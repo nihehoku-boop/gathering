@@ -41,7 +41,10 @@ interface Collection {
   coverImage?: string | null
   coverImageAspectRatio?: string | null
   tags?: string
-  items: Item[]
+  items?: Item[] // Optional - may not be loaded initially
+  _count?: {
+    items: number
+  }
 }
 
 // Helper function to get custom field definitions
@@ -72,7 +75,12 @@ const getItemCustomFields = (item: Item): Record<string, any> => {
 export default function CollectionDetail({ collectionId }: { collectionId: string }) {
   const router = useRouter()
   const [collection, setCollection] = useState<Collection | null>(null)
+  const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
+  const [itemsLoading, setItemsLoading] = useState(false)
+  const [itemsPage, setItemsPage] = useState(1)
+  const [hasMoreItems, setHasMoreItems] = useState(true)
+  const [totalItemsCount, setTotalItemsCount] = useState(0)
   const [newItemName, setNewItemName] = useState('')
   const [newItemNumber, setNewItemNumber] = useState('')
   const [addingItem, setAddingItem] = useState(false)
@@ -95,24 +103,58 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     fetchCollection()
   }, [collectionId])
 
+  useEffect(() => {
+    if (collection) {
+      // Load first page of items
+      fetchItems(1)
+    }
+  }, [collection])
+
   const fetchCollection = async () => {
     try {
+      // Don't include items in initial fetch - we'll load them separately with pagination
       const res = await fetch(`/api/collections/${collectionId}`)
       if (res.ok) {
         const data = await res.json()
         setCollection(data)
-      }
-      // Fetch share settings
-      const shareRes = await fetch(`/api/collections/${collectionId}/share`)
-      if (shareRes.ok) {
-        const shareData = await shareRes.json()
-        setIsPublic(shareData.isPublic || false)
-        setShareToken(shareData.shareToken || null)
+        // Share settings are now included in the collection response
+        setIsPublic(data.isPublic || false)
+        setShareToken(data.shareToken || null)
+        setTotalItemsCount(data._count?.items || 0)
       }
     } catch (error) {
       console.error('Error fetching collection:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchItems = async (page: number = 1, append: boolean = false) => {
+    if (itemsLoading) return
+    
+    setItemsLoading(true)
+    try {
+      const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50`)
+      if (res.ok) {
+        const data = await res.json()
+        if (append) {
+          setItems(prev => [...prev, ...data.items])
+        } else {
+          setItems(data.items)
+        }
+        setHasMoreItems(data.pagination.hasMore)
+        setItemsPage(page)
+      }
+    } catch (error) {
+      console.error('Error fetching items:', error)
+    } finally {
+      setItemsLoading(false)
+    }
+  }
+
+  const loadMoreItems = () => {
+    if (!itemsLoading && hasMoreItems) {
+      fetchItems(itemsPage + 1, true)
     }
   }
 
@@ -149,10 +191,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
+        const newItem = await res.json()
         setNewItemName('')
         setNewItemNumber('')
         setShowAddForm(false)
-        fetchCollection()
+        // Add the new item to the list and refresh count
+        setItems(prev => [newItem, ...prev])
+        setTotalItemsCount(prev => prev + 1)
       }
     } catch (error) {
       console.error('Error adding item:', error)
@@ -178,7 +223,9 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
-        fetchCollection()
+        // Remove item from the list
+        setItems(prev => prev.filter(item => item.id !== itemId))
+        setTotalItemsCount(prev => Math.max(0, prev - 1))
         showAlert({
           title: 'Success',
           message: 'Item deleted successfully.',
@@ -215,7 +262,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   const selectAll = () => {
     if (collection) {
-      setSelectedItems(new Set(collection.items.map(item => item.id)))
+      setSelectedItems(new Set(items.map(item => item.id)))
     }
   }
 
@@ -310,7 +357,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     if (selectedItems.size === 0 || !collection) return
 
     try {
-      const itemsToAdd = collection.items
+      const itemsToAdd = items
         .filter(item => selectedItems.has(item.id))
         .map(item => ({
           itemId: item.id,
@@ -372,7 +419,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       }
 
       const result = await res.json()
-      fetchCollection()
+      // Update the item in the local state
+      setItems(prev => prev.map(item => item.id === itemId ? result : item))
       return result
     } catch (error) {
       console.error('Error saving item:', error)
@@ -404,8 +452,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     )
   }
 
-  const ownedCount = collection.items.filter(item => item.isOwned).length
-  const totalCount = collection.items.length
+  const ownedCount = items.filter(item => item.isOwned).length
+  const totalCount = totalItemsCount || items.length
   const progress = totalCount > 0 ? Math.round((ownedCount / totalCount) * 100) : 0
 
   return (
@@ -678,14 +726,15 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
               )}
             </div>
 
-            {collection.items.length === 0 && (
+            {items.length === 0 && !itemsLoading && (
               <div className="text-center py-12 text-[#969696]">
                 No items yet. Add your first item above!
               </div>
             )}
-            {collection.items.length > 0 && viewMode === 'cover' && (
+            {items.length > 0 && viewMode === 'cover' && (
+              <>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                {collection.items.map((item, index) => (
+                {items.map((item, index) => (
                   <div
                     key={item.id}
                     className={`relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer ${
@@ -939,10 +988,25 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </div>
                 ))}
               </div>
+              {/* Load More Button for List View */}
+              {hasMoreItems && (
+                <div className="flex justify-center mt-6">
+                  <Button
+                    onClick={loadMoreItems}
+                    disabled={itemsLoading}
+                    variant="outline"
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                  >
+                    {itemsLoading ? 'Loading...' : 'Load More Items'}
+                  </Button>
+                </div>
+              )}
+              </>
             )}
-            {collection.items.length > 0 && viewMode === 'list' && (
+            {items.length > 0 && viewMode === 'list' && (
+              <>
               <div className="space-y-2">
-                {collection.items.map((item, index) => (
+                {items.map((item, index) => (
                   <div
                     key={item.id}
                     className={`rounded-lg border transition-colors animate-fade-up cursor-pointer ${
@@ -1141,6 +1205,25 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </div>
                 ))}
               </div>
+              {/* Load More Button for List View */}
+              {hasMoreItems && (
+                <div className="flex justify-center mt-6">
+                  <Button
+                    onClick={loadMoreItems}
+                    disabled={itemsLoading}
+                    variant="outline"
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                  >
+                    {itemsLoading ? 'Loading...' : 'Load More Items'}
+                  </Button>
+                </div>
+              )}
+              </>
+            )}
+            {itemsLoading && items.length === 0 && (
+              <div className="text-center py-12 text-[#969696]">
+                Loading items...
+              </div>
             )}
           </CardContent>
         </Card>
@@ -1150,7 +1233,11 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         open={showBulkImport}
         onOpenChange={setShowBulkImport}
         collectionId={collectionId}
-        onSuccess={fetchCollection}
+        onSuccess={() => {
+          // Refresh items after bulk import
+          fetchItems(1, false)
+          fetchCollection()
+        }}
       />
       <EditItemDialog
         open={editingItem !== null}
