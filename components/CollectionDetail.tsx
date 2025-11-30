@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -77,6 +77,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [itemsPage, setItemsPage] = useState(1)
   const [hasMoreItems, setHasMoreItems] = useState(true)
   const [totalItemsCount, setTotalItemsCount] = useState(0)
+  // Use refs to track latest values for observer callback
+  const hasMoreItemsRef = useRef(hasMoreItems)
+  const itemsPageRef = useRef(itemsPage)
+  const itemsLoadingRef = useRef(false)
   const [newItemName, setNewItemName] = useState('')
   const [newItemNumber, setNewItemNumber] = useState('')
   const [addingItem, setAddingItem] = useState(false)
@@ -124,7 +128,25 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     }
   }
 
+  const [itemsLoading, setItemsLoading] = useState(false)
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    hasMoreItemsRef.current = hasMoreItems
+  }, [hasMoreItems])
+
+  useEffect(() => {
+    itemsPageRef.current = itemsPage
+  }, [itemsPage])
+
+  useEffect(() => {
+    itemsLoadingRef.current = itemsLoading
+  }, [itemsLoading])
+
   const fetchItems = async (page: number = 1, append: boolean = false) => {
+    if (itemsLoadingRef.current) return // Prevent concurrent requests
+    setItemsLoading(true)
+    itemsLoadingRef.current = true
     try {
       const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50`)
       if (res.ok) {
@@ -135,42 +157,73 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           setItems(data.items)
         }
         setHasMoreItems(data.pagination.hasMore)
+        hasMoreItemsRef.current = data.pagination.hasMore
         setItemsPage(page)
+        itemsPageRef.current = page
       }
     } catch (error) {
       console.error('Error fetching items:', error)
+    } finally {
+      setItemsLoading(false)
+      itemsLoadingRef.current = false
     }
   }
 
   // Silent infinite scroll - loads items as user scrolls without visible indicators
   useEffect(() => {
-    if (!hasMoreItems) return
+    if (!hasMoreItemsRef.current || items.length === 0 || itemsLoadingRef.current) return
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMoreItems) {
-          // Load next page silently
-          fetchItems(itemsPage + 1, true)
-        }
-      },
-      {
-        rootMargin: '300px', // Start loading 300px before reaching the bottom
+    let observer: IntersectionObserver | null = null
+    let lastItemElement: Element | null = null
+
+    const setupObserver = () => {
+      // Clean up previous observer
+      if (observer && lastItemElement) {
+        observer.unobserve(lastItemElement)
+        observer.disconnect()
       }
-    )
 
-    // Observe the last item in the list
-    const lastItem = document.querySelector('[data-last-item]')
-    if (lastItem) {
-      observer.observe(lastItem)
+      // Find the last item element
+      lastItemElement = document.querySelector('[data-last-item]')
+      if (!lastItemElement) return
+
+      // Create new observer using refs to get latest values
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && hasMoreItemsRef.current && !itemsLoadingRef.current) {
+              // Load next page silently using ref value
+              const nextPage = itemsPageRef.current + 1
+              fetchItems(nextPage, true)
+            }
+          })
+        },
+        {
+          rootMargin: '300px', // Start loading 300px before reaching the bottom
+        }
+      )
+
+      observer.observe(lastItemElement)
     }
 
+    // Use requestAnimationFrame to ensure DOM has updated after React render
+    const rafId = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setupObserver()
+      })
+    })
+
     return () => {
-      if (lastItem) {
-        observer.unobserve(lastItem)
+      cancelAnimationFrame(rafId)
+      if (observer && lastItemElement) {
+        observer.unobserve(lastItemElement)
+      }
+      if (observer) {
+        observer.disconnect()
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMoreItems, itemsPage, items.length])
+  }, [items.length]) // Only depend on items.length to re-setup observer when items change
 
   const toggleItemOwned = async (itemId: string, currentStatus: boolean) => {
     try {
