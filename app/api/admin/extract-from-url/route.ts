@@ -12,7 +12,7 @@ import '@/lib/data-fetchers/init' // Initialize data sources
  * Body: { url: string }
  */
 export async function POST(request: NextRequest) {
-  let url: string | undefined
+  let url: string | undefined = undefined
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     console.error('[Extract URL] Error details:', {
       message: errorMessage,
       stack: errorStack,
-      url: url || 'not provided',
+      url: url !== undefined ? url : 'not provided',
     })
     
     return NextResponse.json(
