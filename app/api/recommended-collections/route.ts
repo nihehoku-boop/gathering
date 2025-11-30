@@ -18,14 +18,25 @@ export async function GET() {
     }
 
     // If admin, show all collections. Otherwise, only show public ones.
-    // Note: If isPublic field doesn't exist yet, show all to everyone (backward compatibility)
+    // Note: If isPublic field doesn't exist yet in DB, this will show all (backward compatibility)
+    let whereClause: any = undefined
+    if (!isAdmin) {
+      // Try to filter by isPublic, but if field doesn't exist, show all (backward compatibility)
+      try {
+        whereClause = { 
+          OR: [
+            { isPublic: true },
+            { isPublic: null }, // Handle collections created before isPublic field existed
+          ]
+        }
+      } catch {
+        // If field doesn't exist, show all (backward compatibility)
+        whereClause = undefined
+      }
+    }
+    
     const recommendedCollections = await prisma.recommendedCollection.findMany({
-      where: isAdmin ? undefined : { 
-        OR: [
-          { isPublic: true },
-          { isPublic: null }, // Handle collections created before isPublic field existed
-        ]
-      },
+      where: whereClause,
       include: {
         items: {
           orderBy: [
