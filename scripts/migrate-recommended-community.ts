@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import Database from 'better-sqlite3'
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 
 /**
  * Script to migrate recommended and community collections from local SQLite database to production PostgreSQL
@@ -8,6 +10,44 @@ import Database from 'better-sqlite3'
  * 1. Make sure you have .env.local with production DATABASE_URL
  * 2. Run: npm run migrate-recommended-community
  */
+
+// Load environment variables from .env.local manually (override any existing values)
+try {
+  const envPath = resolve(process.cwd(), '.env.local')
+  const envFile = readFileSync(envPath, 'utf-8')
+  envFile.split('\n').forEach(line => {
+    const match = line.match(/^([^=]+)=(.*)$/)
+    if (match) {
+      const key = match[1].trim()
+      let value = match[2].trim()
+      // Remove quotes if present
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1)
+      }
+      // Always override with .env.local values
+      process.env[key] = value
+    }
+  })
+  console.log('✅ Loaded environment variables from .env.local')
+} catch (error) {
+  console.error('⚠️  Warning: Could not load .env.local, using existing environment variables')
+}
+
+// Verify DATABASE_URL is set
+if (!process.env.DATABASE_URL) {
+  console.error('❌ Error: DATABASE_URL is not set')
+  console.error('Please set DATABASE_URL in .env.local to your production PostgreSQL connection string')
+  process.exit(1)
+}
+
+// Verify DATABASE_URL is PostgreSQL
+if (!process.env.DATABASE_URL.startsWith('postgres://') && !process.env.DATABASE_URL.startsWith('postgresql://')) {
+  console.error('❌ Error: DATABASE_URL must start with postgres:// or postgresql://')
+  console.error('Current DATABASE_URL starts with:', process.env.DATABASE_URL.substring(0, 20))
+  process.exit(1)
+}
+
+console.log('✅ DATABASE_URL is set and valid')
 
 const prisma = new PrismaClient()
 

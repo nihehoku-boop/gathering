@@ -68,7 +68,7 @@ export async function PATCH(
     const collectionId = resolvedParams.id
 
     const body = await request.json()
-    const { name, description, category, coverImage, tags } = body
+    const { name, description, category, coverImage, tags, isPublic } = body
 
     const updateData: any = {}
 
@@ -118,6 +118,10 @@ export async function PATCH(
         console.error('Error parsing tags:', e)
         updateData.tags = '[]'
       }
+    }
+
+    if (isPublic !== undefined) {
+      updateData.isPublic = isPublic === true || isPublic === 'true'
     }
 
     const collection = await prisma.recommendedCollection.update({

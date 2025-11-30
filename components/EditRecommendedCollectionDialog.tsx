@@ -41,6 +41,7 @@ export default function EditRecommendedCollectionDialog({
   const [category, setCategory] = useState('')
   const [coverImage, setCoverImage] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function EditRecommendedCollectionDialog({
       setCategory(collection.category || '')
       setCoverImage(collection.coverImage || '')
       setSelectedTags(parseTags(collection.tags || '[]'))
+      setIsPublic((collection as any).isPublic || false)
     }
   }, [collection])
 
@@ -68,6 +70,7 @@ export default function EditRecommendedCollectionDialog({
           category: category ? category.trim() : null, 
           coverImage: coverImage ? coverImage.trim() : null,
           tags: stringifyTags(selectedTags),
+          isPublic,
         }),
       })
 
@@ -215,6 +218,21 @@ export default function EditRecommendedCollectionDialog({
                 </div>
               )}
             </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="isPublic"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+                className="w-4 h-4 rounded border-[#353842] bg-[#2a2d35] text-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+              />
+              <Label htmlFor="isPublic" className="text-[#fafafa] cursor-pointer">
+                Make this collection visible to all users
+              </Label>
+            </div>
+            <p className="text-xs text-[#969696]">
+              Uncheck to hide from public view
+            </p>
           </CardContent>
           <CardFooter className="flex justify-end gap-2">
             <Button

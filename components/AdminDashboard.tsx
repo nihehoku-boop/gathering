@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Trash2, Plus, Edit, List, Download } from 'lucide-react'
+import { Trash2, Plus, Edit, List, Download, Eye, EyeOff } from 'lucide-react'
 import CreateRecommendedCollectionDialog from './CreateRecommendedCollectionDialog'
 import EditRecommendedCollectionDialog from './EditRecommendedCollectionDialog'
 import RecommendedCollectionItemsManager from './RecommendedCollectionItemsManager'
@@ -26,6 +26,7 @@ interface RecommendedCollection {
   category: string | null
   coverImage: string | null
   tags: string
+  isPublic?: boolean
   items: RecommendedItem[]
   createdAt: string
 }
@@ -70,6 +71,25 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Error deleting collection:', error)
+    }
+  }
+
+  const handleToggleVisibility = async (id: string, currentVisibility: boolean) => {
+    try {
+      const res = await fetch(`/api/recommended-collections/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPublic: !currentVisibility }),
+      })
+      if (res.ok) {
+        fetchCollections()
+      } else {
+        const error = await res.json()
+        alert(`Error: ${error.error || 'Failed to update visibility'}`)
+      }
+    } catch (error) {
+      console.error('Error toggling visibility:', error)
+      alert('Failed to update visibility')
     }
   }
 
@@ -168,6 +188,15 @@ export default function AdminDashboard() {
                     })()}
                   </div>
                   <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleToggleVisibility(collection.id, collection.isPublic || false)}
+                      className={collection.isPublic ? "text-green-600 hover:text-green-700" : "text-gray-400 hover:text-gray-600"}
+                      title={collection.isPublic ? "Hide from public" : "Make public"}
+                    >
+                      {collection.isPublic ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"

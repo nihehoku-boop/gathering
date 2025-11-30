@@ -5,7 +5,21 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions)
+    
+    // Check if user is admin
+    let isAdmin = false
+    if (session?.user?.id) {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { isAdmin: true },
+      })
+      isAdmin = user?.isAdmin || false
+    }
+
+    // If admin, show all collections. Otherwise, only show public ones.
     const recommendedCollections = await prisma.recommendedCollection.findMany({
+      where: isAdmin ? undefined : { isPublic: true },
       include: {
         items: {
           orderBy: [
@@ -44,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, coverImage, tags, items } = body
+    const { name, description, category, coverImage, tags, items, isPublic } = body
 
     if (!name) {
       return NextResponse.json(
@@ -77,6 +91,7 @@ export async function POST(request: NextRequest) {
         category: category || null,
         coverImage: coverImage || null,
         tags: tagsValue,
+        isPublic: isPublic === true || isPublic === 'true',
         items: items ? {
           create: items.map((item: { name: string; number?: number | null; notes?: string | null; image?: string | null }) => ({
             name: item.name,

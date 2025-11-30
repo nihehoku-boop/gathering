@@ -137,6 +137,7 @@ model RecommendedCollection {
   category    String?
   coverImage  String?  // URL or path to cover image
   tags        String   @default("[]") // JSON array of tags
+  isPublic    Boolean  @default(false) // Whether this collection is visible to non-admin users
   items       RecommendedItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
