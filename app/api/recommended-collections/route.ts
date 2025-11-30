@@ -20,7 +20,16 @@ export async function GET() {
     // If admin, show all collections. Otherwise, only show public ones.
     const recommendedCollections = await prisma.recommendedCollection.findMany({
       where: isAdmin ? undefined : { isPublic: true },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        category: true,
+        coverImage: true,
+        tags: true,
+        isPublic: true, // Explicitly include isPublic
+        createdAt: true,
+        updatedAt: true,
         items: {
           orderBy: [
             { number: 'asc' },
