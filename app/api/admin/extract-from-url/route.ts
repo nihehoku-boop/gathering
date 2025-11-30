@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     console.error('[Extract URL] Error details:', {
       message: errorMessage,
       stack: errorStack,
-      url: url,
+      url: url || 'not provided',
     })
     
     return NextResponse.json(
