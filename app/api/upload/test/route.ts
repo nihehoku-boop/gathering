@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/lib/auth-config"'
+import { authOptions } from "@/lib/auth-config"
 import { v2 as cloudinary } from 'cloudinary'
 
 // Configure Cloudinary (only if credentials exist)

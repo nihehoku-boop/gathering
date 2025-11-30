@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/lib/auth-config"'
+import { authOptions } from "@/lib/auth-config"
 import CollectionsList from '@/components/CollectionsList'
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'

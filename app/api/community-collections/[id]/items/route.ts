@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,8 +13,9 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const resolvedParams = await Promise.resolve(params)
     const collection = await prisma.communityCollection.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     if (!collection) {
@@ -44,7 +45,7 @@ export async function POST(
 
     const createdItems = await prisma.communityItem.createMany({
       data: items.map((item: any) => ({
-        communityCollectionId: params.id,
+        communityCollectionId: resolvedParams.id,
         name: item.name,
         number: item.number || null,
         notes: item.notes || null,

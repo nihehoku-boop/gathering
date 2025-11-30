@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/lib/auth-config"'
+import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params)
     const collection = await prisma.communityCollection.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         items: {
           orderBy: [
@@ -47,7 +48,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -55,8 +56,9 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const resolvedParams = await Promise.resolve(params)
     const collection = await prisma.communityCollection.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     if (!collection) {
@@ -133,7 +135,7 @@ export async function PATCH(
     }
 
     const updatedCollection = await prisma.communityCollection.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: updateData,
     })
 
@@ -149,7 +151,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -157,8 +159,9 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const resolvedParams = await Promise.resolve(params)
     const collection = await prisma.communityCollection.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     if (!collection) {
@@ -177,7 +180,7 @@ export async function DELETE(
     }
 
     await prisma.communityCollection.delete({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     return NextResponse.json({ success: true })

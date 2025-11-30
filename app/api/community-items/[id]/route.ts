@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/lib/auth-config"'
+import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,8 +13,9 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const resolvedParams = await Promise.resolve(params)
     const item = await prisma.communityItem.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         communityCollection: {
           select: { userId: true },
@@ -73,7 +74,7 @@ export async function PATCH(
     }
 
     const updatedItem = await prisma.communityItem.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: updateData,
     })
 
@@ -89,7 +90,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -97,8 +98,9 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const resolvedParams = await Promise.resolve(params)
     const item = await prisma.communityItem.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         communityCollection: {
           select: { userId: true },
@@ -122,7 +124,7 @@ export async function DELETE(
     }
 
     await prisma.communityItem.delete({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     return NextResponse.json({ success: true })

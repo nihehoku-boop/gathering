@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/lib/auth-config"'
+import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -14,9 +14,12 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Resolve params (Next.js 16+ uses async params)
+    const resolvedParams = await Promise.resolve(params)
+
     // Get the community collection
     const communityCollection = await prisma.communityCollection.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         items: true,
       },

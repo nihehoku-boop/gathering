@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/lib/auth-config"'
+import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -22,6 +22,7 @@ export async function POST(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
+    const resolvedParams = await Promise.resolve(params)
     const body = await request.json()
     const { items } = body
 
@@ -34,7 +35,7 @@ export async function POST(
 
     // Verify collection exists
     const collection = await prisma.recommendedCollection.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     if (!collection) {
@@ -49,7 +50,7 @@ export async function POST(
       items.map((item: { name: string; number?: number | null; notes?: string | null; image?: string | null }) =>
         prisma.recommendedItem.create({
           data: {
-            recommendedCollectionId: params.id,
+            recommendedCollectionId: resolvedParams.id,
             name: item.name,
             number: item.number ? parseInt(String(item.number)) : null,
             notes: item.notes || null,
