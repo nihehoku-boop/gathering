@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 
 // Connect to local SQLite database
 const localDbPath = './prisma/dev.db'
-let localDb: Database | null = null
+let localDb: InstanceType<typeof Database> | null = null
 
 try {
   localDb = new Database(localDbPath)
