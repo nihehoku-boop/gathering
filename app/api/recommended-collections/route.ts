@@ -3,9 +3,13 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
+    
+    // Check if this is an admin dashboard request (check referer or query param)
+    const url = new URL(request.url)
+    const isAdminDashboard = url.searchParams.get('admin') === 'true'
     
     // Check if user is admin
     let isAdmin = false
@@ -17,9 +21,10 @@ export async function GET() {
       isAdmin = user?.isAdmin || false
     }
 
-    // If admin, show all collections. Otherwise, only show public ones.
+    // Only show all collections if explicitly requested from admin dashboard AND user is admin
+    // Otherwise, always filter to show only public collections
     const recommendedCollections = await prisma.recommendedCollection.findMany({
-      where: isAdmin ? undefined : { isPublic: true },
+      where: (isAdmin && isAdminDashboard) ? undefined : { isPublic: true },
       select: {
         id: true,
         name: true,

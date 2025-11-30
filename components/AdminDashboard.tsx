@@ -47,7 +47,8 @@ export default function AdminDashboard() {
 
   const fetchCollections = async () => {
     try {
-      const res = await fetch('/api/recommended-collections')
+      // Add ?admin=true to show all collections (including hidden ones) in admin dashboard
+      const res = await fetch('/api/recommended-collections?admin=true')
       if (res.ok) {
         const data = await res.json()
         console.log('Fetched collections:', data)
