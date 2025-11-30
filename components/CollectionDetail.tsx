@@ -152,11 +152,48 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     }
   }
 
-  const loadMoreItems = () => {
-    if (!itemsLoading && hasMoreItems) {
-      fetchItems(itemsPage + 1, true)
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    if (!hasMoreItems || itemsLoading) return
+
+    const loadMore = () => {
+      if (hasMoreItems && !itemsLoading) {
+        fetchItems(itemsPage + 1, true)
+      }
     }
-  }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore()
+        }
+      },
+      {
+        rootMargin: '200px', // Start loading 200px before reaching the bottom
+      }
+    )
+
+    // Observe both sentinels (one for cover view, one for list view)
+    const sentinelCover = document.getElementById('items-sentinel-cover')
+    const sentinelList = document.getElementById('items-sentinel-list')
+    
+    if (sentinelCover) {
+      observer.observe(sentinelCover)
+    }
+    if (sentinelList) {
+      observer.observe(sentinelList)
+    }
+
+    return () => {
+      if (sentinelCover) {
+        observer.unobserve(sentinelCover)
+      }
+      if (sentinelList) {
+        observer.unobserve(sentinelList)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasMoreItems, itemsLoading, itemsPage, viewMode])
 
   const toggleItemOwned = async (itemId: string, currentStatus: boolean) => {
     try {
@@ -988,17 +1025,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </div>
                 ))}
               </div>
-              {/* Load More Button for List View */}
+              {/* Infinite scroll sentinel for cover view */}
               {hasMoreItems && (
-                <div className="flex justify-center mt-6">
-                  <Button
-                    onClick={loadMoreItems}
-                    disabled={itemsLoading}
-                    variant="outline"
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
-                  >
-                    {itemsLoading ? 'Loading...' : 'Load More Items'}
-                  </Button>
+                <div id="items-sentinel-cover" className="h-20 flex items-center justify-center">
+                  {itemsLoading && (
+                    <div className="text-sm text-[#666]">Loading more items...</div>
+                  )}
                 </div>
               )}
               </>
@@ -1205,17 +1237,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </div>
                 ))}
               </div>
-              {/* Load More Button for List View */}
+              {/* Infinite scroll sentinel for list view */}
               {hasMoreItems && (
-                <div className="flex justify-center mt-6">
-                  <Button
-                    onClick={loadMoreItems}
-                    disabled={itemsLoading}
-                    variant="outline"
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
-                  >
-                    {itemsLoading ? 'Loading...' : 'Load More Items'}
-                  </Button>
+                <div id="items-sentinel-list" className="h-20 flex items-center justify-center">
+                  {itemsLoading && (
+                    <div className="text-sm text-[#666]">Loading more items...</div>
+                  )}
                 </div>
               )}
               </>
