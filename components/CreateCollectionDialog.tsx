@@ -1,0 +1,283 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { AVAILABLE_TAGS, stringifyTags, getTagColor } from '@/lib/tags'
+import { ITEM_TEMPLATES } from '@/lib/item-templates'
+import { X } from 'lucide-react'
+import ImageUpload from './ImageUpload'
+
+interface CreateCollectionDialogProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSuccess: () => void
+}
+
+export default function CreateCollectionDialog({
+  open,
+  onOpenChange,
+  onSuccess,
+}: CreateCollectionDialogProps) {
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [category, setCategory] = useState('')
+  const [folderId, setFolderId] = useState<string>('')
+  const [folders, setFolders] = useState<Array<{ id: string; name: string }>>([])
+  const [template, setTemplate] = useState<string>('custom')
+  const [coverImage, setCoverImage] = useState('')
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    fetchFolders()
+  }, [])
+
+  const fetchFolders = async () => {
+    try {
+      const res = await fetch('/api/folders')
+      if (res.ok) {
+        const data = await res.json()
+        setFolders(data)
+      }
+    } catch (error) {
+      console.error('Error fetching folders:', error)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      const payload = { 
+        name, 
+        description, 
+        category,
+          folderId: folderId && folderId.trim() !== '' ? folderId.trim() : null,
+          template: template || 'custom',
+          coverImage: coverImage || null,
+          tags: stringifyTags(selectedTags),
+      }
+      
+      console.log('Creating collection with payload:', payload)
+
+      const res = await fetch('/api/collections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (res.ok) {
+        setName('')
+        setDescription('')
+        setCategory('')
+        setFolderId('')
+        setCoverImage('')
+        setSelectedTags([])
+        onOpenChange(false)
+        onSuccess()
+      }
+    } catch (error) {
+      console.error('Error creating collection:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!open) return null
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
+      <Card className="w-full max-w-md max-h-[90vh] bg-[#1a1d24] border-[#2a2d35] animate-scale-in flex flex-col">
+        <CardHeader className="flex-shrink-0">
+          <CardTitle className="text-[#fafafa]">Create New Collection</CardTitle>
+          <CardDescription className="text-[#969696]">
+            Add a new collection to track your items
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <CardContent className="space-y-4 overflow-y-auto flex-1 min-h-0">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-[#fafafa]">Collection Name *</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g., Marvel Comics, Vintage Toys"
+                required
+                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-[#fafafa]">Category</Label>
+                <Input
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="e.g., Comics, Books, Cards"
+                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="folder" className="text-[#fafafa]">Folder</Label>
+                <select
+                  id="folder"
+                  value={folderId}
+                  onChange={(e) => setFolderId(e.target.value)}
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                >
+                  <option value="">No Folder</option>
+                  {folders.map((folder) => (
+                    <option key={folder.id} value={folder.id}>
+                      {folder.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="template" className="text-[#fafafa]">Item Template</Label>
+              <select
+                id="template"
+                value={template}
+                onChange={(e) => setTemplate(e.target.value)}
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+              >
+                {ITEM_TEMPLATES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.icon} {t.name} - {t.description}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-[#666]">
+                Choose a template to customize the fields available when editing items in this collection.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description" className="text-[#fafafa]">Description</Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Optional description of your collection"
+                rows={3}
+                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+              />
+            </div>
+            <div className="space-y-2">
+              <ImageUpload
+                value={coverImage || null}
+                onChange={(url) => setCoverImage(url || '')}
+                label="Cover Image"
+                aspectRatio="2/3"
+                maxSize={10}
+              />
+              <div className="mt-2">
+                <Label htmlFor="coverImage-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Input
+                  id="coverImage-url"
+                  type="url"
+                  value={coverImage}
+                  onChange={(e) => setCoverImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[#fafafa]">Tags</Label>
+              <div className="flex flex-wrap gap-2">
+                {AVAILABLE_TAGS.map((tag) => {
+                  const colors = getTagColor(tag)
+                  const isSelected = selectedTags.includes(tag)
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => {
+                        if (selectedTags.includes(tag)) {
+                          setSelectedTags(selectedTags.filter(t => t !== tag))
+                        } else {
+                          setSelectedTags([...selectedTags, tag])
+                        }
+                      }}
+                      className={`px-3 py-1.5 rounded-full text-sm smooth-transition border ${
+                        isSelected
+                          ? 'opacity-100'
+                          : 'opacity-60 hover:opacity-100'
+                      }`}
+                      style={{
+                        backgroundColor: isSelected ? colors.bg : '#2a2d35',
+                        color: isSelected ? colors.text : '#fafafa',
+                        borderColor: isSelected ? colors.border : '#353842',
+                      }}
+                    >
+                      {tag}
+                    </button>
+                  )
+                })}
+              </div>
+              {selectedTags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {selectedTags.map((tag) => {
+                    const colors = getTagColor(tag)
+                    return (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full border"
+                        style={{
+                          backgroundColor: colors.bg,
+                          color: colors.text,
+                          borderColor: colors.border,
+                        }}
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => setSelectedTags(selectedTags.filter(t => t !== tag))}
+                          className="hover:opacity-70 smooth-transition"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35]">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              disabled={loading}
+              className="accent-button text-white smooth-transition"
+            >
+              {loading ? 'Creating...' : 'Create Collection'}
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
+  )
+}
+

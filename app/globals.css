@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Letterboxd-style dark theme with subtle dark blue tint */
+    --background: 220 20% 8%; /* Very dark blue-gray background */
+    --foreground: 0 0% 98%; /* #fafafa - Almost white text */
+    --card: 220 18% 12%; /* Dark blue-gray card background */
+    --card-foreground: 0 0% 98%;
+    --popover: 220 18% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 210 100% 50%; /* Apple blue #007AFF */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 15% 18%; /* Dark blue-gray secondary */
+    --secondary-foreground: 0 0% 78%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 0 0% 59%; /* #969696 - Muted text */
+    --accent: 220 15% 22%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%; /* Apple red #FF3B30 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 20%; /* Subtle blue-gray borders */
+    --input: 220 15% 18%;
+    --ring: 210 100% 50%;
+    --radius: 0.75rem; /* Slightly more rounded, Apple-style */
+    
+    /* Custom accent color (default: yellow) */
+    --accent-color: #FFD60A;
+    --accent-color-hover: #E6C009;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply text-[#fafafa] antialiased;
+    background-color: hsl(220, 20%, 8%);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(24, 28, 36, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+  
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .accent-button {
+    background-color: var(--accent-color);
+    color: white;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .accent-button:hover {
+    background-color: var(--accent-color-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .animate-fade-up {
+    animation: fade-up 0.5s ease-out;
+    animation-fill-mode: both;
+    will-change: opacity, transform;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
+    animation-fill-mode: both;
+    will-change: opacity;
+  }
+  
+  .animate-stagger {
+    animation: fade-up 0.5s ease-out;
+    animation-fill-mode: both;
+    will-change: opacity, transform;
+  }
+  
+  /* Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up,
+    .animate-fade-in,
+    .animate-stagger,
+    .animate-slide-in-right,
+    .animate-scale-in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    
+    .smooth-transition {
+      transition: none;
+    }
+  }
+  
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
