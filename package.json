@@ -16,7 +16,8 @@
     "seed:recommended": "tsx scripts/seed-recommended.ts",
     "set-admin": "tsx scripts/set-admin.ts",
     "set-password": "tsx scripts/set-password.ts",
-    "set-admin-password": "tsx scripts/set-admin-password.ts"
+    "set-admin-password": "tsx scripts/set-admin-password.ts",
+    "migrate-to-production": "tsx scripts/migrate-to-production.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -45,10 +46,12 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "better-sqlite3": "^12.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "postcss": "^8",
