@@ -46,20 +46,45 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-        const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: { isAdmin: true },
-        })
-        token.isAdmin = dbUser?.isAdmin || false
+      try {
+        if (user) {
+          token.id = user.id
+          // Fetch admin status from database
+          try {
+            const dbUser = await prisma.user.findUnique({
+              where: { id: user.id },
+              select: { isAdmin: true, badge: true },
+            })
+            token.isAdmin = dbUser?.isAdmin || false
+            token.badge = dbUser?.badge || null
+          } catch (error) {
+            console.error('Error fetching admin status in JWT callback:', error)
+            token.isAdmin = false
+          }
+        } else if (token.id) {
+          // Refresh admin status on each token check
+          try {
+            const dbUser = await prisma.user.findUnique({
+              where: { id: token.id as string },
+              select: { isAdmin: true, badge: true },
+            })
+            token.isAdmin = dbUser?.isAdmin || false
+            token.badge = dbUser?.badge || null
+          } catch (error) {
+            console.error('Error refreshing admin status in JWT callback:', error)
+            // Keep existing admin status if query fails
+          }
+        }
+      } catch (error) {
+        console.error('Error in JWT callback:', error)
       }
       return token
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token.id) {
         session.user.id = token.id as string
-        session.user.isAdmin = token.isAdmin as boolean
+        session.user.isAdmin = (token.isAdmin as boolean) || false
+        session.user.badge = (token.badge as string | null) || null
       }
       return session
     },
