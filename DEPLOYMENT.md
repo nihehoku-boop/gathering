@@ -1,5 +1,10 @@
 # Deployment Guide - Vercel
 
+## Production URL
+**Live Site**: https://gathering-jade.vercel.app
+**Sign In**: https://gathering-jade.vercel.app/auth/signin
+**Sign Up**: https://gathering-jade.vercel.app/auth/signup
+
 This guide will help you deploy Gathering to Vercel for staging/production.
 
 ## Prerequisites
@@ -105,7 +110,7 @@ CLOUDINARY_API_SECRET=your-api-secret
 ## Step 7: Update NEXTAUTH_URL
 
 1. Go back to Environment Variables
-2. Update `NEXTAUTH_URL` to your actual Vercel URL
+2. Update `NEXTAUTH_URL` to your actual Vercel URL: `https://gathering-jade.vercel.app`
 3. Redeploy (or it will auto-redeploy)
 
 ## Step 8: Run Database Migrations
