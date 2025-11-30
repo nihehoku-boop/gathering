@@ -55,7 +55,10 @@ export async function GET(
       )
     }
 
-    return NextResponse.json(collection)
+    const response = NextResponse.json(collection)
+    // Add caching headers for collection data
+    response.headers.set('Cache-Control', 'private, s-maxage=30, stale-while-revalidate=60')
+    return response
   } catch (error) {
     console.error('Error fetching collection:', error)
     return NextResponse.json(

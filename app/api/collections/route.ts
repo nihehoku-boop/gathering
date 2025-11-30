@@ -37,17 +37,35 @@ export async function GET() {
         _count: {
           select: { items: true },
         },
-        items: {
-          select: {
-            isOwned: true,
-          },
-          take: 1000, // Limit items to prevent huge queries
-        },
       },
       orderBy: { createdAt: 'desc' },
     })
 
-    return NextResponse.json(collections)
+    // Calculate owned items count efficiently in a single query
+    const collectionIds = collections.map(c => c.id)
+    const ownedCounts = await prisma.item.groupBy({
+      by: ['collectionId'],
+      where: {
+        collectionId: { in: collectionIds },
+        isOwned: true,
+      },
+      _count: {
+        id: true,
+      },
+    })
+
+    const ownedCountMap = new Map(ownedCounts.map(item => [item.collectionId, item._count.id]))
+
+    const collectionsWithStats = collections.map((collection) => ({
+      ...collection,
+      items: [], // Remove items array, we don't need it
+      ownedCount: ownedCountMap.get(collection.id) || 0,
+    }))
+
+    const response = NextResponse.json(collectionsWithStats)
+    // Add caching headers
+    response.headers.set('Cache-Control', 'private, s-maxage=60, stale-while-revalidate=120')
+    return response
   } catch (error) {
     console.error('Error fetching collections:', error)
     return NextResponse.json(

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { useDebounce } from '@/hooks/useDebounce'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -113,7 +114,9 @@ export default function CollectionsList() {
 
   const fetchCollections = async () => {
     try {
-      const res = await fetch('/api/collections')
+      const res = await fetch('/api/collections', {
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      })
       if (res.ok) {
         const data = await res.json()
         console.log('Fetched collections:', data.length, 'collections')
@@ -615,11 +618,15 @@ export default function CollectionsList() {
                 onClick={() => router.push(`/collections/${collection.id}`)}
               >
                 {collection.coverImage && (
-                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35]">
-                    <img
+                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35] relative">
+                    <Image
                       src={collection.coverImage}
                       alt={collection.name}
-                      className="w-full h-full object-cover group-hover:scale-105 smooth-transition"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 smooth-transition"
+                      loading="lazy"
+                      unoptimized={collection.coverImage.startsWith('/ltbcover/') || collection.coverImage.includes('localhost')}
                     />
                   </div>
                 )}

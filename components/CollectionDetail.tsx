@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -728,10 +729,14 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     >
                       {item.image ? (
                         <>
-                          <img
+                          <Image
                             src={item.image}
                             alt={item.name}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                            className="object-cover"
+                            loading="lazy"
+                            unoptimized={item.image.startsWith('/ltbcover/') || item.image.includes('localhost')}
                           />
                           {(() => {
                             try {
@@ -1081,7 +1086,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         </>
                       )}
                     </div>
-                    </div>
                     {expandedItems.has(item.id) && (
                       <div className="px-3 pb-3 pt-0 border-t border-[#2a2d35] space-y-2 text-sm">
                         {item.wear && (
@@ -1133,6 +1137,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         )}
                       </div>
                     )}
+                    </div>
                   </div>
                 ))}
               </div>
