@@ -229,12 +229,12 @@ export default function ProfilePage() {
                     </p>
                   </div>
 
-                  {session.user?.image && (
+                  {(session.user as any)?.image && (
                     <div className="space-y-2">
                       <Label className="text-[#fafafa]">Profile Picture</Label>
                       <div className="flex items-center gap-4">
                         <img
-                          src={session.user.image}
+                          src={(session.user as any).image}
                           alt="Profile"
                           className="w-20 h-20 rounded-full border-2 border-[#353842]"
                         />

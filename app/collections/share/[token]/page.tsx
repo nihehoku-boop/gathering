@@ -149,9 +149,9 @@ export default function SharedCollectionPage() {
                           key={tag}
                           className="text-xs px-2 py-1 rounded"
                           style={{
-                            backgroundColor: `${getTagColor(tag)}20`,
-                            color: getTagColor(tag),
-                            border: `1px solid ${getTagColor(tag)}40`,
+                            backgroundColor: `${getTagColor(tag).bg}20`,
+                            color: getTagColor(tag).text,
+                            border: `1px solid ${getTagColor(tag).border}40`,
                           }}
                         >
                           {tag}

@@ -32,7 +32,7 @@ interface EditItemDialogProps {
     wear: string | null
     personalRating: number | null
     logDate: string | null
-    customFields?: string
+    customFields?: string | Record<string, any>
   } | null
   collectionTemplate?: string | null
   customFieldDefinitions?: string | null
@@ -230,7 +230,7 @@ export default function EditItemDialog({
             <div className="space-y-2">
               <ImageUpload
                 value={image}
-                onChange={setImage}
+                onChange={(value) => setImage(value || '')}
                 label="Image"
                 aspectRatio="2/3"
                 maxSize={10}
@@ -241,7 +241,7 @@ export default function EditItemDialog({
                   id="image-url"
                   type="text"
                   value={image || ''}
-                  onChange={(e) => setImage(e.target.value || null)}
+                  onChange={(e) => setImage(e.target.value || '')}
                   placeholder="https://example.com/image.jpg or /ltbcover/image.jpg"
                   className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition mt-1"
                 />
@@ -427,7 +427,7 @@ export default function EditItemDialog({
                         className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                       >
                         <option value="">Select {field.label}</option>
-                        {field.options.map((option) => (
+                        {field.options.map((option: string) => (
                           <option key={option} value={option}>
                             {option}
                           </option>

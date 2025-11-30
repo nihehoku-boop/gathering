@@ -36,6 +36,12 @@ export async function GET(request: NextRequest) {
         ],
       },
       include: {
+        folder: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         _count: {
           select: { items: true },
         },
@@ -85,6 +91,11 @@ export async function GET(request: NextRequest) {
             badge: true,
           },
         },
+        votes: {
+          select: {
+            voteType: true,
+          },
+        },
         _count: {
           select: { items: true },
         },
@@ -131,8 +142,7 @@ export async function GET(request: NextRequest) {
     const filteredCollections = collections.filter(c =>
       filterCaseInsensitive(c.name, query.trim()) ||
       filterCaseInsensitive(c.description, query.trim()) ||
-      filterCaseInsensitive(c.category, query.trim()) ||
-      (c.folder && filterCaseInsensitive(c.folder.name, query.trim()))
+      filterCaseInsensitive(c.category, query.trim())
     )
 
     const filteredItems = allItems.filter(item =>
@@ -174,7 +184,7 @@ export async function GET(request: NextRequest) {
         coverImage: cc.coverImage,
         itemCount: cc._count.items,
         user: cc.user,
-        upvotes: cc.upvotes,
+        upvotes: cc.votes.filter(v => v.voteType === 'upvote').length,
       })),
     })
   } catch (error) {

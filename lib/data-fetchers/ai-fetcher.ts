@@ -205,7 +205,7 @@ Return ONLY valid JSON, no other text.`
       metadata: extracted.metadata || {
         name: 'Unknown Collection',
         description: null,
-        category: null,
+        category: undefined,
         coverImage: null,
         tags: [],
       },
@@ -236,7 +236,7 @@ async function searchCollectionWithAI(
     return [{
       name: query,
       description: 'AI search requires OPENAI_API_KEY to be set in environment variables',
-      category: null,
+      category: undefined,
       tags: [],
     }]
   }
@@ -379,10 +379,10 @@ export function createAISource(config?: AIConfig): DataSource {
         // Fallback: try to search again with sourceId as query
         console.log('[AI Fetcher] No URL found, trying search with:', sourceId)
         const searchResults = await searchCollectionWithAI(sourceId, config)
-        if (searchResults.length > 0 && searchResults[0].sourceId) {
+        if (searchResults.length > 0) {
           // Recursively fetch items using the sourceId (which might be a URL)
           const aiSource = createAISource(config)
-          return await aiSource.fetchItems(searchResults[0].sourceId, searchResults[0])
+          return await aiSource.fetchItems(sourceId, searchResults[0])
         }
         return []
       }

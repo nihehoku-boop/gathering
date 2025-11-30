@@ -190,7 +190,7 @@ export default function Sidebar() {
         setFolders(prev => [...prev, folder])
         setNewFolderName('')
         setShowNewFolderInput(false)
-        setOpenFolders(prev => new Set([...prev, folder.id]))
+        setOpenFolders(prev => new Set([...Array.from(prev), folder.id]))
       }
     } catch (error) {
       console.error('Error creating folder:', error)

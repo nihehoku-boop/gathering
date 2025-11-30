@@ -161,7 +161,7 @@ function detectCustomizations(
   }
 
   // Check if any items were renamed or had images changed
-  for (const [key, recommendedItem] of recommendedItemMap.entries()) {
+  for (const [key, recommendedItem] of Array.from(recommendedItemMap.entries())) {
     const userItem = userItemMap.get(key)
     if (!userItem || userItem.name !== recommendedItem.name) {
       return true
