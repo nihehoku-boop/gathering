@@ -18,7 +18,8 @@
     "set-password": "tsx scripts/set-password.ts",
     "set-admin-password": "tsx scripts/set-admin-password.ts",
     "migrate-to-production": "tsx scripts/migrate-to-production.ts",
-    "migrate-recommended-community": "tsx scripts/migrate-recommended-community.ts"
+    "migrate-recommended-community": "tsx scripts/migrate-recommended-community.ts",
+    "set-recommended-public": "tsx scripts/set-recommended-collections-public.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
