@@ -12,6 +12,7 @@ import '@/lib/data-fetchers/init' // Initialize data sources
  * Body: { url: string }
  */
 export async function POST(request: NextRequest) {
+  let url: string | undefined
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { url } = body
+    url = body.url
 
     if (!url || typeof url !== 'string') {
       return NextResponse.json(
