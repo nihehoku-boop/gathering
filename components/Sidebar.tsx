@@ -521,15 +521,6 @@ export default function Sidebar() {
                     <ChevronRight className="h-4 w-4" />
                   )}
                 </button>
-                {isCollectionsOpen && (
-                  <button
-                    onClick={() => setShowNewFolderInput(true)}
-                    className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
-                    title="Create new folder"
-                  >
-                    <FolderPlus className="h-4 w-4" />
-                  </button>
-                )}
               </div>
 
               {/* Collections List */}
@@ -549,142 +540,6 @@ export default function Sidebar() {
                   >
                     <span>All Collections</span>
                   </button>
-
-                  {/* Create Folder Input - Only shown when active */}
-                  {showNewFolderInput && (
-                    <div className="flex items-center gap-2 px-3 py-2">
-                      <input
-                        type="text"
-                        value={newFolderName}
-                        onChange={(e) => setNewFolderName(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleCreateFolder()
-                          } else if (e.key === 'Escape') {
-                            setNewFolderName('')
-                            setShowNewFolderInput(false)
-                          }
-                        }}
-                        onBlur={() => {
-                          if (!newFolderName.trim()) {
-                            setShowNewFolderInput(false)
-                          }
-                        }}
-                        placeholder="Folder name..."
-                        autoFocus
-                        className="flex-1 px-2 py-1 text-xs bg-[#2a2d35] border border-[#3a3d45] rounded text-[#fafafa] placeholder-[#666] focus:outline-none focus:border-[var(--accent-color)]"
-                      />
-                      <button
-                        onClick={handleCreateFolder}
-                        className="p-1 text-[var(--accent-color)] hover:text-[var(--accent-color)]/80 smooth-transition"
-                        title="Create folder"
-                      >
-                        <FolderPlus className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setNewFolderName('')
-                          setShowNewFolderInput(false)
-                        }}
-                        className="p-1 text-[#666] hover:text-[#fafafa] smooth-transition"
-                        title="Cancel"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Folders */}
-                  {folders.map((folder) => {
-                    const isOpen = openFolders.has(folder.id)
-                    const folderCollections = collectionsByFolder.grouped[folder.id] || []
-
-                    return (
-                      <div key={folder.id} className="space-y-1">
-                        <div className="flex items-center group">
-                          <button
-                            onClick={() => toggleFolder(folder.id)}
-                            className={cn(
-                              "flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm relative",
-                              "text-[#666] hover:text-[#fafafa] hover:bg-[#2a2d35]"
-                            )}
-                          >
-                            {isOpen ? (
-                              <ChevronDown className="h-3 w-3 flex-shrink-0" />
-                            ) : (
-                              <ChevronRight className="h-3 w-3 flex-shrink-0" />
-                            )}
-                            <Folder className="h-3 w-3 flex-shrink-0 absolute left-8" />
-                            <div className="flex items-center gap-1 flex-1 ml-5 min-w-0">
-                              {editingFolder === folder.id ? (
-                                <input
-                                  type="text"
-                                  defaultValue={folder.name}
-                                  onBlur={(e) => handleEditFolder(folder.id, e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      handleEditFolder(folder.id, e.currentTarget.value)
-                                    } else if (e.key === 'Escape') {
-                                      setEditingFolder(null)
-                                    }
-                                  }}
-                                  autoFocus
-                                  className="flex-1 px-1 text-xs bg-[#1a1d24] border border-[var(--accent-color)] rounded text-[#fafafa] focus:outline-none"
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              ) : (
-                                <span className="truncate flex-1">{folder.name}</span>
-                              )}
-                              {folder._count && (
-                                <span className="text-xs text-[#666] flex-shrink-0">({folder._count.collections})</span>
-                              )}
-                            </div>
-                          </button>
-                          <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 smooth-transition">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setEditingFolder(folder.id)
-                              }}
-                              className="p-1 text-[#666] hover:text-[var(--accent-color)] smooth-transition"
-                              title="Rename folder"
-                            >
-                              <Edit className="h-3 w-3" />
-                            </button>
-                            <button
-                              onClick={(e) => handleDeleteFolder(folder.id, e)}
-                              className="p-1 text-[#666] hover:text-red-400 smooth-transition"
-                              title="Delete folder"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </button>
-                          </div>
-                        </div>
-                        {isOpen && folderCollections.length > 0 && (
-                          <div className="ml-6 space-y-1 border-l border-[#2a2d35] pl-3">
-                            <DndContext
-                              sensors={sensors}
-                              collisionDetection={closestCenter}
-                              onDragEnd={(e) => handleCollectionDragEnd(e, folder.id)}
-                            >
-                              <SortableContext
-                                items={folderCollections.map(c => c.id)}
-                                strategy={verticalListSortingStrategy}
-                              >
-                                {folderCollections.map((collection) => (
-                                  <SortableCollectionItem
-                                    key={collection.id}
-                                    collection={collection}
-                                    folderId={folder.id}
-                                  />
-                                ))}
-                              </SortableContext>
-                            </DndContext>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
 
                   {/* Collections without folder */}
                   {collectionsByFolder.noFolder.length > 0 && (
@@ -713,6 +568,164 @@ export default function Sidebar() {
               )}
             </div>
           </nav>
+
+          {/* Folders Section */}
+          {session?.user?.id && (
+            <div className="p-4 border-t border-[#2a2d35] bg-[#1a1d24]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-[#969696]">Folders</span>
+                {!showNewFolderInput && (
+                  <button
+                    onClick={() => setShowNewFolderInput(true)}
+                    className="p-1 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded smooth-transition"
+                    title="Create new folder"
+                  >
+                    <FolderPlus className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              {/* Create Folder Input */}
+              {showNewFolderInput && (
+                <div className="flex items-center gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={newFolderName}
+                    onChange={(e) => setNewFolderName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleCreateFolder()
+                      } else if (e.key === 'Escape') {
+                        setNewFolderName('')
+                        setShowNewFolderInput(false)
+                      }
+                    }}
+                    onBlur={() => {
+                      if (!newFolderName.trim()) {
+                        setShowNewFolderInput(false)
+                      }
+                    }}
+                    placeholder="Folder name..."
+                    autoFocus
+                    className="flex-1 px-2 py-1 text-xs bg-[#2a2d35] border border-[#3a3d45] rounded text-[#fafafa] placeholder-[#666] focus:outline-none focus:border-[var(--accent-color)]"
+                  />
+                  <button
+                    onClick={handleCreateFolder}
+                    className="p-1 text-[var(--accent-color)] hover:text-[var(--accent-color)]/80 smooth-transition"
+                    title="Create folder"
+                  >
+                    <FolderPlus className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setNewFolderName('')
+                      setShowNewFolderInput(false)
+                    }}
+                    className="p-1 text-[#666] hover:text-[#fafafa] smooth-transition"
+                    title="Cancel"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              )}
+
+              {/* Folders List */}
+              {folders.length > 0 && (
+                <div className="space-y-1">
+                  {folders.map((folder) => {
+                  const isOpen = openFolders.has(folder.id)
+                  const folderCollections = collectionsByFolder.grouped[folder.id] || []
+
+                  return (
+                    <div key={folder.id} className="space-y-1">
+                      <div className="flex items-center group">
+                        <button
+                          onClick={() => toggleFolder(folder.id)}
+                          className={cn(
+                            "flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm relative",
+                            "text-[#666] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                          )}
+                        >
+                          {isOpen ? (
+                            <ChevronDown className="h-3 w-3 flex-shrink-0" />
+                          ) : (
+                            <ChevronRight className="h-3 w-3 flex-shrink-0" />
+                          )}
+                          <Folder className="h-3 w-3 flex-shrink-0 absolute left-8" />
+                          <div className="flex items-center gap-1 flex-1 ml-5 min-w-0">
+                            {editingFolder === folder.id ? (
+                              <input
+                                type="text"
+                                defaultValue={folder.name}
+                                onBlur={(e) => handleEditFolder(folder.id, e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    handleEditFolder(folder.id, e.currentTarget.value)
+                                  } else if (e.key === 'Escape') {
+                                    setEditingFolder(null)
+                                  }
+                                }}
+                                autoFocus
+                                className="flex-1 px-1 text-xs bg-[#1a1d24] border border-[var(--accent-color)] rounded text-[#fafafa] focus:outline-none"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            ) : (
+                              <span className="truncate flex-1">{folder.name}</span>
+                            )}
+                            {folder._count && (
+                              <span className="text-xs text-[#666] flex-shrink-0">({folder._count.collections})</span>
+                            )}
+                          </div>
+                        </button>
+                        <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 smooth-transition">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setEditingFolder(folder.id)
+                            }}
+                            className="p-1 text-[#666] hover:text-[var(--accent-color)] smooth-transition"
+                            title="Rename folder"
+                          >
+                            <Edit className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={(e) => handleDeleteFolder(folder.id, e)}
+                            className="p-1 text-[#666] hover:text-red-400 smooth-transition"
+                            title="Delete folder"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </div>
+                      {isOpen && folderCollections.length > 0 && (
+                        <div className="ml-6 space-y-1 border-l border-[#2a2d35] pl-3">
+                          <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={(e) => handleCollectionDragEnd(e, folder.id)}
+                          >
+                            <SortableContext
+                              items={folderCollections.map(c => c.id)}
+                              strategy={verticalListSortingStrategy}
+                            >
+                              {folderCollections.map((collection) => (
+                                <SortableCollectionItem
+                                  key={collection.id}
+                                  collection={collection}
+                                  folderId={folder.id}
+                                />
+                              ))}
+                            </SortableContext>
+                          </DndContext>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Overall Progress */}
           {session?.user?.id && collections.length > 0 && showProgress && (
