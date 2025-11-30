@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, Plus, Check, X, Upload, Grid3x3, List, Edit, ChevronDown, ChevronUp, Info, Image as ImageIcon, Download, Share2, Trash2, Heart, Square, CheckSquare2, Copy, Link as LinkIcon } from 'lucide-react'
+import { ArrowLeft, Plus, Check, X, Upload, Grid3x3, List, Edit, ChevronDown, ChevronUp, Info, Image as ImageIcon, Download, Share2, Trash2, Heart, Square, CheckSquare2, Copy, Link as LinkIcon, ArrowUpDown } from 'lucide-react'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import BulkImportDialog from './BulkImportDialog'
@@ -86,6 +86,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [addingItem, setAddingItem] = useState(false)
   const [showBulkImport, setShowBulkImport] = useState(false)
   const [viewMode, setViewMode] = useState<'cover' | 'list'>('cover')
+  const [sortBy, setSortBy] = useState<'number-asc' | 'number-desc' | 'name-asc' | 'name-desc' | 'owned' | 'not-owned' | 'rating-high' | 'rating-low' | 'date-new' | 'date-old'>('number-asc')
+  const [showSortMenu, setShowSortMenu] = useState(false)
   const [editingItem, setEditingItem] = useState<Item | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
@@ -520,6 +522,107 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     )
   }
 
+  // Sort items based on selected sort option
+  const sortedItems = useMemo(() => {
+    const itemsCopy = [...items]
+    switch (sortBy) {
+      case 'number-asc':
+        return itemsCopy.sort((a, b) => {
+          if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+          if (a.number === null) return 1
+          if (b.number === null) return -1
+          return a.number - b.number
+        })
+      case 'number-desc':
+        return itemsCopy.sort((a, b) => {
+          if (a.number === null && b.number === null) return b.name.localeCompare(a.name)
+          if (a.number === null) return 1
+          if (b.number === null) return -1
+          return b.number - a.number
+        })
+      case 'name-asc':
+        return itemsCopy.sort((a, b) => a.name.localeCompare(b.name))
+      case 'name-desc':
+        return itemsCopy.sort((a, b) => b.name.localeCompare(a.name))
+      case 'owned':
+        return itemsCopy.sort((a, b) => {
+          if (a.isOwned === b.isOwned) {
+            // If same owned status, sort by number
+            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+            if (a.number === null) return 1
+            if (b.number === null) return -1
+            return a.number - b.number
+          }
+          return a.isOwned ? -1 : 1
+        })
+      case 'not-owned':
+        return itemsCopy.sort((a, b) => {
+          if (a.isOwned === b.isOwned) {
+            // If same owned status, sort by number
+            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+            if (a.number === null) return 1
+            if (b.number === null) return -1
+            return a.number - b.number
+          }
+          return a.isOwned ? 1 : -1
+        })
+      case 'rating-high':
+        return itemsCopy.sort((a, b) => {
+          if (a.personalRating === null && b.personalRating === null) {
+            // If both null, sort by number
+            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+            if (a.number === null) return 1
+            if (b.number === null) return -1
+            return a.number - b.number
+          }
+          if (a.personalRating === null) return 1
+          if (b.personalRating === null) return -1
+          return b.personalRating - a.personalRating
+        })
+      case 'rating-low':
+        return itemsCopy.sort((a, b) => {
+          if (a.personalRating === null && b.personalRating === null) {
+            // If both null, sort by number
+            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+            if (a.number === null) return 1
+            if (b.number === null) return -1
+            return a.number - b.number
+          }
+          if (a.personalRating === null) return 1
+          if (b.personalRating === null) return -1
+          return a.personalRating - b.personalRating
+        })
+      case 'date-new':
+        return itemsCopy.sort((a, b) => {
+          if (!a.logDate && !b.logDate) {
+            // If both null, sort by number
+            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+            if (a.number === null) return 1
+            if (b.number === null) return -1
+            return a.number - b.number
+          }
+          if (!a.logDate) return 1
+          if (!b.logDate) return -1
+          return new Date(b.logDate).getTime() - new Date(a.logDate).getTime()
+        })
+      case 'date-old':
+        return itemsCopy.sort((a, b) => {
+          if (!a.logDate && !b.logDate) {
+            // If both null, sort by number
+            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
+            if (a.number === null) return 1
+            if (b.number === null) return -1
+            return a.number - b.number
+          }
+          if (!a.logDate) return 1
+          if (!b.logDate) return -1
+          return new Date(a.logDate).getTime() - new Date(b.logDate).getTime()
+        })
+      default:
+        return itemsCopy
+    }
+  }, [items, sortBy])
+
   const ownedCount = items.filter(item => item.isOwned).length
   const totalCount = totalItemsCount || items.length
   const progress = totalCount > 0 ? Math.round((ownedCount / totalCount) * 100) : 0
@@ -707,6 +810,90 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                 </CardDescription>
               </div>
               <div className="flex gap-2">
+                <div className="relative">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowSortMenu(!showSortMenu)}
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                  >
+                    <ArrowUpDown className="mr-2 h-4 w-4" />
+                    Sort
+                  </Button>
+                  {showSortMenu && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-10" 
+                        onClick={() => setShowSortMenu(false)}
+                      />
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-20 overflow-hidden">
+                        <div className="px-3 py-2 text-xs font-semibold text-[#969696] uppercase border-b border-[#2a2d35]">
+                          Sort by
+                        </div>
+                        <button
+                          onClick={() => { setSortBy('number-asc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'number-asc' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Number (Low to High)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('number-desc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'number-desc' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Number (High to Low)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'name-asc' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Name (A-Z)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'name-desc' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Name (Z-A)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('owned'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'owned' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Owned First
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('not-owned'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'not-owned' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Not Owned First
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('rating-high'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'rating-high' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Rating (High to Low)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('rating-low'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'rating-low' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Rating (Low to High)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'date-new' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Date Added (Newest)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'date-old' ? 'bg-[#2a2d35]' : ''}`}
+                        >
+                          Date Added (Oldest)
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
                 <Button
                   variant={viewMode === 'cover' ? 'default' : 'outline'}
                   size="sm"
@@ -801,10 +988,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             )}
             {items.length > 0 && viewMode === 'cover' && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                {items.map((item, index) => (
+                {sortedItems.map((item, index) => (
                   <div
                     key={item.id}
-                    data-last-item={index === items.length - 1 ? true : undefined}
+                    data-last-item={index === sortedItems.length - 1 ? true : undefined}
                     className={`relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer ${
                       item.isOwned
                         ? 'border-[#34C759] shadow-md'
@@ -1059,10 +1246,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             )}
             {items.length > 0 && viewMode === 'list' && (
               <div className="space-y-2">
-                {items.map((item, index) => (
+                {sortedItems.map((item, index) => (
                   <div
                     key={item.id}
-                    data-last-item={index === items.length - 1 ? true : undefined}
+                    data-last-item={index === sortedItems.length - 1 ? true : undefined}
                     className={`rounded-lg border transition-colors animate-fade-up cursor-pointer ${
                       item.isOwned
                         ? 'bg-[#1a2e1a] border-[#34C759]'
