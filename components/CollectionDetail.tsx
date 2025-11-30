@@ -41,10 +41,7 @@ interface Collection {
   coverImage?: string | null
   coverImageAspectRatio?: string | null
   tags?: string
-  items?: Item[] // Optional - may not be loaded initially
-  _count?: {
-    items: number
-  }
+  items: Item[]
 }
 
 // Helper function to get custom field definitions
@@ -75,12 +72,7 @@ const getItemCustomFields = (item: Item): Record<string, any> => {
 export default function CollectionDetail({ collectionId }: { collectionId: string }) {
   const router = useRouter()
   const [collection, setCollection] = useState<Collection | null>(null)
-  const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
-  const [itemsLoading, setItemsLoading] = useState(false)
-  const [itemsPage, setItemsPage] = useState(1)
-  const [hasMoreItems, setHasMoreItems] = useState(true)
-  const [totalItemsCount, setTotalItemsCount] = useState(0)
   const [newItemName, setNewItemName] = useState('')
   const [newItemNumber, setNewItemNumber] = useState('')
   const [addingItem, setAddingItem] = useState(false)
@@ -103,16 +95,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     fetchCollection()
   }, [collectionId])
 
-  useEffect(() => {
-    if (collection) {
-      // Load first page of items
-      fetchItems(1)
-    }
-  }, [collection])
-
   const fetchCollection = async () => {
     try {
-      // Don't include items in initial fetch - we'll load them separately with pagination
       const res = await fetch(`/api/collections/${collectionId}`)
       if (res.ok) {
         const data = await res.json()
@@ -120,7 +104,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         // Share settings are now included in the collection response
         setIsPublic(data.isPublic || false)
         setShareToken(data.shareToken || null)
-        setTotalItemsCount(data._count?.items || 0)
       }
     } catch (error) {
       console.error('Error fetching collection:', error)
@@ -128,72 +111,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       setLoading(false)
     }
   }
-
-  const fetchItems = async (page: number = 1, append: boolean = false) => {
-    if (itemsLoading) return
-    
-    setItemsLoading(true)
-    try {
-      const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50`)
-      if (res.ok) {
-        const data = await res.json()
-        if (append) {
-          setItems(prev => [...prev, ...data.items])
-        } else {
-          setItems(data.items)
-        }
-        setHasMoreItems(data.pagination.hasMore)
-        setItemsPage(page)
-      }
-    } catch (error) {
-      console.error('Error fetching items:', error)
-    } finally {
-      setItemsLoading(false)
-    }
-  }
-
-  // Intersection Observer for infinite scroll
-  useEffect(() => {
-    if (!hasMoreItems || itemsLoading) return
-
-    const loadMore = () => {
-      if (hasMoreItems && !itemsLoading) {
-        fetchItems(itemsPage + 1, true)
-      }
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore()
-        }
-      },
-      {
-        rootMargin: '200px', // Start loading 200px before reaching the bottom
-      }
-    )
-
-    // Observe both sentinels (one for cover view, one for list view)
-    const sentinelCover = document.getElementById('items-sentinel-cover')
-    const sentinelList = document.getElementById('items-sentinel-list')
-    
-    if (sentinelCover) {
-      observer.observe(sentinelCover)
-    }
-    if (sentinelList) {
-      observer.observe(sentinelList)
-    }
-
-    return () => {
-      if (sentinelCover) {
-        observer.unobserve(sentinelCover)
-      }
-      if (sentinelList) {
-        observer.unobserve(sentinelList)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMoreItems, itemsLoading, itemsPage, viewMode])
 
   const toggleItemOwned = async (itemId: string, currentStatus: boolean) => {
     try {
@@ -228,13 +145,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
-        const newItem = await res.json()
         setNewItemName('')
         setNewItemNumber('')
         setShowAddForm(false)
-        // Add the new item to the list and refresh count
-        setItems(prev => [newItem, ...prev])
-        setTotalItemsCount(prev => prev + 1)
+        fetchCollection()
       }
     } catch (error) {
       console.error('Error adding item:', error)
@@ -260,9 +174,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
-        // Remove item from the list
-        setItems(prev => prev.filter(item => item.id !== itemId))
-        setTotalItemsCount(prev => Math.max(0, prev - 1))
+        fetchCollection()
         showAlert({
           title: 'Success',
           message: 'Item deleted successfully.',
@@ -299,7 +211,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   const selectAll = () => {
     if (collection) {
-      setSelectedItems(new Set(items.map(item => item.id)))
+      setSelectedItems(new Set(collection.items.map(item => item.id)))
     }
   }
 
@@ -394,7 +306,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     if (selectedItems.size === 0 || !collection) return
 
     try {
-      const itemsToAdd = items
+      const itemsToAdd = collection.items
         .filter(item => selectedItems.has(item.id))
         .map(item => ({
           itemId: item.id,
@@ -456,8 +368,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       }
 
       const result = await res.json()
-      // Update the item in the local state
-      setItems(prev => prev.map(item => item.id === itemId ? result : item))
+      fetchCollection()
       return result
     } catch (error) {
       console.error('Error saving item:', error)
@@ -489,8 +400,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     )
   }
 
-  const ownedCount = items.filter(item => item.isOwned).length
-  const totalCount = totalItemsCount || items.length
+  const ownedCount = collection.items.filter(item => item.isOwned).length
+  const totalCount = collection.items.length
   const progress = totalCount > 0 ? Math.round((ownedCount / totalCount) * 100) : 0
 
   return (
@@ -763,15 +674,14 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
               )}
             </div>
 
-            {items.length === 0 && !itemsLoading && (
+            {collection.items.length === 0 && (
               <div className="text-center py-12 text-[#969696]">
                 No items yet. Add your first item above!
               </div>
             )}
-            {items.length > 0 && viewMode === 'cover' && (
-              <>
+            {collection.items.length > 0 && viewMode === 'cover' && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                {items.map((item, index) => (
+                {collection.items.map((item, index) => (
                   <div
                     key={item.id}
                     className={`relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer ${
@@ -1025,20 +935,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </div>
                 ))}
               </div>
-              {/* Infinite scroll sentinel for cover view */}
-              {hasMoreItems && (
-                <div id="items-sentinel-cover" className="h-20 flex items-center justify-center">
-                  {itemsLoading && (
-                    <div className="text-sm text-[#666]">Loading more items...</div>
-                  )}
-                </div>
-              )}
-              </>
             )}
-            {items.length > 0 && viewMode === 'list' && (
-              <>
+            {collection.items.length > 0 && viewMode === 'list' && (
               <div className="space-y-2">
-                {items.map((item, index) => (
+                {collection.items.map((item, index) => (
                   <div
                     key={item.id}
                     className={`rounded-lg border transition-colors animate-fade-up cursor-pointer ${
@@ -1237,20 +1137,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </div>
                 ))}
               </div>
-              {/* Infinite scroll sentinel for list view */}
-              {hasMoreItems && (
-                <div id="items-sentinel-list" className="h-20 flex items-center justify-center">
-                  {itemsLoading && (
-                    <div className="text-sm text-[#666]">Loading more items...</div>
-                  )}
-                </div>
-              )}
-              </>
-            )}
-            {itemsLoading && items.length === 0 && (
-              <div className="text-center py-12 text-[#969696]">
-                Loading items...
-              </div>
             )}
           </CardContent>
         </Card>
@@ -1260,11 +1146,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         open={showBulkImport}
         onOpenChange={setShowBulkImport}
         collectionId={collectionId}
-        onSuccess={() => {
-          // Refresh items after bulk import
-          fetchItems(1, false)
-          fetchCollection()
-        }}
+        onSuccess={fetchCollection}
       />
       <EditItemDialog
         open={editingItem !== null}

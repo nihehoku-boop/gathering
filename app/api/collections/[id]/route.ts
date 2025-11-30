@@ -17,11 +17,6 @@ export async function GET(
     const resolvedParams = await Promise.resolve(params)
     const collectionId = resolvedParams.id
 
-    // Get query parameter to determine if we should include items
-    const url = new URL(request.url)
-    const includeItems = url.searchParams.get('includeItems') === 'true'
-    const itemsLimit = includeItems ? parseInt(url.searchParams.get('itemsLimit') || '100') : 0
-
     const collection = await prisma.collection.findFirst({
       where: {
         id: collectionId,
@@ -44,16 +39,11 @@ export async function GET(
         isPublic: true,
         createdAt: true,
         updatedAt: true,
-        // Only include items if explicitly requested, and limit the number
-        items: includeItems ? {
+        items: {
           orderBy: [
             { number: 'asc' },
             { name: 'asc' },
           ],
-          take: itemsLimit,
-        } : undefined,
-        _count: {
-          select: { items: true },
         },
       },
     })
