@@ -910,7 +910,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 })
                               }
                             }}
-                            className="w-6 h-6 rounded-full bg-[#FF3B30] text-white flex items-center justify-center shadow-md hover:bg-[#C0392B] smooth-transition"
+                            className="w-6 h-6 rounded-full bg-[#FF6B9D] text-white flex items-center justify-center shadow-md hover:bg-[#E55A8A] smooth-transition"
                             title="Add to Wishlist"
                           >
                             <Heart className="h-3 w-3" />
@@ -1062,7 +1062,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 })
                               }
                             }}
-                            className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition"
+                            className="text-[#FF6B9D] hover:text-[#FF6B9D] hover:bg-[#FF6B9D]/10 smooth-transition"
                             title="Add to Wishlist"
                           >
                             <Heart className="h-4 w-4" />

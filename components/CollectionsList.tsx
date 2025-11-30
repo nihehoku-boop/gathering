@@ -38,6 +38,7 @@ interface Collection {
   items: Array<{
     isOwned: boolean
   }>
+  ownedCount?: number // Added from optimized API
 }
 
 interface UpdateStatus {
@@ -293,7 +294,10 @@ export default function CollectionsList() {
 
   const calculateProgress = (collection: Collection) => {
     if (collection._count.items === 0) return 0
-    const owned = collection.items.filter(item => item.isOwned).length
+    // Use ownedCount if available (from optimized API), otherwise calculate from items
+    const owned = collection.ownedCount !== undefined 
+      ? collection.ownedCount 
+      : (collection.items?.filter(item => item.isOwned).length || 0)
     return Math.round((owned / collection._count.items) * 100)
   }
 

@@ -130,12 +130,17 @@ export default function Sidebar() {
     let owned = 0
 
     collections.forEach(collection => {
-      if (collection.items) {
+      // Use ownedCount if available (from optimized API), otherwise calculate from items
+      if ((collection as any).ownedCount !== undefined) {
+        total += collection._count?.items || 0
+        owned += (collection as any).ownedCount || 0
+      } else if (collection.items && collection.items.length > 0) {
         total += collection.items.length
         owned += collection.items.filter(item => item.isOwned).length
       } else if (collection._count?.items) {
-        // Fallback if items array is not available
+        // Fallback if items array is not available and no ownedCount
         total += collection._count.items
+        // Can't calculate owned without items array or ownedCount
       }
     })
 
