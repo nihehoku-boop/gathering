@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef, useMemo } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -107,111 +107,16 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   useEffect(() => {
     if (collection) {
-      // Load first page of items silently
-      fetchItems(1)
+      // Reset items and load first page when collection or sort changes
+      setItems([])
+      setItemsPage(1)
+      setHasMoreItems(true)
+      fetchItems(1, false)
     }
-  }, [collection])
+  }, [collection, sortBy])
 
-  // Sort items based on selected sort option - MUST be before any early returns
-  const sortedItems = useMemo(() => {
-    const itemsCopy = [...items]
-    switch (sortBy) {
-      case 'number-asc':
-        return itemsCopy.sort((a, b) => {
-          if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-          if (a.number === null) return 1
-          if (b.number === null) return -1
-          return a.number - b.number
-        })
-      case 'number-desc':
-        return itemsCopy.sort((a, b) => {
-          if (a.number === null && b.number === null) return b.name.localeCompare(a.name)
-          if (a.number === null) return 1
-          if (b.number === null) return -1
-          return b.number - a.number
-        })
-      case 'name-asc':
-        return itemsCopy.sort((a, b) => a.name.localeCompare(b.name))
-      case 'name-desc':
-        return itemsCopy.sort((a, b) => b.name.localeCompare(a.name))
-      case 'owned':
-        return itemsCopy.sort((a, b) => {
-          if (a.isOwned === b.isOwned) {
-            // If same owned status, sort by number
-            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-            if (a.number === null) return 1
-            if (b.number === null) return -1
-            return a.number - b.number
-          }
-          return a.isOwned ? -1 : 1
-        })
-      case 'not-owned':
-        return itemsCopy.sort((a, b) => {
-          if (a.isOwned === b.isOwned) {
-            // If same owned status, sort by number
-            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-            if (a.number === null) return 1
-            if (b.number === null) return -1
-            return a.number - b.number
-          }
-          return a.isOwned ? 1 : -1
-        })
-      case 'rating-high':
-        return itemsCopy.sort((a, b) => {
-          if (a.personalRating === null && b.personalRating === null) {
-            // If both null, sort by number
-            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-            if (a.number === null) return 1
-            if (b.number === null) return -1
-            return a.number - b.number
-          }
-          if (a.personalRating === null) return 1
-          if (b.personalRating === null) return -1
-          return b.personalRating - a.personalRating
-        })
-      case 'rating-low':
-        return itemsCopy.sort((a, b) => {
-          if (a.personalRating === null && b.personalRating === null) {
-            // If both null, sort by number
-            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-            if (a.number === null) return 1
-            if (b.number === null) return -1
-            return a.number - b.number
-          }
-          if (a.personalRating === null) return 1
-          if (b.personalRating === null) return -1
-          return a.personalRating - b.personalRating
-        })
-      case 'date-new':
-        return itemsCopy.sort((a, b) => {
-          if (!a.logDate && !b.logDate) {
-            // If both null, sort by number
-            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-            if (a.number === null) return 1
-            if (b.number === null) return -1
-            return a.number - b.number
-          }
-          if (!a.logDate) return 1
-          if (!b.logDate) return -1
-          return new Date(b.logDate).getTime() - new Date(a.logDate).getTime()
-        })
-      case 'date-old':
-        return itemsCopy.sort((a, b) => {
-          if (!a.logDate && !b.logDate) {
-            // If both null, sort by number
-            if (a.number === null && b.number === null) return a.name.localeCompare(b.name)
-            if (a.number === null) return 1
-            if (b.number === null) return -1
-            return a.number - b.number
-          }
-          if (!a.logDate) return 1
-          if (!b.logDate) return -1
-          return new Date(a.logDate).getTime() - new Date(b.logDate).getTime()
-        })
-      default:
-        return itemsCopy
-    }
-  }, [items, sortBy])
+  // Items are now sorted server-side, so we can use them directly
+  const sortedItems = items
 
   const fetchCollection = async () => {
     try {
@@ -251,7 +156,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     setItemsLoading(true)
     itemsLoadingRef.current = true
     try {
-      const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50`)
+      const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50&sortBy=${sortBy}`)
       if (res.ok) {
         const data = await res.json()
         if (append) {

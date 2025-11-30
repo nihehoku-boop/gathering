@@ -17,11 +17,12 @@ export async function GET(
     const resolvedParams = await Promise.resolve(params)
     const collectionId = resolvedParams.id
 
-    // Get query parameters for pagination
+    // Get query parameters for pagination and sorting
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '1')
     const limit = parseInt(url.searchParams.get('limit') || '50')
     const skip = (page - 1) * limit
+    const sortBy = url.searchParams.get('sortBy') || 'number-asc'
 
     // Verify collection belongs to user
     const collection = await prisma.collection.findFirst({
@@ -44,13 +45,48 @@ export async function GET(
       where: { collectionId },
     })
 
-    // Fetch paginated items
+    // Build orderBy based on sortBy parameter
+    // Prisma handles nulls by placing them last for desc and first for asc
+    const simplifiedOrderBy: any[] = []
+    switch (sortBy) {
+      case 'number-asc':
+        simplifiedOrderBy.push({ number: 'asc' }, { name: 'asc' })
+        break
+      case 'number-desc':
+        simplifiedOrderBy.push({ number: 'desc' }, { name: 'desc' })
+        break
+      case 'name-asc':
+        simplifiedOrderBy.push({ name: 'asc' })
+        break
+      case 'name-desc':
+        simplifiedOrderBy.push({ name: 'desc' })
+        break
+      case 'owned':
+        simplifiedOrderBy.push({ isOwned: 'desc' }, { number: 'asc' }, { name: 'asc' })
+        break
+      case 'not-owned':
+        simplifiedOrderBy.push({ isOwned: 'asc' }, { number: 'asc' }, { name: 'asc' })
+        break
+      case 'rating-high':
+        simplifiedOrderBy.push({ personalRating: 'desc' }, { number: 'asc' }, { name: 'asc' })
+        break
+      case 'rating-low':
+        simplifiedOrderBy.push({ personalRating: 'asc' }, { number: 'asc' }, { name: 'asc' })
+        break
+      case 'date-new':
+        simplifiedOrderBy.push({ logDate: 'desc' }, { number: 'asc' }, { name: 'asc' })
+        break
+      case 'date-old':
+        simplifiedOrderBy.push({ logDate: 'asc' }, { number: 'asc' }, { name: 'asc' })
+        break
+      default:
+        simplifiedOrderBy.push({ number: 'asc' }, { name: 'asc' })
+    }
+
+    // Fetch paginated items with sorting
     const items = await prisma.item.findMany({
       where: { collectionId },
-      orderBy: [
-        { number: 'asc' },
-        { name: 'asc' },
-      ],
+      orderBy: simplifiedOrderBy,
       skip,
       take: limit,
       select: {
