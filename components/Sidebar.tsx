@@ -605,7 +605,7 @@ export default function Sidebar() {
                           <button
                             onClick={() => toggleFolder(folder.id)}
                             className={cn(
-                              "flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm",
+                              "flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm relative",
                               "text-[#666] hover:text-[#fafafa] hover:bg-[#2a2d35]"
                             )}
                           >
@@ -614,29 +614,31 @@ export default function Sidebar() {
                             ) : (
                               <ChevronRight className="h-3 w-3 flex-shrink-0" />
                             )}
-                            <Folder className="h-3 w-3 flex-shrink-0" />
-                            {editingFolder === folder.id ? (
-                              <input
-                                type="text"
-                                defaultValue={folder.name}
-                                onBlur={(e) => handleEditFolder(folder.id, e.target.value)}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    handleEditFolder(folder.id, e.currentTarget.value)
-                                  } else if (e.key === 'Escape') {
-                                    setEditingFolder(null)
-                                  }
-                                }}
-                                autoFocus
-                                className="flex-1 px-1 text-xs bg-[#1a1d24] border border-[var(--accent-color)] rounded text-[#fafafa] focus:outline-none"
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            ) : (
-                              <span className="truncate flex-1">{folder.name}</span>
-                            )}
-                            {folder._count && (
-                              <span className="text-xs text-[#666]">({folder._count.collections})</span>
-                            )}
+                            <Folder className="h-3 w-3 flex-shrink-0 absolute left-8" />
+                            <div className="flex items-center gap-1 flex-1 ml-5 min-w-0">
+                              {editingFolder === folder.id ? (
+                                <input
+                                  type="text"
+                                  defaultValue={folder.name}
+                                  onBlur={(e) => handleEditFolder(folder.id, e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      handleEditFolder(folder.id, e.currentTarget.value)
+                                    } else if (e.key === 'Escape') {
+                                      setEditingFolder(null)
+                                    }
+                                  }}
+                                  autoFocus
+                                  className="flex-1 px-1 text-xs bg-[#1a1d24] border border-[var(--accent-color)] rounded text-[#fafafa] focus:outline-none"
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              ) : (
+                                <span className="truncate flex-1">{folder.name}</span>
+                              )}
+                              {folder._count && (
+                                <span className="text-xs text-[#666] flex-shrink-0">({folder._count.collections})</span>
+                              )}
+                            </div>
                           </button>
                           <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 smooth-transition">
                             <button
