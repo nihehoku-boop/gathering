@@ -50,6 +50,7 @@ export default function AdminDashboard() {
       const res = await fetch('/api/recommended-collections')
       if (res.ok) {
         const data = await res.json()
+        console.log('Fetched collections:', data)
         setCollections(data)
       }
     } catch (error) {
