@@ -113,11 +113,12 @@ export async function POST(request: NextRequest) {
     console.error('[Extract URL] Error:', error)
     const errorMessage = error instanceof Error ? error.message : String(error)
     const errorStack = error instanceof Error ? error.stack : undefined
+    const errorUrl = url !== undefined ? url : 'not provided'
     
     console.error('[Extract URL] Error details:', {
       message: errorMessage,
       stack: errorStack,
-      url: url !== undefined ? url : 'not provided',
+      url: errorUrl,
     })
     
     return NextResponse.json(
