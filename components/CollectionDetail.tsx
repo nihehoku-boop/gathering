@@ -549,16 +549,16 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
         <Card className="mb-8 bg-[#1a1d24] border-[#2a2d35] animate-fade-up">
           <CardHeader>
-            <div className="flex justify-between items-start">
-              <div>
-                <CardTitle className="text-4xl font-semibold text-[#fafafa] tracking-tight">{collection.name}</CardTitle>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-3xl sm:text-4xl font-semibold text-[#fafafa] tracking-tight break-words">{collection.name}</CardTitle>
                 {collection.category && (
                   <span className="text-sm text-muted-foreground bg-secondary px-2 py-1 rounded mt-2 inline-block">
                     {collection.category}
                   </span>
                 )}
                 {collection.description && (
-                  <CardDescription className="mt-2">
+                  <CardDescription className="mt-2 break-words">
                     {collection.description}
                   </CardDescription>
                 )}
@@ -698,7 +698,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                 <span className="font-semibold text-lg">{progress}%</span>
               </div>
               <Progress value={progress} className="h-3" />
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground break-words">
                 {ownedCount} of {totalCount} items collected
               </p>
             </div>
