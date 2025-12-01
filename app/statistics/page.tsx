@@ -90,21 +90,23 @@ export default function StatisticsPage() {
       <Sidebar />
       <Navbar />
       <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-        <div className="container mx-auto px-6 py-12">
-          <Button
-            variant="ghost"
-            onClick={() => router.push('/')}
-            className="mb-8 text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Collections
-          </Button>
-
-          <div className="mb-10 animate-fade-up">
-            <h1 className="text-5xl font-semibold text-[#fafafa] mb-3 tracking-tight">
-              Statistics Dashboard
-            </h1>
-            <p className="text-[#969696] text-lg">
+        <div className="container mx-auto px-6 py-8">
+          <div className="mb-10">
+            <div className="flex items-center gap-4 mb-6">
+              <Button
+                variant="ghost"
+                onClick={() => router.back()}
+                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Button>
+            </div>
+            <div className="flex items-center gap-3 mb-3">
+              <BarChart3 className="h-8 w-8 text-[#fafafa]" />
+              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">Statistics Dashboard</h1>
+            </div>
+            <p className="text-[#969696] text-lg mb-10">
               Insights into your collection
             </p>
           </div>
