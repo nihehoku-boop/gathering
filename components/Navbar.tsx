@@ -3,7 +3,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X } from 'lucide-react'
+import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, PanelLeft } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import { getBadgeEmoji } from '@/lib/badges'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
@@ -43,13 +43,13 @@ export default function Navbar() {
     <nav className="border-b border-[#2a2d35] glass sticky top-0 z-50 lg:ml-64 bg-[#1a1d24] animate-slide-in-right will-change-transform">
       <div className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex justify-between items-center gap-4">
-          {/* Mobile: Hamburger menu button for sidebar */}
+          {/* Mobile: Sidebar toggle button */}
           <button
             onClick={toggleSidebar}
             className="lg:hidden text-[#969696] hover:text-[#fafafa] smooth-transition p-2 -ml-2"
-            aria-label="Open menu"
+            aria-label="Open sidebar"
           >
-            <Menu className="h-6 w-6" />
+            <PanelLeft className="h-6 w-6" />
           </button>
 
           {/* Desktop: Menu items */}
