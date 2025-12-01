@@ -120,9 +120,9 @@ export default function Navbar() {
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2a2d35] hover:bg-[#353842] smooth-transition overflow-hidden"
                 aria-label="Profile"
               >
-                {session.user?.image ? (
+                {(session.user as any)?.image ? (
                   <img 
-                    src={session.user.image} 
+                    src={(session.user as any).image} 
                     alt={session.user?.name || 'Profile'} 
                     className="w-full h-full object-cover"
                   />
@@ -192,6 +192,7 @@ export default function Navbar() {
                   </div>
                 </>
               )}
+              </div>
             </div>
           )}
         </div>
