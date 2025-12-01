@@ -174,7 +174,7 @@ export default function ProfilePage() {
             <div className="flex items-center gap-4 mb-6">
               <Button
                 variant="ghost"
-                onClick={() => router.back()}
+                onClick={() => router.push('/')}
                 className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -419,7 +419,7 @@ export default function ProfilePage() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => router.back()}
+                      onClick={() => router.push('/')}
                       className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
                     >
                       Cancel
