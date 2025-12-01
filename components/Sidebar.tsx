@@ -846,6 +846,15 @@ export default function Sidebar() {
         onConfirm={alertDialog.onConfirm}
         onCancel={alertDialog.onCancel}
       />
+
+      <CreateCollectionDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onSuccess={() => {
+          fetchCollections()
+          setShowCreateDialog(false)
+        }}
+      />
     </>
   )
 }
