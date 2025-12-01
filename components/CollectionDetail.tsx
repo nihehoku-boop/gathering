@@ -563,7 +563,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   </CardDescription>
                 )}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-shrink-0">
                 <div className="relative">
                   <Button
                     variant="outline"
