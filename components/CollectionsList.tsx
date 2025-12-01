@@ -509,7 +509,78 @@ export default function CollectionsList() {
       </div>
 
       {collections.length > 0 && filteredCollections.length > 0 && (
-        <div className="mb-6 flex gap-2 justify-end">
+        <div className="mb-6 flex gap-2 justify-end items-center">
+          <div className="relative">
+            <Button
+              variant="outline"
+              onClick={() => setShowSortMenu(!showSortMenu)}
+              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+            >
+              <ArrowUpDown className="mr-2 h-4 w-4" />
+              Sort
+            </Button>
+            {showSortMenu && (
+              <>
+                <div 
+                  className="fixed inset-0 z-10" 
+                  onClick={() => setShowSortMenu(false)}
+                />
+                <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-20 overflow-hidden">
+                  <div className="px-3 py-2 text-xs font-semibold text-[#969696] uppercase border-b border-[#2a2d35]">
+                    Sort by
+                  </div>
+                  <button
+                    onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'name-asc' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Name (A-Z)
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'name-desc' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Name (Z-A)
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('items-desc'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'items-desc' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Most Items
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('items-asc'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'items-asc' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Fewest Items
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('progress-desc'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'progress-desc' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Highest Progress
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('progress-asc'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'progress-asc' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Lowest Progress
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'date-new' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Newest First
+                  </button>
+                  <button
+                    onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
+                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'date-old' ? 'bg-[#2a2d35]' : ''}`}
+                  >
+                    Oldest First
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
           <div className="relative">
             <Button
               variant="outline"
