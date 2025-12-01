@@ -19,11 +19,9 @@ export default function AccentColorLoader() {
     const loadAccentColor = async () => {
       let accentColor = '#FFD60A' // Default
 
-      // First, try to get from session
-      if (session?.user?.accentColor) {
-        accentColor = session.user.accentColor
-      } else if (session?.user?.id) {
-        // If not in session, fetch from profile API
+      // Always fetch from API if user is logged in to get the latest value
+      // (session might be cached and not reflect recent changes)
+      if (session?.user?.id) {
         try {
           const res = await fetch('/api/user/profile')
           if (res.ok) {
@@ -34,7 +32,14 @@ export default function AccentColorLoader() {
           }
         } catch (error) {
           console.error('Error loading accent color:', error)
+          // Fallback to session if API fails
+          if (session?.user?.accentColor) {
+            accentColor = session.user.accentColor
+          }
         }
+      } else if (session?.user?.accentColor) {
+        // If not logged in but have session data, use it
+        accentColor = session.user.accentColor
       }
 
       // Apply the accent color
@@ -43,7 +48,10 @@ export default function AccentColorLoader() {
       document.documentElement.style.setProperty('--accent-color-hover', accentColorHover)
     }
 
-    loadAccentColor()
+    // Load immediately if session is available, otherwise wait for it
+    if (session !== undefined) {
+      loadAccentColor()
+    }
   }, [session])
 
   return null // This component doesn't render anything

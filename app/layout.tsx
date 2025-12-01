@@ -31,9 +31,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
-  const accentColor = (session?.user as any)?.accentColor || '#FFD60A'
-  const accentColorHover = adjustBrightness(accentColor, -20)
+  // Don't try to get accent color server-side - let client-side component handle it
+  // This avoids hydration mismatches and ensures we always get the latest value
+  const defaultAccentColor = '#FFD60A'
+  const defaultAccentColorHover = adjustBrightness(defaultAccentColor, -20)
 
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
@@ -42,8 +43,9 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                const accentColor = '${accentColor}';
-                const accentColorHover = '${accentColorHover}';
+                // Set default values - AccentColorLoader will update them after hydration
+                const accentColor = '${defaultAccentColor}';
+                const accentColorHover = '${defaultAccentColorHover}';
                 document.documentElement.style.setProperty('--accent-color', accentColor);
                 document.documentElement.style.setProperty('--accent-color-hover', accentColorHover);
               })();
