@@ -589,6 +589,14 @@ export default function BulkImportDialog({
                   <li key={idx}>
                     {item.number && `#${item.number} - `}
                     {item.name}
+                    {item.customFields && Object.keys(item.customFields).length > 0 && (
+                      <span className="text-muted-foreground ml-2 text-xs">
+                        ({Object.entries(item.customFields).map(([key, val]) => {
+                          const field = templateFields.find(f => f.id === key)
+                          return `${field?.label || key}: ${val}`
+                        }).join(', ')})
+                      </span>
+                    )}
                   </li>
                 ))}
                 {getItemCount() > 5 && (
