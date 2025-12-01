@@ -3,15 +3,18 @@
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3 } from 'lucide-react'
+import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { getBadgeEmoji } from '@/lib/badges'
+import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 export default function Navbar() {
+  const { toggleSidebar } = useMobileMenu()
   const { data: session } = useSession()
   const router = useRouter()
   const pathname = usePathname()
   const [isAdmin, setIsAdmin] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -26,84 +29,93 @@ export default function Navbar() {
     }
   }, [session])
 
+  const menuItems = session ? [
+    ...(isAdmin ? [{ label: 'Admin', icon: Star, path: '/admin' }] : []),
+    { label: 'Achievements', icon: Award, path: '/achievements' },
+    { label: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
+    { label: 'Statistics', icon: BarChart3, path: '/statistics' },
+    { label: 'About', icon: Info, path: '/about' },
+    { label: 'Settings', icon: Settings, path: '/settings' },
+  ] : []
+
   return (
     <nav className="border-b border-[#2a2d35] glass sticky top-0 z-50 lg:ml-64 bg-[#1a1d24] animate-slide-in-right will-change-transform">
-      <div className="container mx-auto px-6 py-4">
+      <div className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-6 flex-1">
-            {isAdmin && (
-              <button
-                onClick={() => router.push('/admin')}
-                className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                  pathname === '/admin' 
-                    ? 'text-[var(--accent-color)] font-medium' 
-                    : 'text-[#969696] hover:text-[#fafafa]'
-                }`}
-              >
-                <Star className="h-4 w-4" />
-                Admin
-              </button>
-            )}
-            {session && (
-              <>
+          {/* Mobile: Hamburger menu button for sidebar */}
+          <button
+            onClick={toggleSidebar}
+            className="lg:hidden text-[#969696] hover:text-[#fafafa] smooth-transition p-2 -ml-2"
+            aria-label="Open menu"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+
+          {/* Desktop: Menu items */}
+          <div className="hidden lg:flex items-center gap-6 flex-1">
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              return (
                 <button
-                  onClick={() => router.push('/achievements')}
+                  key={item.path}
+                  onClick={() => router.push(item.path)}
                   className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === '/achievements' 
+                    pathname === item.path 
                       ? 'text-[var(--accent-color)] font-medium' 
                       : 'text-[#969696] hover:text-[#fafafa]'
                   }`}
                 >
-                  <Award className="h-4 w-4" />
-                  Achievements
+                  <Icon className="h-4 w-4" />
+                  {item.label}
                 </button>
-                <button
-                  onClick={() => router.push('/leaderboard')}
-                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === '/leaderboard' 
-                      ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
-                  }`}
-                >
-                  <Trophy className="h-4 w-4" />
-                  Leaderboard
-                </button>
-                <button
-                  onClick={() => router.push('/statistics')}
-                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === '/statistics' 
-                      ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
-                  }`}
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  Statistics
-                </button>
-                <button
-                  onClick={() => router.push('/about')}
-                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === '/about' 
-                      ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
-                  }`}
-                >
-                  <Info className="h-4 w-4" />
-                  About
-                </button>
-                <button
-                  onClick={() => router.push('/settings')}
-                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === '/settings' 
-                      ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
-                  }`}
-                >
-                  <Settings className="h-4 w-4" />
-                  Settings
-                </button>
-              </>
-            )}
+              )
+            })}
           </div>
+
+          {/* Mobile: Menu dropdown button */}
+          {session && menuItems.length > 0 && (
+            <div className="lg:hidden relative">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-[#969696] hover:text-[#fafafa] smooth-transition p-2"
+                aria-label="Open menu"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+              
+              {/* Mobile dropdown menu */}
+              {isMobileMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 overflow-hidden">
+                    {menuItems.map((item) => {
+                      const Icon = item.icon
+                      return (
+                        <button
+                          key={item.path}
+                          onClick={() => {
+                            router.push(item.path)
+                            setIsMobileMenuOpen(false)
+                          }}
+                          className={`w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 ${
+                            pathname === item.path
+                              ? 'bg-[var(--accent-color)]/20 text-[var(--accent-color)]'
+                              : 'text-[#fafafa] hover:bg-[#2a2d35]'
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                          {item.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
           <div className="flex items-center gap-4">
             {session && (
               <>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical } from 'lucide-react'
@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
 import { useAlert } from '@/hooks/useAlert'
 import AlertDialog from './ui/alert-dialog'
+import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import {
   DndContext,
   closestCenter,
@@ -50,6 +51,7 @@ export default function Sidebar() {
   const router = useRouter()
   const pathname = usePathname()
   const { data: session } = useSession()
+  const { isSidebarOpen, setIsSidebarOpen } = useMobileMenu()
   const [collections, setCollections] = useState<Collection[]>([])
   const [folders, setFolders] = useState<Folder[]>([])
   const [openFolders, setOpenFolders] = useState<Set<string>>(new Set())
@@ -57,7 +59,13 @@ export default function Sidebar() {
   const [newFolderName, setNewFolderName] = useState('')
   const [showNewFolderInput, setShowNewFolderInput] = useState(false)
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(true)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
+  
+  // Close sidebar when route changes on mobile
+  useEffect(() => {
+    setIsSidebarOpen(false)
+  }, [pathname, setIsSidebarOpen])
   const [showProgress, setShowProgress] = useState(() => {
     // Initialize from localStorage immediately to prevent flicker
     if (typeof window !== 'undefined') {
@@ -394,7 +402,7 @@ export default function Sidebar() {
         <button
           onClick={() => {
             router.push(`/collections/${collection.id}`)
-            setIsMobileOpen(false)
+            setIsSidebarOpen(false)
           }}
           className="truncate flex-1 text-left"
         >
@@ -406,24 +414,83 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile overlay */}
-      {isMobileOpen && (
+      {/* Mobile overlay with swipe to close */}
+      {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setIsMobileOpen(false)}
+          onClick={() => setIsSidebarOpen(false)}
+          onTouchStart={(e) => {
+            const touch = e.touches[0]
+            touchStartX.current = touch.clientX
+            touchStartY.current = touch.clientY
+          }}
+          onTouchMove={(e) => {
+            if (touchStartX.current !== null && touchStartY.current !== null) {
+              const touch = e.touches[0]
+              const deltaX = touch.clientX - touchStartX.current
+              const deltaY = touch.clientY - touchStartY.current
+              
+              // If swiping left more than right, and more horizontal than vertical
+              if (deltaX < -10 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                e.preventDefault()
+              }
+            }
+          }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current !== null) {
+              const touch = e.changedTouches[0]
+              const deltaX = touch.clientX - touchStartX.current
+              
+              // If swiped left more than 50px, close sidebar
+              if (deltaX < -50) {
+                setIsSidebarOpen(false)
+              }
+            }
+            touchStartX.current = null
+            touchStartY.current = null
+          }}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar with swipe to close */}
       <aside
         className={cn(
           "fixed left-0 top-0 h-full w-64 bg-[#1a1d24] border-r border-[#2a2d35] z-50 transition-transform duration-300 ease-in-out will-change-transform",
           "lg:translate-x-0",
-          isMobileOpen ? "translate-x-0" : "-translate-x-full"
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
         style={{ 
           opacity: isMounted ? 1 : 0,
           transition: 'opacity 0.2s ease-in, transform 0.3s ease-in-out'
+        }}
+        onTouchStart={(e) => {
+          const touch = e.touches[0]
+          touchStartX.current = touch.clientX
+          touchStartY.current = touch.clientY
+        }}
+        onTouchMove={(e) => {
+          if (isSidebarOpen && touchStartX.current !== null) {
+            const touch = e.touches[0]
+            const deltaX = touch.clientX - touchStartX.current
+            
+            // If swiping left (closing), allow it
+            if (deltaX < -10) {
+              e.preventDefault()
+            }
+          }
+        }}
+        onTouchEnd={(e) => {
+          if (isSidebarOpen && touchStartX.current !== null) {
+            const touch = e.changedTouches[0]
+            const deltaX = touch.clientX - touchStartX.current
+            
+            // If swiped left more than 50px, close sidebar
+            if (deltaX < -50) {
+              setIsSidebarOpen(false)
+            }
+          }
+          touchStartX.current = null
+          touchStartY.current = null
         }}
       >
         <div className="flex flex-col h-full">
@@ -433,7 +500,7 @@ export default function Sidebar() {
               Gathering
             </h2>
             <button
-              onClick={() => setIsMobileOpen(false)}
+              onClick={() => setIsSidebarOpen(false)}
               className="lg:hidden text-[#969696] hover:text-[#fafafa] smooth-transition"
             >
               <X className="h-5 w-5" />
@@ -446,7 +513,7 @@ export default function Sidebar() {
             <button
               onClick={() => {
                 router.push('/recommended')
-                setIsMobileOpen(false)
+                setIsSidebarOpen(false)
               }}
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 rounded-full text-left smooth-transition",
@@ -463,7 +530,7 @@ export default function Sidebar() {
             <button
               onClick={() => {
                 router.push('/community')
-                setIsMobileOpen(false)
+                setIsSidebarOpen(false)
               }}
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 rounded-full text-left smooth-transition",
@@ -480,7 +547,7 @@ export default function Sidebar() {
             <button
               onClick={() => {
                 router.push('/wishlist')
-                setIsMobileOpen(false)
+                setIsSidebarOpen(false)
               }}
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 rounded-full text-left smooth-transition",
@@ -501,7 +568,7 @@ export default function Sidebar() {
                     setIsCollectionsOpen(!isCollectionsOpen)
                     if (!isCollectionsOpen) {
                       router.push('/')
-                      setIsMobileOpen(false)
+                      setIsSidebarOpen(false)
                     }
                   }}
                   className={cn(
@@ -529,7 +596,7 @@ export default function Sidebar() {
                   <button
                     onClick={() => {
                       router.push('/')
-                      setIsMobileOpen(false)
+                      setIsSidebarOpen(false)
                     }}
                     className={cn(
                       "w-full flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm",
@@ -745,7 +812,7 @@ export default function Sidebar() {
 
       {/* Mobile menu button */}
       <button
-        onClick={() => setIsMobileOpen(true)}
+        onClick={() => setIsSidebarOpen(true)}
         className="lg:hidden fixed top-4 left-4 z-30 p-2 bg-[#1a1d24] border border-[#2a2d35] rounded-full text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
       >
         <svg
