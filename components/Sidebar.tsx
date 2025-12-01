@@ -810,23 +810,6 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setIsSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-30 p-2 bg-[#1a1d24] border border-[#2a2d35] rounded-full text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
-      >
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
       <AlertDialog
         open={alertDialog.open}
         onOpenChange={(open) => !open && closeAlert()}

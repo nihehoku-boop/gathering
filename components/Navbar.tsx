@@ -90,7 +90,7 @@ export default function Navbar() {
                     className="fixed inset-0 bg-black/50 z-40 lg:hidden"
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 overflow-hidden">
+                  <div className="absolute right-0 top-full mt-2 w-56 max-w-[calc(100vw-1rem)] bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 overflow-hidden" style={{ right: '0.5rem' }}>
                     {menuItems.map((item) => {
                       const Icon = item.icon
                       return (
