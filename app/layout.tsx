@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth-config'
 
 const bricolageGrotesque = Bricolage_Grotesque({ 
   subsets: ['latin'],
