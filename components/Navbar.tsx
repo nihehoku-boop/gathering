@@ -73,8 +73,41 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Mobile: Menu dropdown button */}
-          {session && menuItems.length > 0 && (
+          {/* Desktop: Menu items */}
+          <div className="hidden lg:flex items-center gap-4">
+            {session && (
+              <>
+                <button
+                  onClick={() => router.push('/profile')}
+                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
+                    pathname === '/profile' 
+                      ? 'text-[var(--accent-color)] font-medium' 
+                      : 'text-[#969696] hover:text-[#fafafa]'
+                  }`}
+                >
+                  <User className="h-4 w-4" />
+                  <span className="text-[#fafafa] flex items-center gap-1.5">
+                    {session.user?.badge && (
+                      <span className="text-base">{getBadgeEmoji(session.user.badge) || session.user.badge}</span>
+                    )}
+                    {session.user?.name || session.user?.email}
+                  </span>
+                </button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+                  className="text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </Button>
+              </>
+            )}
+          </div>
+
+          {/* Mobile: Menu dropdown button (replaces sign out button position) */}
+          {session && (
             <div className="lg:hidden relative">
               <button
                 ref={menuButtonRef}
@@ -119,42 +152,24 @@ export default function Navbar() {
                         </button>
                       )
                     })}
+                    {/* Sign Out button in mobile menu */}
+                    <div className="border-t border-[#2a2d35]">
+                      <button
+                        onClick={() => {
+                          signOut({ callbackUrl: '/auth/signin' })
+                          setIsMobileMenuOpen(false)
+                        }}
+                        className="w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 text-[#fafafa] hover:bg-[#2a2d35]"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
             </div>
           )}
-          <div className="flex items-center gap-4">
-            {session && (
-              <>
-                <button
-                  onClick={() => router.push('/profile')}
-                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === '/profile' 
-                      ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
-                  }`}
-                >
-                  <User className="h-4 w-4" />
-                  <span className="text-[#fafafa] flex items-center gap-1.5">
-                    {session.user?.badge && (
-                      <span className="text-base">{getBadgeEmoji(session.user.badge) || session.user.badge}</span>
-                    )}
-                    {session.user?.name || session.user?.email}
-                  </span>
-                </button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => signOut({ callbackUrl: '/auth/signin' })}
-                  className="text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </Button>
-              </>
-            )}
-          </div>
         </div>
       </div>
     </nav>
