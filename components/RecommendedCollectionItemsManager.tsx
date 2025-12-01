@@ -274,7 +274,7 @@ export default function RecommendedCollectionItemsManager({
                       variant="ghost"
                       size="icon"
                       onClick={() => setEditingItem(item)}
-                      className="text-[#007AFF] hover:text-[#007AFF] hover:bg-[#2a2d35] smooth-transition"
+                      className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] hover:bg-[#2a2d35] smooth-transition"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

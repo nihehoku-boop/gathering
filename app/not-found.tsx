@@ -10,7 +10,7 @@ export default function NotFound() {
           The page you're looking for doesn't exist.
         </p>
         <Link href="/">
-          <Button className="bg-[#007AFF] hover:bg-[#0051D5] text-white smooth-transition">
+          <Button className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition">
             Go home
           </Button>
         </Link>

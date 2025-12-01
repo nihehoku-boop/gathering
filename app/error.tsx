@@ -24,7 +24,7 @@ export default function Error({
         <div className="flex gap-4 justify-center">
           <Button 
             onClick={reset}
-            className="bg-[#007AFF] hover:bg-[#0051D5] text-white smooth-transition"
+            className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition"
           >
             Try again
           </Button>

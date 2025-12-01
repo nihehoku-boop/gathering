@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -31,27 +32,73 @@ const adjustBrightness = (color: string, percent: number) => {
 
 export default function SettingsPage() {
   const router = useRouter()
+  const { data: session, update } = useSession()
   const [accentColor, setAccentColor] = useState('#FFD60A')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Load settings from localStorage
-    const savedAccentColor = localStorage.getItem('accentColor') || '#FFD60A'
-    const savedShowProgress = localStorage.getItem('showProgressInSidebar') !== 'false'
+    const fetchSettings = async () => {
+      try {
+        // Load accent color from user profile
+        const profileRes = await fetch('/api/user/profile')
+        if (profileRes.ok) {
+          const profileData = await profileRes.json()
+          const savedAccentColor = profileData.accentColor || '#FFD60A'
+          setAccentColor(savedAccentColor)
+          
+          // Apply accent color
+          document.documentElement.style.setProperty('--accent-color', savedAccentColor)
+          document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(savedAccentColor, -20))
+        }
+        
+        // Load sidebar progress setting from localStorage (still local)
+        const savedShowProgress = localStorage.getItem('showProgressInSidebar') !== 'false'
+        setShowProgressInSidebar(savedShowProgress)
+      } catch (error) {
+        console.error('Error fetching settings:', error)
+        // Fallback to defaults
+        setAccentColor('#FFD60A')
+        document.documentElement.style.setProperty('--accent-color', '#FFD60A')
+        document.documentElement.style.setProperty('--accent-color-hover', '#E6C009')
+      } finally {
+        setLoading(false)
+      }
+    }
 
-    setAccentColor(savedAccentColor)
-    setShowProgressInSidebar(savedShowProgress)
-
-    // Apply accent color
-    document.documentElement.style.setProperty('--accent-color', savedAccentColor)
-    document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(savedAccentColor, -20))
+    fetchSettings()
   }, [])
 
-  const handleAccentColorChange = (color: string) => {
+  const handleAccentColorChange = async (color: string) => {
     setAccentColor(color)
-    localStorage.setItem('accentColor', color)
+    
+    // Apply immediately for better UX
     document.documentElement.style.setProperty('--accent-color', color)
     document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(color, -20))
+    
+    try {
+      // Save to user profile
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accentColor: color }),
+      })
+      
+      if (res.ok) {
+        // Update session to reflect the change
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            accentColor: color,
+          },
+        })
+      } else {
+        console.error('Failed to save accent color')
+      }
+    } catch (error) {
+      console.error('Error saving accent color:', error)
+    }
   }
 
   const handleShowProgressChange = (enabled: boolean) => {
@@ -178,14 +225,27 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <p className="text-sm text-[#969696]">
-                  Your settings are stored locally in your browser. Clearing your browser data will reset these preferences.
+                  Your accent color is synced across all your devices. Sidebar preferences are stored locally in your browser.
                 </p>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     if (confirm('Are you sure you want to reset all settings to default?')) {
-                      localStorage.removeItem('accentColor')
-                      localStorage.removeItem('showProgressInSidebar')
-                      window.location.reload()
+                      try {
+                        // Reset accent color to default
+                        await fetch('/api/user/profile', {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ accentColor: '#FFD60A' }),
+                        })
+                        
+                        // Reset sidebar progress setting
+                        localStorage.removeItem('showProgressInSidebar')
+                        
+                        // Reload to apply changes
+                        window.location.reload()
+                      } catch (error) {
+                        console.error('Error resetting settings:', error)
+                      }
                     }
                   }}
                   className="px-4 py-2 rounded-full bg-[#2a2d35] hover:bg-[#353842] text-[#fafafa] smooth-transition text-sm"

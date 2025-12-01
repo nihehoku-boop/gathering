@@ -53,10 +53,11 @@ export const authOptions: NextAuthOptions = {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { id: user.id },
-              select: { isAdmin: true, badge: true },
+              select: { isAdmin: true, badge: true, accentColor: true },
             })
             token.isAdmin = dbUser?.isAdmin || false
             token.badge = dbUser?.badge || null
+            token.accentColor = dbUser?.accentColor || '#FFD60A'
           } catch (error) {
             console.error('Error fetching admin status in JWT callback:', error)
             token.isAdmin = false
@@ -66,10 +67,11 @@ export const authOptions: NextAuthOptions = {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { id: token.id as string },
-              select: { isAdmin: true, badge: true },
+              select: { isAdmin: true, badge: true, accentColor: true },
             })
             token.isAdmin = dbUser?.isAdmin || false
             token.badge = dbUser?.badge || null
+            token.accentColor = dbUser?.accentColor || '#FFD60A'
           } catch (error) {
             console.error('Error refreshing admin status in JWT callback:', error)
             // Keep existing admin status if query fails
@@ -85,6 +87,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string
         session.user.isAdmin = (token.isAdmin as boolean) || false
         session.user.badge = (token.badge as string | null) || null
+        session.user.accentColor = (token.accentColor as string) || '#FFD60A'
       }
       return session
     },

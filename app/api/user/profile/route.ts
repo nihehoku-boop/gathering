@@ -19,6 +19,7 @@ export async function GET() {
         image: true,
         isPrivate: true,
         badge: true,
+        accentColor: true,
         _count: {
           select: {
             collections: true,
@@ -65,7 +66,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, isPrivate, badge } = body
+    const { name, isPrivate, badge, accentColor } = body
 
     const updateData: any = {}
     if (name !== undefined) {
@@ -76,6 +77,9 @@ export async function PATCH(request: NextRequest) {
     }
     if (badge !== undefined) {
       updateData.badge = badge || null
+    }
+    if (accentColor !== undefined) {
+      updateData.accentColor = accentColor || '#FFD60A'
     }
 
     const updatedUser = await prisma.user.update({
@@ -88,6 +92,7 @@ export async function PATCH(request: NextRequest) {
         image: true,
         isPrivate: true,
         badge: true,
+        accentColor: true,
       },
     })
 
