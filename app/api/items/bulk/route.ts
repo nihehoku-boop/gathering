@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { checkAllAchievements } from '@/lib/achievement-checker'
 
 // DELETE - Delete multiple items
 export async function DELETE(request: NextRequest) {
@@ -116,6 +117,74 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ success: true, updatedCount: result.count })
   } catch (error) {
     console.error('Error updating items:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+// POST - Create multiple items (bulk import)
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const { collectionId, items } = body
+
+    if (!collectionId || !Array.isArray(items) || items.length === 0) {
+      return NextResponse.json(
+        { error: 'Collection ID and items array are required' },
+        { status: 400 }
+      )
+    }
+
+    // Verify collection belongs to user
+    const collection = await prisma.collection.findFirst({
+      where: {
+        id: collectionId,
+        userId: session.user.id,
+      },
+    })
+
+    if (!collection) {
+      return NextResponse.json(
+        { error: 'Collection not found' },
+        { status: 404 }
+      )
+    }
+
+    // Create all items in a transaction
+    const createdItems = await prisma.$transaction(
+      items.map((item: { 
+        name: string
+        number?: number | null
+        customFields?: Record<string, any>
+      }) =>
+        prisma.item.create({
+          data: {
+            collectionId,
+            name: item.name,
+            number: item.number ? parseInt(String(item.number)) : null,
+            customFields: item.customFields ? JSON.stringify(item.customFields) : '{}',
+          },
+        })
+      )
+    )
+
+    // Check and unlock achievements
+    const newlyUnlocked = await checkAllAchievements(session.user.id)
+
+    return NextResponse.json({ 
+      items: createdItems, 
+      count: createdItems.length,
+      newlyUnlockedAchievements: newlyUnlocked,
+    }, { status: 201 })
+  } catch (error) {
+    console.error('Error creating bulk items:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

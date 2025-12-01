@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -14,11 +14,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getTemplateFields } from '@/lib/item-templates'
 
 interface BulkImportDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   collectionId: string
+  collectionTemplate?: string | null
+  customFieldDefinitions?: string | null
   onSuccess: () => void
 }
 
@@ -26,6 +29,8 @@ export default function BulkImportDialog({
   open,
   onOpenChange,
   collectionId,
+  collectionTemplate,
+  customFieldDefinitions,
   onSuccess,
 }: BulkImportDialogProps) {
   const [loading, setLoading] = useState(false)
@@ -43,9 +48,78 @@ export default function BulkImportDialog({
   const [csvSkipHeader, setCsvSkipHeader] = useState(false)
   const [csvNumberPattern, setCsvNumberPattern] = useState('auto') // 'auto', 'first', 'last', 'extract'
   const [csvTrimWhitespace, setCsvTrimWhitespace] = useState(true)
+  const [csvColumnMapping, setCsvColumnMapping] = useState<Record<number, string>>({}) // Maps column index to field ID
+  const [csvDetectedColumns, setCsvDetectedColumns] = useState<string[]>([]) // Detected column headers/indices
 
   // Manual list
   const [manualList, setManualList] = useState('')
+
+  // Get available template fields
+  const templateFields = useMemo(() => {
+    const fields: Array<{ id: string; label: string; type: string }> = []
+    
+    // Add template fields
+    if (collectionTemplate) {
+      const templateFieldsList = getTemplateFields(collectionTemplate)
+      fields.push(...templateFieldsList.map(f => ({ id: f.id, label: f.label, type: f.type })))
+    }
+    
+    // Add custom fields
+    if (customFieldDefinitions) {
+      try {
+        const parsed = typeof customFieldDefinitions === 'string'
+          ? JSON.parse(customFieldDefinitions)
+          : customFieldDefinitions
+        if (Array.isArray(parsed)) {
+          fields.push(...parsed.map((f: any) => ({ id: f.id || f.name, label: f.label || f.name, type: f.type || 'text' })))
+        }
+      } catch (e) {
+        console.error('Error parsing custom field definitions:', e)
+      }
+    }
+    
+    return fields
+  }, [collectionTemplate, customFieldDefinitions])
+
+  // Detect CSV columns when text changes
+  useEffect(() => {
+    if (activeTab === 'csv' && csvText.trim()) {
+      const lines = csvText.trim().split('\n')
+      const firstLine = lines.length > 0 ? lines[0] : ''
+      if (firstLine) {
+        const delimiterMap: Record<string, string> = {
+          ',': ',',
+          ';': ';',
+          '\t': '\t',
+          '|': '|',
+          'tab': '\t',
+          'semicolon': ';',
+          'pipe': '|',
+        }
+        const delimiter = delimiterMap[csvDelimiter] || ','
+        const parts = firstLine.split(delimiter).map(p => csvTrimWhitespace ? p.trim() : p)
+        setCsvDetectedColumns(parts)
+        
+        // Auto-map columns if header row exists
+        if (csvSkipHeader && parts.length > 0) {
+          const autoMapping: Record<number, string> = {}
+          parts.forEach((col, index) => {
+            const colLower = col.toLowerCase().trim()
+            // Try to match column name to field
+            const matchedField = templateFields.find(f => 
+              f.label.toLowerCase() === colLower ||
+              f.id.toLowerCase() === colLower ||
+              f.label.toLowerCase().replace(/\s+/g, '') === colLower.replace(/\s+/g, '')
+            )
+            if (matchedField) {
+              autoMapping[index] = matchedField.id
+            }
+          })
+          setCsvColumnMapping(autoMapping)
+        }
+      }
+    }
+  }, [csvText, csvDelimiter, csvSkipHeader, csvTrimWhitespace, activeTab, templateFields])
 
   if (!open) return null
 
@@ -96,35 +170,58 @@ export default function BulkImportDialog({
           // Multiple columns - determine which is number and which is name
           let number: number | null = null
           let name: string = ''
+          let numberColumnIndex: number | null = null
+          let nameColumnIndices: number[] = []
 
           if (csvNumberPattern === 'first') {
             // First column is number
             const num = parseInt(parts[0])
             number = isNaN(num) ? null : num
+            numberColumnIndex = 0
+            nameColumnIndices = parts.slice(1).map((_, i) => i + 1)
             name = parts.slice(1).join(delimiter)
           } else if (csvNumberPattern === 'last') {
             // Last column is number
             const num = parseInt(parts[parts.length - 1])
             number = isNaN(num) ? null : num
+            numberColumnIndex = parts.length - 1
+            nameColumnIndices = parts.slice(0, -1).map((_, i) => i)
             name = parts.slice(0, -1).join(delimiter)
           } else {
             // Auto-detect: try first column as number, if not valid, try extracting from name
             const firstNum = parseInt(parts[0])
             if (!isNaN(firstNum)) {
               number = firstNum
+              numberColumnIndex = 0
+              nameColumnIndices = parts.slice(1).map((_, i) => i + 1)
               name = parts.slice(1).join(delimiter)
             } else {
               // Try to extract number from any column
               const fullText = parts.join(' ')
               const match = fullText.match(/(\d+)/)
               number = match ? parseInt(match[1]) : null
+              // All columns are potentially name
+              nameColumnIndices = parts.map((_, i) => i)
               name = parts.join(delimiter)
             }
           }
 
+          // Extract custom fields based on column mapping (exclude name/number columns)
+          const customFields: Record<string, any> = {}
+          parts.forEach((part, colIndex) => {
+            const fieldId = csvColumnMapping[colIndex]
+            if (fieldId && part) {
+              // Skip columns used for name or number
+              if (colIndex !== numberColumnIndex && !nameColumnIndices.includes(colIndex)) {
+                customFields[fieldId] = part
+              }
+            }
+          })
+
           return {
             name: name || trimmed,
             number,
+            customFields: Object.keys(customFields).length > 0 ? customFields : undefined,
           }
         } else if (parts.length === 1) {
           // Single column - try to extract number from name
@@ -175,7 +272,7 @@ export default function BulkImportDialog({
       .filter(Boolean) as Array<{ name: string; number: number | null }>
   }
 
-  const handleImport = async (items: Array<{ name: string; number: number | null }>) => {
+  const handleImport = async (items: Array<{ name: string; number: number | null; customFields?: Record<string, any> }>) => {
     if (items.length === 0) {
       alert('No items to import')
       return
@@ -199,6 +296,8 @@ export default function BulkImportDialog({
         setCsvSkipHeader(false)
         setCsvNumberPattern('auto')
         setCsvTrimWhitespace(true)
+        setCsvColumnMapping({})
+        setCsvDetectedColumns([])
         setManualList('')
         onOpenChange(false)
         onSuccess()
@@ -215,7 +314,7 @@ export default function BulkImportDialog({
   }
 
   const handleSubmit = () => {
-    let items: Array<{ name: string; number: number | null }> = []
+    let items: Array<{ name: string; number: number | null; customFields?: Record<string, any> }> = []
 
     if (activeTab === 'numbered') {
       if (!seriesName.trim()) {
@@ -241,7 +340,7 @@ export default function BulkImportDialog({
   }
 
   const previewItems = () => {
-    let items: Array<{ name: string; number: number | null }> = []
+    let items: Array<{ name: string; number: number | null; customFields?: Record<string, any> }> = []
 
     if (activeTab === 'numbered') {
       items = generateNumberedSeries().slice(0, 5)
@@ -396,6 +495,69 @@ export default function BulkImportDialog({
                   <span className="text-sm">Trim whitespace</span>
                 </label>
               </div>
+
+              {csvDetectedColumns.length > 0 && templateFields.length > 0 && (
+                <div className="space-y-2 border-t pt-4">
+                  <Label>Map CSV Columns to Fields</Label>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    Map each CSV column to a template field. Leave unmapped to ignore.
+                  </div>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {csvDetectedColumns.map((col, index) => {
+                      // Determine if this column is used for name/number
+                      let isNameOrNumber = false
+                      if (csvNumberPattern === 'first' && index === 0) {
+                        isNameOrNumber = true
+                      } else if (csvNumberPattern === 'last' && index === csvDetectedColumns.length - 1) {
+                        isNameOrNumber = true
+                      } else if (csvNumberPattern === 'auto') {
+                        const firstNum = parseInt(csvDetectedColumns[0])
+                        if (!isNaN(firstNum) && index === 0) {
+                          isNameOrNumber = true
+                        }
+                      }
+                      
+                      return (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className="flex-1 text-sm">
+                            <span className="font-medium">Column {index + 1}:</span>
+                            <span className="text-muted-foreground ml-1">
+                              {csvSkipHeader ? `"${col}"` : `(data)`}
+                            </span>
+                            {isNameOrNumber && (
+                              <span className="text-xs text-muted-foreground ml-2">
+                                (used for {index === 0 && csvNumberPattern !== 'last' ? 'number' : 'name'})
+                              </span>
+                            )}
+                          </div>
+                          {!isNameOrNumber && (
+                            <select
+                              value={csvColumnMapping[index] || ''}
+                              onChange={(e) => {
+                                const newMapping = { ...csvColumnMapping }
+                                if (e.target.value) {
+                                  newMapping[index] = e.target.value
+                                } else {
+                                  delete newMapping[index]
+                                }
+                                setCsvColumnMapping(newMapping)
+                              }}
+                              className="flex-1 px-2 py-1 text-sm bg-background border border-input rounded-md"
+                            >
+                              <option value="">-- Ignore --</option>
+                              {templateFields.map(field => (
+                                <option key={field.id} value={field.id}>
+                                  {field.label} ({field.type})
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
 
               <div className="text-sm text-muted-foreground">
                 Found {getItemCount()} items. Supports multiple delimiters and flexible number detection.

@@ -1444,6 +1444,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         open={showBulkImport}
         onOpenChange={setShowBulkImport}
         collectionId={collectionId}
+        collectionTemplate={collection?.template}
+        customFieldDefinitions={collection?.customFieldDefinitions}
         onSuccess={() => {
           // Refresh items after bulk import
           fetchItems(1, false)
