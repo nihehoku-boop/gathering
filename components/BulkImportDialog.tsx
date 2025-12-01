@@ -171,52 +171,57 @@ export default function BulkImportDialog({
           let number: number | null = null
           let name: string = ''
           let numberColumnIndex: number | null = null
-          let nameColumnIndices: number[] = []
 
+          // First, determine number column
           if (csvNumberPattern === 'first') {
             // First column is number
             const num = parseInt(parts[0])
             number = isNaN(num) ? null : num
             numberColumnIndex = 0
-            nameColumnIndices = parts.slice(1).map((_, i) => i + 1)
-            name = parts.slice(1).join(delimiter)
           } else if (csvNumberPattern === 'last') {
             // Last column is number
             const num = parseInt(parts[parts.length - 1])
             number = isNaN(num) ? null : num
             numberColumnIndex = parts.length - 1
-            nameColumnIndices = parts.slice(0, -1).map((_, i) => i)
-            name = parts.slice(0, -1).join(delimiter)
           } else {
-            // Auto-detect: try first column as number, if not valid, try extracting from name
+            // Auto-detect: try first column as number
             const firstNum = parseInt(parts[0])
             if (!isNaN(firstNum)) {
               number = firstNum
               numberColumnIndex = 0
-              nameColumnIndices = parts.slice(1).map((_, i) => i + 1)
-              name = parts.slice(1).join(delimiter)
             } else {
               // Try to extract number from any column
               const fullText = parts.join(' ')
               const match = fullText.match(/(\d+)/)
               number = match ? parseInt(match[1]) : null
-              // All columns are potentially name
-              nameColumnIndices = parts.map((_, i) => i)
-              name = parts.join(delimiter)
             }
           }
 
-          // Extract custom fields based on column mapping (exclude name/number columns)
+          // Extract custom fields based on column mapping
           const customFields: Record<string, any> = {}
+          const nameParts: string[] = []
+
           parts.forEach((part, colIndex) => {
             const fieldId = csvColumnMapping[colIndex]
             if (fieldId && part) {
-              // Skip columns used for name or number
-              if (colIndex !== numberColumnIndex && !nameColumnIndices.includes(colIndex)) {
-                customFields[fieldId] = part
-              }
+              // This column is mapped to a custom field
+              customFields[fieldId] = part
+            } else if (colIndex !== numberColumnIndex && part) {
+              // This column is not mapped and not the number column - it's part of the name
+              nameParts.push(part)
             }
           })
+
+          // If no name parts were collected, use all non-number, non-mapped columns
+          if (nameParts.length === 0) {
+            parts.forEach((part, colIndex) => {
+              if (colIndex !== numberColumnIndex && !csvColumnMapping[colIndex] && part) {
+                nameParts.push(part)
+              }
+            })
+          }
+
+          name = nameParts.join(delimiter) || trimmed
 
           return {
             name: name || trimmed,
