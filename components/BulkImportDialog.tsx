@@ -257,7 +257,7 @@ export default function BulkImportDialog({
         }
         return null
       })
-      .filter(Boolean) as Array<{ name: string; number: number | null }>
+      .filter(Boolean) as Array<{ name: string; number: number | null; customFields?: Record<string, any> }>
   }
 
   const parseManualList = (text: string) => {
