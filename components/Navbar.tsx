@@ -4,7 +4,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getBadgeEmoji } from '@/lib/badges'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
@@ -15,6 +15,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const [isAdmin, setIsAdmin] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -76,6 +77,7 @@ export default function Navbar() {
           {session && menuItems.length > 0 && (
             <div className="lg:hidden relative">
               <button
+                ref={menuButtonRef}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-[#969696] hover:text-[#fafafa] smooth-transition p-2"
                 aria-label="Open menu"
@@ -90,7 +92,13 @@ export default function Navbar() {
                     className="fixed inset-0 bg-black/50 z-40 lg:hidden"
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 w-56 max-w-[calc(100vw-1rem)] bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 overflow-hidden" style={{ right: '0.5rem' }}>
+                  <div 
+                    className="fixed w-56 max-w-[calc(100vw-2rem)] bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 overflow-hidden"
+                    style={{
+                      top: menuButtonRef.current ? `${menuButtonRef.current.getBoundingClientRect().bottom + 8}px` : '4rem',
+                      right: '1rem',
+                    }}
+                  >
                     {menuItems.map((item) => {
                       const Icon = item.icon
                       return (
