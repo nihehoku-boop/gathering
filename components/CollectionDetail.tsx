@@ -715,17 +715,99 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                 </CardDescription>
               </div>
               <div className="flex gap-2">
-                <div className="relative">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowSortMenu(!showSortMenu)}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
-                  >
-                    <ArrowUpDown className="mr-2 h-4 w-4" />
-                    Sort
-                  </Button>
-                  {showSortMenu && (
+                {isSelectionMode ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setIsSelectionMode(false)
+                        clearSelection()
+                      }}
+                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                    >
+                      <X className="mr-2 h-4 w-4" />
+                      Cancel
+                    </Button>
+                    <div className="flex items-center gap-2 px-3 text-sm text-[#969696]">
+                      {selectedItems.size} selected
+                    </div>
+                    {selectedItems.size > 0 && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={selectAll}
+                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                        >
+                          Select All
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleBulkMarkOwned(true)}
+                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          title="Mark as owned"
+                        >
+                          <Check className="mr-2 h-4 w-4" />
+                          Mark Owned
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleBulkMarkOwned(false)}
+                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          title="Mark as not owned"
+                        >
+                          <X className="mr-2 h-4 w-4" />
+                          Mark Not Owned
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleBulkAddToWishlist}
+                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          title="Add to wishlist"
+                        >
+                          <Heart className="mr-2 h-4 w-4" />
+                          Add to Wishlist
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleBulkDelete}
+                          className="border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10"
+                          title="Delete selected items"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsSelectionMode(true)}
+                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                      title="Select multiple items"
+                    >
+                      <CheckSquare2 className="mr-2 h-4 w-4" />
+                      Select
+                    </Button>
+                    <div className="relative">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowSortMenu(!showSortMenu)}
+                        className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                      >
+                        <ArrowUpDown className="mr-2 h-4 w-4" />
+                        Sort
+                      </Button>
+                      {showSortMenu && (
                     <>
                       <div 
                         className="fixed inset-0 z-10" 
