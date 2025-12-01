@@ -73,7 +73,7 @@ export default function PublicProfilePage() {
         <Sidebar />
         <Navbar />
         <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-          <div className="container mx-auto px-6 py-12">
+          <div className="container mx-auto px-6 py-8">
             <div className="text-center text-[#969696]">Loading profile...</div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function PublicProfilePage() {
         <Sidebar />
         <Navbar />
         <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-          <div className="container mx-auto px-6 py-12">
+          <div className="container mx-auto px-6 py-8">
             <Card className="bg-[#1a1d24] border-[#2a2d35]">
               <CardContent className="py-16 text-center">
                 <User className="mx-auto h-16 w-16 text-[#353842] mb-6" />
@@ -111,7 +111,7 @@ export default function PublicProfilePage() {
         <Sidebar />
         <Navbar />
         <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-          <div className="container mx-auto px-6 py-12">
+          <div className="container mx-auto px-6 py-8">
             <div className="mb-10">
               <div className="flex items-center gap-4 mb-6">
                 <Button
@@ -146,7 +146,7 @@ export default function PublicProfilePage() {
       <Sidebar />
       <Navbar />
       <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-        <div className="container mx-auto px-6 py-12">
+        <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button

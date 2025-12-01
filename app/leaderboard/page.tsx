@@ -79,7 +79,7 @@ export default function LeaderboardPage() {
       <Sidebar />
       <Navbar />
       <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-        <div className="container mx-auto px-6 py-12">
+        <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button

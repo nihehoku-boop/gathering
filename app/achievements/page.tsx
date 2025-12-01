@@ -91,7 +91,7 @@ export default function AchievementsPage() {
         <Sidebar />
         <Navbar />
         <div className="min-h-screen bg-[#0f1114] lg:ml-64">
-          <div className="container mx-auto px-6 py-12">
+          <div className="container mx-auto px-6 py-8">
             <Card className="bg-[#1a1d24] border-[#2a2d35]">
               <CardContent className="py-16 text-center">
                 <Lock className="mx-auto h-16 w-16 text-[#353842] mb-6" />
