@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
-import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package } from 'lucide-react'
+import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown } from 'lucide-react'
 import CreateCollectionDialog from './CreateCollectionDialog'
 import EditCollectionDialog from './EditCollectionDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
@@ -39,6 +39,8 @@ interface Collection {
     isOwned: boolean
   }>
   ownedCount?: number // Added from optimized API
+  createdAt?: string
+  updatedAt?: string
 }
 
 interface UpdateStatus {
@@ -90,6 +92,8 @@ export default function CollectionsList() {
   })
   const [syncCollectionId, setSyncCollectionId] = useState<string | null>(null)
   const [syncCollectionData, setSyncCollectionData] = useState<UpdateStatus | null>(null)
+  const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'items-asc' | 'items-desc' | 'progress-asc' | 'progress-desc' | 'date-new' | 'date-old'>('name-asc')
+  const [showSortMenu, setShowSortMenu] = useState(false)
 
   useEffect(() => {
     fetchCollections()
