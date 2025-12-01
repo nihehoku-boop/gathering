@@ -39,6 +39,10 @@ export default function BulkImportDialog({
 
   // CSV import
   const [csvText, setCsvText] = useState('')
+  const [csvDelimiter, setCsvDelimiter] = useState(',')
+  const [csvSkipHeader, setCsvSkipHeader] = useState(false)
+  const [csvNumberPattern, setCsvNumberPattern] = useState('auto') // 'auto', 'first', 'last', 'extract'
+  const [csvTrimWhitespace, setCsvTrimWhitespace] = useState(true)
 
   // Manual list
   const [manualList, setManualList] = useState('')
@@ -61,26 +65,92 @@ export default function BulkImportDialog({
   }
 
   const parseCSV = (text: string) => {
-    const lines = text.trim().split('\n')
+    let lines = text.split('\n')
+    
+    // Skip header row if enabled
+    if (csvSkipHeader && lines.length > 0) {
+      lines = lines.slice(1)
+    }
+
+    // Map delimiter string to actual character
+    const delimiterMap: Record<string, string> = {
+      ',': ',',
+      ';': ';',
+      '\t': '\t',
+      '|': '|',
+      'tab': '\t',
+      'semicolon': ';',
+      'pipe': '|',
+    }
+    const delimiter = delimiterMap[csvDelimiter] || ','
+
     return lines
       .map((line, index) => {
-        const trimmed = line.trim()
+        let trimmed = csvTrimWhitespace ? line.trim() : line
         if (!trimmed) return null
 
-        // Try to parse CSV format: number,name or just name
-        const parts = trimmed.split(',').map(p => p.trim())
-        if (parts.length === 2) {
-          const num = parseInt(parts[0])
+        // Split by delimiter
+        const parts = trimmed.split(delimiter).map(p => csvTrimWhitespace ? p.trim() : p)
+        
+        if (parts.length >= 2) {
+          // Multiple columns - determine which is number and which is name
+          let number: number | null = null
+          let name: string = ''
+
+          if (csvNumberPattern === 'first') {
+            // First column is number
+            const num = parseInt(parts[0])
+            number = isNaN(num) ? null : num
+            name = parts.slice(1).join(delimiter)
+          } else if (csvNumberPattern === 'last') {
+            // Last column is number
+            const num = parseInt(parts[parts.length - 1])
+            number = isNaN(num) ? null : num
+            name = parts.slice(0, -1).join(delimiter)
+          } else {
+            // Auto-detect: try first column as number, if not valid, try extracting from name
+            const firstNum = parseInt(parts[0])
+            if (!isNaN(firstNum)) {
+              number = firstNum
+              name = parts.slice(1).join(delimiter)
+            } else {
+              // Try to extract number from any column
+              const fullText = parts.join(' ')
+              const match = fullText.match(/(\d+)/)
+              number = match ? parseInt(match[1]) : null
+              name = parts.join(delimiter)
+            }
+          }
+
           return {
-            name: parts[1],
-            number: isNaN(num) ? null : num,
+            name: name || trimmed,
+            number,
           }
         } else if (parts.length === 1) {
-          // Try to extract number from name like "LTB #123" or "Book 42"
-          const match = trimmed.match(/(\d+)/)
+          // Single column - try to extract number from name
+          let number: number | null = null
+          
+          if (csvNumberPattern === 'extract' || csvNumberPattern === 'auto') {
+            // Try multiple patterns to extract number
+            const patterns = [
+              /#(\d+)/,           // #123
+              /No\.?\s*(\d+)/i,   // No. 123 or No 123
+              /Nr\.?\s*(\d+)/i,   // Nr. 123 or Nr 123
+              /(\d+)/,            // Any number
+            ]
+            
+            for (const pattern of patterns) {
+              const match = trimmed.match(pattern)
+              if (match) {
+                number = parseInt(match[1])
+                break
+              }
+            }
+          }
+
           return {
             name: trimmed,
-            number: match ? parseInt(match[1]) : null,
+            number,
           }
         }
         return null
@@ -125,6 +195,10 @@ export default function BulkImportDialog({
         setStartNumber('1')
         setEndNumber('100')
         setCsvText('')
+        setCsvDelimiter(',')
+        setCsvSkipHeader(false)
+        setCsvNumberPattern('auto')
+        setCsvTrimWhitespace(true)
         setManualList('')
         onOpenChange(false)
         onSuccess()
@@ -264,12 +338,67 @@ export default function BulkImportDialog({
                   id="csvText"
                   value={csvText}
                   onChange={(e) => setCsvText(e.target.value)}
-                  placeholder="Format: number,name&#10;1,LTB #1&#10;2,LTB #2&#10;Or just names (numbers will be auto-detected):&#10;LTB #1&#10;LTB #2"
+                  placeholder="Format examples:&#10;number,name&#10;1,LTB #1&#10;2,LTB #2&#10;&#10;Or just names:&#10;LTB #1&#10;LTB #2&#10;&#10;Supports comma, semicolon, tab, or pipe delimiters"
                   rows={10}
                 />
               </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="csvDelimiter">Field Delimiter</Label>
+                  <select
+                    id="csvDelimiter"
+                    value={csvDelimiter}
+                    onChange={(e) => setCsvDelimiter(e.target.value)}
+                    className="w-full px-3 py-2 bg-background border border-input rounded-md text-sm"
+                  >
+                    <option value=",">Comma (,)</option>
+                    <option value=";">Semicolon (;)</option>
+                    <option value="\t">Tab</option>
+                    <option value="|">Pipe (|)</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="csvNumberPattern">Number Detection</Label>
+                  <select
+                    id="csvNumberPattern"
+                    value={csvNumberPattern}
+                    onChange={(e) => setCsvNumberPattern(e.target.value)}
+                    className="w-full px-3 py-2 bg-background border border-input rounded-md text-sm"
+                  >
+                    <option value="auto">Auto-detect</option>
+                    <option value="first">First column is number</option>
+                    <option value="last">Last column is number</option>
+                    <option value="extract">Extract from name</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={csvSkipHeader}
+                    onChange={(e) => setCsvSkipHeader(e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm">Skip first row (header)</span>
+                </label>
+                
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={csvTrimWhitespace}
+                    onChange={(e) => setCsvTrimWhitespace(e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm">Trim whitespace</span>
+                </label>
+              </div>
+
               <div className="text-sm text-muted-foreground">
-                Found {getItemCount()} items. Format: number,name or just name (one per line)
+                Found {getItemCount()} items. Supports multiple delimiters and flexible number detection.
               </div>
             </TabsContent>
 

@@ -913,10 +913,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     variant="outline"
                     onClick={() => setShowBulkImport(true)}
                     className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
-                    size="sm"
+                    size="icon"
+                    title="Bulk Import Items"
                   >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Bulk Import
+                    <Upload className="h-4 w-4" />
                   </Button>
                   <Button
                     type="button"
