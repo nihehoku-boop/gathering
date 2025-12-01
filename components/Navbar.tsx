@@ -52,6 +52,11 @@ export default function Navbar() {
             <PanelLeft className="h-6 w-6" />
           </button>
 
+          {/* Mobile: Logo in center */}
+          <h1 className="lg:hidden text-xl font-semibold text-[#fafafa] tracking-tight flex-1 text-center">
+            Gathering
+          </h1>
+
           {/* Desktop: Menu items */}
           <div className="hidden lg:flex items-center gap-6 flex-1">
             {menuItems.map((item) => {
@@ -106,17 +111,36 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile: Menu dropdown button (replaces sign out button position) */}
+          {/* Mobile: Profile picture and menu dropdown */}
           {session && (
-            <div className="lg:hidden relative">
+            <div className="lg:hidden flex items-center gap-2">
+              {/* Profile picture/avatar */}
               <button
-                ref={menuButtonRef}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-[#969696] hover:text-[#fafafa] smooth-transition p-2"
-                aria-label="Open menu"
+                onClick={() => router.push('/profile')}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2a2d35] hover:bg-[#353842] smooth-transition overflow-hidden"
+                aria-label="Profile"
               >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {session.user?.image ? (
+                  <img 
+                    src={session.user.image} 
+                    alt={session.user?.name || 'Profile'} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="h-4 w-4 text-[#969696]" />
+                )}
               </button>
+              
+              {/* Menu dropdown button */}
+              <div className="relative">
+                <button
+                  ref={menuButtonRef}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="text-[#969696] hover:text-[#fafafa] smooth-transition p-2"
+                  aria-label="Open menu"
+                >
+                  {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
               
               {/* Mobile dropdown menu */}
               {isMobileMenuOpen && (
