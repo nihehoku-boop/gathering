@@ -73,8 +73,12 @@ export default function SettingsPage() {
     setAccentColor(color)
     
     // Apply immediately for better UX
+    const accentColorHover = adjustBrightness(color, -20)
     document.documentElement.style.setProperty('--accent-color', color)
-    document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(color, -20))
+    document.documentElement.style.setProperty('--accent-color-hover', accentColorHover)
+    
+    // Also update localStorage immediately
+    localStorage.setItem('accentColor', color)
     
     try {
       // Save to user profile

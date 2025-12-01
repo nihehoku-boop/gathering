@@ -12,46 +12,57 @@ const adjustBrightness = (color: string, percent: number) => {
   return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1)
 }
 
+const applyAccentColor = (color: string) => {
+  const accentColorHover = adjustBrightness(color, -20)
+  document.documentElement.style.setProperty('--accent-color', color)
+  document.documentElement.style.setProperty('--accent-color-hover', accentColorHover)
+  // Also store in localStorage as cache
+  localStorage.setItem('accentColor', color)
+}
+
 export default function AccentColorLoader() {
   const { data: session } = useSession()
 
   useEffect(() => {
     const loadAccentColor = async () => {
-      let accentColor = '#FFD60A' // Default
+      // First, try to load from localStorage (instant, no flash)
+      const cachedColor = localStorage.getItem('accentColor')
+      if (cachedColor) {
+        applyAccentColor(cachedColor)
+      }
 
-      // Always fetch from API if user is logged in to get the latest value
-      // (session might be cached and not reflect recent changes)
+      // Then fetch from API to get the latest value
       if (session?.user?.id) {
         try {
-          const res = await fetch('/api/user/profile')
+          const res = await fetch('/api/user/profile', {
+            cache: 'no-store', // Always fetch fresh data
+          })
           if (res.ok) {
             const profile = await res.json()
             if (profile.accentColor) {
-              accentColor = profile.accentColor
+              // Only update if different from cache
+              if (profile.accentColor !== cachedColor) {
+                applyAccentColor(profile.accentColor)
+              }
             }
           }
         } catch (error) {
           console.error('Error loading accent color:', error)
-          // Fallback to session if API fails
-          if (session?.user?.accentColor) {
-            accentColor = session.user.accentColor
+          // If API fails and we have cached color, keep using it
+          // If no cache, fallback to session or default
+          if (!cachedColor) {
+            const fallbackColor = session?.user?.accentColor || '#FFD60A'
+            applyAccentColor(fallbackColor)
           }
         }
-      } else if (session?.user?.accentColor) {
-        // If not logged in but have session data, use it
-        accentColor = session.user.accentColor
+      } else if (!cachedColor) {
+        // Not logged in and no cache, use default
+        applyAccentColor('#FFD60A')
       }
-
-      // Apply the accent color
-      const accentColorHover = adjustBrightness(accentColor, -20)
-      document.documentElement.style.setProperty('--accent-color', accentColor)
-      document.documentElement.style.setProperty('--accent-color-hover', accentColorHover)
     }
 
-    // Load immediately if session is available, otherwise wait for it
-    if (session !== undefined) {
-      loadAccentColor()
-    }
+    // Load immediately
+    loadAccentColor()
   }, [session])
 
   return null // This component doesn't render anything
