@@ -3,11 +3,12 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical } from 'lucide-react'
+import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical, Plus, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
 import { useAlert } from '@/hooks/useAlert'
 import AlertDialog from './ui/alert-dialog'
+import CreateCollectionDialog from './CreateCollectionDialog'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import {
   DndContext,
@@ -75,6 +76,7 @@ export default function Sidebar() {
     return true
   })
   const [isMounted, setIsMounted] = useState(false)
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
   const { alertDialog, showAlert, closeAlert } = useAlert()
 
   useEffect(() => {
@@ -772,16 +774,38 @@ export default function Sidebar() {
             </div>
           </nav>
 
-          {/* Folder Icon - Create New Folder */}
+          {/* Bottom Action Buttons */}
           {session?.user?.id && (
             <div className="p-4 border-t border-[#2a2d35] bg-[#1a1d24]">
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={() => {
+                    if (pathname !== '/') {
+                      router.push('/')
+                      // Small delay to ensure navigation happens first
+                      setTimeout(() => setShowCreateDialog(true), 100)
+                    } else {
+                      setShowCreateDialog(true)
+                    }
+                  }}
+                  className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
+                  title="Create new collection"
+                >
+                  <Plus className="h-5 w-5" />
+                </button>
                 <button
                   onClick={() => setShowNewFolderInput(true)}
                   className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
                   title="Create new folder"
                 >
                   <FolderPlus className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => router.push('/settings')}
+                  className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
+                  title="Settings"
+                >
+                  <Settings className="h-5 w-5" />
                 </button>
               </div>
             </div>
