@@ -8,6 +8,7 @@ declare module 'next-auth' {
       name?: string | null
       isAdmin?: boolean
       badge?: string | null
+      accentColor?: string
     }
   }
 }
@@ -17,6 +18,7 @@ declare module 'next-auth/jwt' {
     id?: string
     isAdmin?: boolean
     badge?: string | null
+    accentColor?: string
   }
 }
 
