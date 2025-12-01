@@ -880,25 +880,27 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </div>
                     </>
                   )}
-                </div>
-                <Button
-                  variant={viewMode === 'cover' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setViewMode('cover')}
-                  className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
-                >
-                  <Grid3x3 className="mr-2 h-4 w-4" />
-                  Cover
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setViewMode('list')}
-                  className={viewMode === 'list' ? 'accent-button text-white' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
-                >
-                  <List className="mr-2 h-4 w-4" />
-                  List
-                </Button>
+                    </div>
+                    <Button
+                      variant={viewMode === 'cover' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('cover')}
+                      className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                    >
+                      <Grid3x3 className="mr-2 h-4 w-4" />
+                      Cover
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                      className={viewMode === 'list' ? 'accent-button text-white' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                    >
+                      <List className="mr-2 h-4 w-4" />
+                      List
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </CardHeader>
