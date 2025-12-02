@@ -27,7 +27,7 @@ export async function PATCH(
     const itemId = resolvedParams.id
 
     const body = await request.json()
-    const { name, number, notes, image } = body
+    const { name, number, notes, image, customFields } = body
 
     const updateData: any = {}
     
@@ -42,6 +42,9 @@ export async function PATCH(
     }
     if (image !== undefined) {
       updateData.image = image || null
+    }
+    if (customFields !== undefined) {
+      updateData.customFields = customFields ? JSON.stringify(customFields) : '{}'
     }
 
     const item = await prisma.recommendedItem.update({

@@ -24,6 +24,8 @@ interface RecommendedCollection {
   name: string
   description: string | null
   category: string | null
+  template?: string | null
+  customFieldDefinitions?: string | null
   coverImage: string | null
   tags: string
   isPublic?: boolean
@@ -270,280 +272,33 @@ export default function AdminDashboard() {
         onOpenChange={(open) => !open && setEditingCollection(null)}
         collection={editingCollection ? {
           ...editingCollection,
-          tags: editingCollection.tags || '[]'
+          tags: editingCollection.tags || '[]',
+          template: editingCollection.template || null,
+          customFieldDefinitions: editingCollection.customFieldDefinitions || null,
         } : null}
         onSuccess={fetchCollections}
       />
 
-      {selectedCollectionId && (
-        <BulkImportRecommendedDialog
-          open={showBulkImport}
-          onOpenChange={(open) => {
-            setShowBulkImport(open)
-            if (!open) setSelectedCollectionId(null)
-          }}
-          collectionId={selectedCollectionId}
-          onSuccess={fetchCollections}
-        />
-      )}
+      {selectedCollectionId && (() => {
+        const selectedCollection = collections.find(c => c.id === selectedCollectionId)
+        return (
+          <BulkImportDialog
+            open={showBulkImport}
+            onOpenChange={(open) => {
+              setShowBulkImport(open)
+              if (!open) setSelectedCollectionId(null)
+            }}
+            collectionId={selectedCollectionId}
+            collectionTemplate={selectedCollection?.template || null}
+            customFieldDefinitions={selectedCollection?.customFieldDefinitions || null}
+            apiEndpoint={`/api/recommended-collections/${selectedCollectionId}/items`}
+            isRecommendedCollection={true}
+            onSuccess={fetchCollections}
+          />
+        )
+      })()}
     </div>
   )
 }
 
-// Bulk import dialog for recommended collections
-function BulkImportRecommendedDialog({
-  open,
-  onOpenChange,
-  collectionId,
-  onSuccess,
-}: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  collectionId: string
-  onSuccess: () => void
-}) {
-  const [loading, setLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState('numbered')
-  const [seriesName, setSeriesName] = useState('')
-  const [startNumber, setStartNumber] = useState('1')
-  const [endNumber, setEndNumber] = useState('100')
-  const [prefix, setPrefix] = useState('#')
-  const [csvText, setCsvText] = useState('')
-  const [manualList, setManualList] = useState('')
-
-  if (!open) return null
-
-  const generateNumberedSeries = () => {
-    const start = parseInt(startNumber)
-    const end = parseInt(endNumber)
-    if (isNaN(start) || isNaN(end) || start > end) return []
-    const items = []
-    for (let i = start; i <= end; i++) {
-      items.push({ name: `${seriesName} ${prefix}${i}`, number: i })
-    }
-    return items
-  }
-
-  const parseCSV = (text: string) => {
-    const lines = text.trim().split('\n')
-    return lines
-      .map((line) => {
-        const trimmed = line.trim()
-        if (!trimmed) return null
-        const parts = trimmed.split(',').map(p => p.trim())
-        if (parts.length === 2) {
-          const num = parseInt(parts[0])
-          return { name: parts[1], number: isNaN(num) ? null : num }
-        } else if (parts.length === 1) {
-          const match = trimmed.match(/(\d+)/)
-          return { name: trimmed, number: match ? parseInt(match[1]) : null }
-        }
-        return null
-      })
-      .filter(Boolean) as Array<{ name: string; number: number | null }>
-  }
-
-  const parseManualList = (text: string) => {
-    const lines = text.trim().split('\n')
-    return lines
-      .map((line) => {
-        const trimmed = line.trim()
-        if (!trimmed) return null
-        const match = trimmed.match(/(\d+)/)
-        return { name: trimmed, number: match ? parseInt(match[1]) : null }
-      })
-      .filter(Boolean) as Array<{ name: string; number: number | null }>
-  }
-
-  const handleImport = async (items: Array<{ name: string; number: number | null }>) => {
-    if (items.length === 0) {
-      alert('No items to import')
-      return
-    }
-
-    setLoading(true)
-    try {
-      const res = await fetch(`/api/recommended-collections/${collectionId}/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
-      })
-
-      if (res.ok) {
-        setSeriesName('')
-        setStartNumber('1')
-        setEndNumber('100')
-        setCsvText('')
-        setManualList('')
-        onOpenChange(false)
-        onSuccess()
-      } else {
-        const error = await res.json()
-        alert(`Error: ${error.error || 'Failed to import items'}`)
-      }
-    } catch (error) {
-      console.error('Error importing items:', error)
-      alert('Failed to import items')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSubmit = () => {
-    let items: Array<{ name: string; number: number | null }> = []
-    if (activeTab === 'numbered') {
-      if (!seriesName.trim()) {
-        alert('Please enter a series name')
-        return
-      }
-      items = generateNumberedSeries()
-    } else if (activeTab === 'csv') {
-      items = parseCSV(csvText)
-      if (items.length === 0) {
-        alert('No valid items found in CSV')
-        return
-      }
-    } else if (activeTab === 'manual') {
-      items = parseManualList(manualList)
-      if (items.length === 0) {
-        alert('No items found in list')
-        return
-      }
-    }
-    handleImport(items)
-  }
-
-  const getItemCount = () => {
-    if (activeTab === 'numbered') {
-      const start = parseInt(startNumber)
-      const end = parseInt(endNumber)
-      if (isNaN(start) || isNaN(end) || start > end) return 0
-      return end - start + 1
-    } else if (activeTab === 'csv') {
-      return parseCSV(csvText).length
-    } else if (activeTab === 'manual') {
-      return parseManualList(manualList).length
-    }
-    return 0
-  }
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <CardHeader>
-          <CardTitle>Bulk Import Items</CardTitle>
-          <CardDescription>Add multiple items to recommended collection</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <button
-                onClick={() => setActiveTab('numbered')}
-                className={`px-4 py-2 rounded ${activeTab === 'numbered' ? 'bg-primary text-white' : 'bg-secondary'}`}
-              >
-                Numbered Series
-              </button>
-              <button
-                onClick={() => setActiveTab('csv')}
-                className={`px-4 py-2 rounded ${activeTab === 'csv' ? 'bg-primary text-white' : 'bg-secondary'}`}
-              >
-                CSV
-              </button>
-              <button
-                onClick={() => setActiveTab('manual')}
-                className={`px-4 py-2 rounded ${activeTab === 'manual' ? 'bg-primary text-white' : 'bg-secondary'}`}
-              >
-                Manual List
-              </button>
-            </div>
-
-            {activeTab === 'numbered' && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Series Name *</label>
-                  <input
-                    className="w-full px-3 py-2 border rounded"
-                    value={seriesName}
-                    onChange={(e) => setSeriesName(e.target.value)}
-                    placeholder="e.g., Tintin, Lucky Luke"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Prefix</label>
-                    <input
-                      className="w-full px-3 py-2 border rounded"
-                      value={prefix}
-                      onChange={(e) => setPrefix(e.target.value)}
-                      placeholder="#"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Start</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border rounded"
-                      value={startNumber}
-                      onChange={(e) => setStartNumber(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">End</label>
-                    <input
-                      type="number"
-                      className="w-full px-3 py-2 border rounded"
-                      value={endNumber}
-                      onChange={(e) => setEndNumber(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Will create {getItemCount()} items
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'csv' && (
-              <div>
-                <label className="block text-sm font-medium mb-1">CSV Data *</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded h-32"
-                  value={csvText}
-                  onChange={(e) => setCsvText(e.target.value)}
-                  placeholder="number,name or just name (one per line)"
-                />
-                <p className="text-sm text-muted-foreground mt-1">
-                  Found {getItemCount()} items
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'manual' && (
-              <div>
-                <label className="block text-sm font-medium mb-1">Item Names (one per line) *</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded h-32"
-                  value={manualList}
-                  onChange={(e) => setManualList(e.target.value)}
-                  placeholder="Item #1&#10;Item #2"
-                />
-                <p className="text-sm text-muted-foreground mt-1">
-                  Found {getItemCount()} items
-                </p>
-              </div>
-            )}
-          </div>
-        </CardContent>
-        <div className="p-6 pt-0 flex justify-end gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} disabled={loading || getItemCount() === 0}>
-            {loading ? 'Importing...' : `Import ${getItemCount()} Items`}
-          </Button>
-        </div>
-      </Card>
-    </div>
-  )
-}
 

@@ -23,6 +23,8 @@ interface BulkImportDialogProps {
   collectionTemplate?: string | null
   customFieldDefinitions?: string | null
   onSuccess: () => void
+  apiEndpoint?: string // Optional: custom API endpoint (defaults to '/api/items/bulk')
+  isRecommendedCollection?: boolean // Optional: if true, items won't have customFields
 }
 
 export default function BulkImportDialog({
@@ -32,6 +34,8 @@ export default function BulkImportDialog({
   collectionTemplate,
   customFieldDefinitions,
   onSuccess,
+  apiEndpoint = '/api/items/bulk',
+  isRecommendedCollection = false,
 }: BulkImportDialogProps) {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('numbered')
@@ -285,10 +289,20 @@ export default function BulkImportDialog({
 
     setLoading(true)
     try {
-      const res = await fetch('/api/items/bulk', {
+      // For recommended collections, use different endpoint format
+      const itemsToSend = items.map(item => ({
+        ...item,
+        customFields: item.customFields || undefined,
+      }))
+
+      const requestBody = isRecommendedCollection
+        ? { items: itemsToSend }
+        : { collectionId, items: itemsToSend }
+
+      const res = await fetch(apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ collectionId, items }),
+        body: JSON.stringify(requestBody),
       })
 
       if (res.ok) {

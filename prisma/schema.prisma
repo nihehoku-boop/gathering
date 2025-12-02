@@ -132,28 +132,31 @@ model Item {
 }
 
 model RecommendedCollection {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  category    String?
-  coverImage  String?  // URL or path to cover image
-  tags        String   @default("[]") // JSON array of tags
-  isPublic    Boolean  @default(false) // Whether this collection is visible to non-admin users
-  items       RecommendedItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  name                    String
+  description             String?
+  category                String?  // e.g., "Comics", "Books", "Cards", "Toys", etc.
+  template                String?  // Template type: "comic-book", "trading-card", "book", "custom", etc.
+  customFieldDefinitions   String   @default("[]") // JSON array of custom field definitions for "custom" template
+  coverImage              String?  // URL or path to cover image
+  tags                    String   @default("[]") // JSON array of tags
+  isPublic                Boolean  @default(false) // Whether this collection is visible to non-admin users
+  items                   RecommendedItem[]
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model RecommendedItem {
-  id           String                @id @default(cuid())
+  id                      String                @id @default(cuid())
   recommendedCollectionId String
   recommendedCollection   RecommendedCollection @relation(fields: [recommendedCollectionId], references: [id], onDelete: Cascade)
-  name         String     // e.g., "Book #1", "Issue #42"
-  number       Int?       // Optional number for ordering
-  notes        String?
-  image        String?   // URL or path to item image
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  name                    String     // e.g., "Book #1", "Issue #42"
+  number                  Int?       // Optional number for ordering
+  notes                   String?
+  image                   String?   // URL or path to item image
+  customFields            String    @default("{}") // JSON object for template-specific fields
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   @@index([recommendedCollectionId])
 }

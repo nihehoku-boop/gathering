@@ -30,6 +30,8 @@ export async function GET(request: NextRequest) {
         name: true,
         description: true,
         category: true,
+        template: true,
+        customFieldDefinitions: true,
         coverImage: true,
         tags: true,
         isPublic: true, // Explicitly include isPublic
@@ -72,7 +74,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, coverImage, tags, items, isPublic } = body
+    const { name, description, category, template, customFieldDefinitions, coverImage, tags, items, isPublic } = body
 
     if (!name) {
       return NextResponse.json(
@@ -98,20 +100,40 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Validate and process customFieldDefinitions
+    let customFieldDefinitionsValue = '[]'
+    if (customFieldDefinitions !== undefined) {
+      try {
+        if (typeof customFieldDefinitions === 'string') {
+          const parsed = JSON.parse(customFieldDefinitions)
+          if (Array.isArray(parsed)) {
+            customFieldDefinitionsValue = customFieldDefinitions
+          }
+        } else if (Array.isArray(customFieldDefinitions)) {
+          customFieldDefinitionsValue = JSON.stringify(customFieldDefinitions)
+        }
+      } catch (e) {
+        console.error('Error parsing customFieldDefinitions:', e)
+      }
+    }
+
     const collection = await prisma.recommendedCollection.create({
       data: {
         name,
         description: description || null,
         category: category || null,
+        template: template || 'custom',
+        customFieldDefinitions: customFieldDefinitionsValue,
         coverImage: coverImage || null,
         tags: tagsValue,
         isPublic: isPublic === true || isPublic === 'true',
         items: items ? {
-          create: items.map((item: { name: string; number?: number | null; notes?: string | null; image?: string | null }) => ({
+          create: items.map((item: { name: string; number?: number | null; notes?: string | null; image?: string | null; customFields?: Record<string, any> }) => ({
             name: item.name,
             number: item.number ? parseInt(String(item.number)) : null,
             notes: item.notes || null,
             image: item.image || null,
+            customFields: item.customFields ? JSON.stringify(item.customFields) : '{}',
           })),
         } : undefined,
       },

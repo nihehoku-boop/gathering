@@ -68,7 +68,7 @@ export async function PATCH(
     const collectionId = resolvedParams.id
 
     const body = await request.json()
-    const { name, description, category, coverImage, tags, isPublic } = body
+    const { name, description, category, template, customFieldDefinitions, coverImage, tags, isPublic } = body
 
     const updateData: any = {}
 
@@ -89,6 +89,35 @@ export async function PATCH(
 
     if (category !== undefined) {
       updateData.category = category && String(category).trim() ? String(category).trim() : null
+    }
+
+    if (template !== undefined) {
+      updateData.template = template && String(template).trim() ? String(template).trim() : 'custom'
+    }
+
+    if (customFieldDefinitions !== undefined) {
+      // Ensure customFieldDefinitions is a valid JSON string
+      try {
+        if (typeof customFieldDefinitions === 'string') {
+          if (customFieldDefinitions.trim() === '') {
+            updateData.customFieldDefinitions = '[]'
+          } else {
+            const parsed = JSON.parse(customFieldDefinitions)
+            if (Array.isArray(parsed)) {
+              updateData.customFieldDefinitions = customFieldDefinitions
+            } else {
+              updateData.customFieldDefinitions = '[]'
+            }
+          }
+        } else if (Array.isArray(customFieldDefinitions)) {
+          updateData.customFieldDefinitions = JSON.stringify(customFieldDefinitions)
+        } else {
+          updateData.customFieldDefinitions = '[]'
+        }
+      } catch (e) {
+        console.error('Error parsing customFieldDefinitions:', e)
+        updateData.customFieldDefinitions = '[]'
+      }
     }
 
     if (coverImage !== undefined) {

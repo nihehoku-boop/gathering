@@ -47,7 +47,7 @@ export async function POST(
 
     // Create all items in a transaction
     const createdItems = await prisma.$transaction(
-      items.map((item: { name: string; number?: number | null; notes?: string | null; image?: string | null }) =>
+      items.map((item: { name: string; number?: number | null; notes?: string | null; image?: string | null; customFields?: Record<string, any> }) =>
         prisma.recommendedItem.create({
           data: {
             recommendedCollectionId: resolvedParams.id,
@@ -55,6 +55,7 @@ export async function POST(
             number: item.number ? parseInt(String(item.number)) : null,
             notes: item.notes || null,
             image: item.image || null,
+            customFields: item.customFields ? JSON.stringify(item.customFields) : '{}',
           },
         })
       )

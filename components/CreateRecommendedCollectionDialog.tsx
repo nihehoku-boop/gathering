@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AVAILABLE_TAGS, stringifyTags, getTagColor } from '@/lib/tags'
+import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X } from 'lucide-react'
 
 interface CreateRecommendedCollectionDialogProps {
@@ -30,6 +31,7 @@ export default function CreateRecommendedCollectionDialog({
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
+  const [template, setTemplate] = useState<string>('custom')
   const [coverImage, setCoverImage] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [isPublic, setIsPublic] = useState(false)
@@ -46,7 +48,8 @@ export default function CreateRecommendedCollectionDialog({
         body: JSON.stringify({ 
           name, 
           description: description ? description.trim() : null, 
-          category: category ? category.trim() : null, 
+          category: category ? category.trim() : null,
+          template: template || 'custom',
           coverImage: coverImage ? coverImage.trim() : null,
           tags: stringifyTags(selectedTags),
           isPublic,
@@ -57,6 +60,7 @@ export default function CreateRecommendedCollectionDialog({
         setName('')
         setDescription('')
         setCategory('')
+        setTemplate('custom')
         setCoverImage('')
         setSelectedTags([])
         onOpenChange(false)
@@ -117,6 +121,24 @@ export default function CreateRecommendedCollectionDialog({
                 rows={3}
                 className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="template" className="text-[#fafafa]">Item Template</Label>
+              <select
+                id="template"
+                value={template}
+                onChange={(e) => setTemplate(e.target.value)}
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+              >
+                {ITEM_TEMPLATES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.icon} {t.name} - {t.description}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-[#666]">
+                Choose a template to customize the fields available when editing items in this collection.
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="coverImage" className="text-[#fafafa]">Cover Image URL</Label>
