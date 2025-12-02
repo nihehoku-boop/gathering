@@ -54,6 +54,7 @@ console.log('📡 SDK Endpoint:', sdk.getEndpoint())
 // Parse command line arguments
 const args = process.argv.slice(2)
 const isTestMode = args.includes('--test')
+const forceRecreate = args.includes('--force')
 const seriesArg = args.find(arg => arg.startsWith('--series='))
 const testSeriesId = seriesArg ? seriesArg.split('=')[1] : null
 
@@ -134,8 +135,25 @@ async function main() {
             })
 
             if (existingCollection) {
-              console.log(`   ⏭️  Skipping "${setResume.name}" - already exists`)
-              continue
+              if (forceRecreate) {
+                console.log(`   🔄 Deleting existing collection "${setResume.name}" to recreate...`)
+                // Delete all items first (cascade should handle this, but being explicit)
+                await prisma.communityItem.deleteMany({
+                  where: {
+                    communityCollectionId: existingCollection.id,
+                  },
+                })
+                // Delete the collection
+                await prisma.communityCollection.delete({
+                  where: {
+                    id: existingCollection.id,
+                  },
+                })
+                console.log(`   ✅ Deleted existing collection "${setResume.name}"`)
+              } else {
+                console.log(`   ⏭️  Skipping "${setResume.name}" - already exists (use --force to recreate)`)
+                continue
+              }
             }
 
             console.log(`   📀 Creating collection: ${setResume.name}...`)
@@ -237,12 +255,14 @@ async function main() {
                   })
                   
                   processedCount++
-                  if (processedCount % 10 === 0) {
+                  if (processedCount % 50 === 0) {
                     console.log(`   ⏳ Processed ${processedCount}/${cards.length} cards...`)
                   }
                   
-                  // Small delay to avoid rate limiting
-                  await new Promise(resolve => setTimeout(resolve, 50))
+                  // Small delay to avoid rate limiting (reduced from 50ms to 20ms)
+                  if (processedCount % 10 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 100))
+                  }
                 } catch (error) {
                   console.error(`   ⚠️  Error fetching full card data for "${cardResume.name}":`, error)
                   // Fallback: use cardResume data
@@ -273,7 +293,21 @@ async function main() {
                 description: setData.description || `Complete set of ${setResume.name} from the ${series.name} series. Contains ${cardItems.length} cards.`,
                 category: 'Trading Cards',
                 template: 'trading-card', // Use trading-card template
-                coverImage: setData.logo || setData.symbol || null,
+                coverImage: (() => {
+                  const logoUrl = setData.logo || setData.symbol || null
+                  if (!logoUrl) return null
+                  // If URL is from TCGdex assets, add quality and extension
+                  if (logoUrl.includes('assets.tcgdx') || logoUrl.includes('assets.tcgdex')) {
+                    // Remove any existing extension and trailing slash, then add /low.webp
+                    let cleanUrl = logoUrl.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/\/$/, '')
+                    // If URL doesn't end with /low or /high, add /low.webp
+                    if (!cleanUrl.match(/\/(low|high)$/)) {
+                      return cleanUrl + '/low.webp'
+                    }
+                    return cleanUrl + '.webp'
+                  }
+                  return logoUrl
+                })(),
                 tags: JSON.stringify(['Pokemon', 'Trading Cards', series.name, 'TCG']),
                 userId: adminUser.id,
                 items: {
