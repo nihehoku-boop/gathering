@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, coverImage, tags } = body
+    const { name, description, category, coverImage, coverImageFit, tags } = body
 
     if (!name || !name.trim()) {
       return NextResponse.json(
@@ -101,6 +101,7 @@ export async function POST(request: NextRequest) {
         description: description?.trim() || null,
         category: category?.trim() || null,
         coverImage: coverImage?.trim() || null,
+        coverImageFit: coverImageFit || 'cover',
         tags: tags || '[]',
         userId: session.user.id,
       },

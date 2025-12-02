@@ -77,7 +77,7 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { name, description, category, coverImage, tags } = body
+    const { name, description, category, coverImage, coverImageFit, tags } = body
 
     const updateData: any = {}
 
@@ -102,6 +102,10 @@ export async function PATCH(
 
     if (coverImage !== undefined) {
       updateData.coverImage = coverImage ? String(coverImage).trim() : null
+    }
+
+    if (coverImageFit !== undefined) {
+      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'cover'
     }
 
     if (tags !== undefined) {

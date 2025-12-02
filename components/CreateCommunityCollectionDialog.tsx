@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AVAILABLE_TAGS, stringifyTags, getTagColor } from '@/lib/tags'
-import { X } from 'lucide-react'
+import { X, Maximize2, Minimize2 } from 'lucide-react'
 
 interface CreateCommunityCollectionDialogProps {
   open: boolean
@@ -31,6 +31,7 @@ export default function CreateCommunityCollectionDialog({
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
   const [coverImage, setCoverImage] = useState('')
+  const [coverImageFit, setCoverImageFit] = useState<string>('cover')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -47,6 +48,7 @@ export default function CreateCommunityCollectionDialog({
           description: description ? description.trim() : null, 
           category: category ? category.trim() : null, 
           coverImage: coverImage ? coverImage.trim() : null,
+          coverImageFit: coverImageFit || 'cover',
           tags: stringifyTags(selectedTags),
         }),
       })
@@ -124,15 +126,32 @@ export default function CreateCommunityCollectionDialog({
                 className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
               />
               {coverImage && (
-                <div className="mt-2">
-                  <img
-                    src={coverImage}
-                    alt="Cover preview"
-                    className="w-full h-48 object-cover rounded border border-[#2a2d35]"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
+                <div className="mt-2 relative group">
+                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35] rounded border border-[#2a2d35] relative">
+                    <img
+                      src={coverImage}
+                      alt="Cover preview"
+                      className={`w-full h-full ${coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} rounded`}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setCoverImageFit(coverImageFit === 'cover' ? 'contain' : 'cover')}
+                      className="absolute top-2 right-2 bg-black/70 hover:bg-black/90 text-white p-2 rounded-full smooth-transition opacity-0 group-hover:opacity-100"
+                      title={coverImageFit === 'cover' ? 'Switch to Fit (Contain)' : 'Switch to Fill (Cover)'}
+                    >
+                      {coverImageFit === 'cover' ? (
+                        <Minimize2 className="h-4 w-4" />
+                      ) : (
+                        <Maximize2 className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-xs text-[#666] mt-1 text-center">
+                    {coverImageFit === 'cover' ? 'Fill (Cover) - Image fills box, may crop' : 'Fit (Contain) - Image fits in box, may have empty space'}
+                  </p>
                 </div>
               )}
             </div>

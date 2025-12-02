@@ -26,6 +26,7 @@ interface CommunityCollection {
   description: string | null
   category: string | null
   coverImage: string | null
+  coverImageFit?: string | null
   tags: string
   items: CommunityItem[]
   userId: string
@@ -554,7 +555,7 @@ export default function CommunityCollectionsList() {
                     <img
                       src={collection.coverImage}
                       alt={collection.name}
-                      className="w-full h-full object-cover group-hover:scale-105 smooth-transition"
+                      className={`w-full h-full ${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition`}
                     />
                   </div>
                 )}
