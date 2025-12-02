@@ -296,13 +296,10 @@ async function main() {
                 coverImage: (() => {
                   const logoUrl = setData.logo || setData.symbol || null
                   if (!logoUrl) return null
-                  // If URL is from TCGdex assets, use symbol.webp format
+                  // If URL is from TCGdex assets, add .webp extension
                   if (logoUrl.includes('assets.tcgdx') || logoUrl.includes('assets.tcgdex')) {
-                    // Remove any existing extension and trailing slash
-                    let cleanUrl = logoUrl.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/\/$/, '')
-                    // Remove /logo or /symbol if present, then add /symbol.webp
-                    cleanUrl = cleanUrl.replace(/\/(logo|symbol)$/i, '')
-                    return cleanUrl + '/symbol.webp'
+                    // Remove any existing extension and trailing slash, then add .webp
+                    return logoUrl.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/\/$/, '') + '.webp'
                   }
                   return logoUrl
                 })(),

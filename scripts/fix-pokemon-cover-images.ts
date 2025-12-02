@@ -38,13 +38,24 @@ const sdk = new TCGdex('en')
 function fixCoverImageUrl(url: string | null): string | null {
   if (!url) return null
   
-  // If URL is from TCGdex assets, use symbol.webp format
+  // If URL is from TCGdex assets, fix the format
   if (url.includes('assets.tcgdx') || url.includes('assets.tcgdex')) {
-    // Remove any existing extension and trailing slash
-    let cleanUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/\/$/, '')
-    // Remove /logo or /symbol if present, then add /symbol.webp
-    cleanUrl = cleanUrl.replace(/\/(logo|symbol)$/i, '')
-    return cleanUrl + '/symbol.webp'
+    // Remove any existing extension
+    let cleanUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '')
+    
+    // If URL ends with /symbol or /logo, keep that part and add .webp
+    // If URL ends with /symbol.webp or /logo.webp (from previous fix), convert to symbol.webp or logo.webp
+    if (cleanUrl.match(/\/(symbol|logo)$/i)) {
+      // URL is like: .../swsh3/symbol -> keep as .../swsh3/symbol.webp
+      return cleanUrl + '.webp'
+    } else if (cleanUrl.match(/\/(symbol|logo)\.webp$/i)) {
+      // URL is like: .../swsh3/symbol.webp -> already correct, just ensure .webp
+      return cleanUrl
+    } else {
+      // URL doesn't have symbol/logo, try to determine from path
+      // For now, just add .webp to whatever is there
+      return cleanUrl.replace(/\/$/, '') + '.webp'
+    }
   }
   return url
 }
