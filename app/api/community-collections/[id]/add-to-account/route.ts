@@ -38,7 +38,9 @@ export async function POST(
         name: communityCollection.name,
         description: communityCollection.description,
         category: communityCollection.category,
+        template: communityCollection.template || null, // Preserve template from community collection
         coverImage: communityCollection.coverImage,
+        coverImageFit: (communityCollection as any).coverImageFit || 'cover',
         tags: communityCollection.tags || '[]',
         userId: session.user.id,
         communityCollectionId: communityCollection.id, // Track that this came from a community collection
@@ -48,6 +50,7 @@ export async function POST(
             number: item.number,
             notes: item.notes,
             image: item.image,
+            customFields: item.customFields || '{}', // Preserve customFields from community items
             isOwned: false,
           })),
         },

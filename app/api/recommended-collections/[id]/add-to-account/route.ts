@@ -38,7 +38,10 @@ export async function POST(
         name: recommendedCollection.name,
         description: recommendedCollection.description,
         category: recommendedCollection.category,
+        template: recommendedCollection.template || null, // Preserve template from recommended collection
+        customFieldDefinitions: recommendedCollection.customFieldDefinitions || '[]', // Preserve custom field definitions
         coverImage: recommendedCollection.coverImage,
+        coverImageFit: recommendedCollection.coverImageFit || 'cover',
         tags: recommendedCollection.tags || '[]',
         userId: session.user.id,
         recommendedCollectionId: recommendedCollection.id,
@@ -49,6 +52,7 @@ export async function POST(
             number: item.number,
             notes: item.notes,
             image: item.image,
+            customFields: item.customFields || '{}', // Preserve customFields from recommended items
             isOwned: false,
           })),
         },
