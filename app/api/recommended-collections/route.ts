@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
         template: true,
         customFieldDefinitions: true,
         coverImage: true,
+        coverImageFit: true,
         tags: true,
         isPublic: true, // Explicitly include isPublic
         createdAt: true,
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, template, customFieldDefinitions, coverImage, tags, items, isPublic } = body
+    const { name, description, category, template, customFieldDefinitions, coverImage, coverImageFit, tags, items, isPublic } = body
 
     if (!name) {
       return NextResponse.json(
@@ -125,6 +126,7 @@ export async function POST(request: NextRequest) {
         template: template || 'custom',
         customFieldDefinitions: customFieldDefinitionsValue,
         coverImage: coverImage || null,
+        coverImageFit: coverImageFit || 'cover',
         tags: tagsValue,
         isPublic: isPublic === true || isPublic === 'true',
         items: items ? {

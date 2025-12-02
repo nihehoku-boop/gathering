@@ -140,6 +140,7 @@ model RecommendedCollection {
   template                String?  // Template type: "comic-book", "trading-card", "book", "custom", etc.
   customFieldDefinitions   String   @default("[]") // JSON array of custom field definitions for "custom" template
   coverImage              String?  // URL or path to cover image
+  coverImageFit           String?  @default("cover") // Image fit mode: "cover" (fill) or "contain" (crop to fit)
   tags                    String   @default("[]") // JSON array of tags
   isPublic                Boolean  @default(false) // Whether this collection is visible to non-admin users
   items                   RecommendedItem[]

@@ -46,6 +46,7 @@ interface EditRecommendedCollectionDialogProps {
     template?: string | null
     customFieldDefinitions?: string | null
     coverImage: string | null
+    coverImageFit?: string | null
     tags: string
   } | null
   onSuccess: () => void
@@ -63,6 +64,7 @@ export default function EditRecommendedCollectionDialog({
   const [template, setTemplate] = useState<string>('custom')
   const [customFieldDefinitions, setCustomFieldDefinitions] = useState<TemplateField[]>([])
   const [coverImage, setCoverImage] = useState('')
+  const [coverImageFit, setCoverImageFit] = useState<string>('cover')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -115,6 +117,7 @@ export default function EditRecommendedCollectionDialog({
       }
       
       setCoverImage(collection.coverImage || '')
+      setCoverImageFit((collection as any).coverImageFit || 'cover')
       setSelectedTags(parseTags(collection.tags || '[]'))
       setIsPublic((collection as any).isPublic || false)
     }
@@ -136,6 +139,7 @@ export default function EditRecommendedCollectionDialog({
           template: template || 'custom',
           customFieldDefinitions: JSON.stringify(customFieldDefinitions),
           coverImage: coverImage ? coverImage.trim() : null,
+          coverImageFit: coverImageFit || 'cover',
           tags: stringifyTags(selectedTags),
           isPublic,
         }),
@@ -474,6 +478,21 @@ export default function EditRecommendedCollectionDialog({
                   placeholder="https://example.com/image.jpg"
                   className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
                 />
+              </div>
+              <div className="mt-2">
+                <Label htmlFor="coverImageFit" className="text-sm text-[#fafafa]">Cover Image Fit</Label>
+                <select
+                  id="coverImageFit"
+                  value={coverImageFit}
+                  onChange={(e) => setCoverImageFit(e.target.value)}
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] mt-1"
+                >
+                  <option value="cover">Fill (Cover) - Image fills the entire box, may be cropped</option>
+                  <option value="contain">Fit (Contain) - Image fits within box, may have empty space</option>
+                </select>
+                <p className="text-xs text-[#666] mt-1">
+                  Choose how the cover image should be displayed in collection cards.
+                </p>
               </div>
             </div>
             <div className="space-y-2">

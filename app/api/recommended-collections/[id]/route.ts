@@ -68,7 +68,7 @@ export async function PATCH(
     const collectionId = resolvedParams.id
 
     const body = await request.json()
-    const { name, description, category, template, customFieldDefinitions, coverImage, tags, isPublic } = body
+    const { name, description, category, template, customFieldDefinitions, coverImage, coverImageFit, tags, isPublic } = body
 
     const updateData: any = {}
 
@@ -122,6 +122,10 @@ export async function PATCH(
 
     if (coverImage !== undefined) {
       updateData.coverImage = coverImage && String(coverImage).trim() ? String(coverImage).trim() : null
+    }
+
+    if (coverImageFit !== undefined) {
+      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'cover'
     }
 
     if (tags !== undefined) {
