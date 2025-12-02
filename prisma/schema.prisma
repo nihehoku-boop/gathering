@@ -95,6 +95,7 @@ model Collection {
   folder                  Folder?   @relation(fields: [folderId], references: [id], onDelete: SetNull)
   coverImage              String?  // URL or path to cover image
   coverImageAspectRatio   String?  // Aspect ratio for cover image (e.g., "1:1", "3:4", "9:16", "2:3")
+  coverImageFit           String?  @default("cover") // Image fit mode: "cover" (fill) or "contain" (crop to fit)
   tags                    String   @default("[]") // JSON array of tags
   userId                  String
   user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -162,18 +163,20 @@ model RecommendedItem {
 }
 
 model CommunityCollection {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  category    String?
-  coverImage  String?  // URL or path to cover image
-  tags        String   @default("[]") // JSON array of tags
-  userId      String   // User who created this collection
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items       CommunityItem[]
-  votes       CommunityCollectionVote[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  name                    String
+  description             String?
+  category                String?
+  template                String?  // Template type: "comic-book", "trading-card", "book", "custom", etc.
+  customFieldDefinitions   String   @default("[]") // JSON array of custom field definitions for "custom" template
+  coverImage              String?  // URL or path to cover image
+  tags                    String   @default("[]") // JSON array of tags
+  userId                  String   // User who created this collection
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items                   CommunityItem[]
+  votes                   CommunityCollectionVote[]
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   @@index([userId])
 }
@@ -200,6 +203,7 @@ model CommunityItem {
   number       Int?       // Optional number for ordering
   notes        String?
   image        String?   // URL or path to item image
+  customFields String    @default("{}") // JSON object for template-specific fields
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 

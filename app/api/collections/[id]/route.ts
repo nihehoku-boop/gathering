@@ -32,6 +32,7 @@ export async function GET(
         folderId: true,
         coverImage: true,
         coverImageAspectRatio: true,
+        coverImageFit: true,
         tags: true,
         recommendedCollectionId: true,
         lastSyncedAt: true,
@@ -101,7 +102,7 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, tags } = body
+    const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, coverImageFit, tags } = body
 
     console.log('PATCH request body:', JSON.stringify({ name, description, category, coverImage, tags }, null, 2))
 
@@ -181,6 +182,10 @@ export async function PATCH(
 
     if (coverImageAspectRatio !== undefined) {
       updateData.coverImageAspectRatio = coverImageAspectRatio && String(coverImageAspectRatio).trim() ? String(coverImageAspectRatio).trim() : null
+    }
+
+    if (coverImageFit !== undefined) {
+      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'cover'
     }
 
     // Tags is always sent from the client, so always process it

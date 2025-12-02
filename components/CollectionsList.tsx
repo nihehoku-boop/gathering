@@ -29,6 +29,7 @@ interface Collection {
     name: string
   } | null
   coverImage: string | null
+  coverImageFit?: string | null
   tags: string
   recommendedCollectionId: string | null
   lastSyncedAt: string | null
@@ -825,7 +826,7 @@ export default function CollectionsList() {
                       alt={collection.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-105 smooth-transition"
+                      className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition`}
                       loading="lazy"
                       unoptimized={collection.coverImage.startsWith('/ltbcover/') || collection.coverImage.includes('localhost') || collection.coverImage.includes('tcgdx') || collection.coverImage.includes('tcgdex')}
                     />

@@ -29,6 +29,7 @@ export async function GET() {
         },
         coverImage: true,
         coverImageAspectRatio: true,
+        coverImageFit: true,
         tags: true,
         recommendedCollectionId: true,
         lastSyncedAt: true,
@@ -83,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, tags, items } = body
+    const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, coverImageFit, tags, items } = body
 
     if (!name) {
       return NextResponse.json(
@@ -139,6 +140,7 @@ export async function POST(request: NextRequest) {
           : '[]',
         coverImage: coverImage || null,
         coverImageAspectRatio: coverImageAspectRatio || null,
+        coverImageFit: coverImageFit || 'cover',
         tags: tagsString,
         userId: session.user.id,
         items: items && Array.isArray(items) ? {

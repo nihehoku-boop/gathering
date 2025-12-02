@@ -36,6 +36,7 @@ export default function CreateCollectionDialog({
   const [folders, setFolders] = useState<Array<{ id: string; name: string }>>([])
   const [template, setTemplate] = useState<string>('custom')
   const [coverImage, setCoverImage] = useState('')
+  const [coverImageFit, setCoverImageFit] = useState<string>('cover')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -67,6 +68,7 @@ export default function CreateCollectionDialog({
           folderId: folderId && folderId.trim() !== '' ? folderId.trim() : null,
           template: template || 'custom',
           coverImage: coverImage || null,
+          coverImageFit: coverImageFit || 'cover',
           tags: stringifyTags(selectedTags),
       }
       
@@ -194,6 +196,21 @@ export default function CreateCollectionDialog({
                   placeholder="https://example.com/image.jpg"
                   className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
                 />
+              </div>
+              <div className="mt-2">
+                <Label htmlFor="coverImageFit" className="text-sm text-[#fafafa]">Image Fit</Label>
+                <select
+                  id="coverImageFit"
+                  value={coverImageFit}
+                  onChange={(e) => setCoverImageFit(e.target.value)}
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] mt-1"
+                >
+                  <option value="cover">Fill (Cover) - Image fills the entire box, may be cropped</option>
+                  <option value="contain">Fit (Contain) - Image fits within box, may have empty space</option>
+                </select>
+                <p className="text-xs text-[#666] mt-1">
+                  Choose how the cover image should be displayed in collection cards.
+                </p>
               </div>
             </div>
             <div className="space-y-2">
