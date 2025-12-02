@@ -392,14 +392,14 @@ export default function BulkImportDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <CardHeader>
+      <Card className="w-full max-w-2xl max-h-[90vh] flex flex-col">
+        <CardHeader className="flex-shrink-0">
           <CardTitle>Bulk Import Items</CardTitle>
           <CardDescription>
             Add multiple items to your collection at once
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 overflow-y-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="numbered">Numbered Series</TabsTrigger>
@@ -465,7 +465,9 @@ export default function BulkImportDialog({
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="border-t pt-4 space-y-4">
+                <div className="text-sm font-medium">CSV Parsing Options</div>
+                <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="csvDelimiter">Field Delimiter</Label>
                   <select
@@ -518,6 +520,13 @@ export default function BulkImportDialog({
                   />
                   <span className="text-sm">Trim whitespace</span>
                 </label>
+              </div>
+              
+              {csvDetectedColumns.length > 0 && (
+                <div className="text-sm text-muted-foreground">
+                  Detected {csvDetectedColumns.length} column(s): {csvDetectedColumns.slice(0, 3).join(', ')}{csvDetectedColumns.length > 3 ? '...' : ''}
+                </div>
+              )}
               </div>
 
               {csvDetectedColumns.length > 0 && templateFields.length > 0 && (
