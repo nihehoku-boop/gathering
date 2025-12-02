@@ -11,9 +11,38 @@ export async function GET(request: NextRequest) {
     const page = parseInt(url.searchParams.get('page') || '1')
     const limit = parseInt(url.searchParams.get('limit') || '20')
     const skip = (page - 1) * limit
+    const searchQuery = url.searchParams.get('search') || ''
+    const category = url.searchParams.get('category') || ''
+    const tags = url.searchParams.get('tags') || '' // Comma-separated tags
 
-    // Get total count first (before applying sorting/filtering)
-    const totalCount = await prisma.communityCollection.count()
+    // Build where clause for filtering
+    const where: any = {}
+    
+    // Search filter - search in name, description, category, and user name/email
+    if (searchQuery.trim()) {
+      where.OR = [
+        { name: { contains: searchQuery, mode: 'insensitive' } },
+        { description: { contains: searchQuery, mode: 'insensitive' } },
+        { category: { contains: searchQuery, mode: 'insensitive' } },
+        { user: { 
+          OR: [
+            { name: { contains: searchQuery, mode: 'insensitive' } },
+            { email: { contains: searchQuery, mode: 'insensitive' } }
+          ]
+        } }
+      ]
+    }
+
+    // Category filter
+    if (category) {
+      where.category = { equals: category, mode: 'insensitive' }
+    }
+
+    // Tags filter - we'll filter after fetching since tags is stored as JSON string
+    const tagArray = tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []
+
+    // Get total count with filters applied (excluding tags, which we'll filter after)
+    const totalCount = await prisma.communityCollection.count({ where })
 
     // Build orderBy based on sortBy
     let orderBy: any = { createdAt: 'desc' } // Default to newest
@@ -35,6 +64,7 @@ export async function GET(request: NextRequest) {
     const fetchSkip = (sortBy === 'popular' || sortBy === 'score') ? 0 : skip
 
     const collections = await prisma.communityCollection.findMany({
+      where,
       orderBy,
       skip: fetchSkip,
       take: fetchLimit,
@@ -75,7 +105,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Calculate vote counts and scores for each collection (upvotes only)
-    const collectionsWithVotes = collections.map(collection => {
+    let collectionsWithVotes = collections.map(collection => {
       const upvotes = collection.votes.filter(v => v.voteType === 'upvote').length
       const score = upvotes
       const userVote = session?.user?.id 
@@ -90,6 +120,21 @@ export async function GET(request: NextRequest) {
         votes: undefined, // Remove votes array from response
       }
     })
+
+    // Filter by tags if specified (since tags are stored as JSON string)
+    if (tagArray.length > 0) {
+      collectionsWithVotes = collectionsWithVotes.filter(collection => {
+        try {
+          const collectionTags = typeof collection.tags === 'string' 
+            ? JSON.parse(collection.tags) 
+            : collection.tags || []
+          return Array.isArray(collectionTags) && 
+                 tagArray.some(tag => collectionTags.includes(tag))
+        } catch {
+          return false
+        }
+      })
+    }
 
     // Sort collections (especially for popular/score)
     let sortedCollections = collectionsWithVotes
@@ -109,14 +154,22 @@ export async function GET(request: NextRequest) {
       sortedCollections = collectionsWithVotes.sort((a, b) => (a._count?.items || 0) - (b._count?.items || 0))
     }
 
+    // For tag filtering, we need to adjust the total count
+    // Since we filter tags after fetching, we can't get an accurate total count
+    // We'll use the filtered count as an approximation
+    const finalTotal = tagArray.length > 0 ? collectionsWithVotes.length : totalCount
+    const hasMore = tagArray.length > 0 
+      ? sortedCollections.length === limit // If we got a full page, there might be more
+      : skip + sortedCollections.length < totalCount
+
     return NextResponse.json({
       collections: sortedCollections,
       pagination: {
         page,
         limit,
-        total: totalCount,
-        totalPages: Math.ceil(totalCount / limit),
-        hasMore: skip + sortedCollections.length < totalCount,
+        total: finalTotal,
+        totalPages: Math.ceil(finalTotal / limit),
+        hasMore,
       },
     })
   } catch (error) {

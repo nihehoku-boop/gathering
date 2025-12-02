@@ -65,7 +65,7 @@ export default function CommunityCollectionsList() {
   const [managingCollectionId, setManagingCollectionId] = useState<string | null>(null)
 
   useEffect(() => {
-    // Reset and fetch first page when component mounts or sortBy changes
+    // Reset and fetch first page when filters/search/sort change
     setCurrentPage(1)
     setCollections([])
     setHasMore(true)
@@ -85,7 +85,7 @@ export default function CommunityCollectionsList() {
     return () => {
       window.removeEventListener('communityCollectionsUpdated', handleUpdate)
     }
-  }, [sortBy])
+  }, [sortBy, searchQuery, selectedCategory, selectedTags])
 
   const handleVote = async (collectionId: string) => {
     if (!session) {
@@ -138,59 +138,10 @@ export default function CommunityCollectionsList() {
     }
   }
 
+  // Since filtering is now done server-side, we just use the collections directly
   useEffect(() => {
-    let filtered = [...collections]
-
-    // Search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(collection => {
-        const nameMatch = collection.name.toLowerCase().includes(query)
-        const descriptionMatch = collection.description?.toLowerCase().includes(query)
-        const categoryMatch = collection.category?.toLowerCase().includes(query)
-        const creatorMatch = collection.user.name?.toLowerCase().includes(query) || 
-                            collection.user.email.toLowerCase().includes(query)
-        return nameMatch || descriptionMatch || categoryMatch || creatorMatch
-      })
-    }
-
-    // Category filter
-    if (selectedCategory) {
-      filtered = filtered.filter(collection => 
-        collection.category?.toLowerCase() === selectedCategory.toLowerCase()
-      )
-    }
-
-    // Tag filter
-    if (selectedTags.length > 0) {
-      filtered = filtered.filter(collection => {
-        const collectionTags = parseTags(collection.tags || '[]')
-        return selectedTags.every(tag => collectionTags.includes(tag))
-      })
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'newest':
-          return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-        case 'oldest':
-          return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
-        case 'popular':
-          return (b.score || 0) - (a.score || 0)
-        case 'mostItems':
-          return b.items.length - a.items.length
-        case 'leastItems':
-          return a.items.length - b.items.length
-        case 'alphabetical':
-          return a.name.localeCompare(b.name)
-        default:
-          return 0
-      }
-    })
-
-    setFilteredCollections(filtered)
-  }, [searchQuery, collections, selectedCategory, selectedTags, sortBy])
+    setFilteredCollections(collections)
+  }, [collections])
 
   const toggleTag = (tag: string) => {
     setSelectedTags(prev =>
@@ -215,7 +166,27 @@ export default function CommunityCollectionsList() {
     try {
       console.log(`[CommunityCollectionsList] Fetching collections page ${page}...`)
       const startTime = performance.now()
-      const res = await fetch(`/api/community-collections?sortBy=${sortBy}&page=${page}&limit=20`, {
+      
+      // Build query parameters
+      const params = new URLSearchParams({
+        sortBy: sortBy,
+        page: page.toString(),
+        limit: '20',
+      })
+      
+      if (searchQuery.trim()) {
+        params.append('search', searchQuery.trim())
+      }
+      
+      if (selectedCategory) {
+        params.append('category', selectedCategory)
+      }
+      
+      if (selectedTags.length > 0) {
+        params.append('tags', selectedTags.join(','))
+      }
+      
+      const res = await fetch(`/api/community-collections?${params.toString()}`, {
         cache: 'no-store',
         headers: { 'Cache-Control': 'no-cache' }
       })
