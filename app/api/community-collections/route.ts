@@ -8,15 +8,47 @@ export async function GET(request: NextRequest) {
     const session = await getServerSession(authOptions)
     const url = new URL(request.url)
     const sortBy = url.searchParams.get('sortBy') || 'newest' // newest, popular, score
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '20')
+    const skip = (page - 1) * limit
 
-    // Get all community collections with their items and creator info
+    // Get total count first (before applying sorting/filtering)
+    const totalCount = await prisma.communityCollection.count()
+
+    // Build orderBy based on sortBy
+    let orderBy: any = { createdAt: 'desc' } // Default to newest
+    if (sortBy === 'popular' || sortBy === 'score') {
+      // For popular/score, we'll need to sort after calculating votes
+      // So we'll fetch all and sort in memory, but limit the fetch
+      orderBy = { createdAt: 'desc' }
+    } else if (sortBy === 'newest') {
+      orderBy = { createdAt: 'desc' }
+    } else if (sortBy === 'oldest') {
+      orderBy = { createdAt: 'asc' }
+    } else if (sortBy === 'alphabetical') {
+      orderBy = { name: 'asc' }
+    }
+
+    // Get paginated community collections with their items and creator info
+    // Note: For popular/score sorting, we need to fetch more and sort in memory
+    const fetchLimit = (sortBy === 'popular' || sortBy === 'score') ? 1000 : limit
+    const fetchSkip = (sortBy === 'popular' || sortBy === 'score') ? 0 : skip
+
     const collections = await prisma.communityCollection.findMany({
+      orderBy,
+      skip: fetchSkip,
+      take: fetchLimit,
       include: {
         items: {
           orderBy: [
             { number: 'asc' },
             { name: 'asc' },
           ],
+          select: {
+            id: true,
+            name: true,
+            number: true,
+          },
         },
         user: {
           select: {
@@ -35,6 +67,7 @@ export async function GET(request: NextRequest) {
         },
         _count: {
           select: {
+            items: true,
             votes: true,
           },
         },
@@ -58,17 +91,34 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    // Sort collections
+    // Sort collections (especially for popular/score)
     let sortedCollections = collectionsWithVotes
     if (sortBy === 'popular' || sortBy === 'score') {
       sortedCollections = collectionsWithVotes.sort((a, b) => b.score - a.score)
+      // Apply pagination after sorting
+      sortedCollections = sortedCollections.slice(skip, skip + limit)
     } else if (sortBy === 'newest') {
-      sortedCollections = collectionsWithVotes.sort((a, b) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
+      // Already sorted by createdAt desc
+    } else if (sortBy === 'oldest') {
+      // Already sorted by createdAt asc
+    } else if (sortBy === 'alphabetical') {
+      // Already sorted by name asc
+    } else if (sortBy === 'mostItems') {
+      sortedCollections = collectionsWithVotes.sort((a, b) => (b._count?.items || 0) - (a._count?.items || 0))
+    } else if (sortBy === 'leastItems') {
+      sortedCollections = collectionsWithVotes.sort((a, b) => (a._count?.items || 0) - (b._count?.items || 0))
     }
 
-    return NextResponse.json(sortedCollections)
+    return NextResponse.json({
+      collections: sortedCollections,
+      pagination: {
+        page,
+        limit,
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+        hasMore: skip + sortedCollections.length < totalCount,
+      },
+    })
   } catch (error) {
     console.error('Error fetching community collections:', error)
     return NextResponse.json(

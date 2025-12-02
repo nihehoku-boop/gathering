@@ -49,6 +49,9 @@ export default function CommunityCollectionsList() {
   const [collections, setCollections] = useState<CommunityCollection[]>([])
   const [filteredCollections, setFilteredCollections] = useState<CommunityCollection[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [hasMore, setHasMore] = useState(true)
   const [addingCollection, setAddingCollection] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('')
@@ -62,12 +65,19 @@ export default function CommunityCollectionsList() {
   const [managingCollectionId, setManagingCollectionId] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchCollections()
+    // Reset and fetch first page when component mounts or sortBy changes
+    setCurrentPage(1)
+    setCollections([])
+    setHasMore(true)
+    fetchCollections(1, false)
     
     // Listen for updates when collections are created/updated
     const handleUpdate = () => {
       console.log('[CommunityCollectionsList] Received update event, refreshing...')
-      fetchCollections()
+      setCurrentPage(1)
+      setCollections([])
+      setHasMore(true)
+      fetchCollections(1, false)
     }
     
     window.addEventListener('communityCollectionsUpdated', handleUpdate)
@@ -75,7 +85,7 @@ export default function CommunityCollectionsList() {
     return () => {
       window.removeEventListener('communityCollectionsUpdated', handleUpdate)
     }
-  }, [])
+  }, [sortBy])
 
   const handleVote = async (collectionId: string) => {
     if (!session) {
@@ -195,11 +205,17 @@ export default function CommunityCollectionsList() {
     return Array.from(new Set(categories)).sort()
   }
 
-  const fetchCollections = async () => {
+  const fetchCollections = async (page: number = 1, append: boolean = false) => {
+    if (append) {
+      setLoadingMore(true)
+    } else {
+      setLoading(true)
+    }
+    
     try {
-      console.log('[CommunityCollectionsList] Fetching collections...')
+      console.log(`[CommunityCollectionsList] Fetching collections page ${page}...`)
       const startTime = performance.now()
-      const res = await fetch('/api/community-collections?sortBy=popular', {
+      const res = await fetch(`/api/community-collections?sortBy=${sortBy}&page=${page}&limit=20`, {
         cache: 'no-store',
         headers: { 'Cache-Control': 'no-cache' }
       })
@@ -207,13 +223,25 @@ export default function CommunityCollectionsList() {
       console.log(`[CommunityCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
       if (res.ok) {
         const data = await res.json()
-        setCollections(data)
-        setFilteredCollections(data)
+        if (append) {
+          setCollections(prev => [...prev, ...data.collections])
+        } else {
+          setCollections(data.collections)
+        }
+        setHasMore(data.pagination.hasMore)
+        setCurrentPage(page)
       }
     } catch (error) {
       console.error('Error fetching community collections:', error)
     } finally {
       setLoading(false)
+      setLoadingMore(false)
+    }
+  }
+
+  const loadMore = () => {
+    if (!loadingMore && hasMore) {
+      fetchCollections(currentPage + 1, true)
     }
   }
 
@@ -692,16 +720,47 @@ export default function CommunityCollectionsList() {
         </div>
       )}
 
+      {/* Load More Button */}
+      {!loading && hasMore && filteredCollections.length > 0 && (
+        <div className="flex justify-center mt-8">
+          <Button
+            onClick={loadMore}
+            disabled={loadingMore}
+            className="accent-button text-white smooth-transition"
+            size="lg"
+          >
+            {loadingMore ? (
+              <>
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                Loading...
+              </>
+            ) : (
+              'Load More'
+            )}
+          </Button>
+        </div>
+      )}
+
       <CreateCommunityCollectionDialog
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
-        onSuccess={fetchCollections}
+        onSuccess={() => {
+          setCurrentPage(1)
+          setCollections([])
+          setHasMore(true)
+          fetchCollections(1, false)
+        }}
       />
       <EditCommunityCollectionDialog
         open={editingCollection !== null}
         onOpenChange={(open) => !open && setEditingCollection(null)}
         collection={editingCollection}
-        onSuccess={fetchCollections}
+        onSuccess={() => {
+          setCurrentPage(1)
+          setCollections([])
+          setHasMore(true)
+          fetchCollections(1, false)
+        }}
       />
       {managingCollectionId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
