@@ -40,22 +40,26 @@ function fixCoverImageUrl(url: string | null): string | null {
   
   // If URL is from TCGdex assets, fix the format
   if (url.includes('assets.tcgdx') || url.includes('assets.tcgdex')) {
-    // Remove any existing extension
+    // Remove any existing extension first
     let cleanUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '')
     
-    // If URL ends with /symbol or /logo, keep that part and add .webp
-    // If URL ends with /symbol.webp or /logo.webp (from previous fix), convert to symbol.webp or logo.webp
-    if (cleanUrl.match(/\/(symbol|logo)$/i)) {
-      // URL is like: .../swsh3/symbol -> keep as .../swsh3/symbol.webp
-      return cleanUrl + '.webp'
-    } else if (cleanUrl.match(/\/(symbol|logo)\.webp$/i)) {
-      // URL is like: .../swsh3/symbol.webp -> already correct, just ensure .webp
-      return cleanUrl
-    } else {
-      // URL doesn't have symbol/logo, try to determine from path
-      // For now, just add .webp to whatever is there
-      return cleanUrl.replace(/\/$/, '') + '.webp'
-    }
+    // Remove /low or /high quality indicators (can be anywhere in path)
+    cleanUrl = cleanUrl.replace(/\/(low|high)\//g, '/').replace(/\/(low|high)$/i, '')
+    
+    // Extract base path and determine if it should be symbol or logo
+    // URLs might be like: .../sv03/logo/symbol or .../sv03/symbol
+    // We want: .../sv03/symbol.webp
+    
+    // If URL contains /logo/ or ends with /logo, use logo.webp
+    // Otherwise use symbol.webp
+    const useLogo = cleanUrl.includes('/logo') || cleanUrl.endsWith('/logo')
+    
+    // Get the base path (everything before /logo or /symbol)
+    let basePath = cleanUrl.replace(/\/logo.*$/i, '').replace(/\/symbol.*$/i, '')
+    basePath = basePath.replace(/\/$/, '') // Remove trailing slash
+    
+    // Return with appropriate name
+    return basePath + (useLogo ? '/logo.webp' : '/symbol.webp')
   }
   return url
 }
@@ -82,6 +86,7 @@ async function main() {
     for (const collection of collections) {
       try {
         const currentCoverImage = collection.coverImage
+        
         const fixedCoverImage = fixCoverImageUrl(currentCoverImage)
 
         // Only update if the URL changed
