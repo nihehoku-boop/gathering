@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, coverImage, coverImageFit, tags } = body
+    const { name, description, category, template, coverImage, coverImageFit, tags } = body
 
     if (!name || !name.trim()) {
       return NextResponse.json(
@@ -203,6 +203,7 @@ export async function POST(request: NextRequest) {
         name: name.trim(),
         description: description?.trim() || null,
         category: category?.trim() || null,
+        template: template || null,
         coverImage: coverImage?.trim() || null,
         coverImageFit: coverImageFit || 'cover',
         tags: tags || '[]',

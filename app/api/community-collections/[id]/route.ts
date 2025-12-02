@@ -77,7 +77,7 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { name, description, category, coverImage, coverImageFit, tags } = body
+    const { name, description, category, template, coverImage, coverImageFit, tags } = body
 
     const updateData: any = {}
 
@@ -98,6 +98,10 @@ export async function PATCH(
 
     if (category !== undefined) {
       updateData.category = category ? String(category).trim() : null
+    }
+
+    if (template !== undefined) {
+      updateData.template = template ? String(template).trim() : null
     }
 
     if (coverImage !== undefined) {

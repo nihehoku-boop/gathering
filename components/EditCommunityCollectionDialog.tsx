@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { AVAILABLE_TAGS, parseTags, stringifyTags, getTagColor } from '@/lib/tags'
+import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
 
 interface CommunityCollection {
@@ -21,6 +22,7 @@ interface CommunityCollection {
   name: string
   description: string | null
   category: string | null
+  template?: string | null
   coverImage: string | null
   coverImageFit?: string | null
   tags: string
@@ -42,6 +44,7 @@ export default function EditCommunityCollectionDialog({
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
+  const [template, setTemplate] = useState<string>('custom')
   const [coverImage, setCoverImage] = useState('')
   const [coverImageFit, setCoverImageFit] = useState<string>('cover')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -52,6 +55,7 @@ export default function EditCommunityCollectionDialog({
       setName(collection.name)
       setDescription(collection.description || '')
       setCategory(collection.category || '')
+      setTemplate(collection.template || 'custom')
       setCoverImage(collection.coverImage || '')
       setCoverImageFit((collection as any).coverImageFit || 'cover')
       setSelectedTags(parseTags(collection.tags || '[]'))
@@ -71,7 +75,8 @@ export default function EditCommunityCollectionDialog({
         body: JSON.stringify({ 
           name, 
           description: description ? description.trim() : null, 
-          category: category ? category.trim() : null, 
+          category: category ? category.trim() : null,
+          template: template || 'custom',
           coverImage: coverImage ? coverImage.trim() : null,
           coverImageFit: coverImageFit || 'cover',
           tags: stringifyTags(selectedTags),
@@ -132,6 +137,24 @@ export default function EditCommunityCollectionDialog({
                 onChange={(e) => setCategory(e.target.value)}
                 className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="template" className="text-[#fafafa]">Item Template</Label>
+              <select
+                id="template"
+                value={template}
+                onChange={(e) => setTemplate(e.target.value)}
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+              >
+                {ITEM_TEMPLATES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.icon} {t.name} - {t.description}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-[#666]">
+                Choose a template to customize the fields available when editing items in this collection.
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="coverImage" className="text-[#fafafa]">Cover Image URL</Label>
