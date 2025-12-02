@@ -38,15 +38,13 @@ const sdk = new TCGdex('en')
 function fixCoverImageUrl(url: string | null): string | null {
   if (!url) return null
   
-  // If URL is from TCGdex assets, add quality and extension
+  // If URL is from TCGdex assets, use symbol.webp format
   if (url.includes('assets.tcgdx') || url.includes('assets.tcgdex')) {
     // Remove any existing extension and trailing slash
     let cleanUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/\/$/, '')
-    // If URL doesn't end with /low or /high, add /low.webp
-    if (!cleanUrl.match(/\/(low|high)$/)) {
-      return cleanUrl + '/low.webp'
-    }
-    return cleanUrl + '.webp'
+    // Remove /logo or /symbol if present, then add /symbol.webp
+    cleanUrl = cleanUrl.replace(/\/(logo|symbol)$/i, '')
+    return cleanUrl + '/symbol.webp'
   }
   return url
 }
