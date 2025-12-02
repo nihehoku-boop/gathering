@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { X, Edit, Trash2, ArrowLeft, Grid3x3, List, Plus } from 'lucide-react'
+import { X, Edit, Trash2, ArrowLeft, Grid3x3, List, Plus, Images } from 'lucide-react'
 import EditRecommendedItemDialog from './EditRecommendedItemDialog'
 import CreateRecommendedItemDialog from './CreateRecommendedItemDialog'
+import BulkImageUploadDialog from './BulkImageUploadDialog'
 
 interface RecommendedItem {
   id: string
@@ -41,6 +42,7 @@ export default function RecommendedCollectionItemsManager({
   const [loading, setLoading] = useState(true)
   const [editingItem, setEditingItem] = useState<RecommendedItem | null>(null)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [showBulkImageUpload, setShowBulkImageUpload] = useState(false)
   const [viewMode, setViewMode] = useState<'cover' | 'list'>('cover')
 
   useEffect(() => {
@@ -162,6 +164,17 @@ export default function RecommendedCollectionItemsManager({
                 <Plus className="mr-2 h-4 w-4" />
                 Add Item
               </Button>
+              {collection.items.length > 0 && (
+                <Button
+                  onClick={() => setShowBulkImageUpload(true)}
+                  variant="outline"
+                  size="sm"
+                  className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                >
+                  <Images className="mr-2 h-4 w-4" />
+                  Bulk Upload Images
+                </Button>
+              )}
               <Button
                 variant={viewMode === 'cover' ? 'default' : 'outline'}
                 size="sm"
@@ -304,6 +317,20 @@ export default function RecommendedCollectionItemsManager({
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
         collectionId={collectionId}
+        onSuccess={() => {
+          fetchCollection()
+          onUpdate()
+        }}
+      />
+      <BulkImageUploadDialog
+        open={showBulkImageUpload}
+        onOpenChange={setShowBulkImageUpload}
+        collectionId={collectionId}
+        items={collection.items.map(item => ({
+          id: item.id,
+          name: item.name,
+          number: item.number,
+        }))}
         onSuccess={() => {
           fetchCollection()
           onUpdate()
