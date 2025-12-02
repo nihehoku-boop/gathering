@@ -352,14 +352,24 @@ export default function CommunityCollectionsList() {
       <div className="mb-6 space-y-4">
         <div className="flex gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696] z-10" />
             <Input
               type="text"
               placeholder="Search collections by name, description, category, or creator..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+              className="pl-10 pr-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
             />
+            {searchInput && searchInput !== searchQuery && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <span className="w-4 h-4 border-2 border-[#666] border-t-transparent rounded-full animate-spin"></span>
+              </div>
+            )}
+            {searchInput && searchInput === searchQuery && loading && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <span className="w-4 h-4 border-2 border-[#666] border-t-transparent rounded-full animate-spin"></span>
+              </div>
+            )}
           </div>
           <Button
             variant="outline"
