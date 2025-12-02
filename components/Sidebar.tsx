@@ -516,6 +516,10 @@ export default function Sidebar() {
           <nav className="flex-1 overflow-y-auto p-4 space-y-1">
             {/* Recommended */}
             <button
+              onMouseEnter={() => {
+                // Prefetch recommended collections on hover
+                fetch('/api/recommended-collections', { method: 'GET' }).catch(() => {})
+              }}
               onClick={() => {
                 router.push('/recommended')
                 setIsSidebarOpen(false)
@@ -533,6 +537,10 @@ export default function Sidebar() {
 
             {/* Community Collections */}
             <button
+              onMouseEnter={() => {
+                // Prefetch community collections on hover
+                fetch('/api/community-collections', { method: 'GET' }).catch(() => {})
+              }}
               onClick={() => {
                 router.push('/community')
                 setIsSidebarOpen(false)
@@ -599,6 +607,10 @@ export default function Sidebar() {
               {isCollectionsOpen && (
                 <div className="mt-1 ml-4 space-y-1 border-l border-[#2a2d35] pl-4">
                   <button
+                    onMouseEnter={() => {
+                      // Prefetch user collections on hover
+                      fetch('/api/collections', { method: 'GET' }).catch(() => {})
+                    }}
                     onClick={() => {
                       router.push('/')
                       setIsSidebarOpen(false)
