@@ -174,18 +174,43 @@ export default function CollectionsList() {
     }
   }
 
+  // Perform search API call when query changes
+  useEffect(() => {
+    const performSearch = async () => {
+      if (debouncedSearchQuery.trim().length >= 2) {
+        setSearchLoading(true)
+        try {
+          const res = await fetch(`/api/search?q=${encodeURIComponent(debouncedSearchQuery)}&limit=20`)
+          if (res.ok) {
+            const data = await res.json()
+            setSearchResults(data)
+          }
+        } catch (error) {
+          console.error('Error performing search:', error)
+        } finally {
+          setSearchLoading(false)
+        }
+      } else {
+        setSearchResults(null)
+      }
+    }
+
+    performSearch()
+  }, [debouncedSearchQuery])
+
   useEffect(() => {
     let filtered = [...collections] // Create a copy to avoid mutating the original
 
-    // Filter by search query
-    if (searchQuery.trim()) {
+    // Filter by search query (only if not using API search results)
+    if (searchQuery.trim() && (!debouncedSearchQuery || debouncedSearchQuery.length < 2)) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(collection => {
         const nameMatch = collection.name.toLowerCase().includes(query)
         const descriptionMatch = collection.description?.toLowerCase().includes(query)
         const categoryMatch = collection.category?.toLowerCase().includes(query)
         const folderMatch = collection.folder?.name.toLowerCase().includes(query)
-        return nameMatch || descriptionMatch || categoryMatch || folderMatch
+        const tagsMatch = parseTags(collection.tags).some(tag => tag.toLowerCase().includes(query))
+        return nameMatch || descriptionMatch || categoryMatch || folderMatch || tagsMatch
       })
     }
 

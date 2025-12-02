@@ -24,17 +24,42 @@ export async function GET(request: NextRequest) {
 
     const searchTerm = query.trim().toLowerCase()
 
-    // Search user's collections (SQLite doesn't support case-insensitive, so we'll use contains)
-    const collections = await prisma.collection.findMany({
+    // Search user's collections (including tags)
+    const allCollections = await prisma.collection.findMany({
       where: {
         userId: session.user.id,
-        OR: [
-          { name: { contains: searchTerm } },
-          { description: { contains: searchTerm } },
-          { category: { contains: searchTerm } },
-          { folder: { name: { contains: searchTerm } } },
-        ],
       },
+      include: {
+        folder: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        _count: {
+          select: { items: true },
+        },
+      },
+    })
+
+    // Filter collections by search term (including tags)
+    const collections = allCollections.filter(c => {
+      const nameMatch = c.name?.toLowerCase().includes(searchTerm)
+      const descriptionMatch = c.description?.toLowerCase().includes(searchTerm)
+      const categoryMatch = c.category?.toLowerCase().includes(searchTerm)
+      const folderMatch = c.folder?.name.toLowerCase().includes(searchTerm)
+      // Search in tags (stored as JSON string)
+      let tagsMatch = false
+      try {
+        const tags = typeof c.tags === 'string' ? JSON.parse(c.tags) : c.tags || []
+        if (Array.isArray(tags)) {
+          tagsMatch = tags.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+        }
+      } catch {
+        // If tags can't be parsed, skip tag matching
+      }
+      return nameMatch || descriptionMatch || categoryMatch || folderMatch || tagsMatch
+    }).slice(0, limit)
       include: {
         folder: {
           select: {
@@ -50,16 +75,12 @@ export async function GET(request: NextRequest) {
       orderBy: { name: 'asc' },
     })
 
-    // Search items within user's collections
-    const items = await prisma.item.findMany({
+    // Search items within user's collections (including custom fields and other fields)
+    const allItems = await prisma.item.findMany({
       where: {
         collection: {
           userId: session.user.id,
         },
-        OR: [
-          { name: { contains: searchTerm } },
-          { notes: { contains: searchTerm } },
-        ],
       },
       include: {
         collection: {
@@ -69,9 +90,34 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-      take: limit,
-      orderBy: { name: 'asc' },
     })
+
+    // Filter items by search term (including custom fields, wear, personalRating, etc.)
+    const items = allItems.filter(item => {
+      const nameMatch = item.name?.toLowerCase().includes(searchTerm)
+      const notesMatch = item.notes?.toLowerCase().includes(searchTerm)
+      const wearMatch = item.wear?.toLowerCase().includes(searchTerm)
+      const personalRatingMatch = item.personalRating?.toString().includes(searchTerm)
+      const logDateMatch = item.logDate ? new Date(item.logDate).toLocaleDateString().toLowerCase().includes(searchTerm) : false
+      
+      // Search in customFields (stored as JSON string)
+      let customFieldsMatch = false
+      try {
+        if (item.customFields) {
+          const customFields = typeof item.customFields === 'string' 
+            ? JSON.parse(item.customFields) 
+            : item.customFields
+          if (typeof customFields === 'object' && customFields !== null) {
+            const customFieldsString = JSON.stringify(customFields).toLowerCase()
+            customFieldsMatch = customFieldsString.includes(searchTerm)
+          }
+        }
+      } catch {
+        // If customFields can't be parsed, skip custom field matching
+      }
+      
+      return nameMatch || notesMatch || wearMatch || personalRatingMatch || logDateMatch || customFieldsMatch
+    }).slice(0, limit)
 
     // Search community collections
     const communityCollections = await prisma.communityCollection.findMany({
@@ -108,7 +154,7 @@ export async function GET(request: NextRequest) {
     let numberItems: any[] = []
     const numericQuery = parseInt(searchTerm)
     if (!isNaN(numericQuery)) {
-      numberItems = await prisma.item.findMany({
+      const numericItems = await prisma.item.findMany({
         where: {
           collection: {
             userId: session.user.id,
@@ -123,32 +169,20 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        take: 5,
-        orderBy: { name: 'asc' },
       })
+      numberItems = numericItems.filter(item => !items.find(i => i.id === item.id))
     }
 
     // Combine items and remove duplicates
-    const allItems = [...items, ...numberItems].filter(
+    const allFilteredItems = [...items, ...numberItems].filter(
       (item, index, self) => index === self.findIndex((i) => i.id === item.id)
     )
 
-    // Post-filter for case-insensitive matching (SQLite contains is case-sensitive)
+    // Post-filter for case-insensitive matching (already done above, but keep for community collections)
     const filterCaseInsensitive = (text: string | null, term: string) => {
       if (!text) return false
       return text.toLowerCase().includes(term.toLowerCase())
     }
-
-    const filteredCollections = collections.filter(c =>
-      filterCaseInsensitive(c.name, query.trim()) ||
-      filterCaseInsensitive(c.description, query.trim()) ||
-      filterCaseInsensitive(c.category, query.trim())
-    )
-
-    const filteredItems = allItems.filter(item =>
-      filterCaseInsensitive(item.name, query.trim()) ||
-      filterCaseInsensitive(item.notes, query.trim())
-    )
 
     const filteredCommunityCollections = communityCollections.filter(cc =>
       filterCaseInsensitive(cc.name, query.trim()) ||
@@ -167,7 +201,7 @@ export async function GET(request: NextRequest) {
         coverImage: c.coverImage,
         itemCount: c._count.items,
       })),
-      items: filteredItems.map((item) => ({
+      items: allFilteredItems.map((item) => ({
         id: item.id,
         name: item.name,
         number: item.number,
