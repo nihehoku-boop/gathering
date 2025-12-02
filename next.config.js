@@ -39,6 +39,14 @@ const nextConfig = {
         hostname: 'weltbild.scene7.com',
       },
       {
+        protocol: 'https',
+        hostname: 'assets.tcgdx.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.tcgdex.net',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },

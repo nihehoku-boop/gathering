@@ -1029,7 +1029,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                             className="object-cover"
                             loading="lazy"
-                            unoptimized={item.image.startsWith('/ltbcover/') || item.image.includes('localhost')}
+                            unoptimized={item.image.startsWith('/ltbcover/') || item.image.includes('localhost') || item.image.includes('tcgdx') || item.image.includes('tcgdex')}
                           />
                           {(() => {
                             try {

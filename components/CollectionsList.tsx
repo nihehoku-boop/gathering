@@ -827,7 +827,7 @@ export default function CollectionsList() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 smooth-transition"
                       loading="lazy"
-                      unoptimized={collection.coverImage.startsWith('/ltbcover/') || collection.coverImage.includes('localhost')}
+                      unoptimized={collection.coverImage.startsWith('/ltbcover/') || collection.coverImage.includes('localhost') || collection.coverImage.includes('tcgdx') || collection.coverImage.includes('tcgdex')}
                     />
                   </div>
                 )}
