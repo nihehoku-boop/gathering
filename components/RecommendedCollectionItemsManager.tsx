@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { X, Edit, Trash2, ArrowLeft, Grid3x3, List, Plus, Images } from 'lucide-react'
+import { X, Edit, Trash2, ArrowLeft, Grid3x3, List, Plus, ImagePlus } from 'lucide-react'
 import EditRecommendedItemDialog from './EditRecommendedItemDialog'
 import CreateRecommendedItemDialog from './CreateRecommendedItemDialog'
 import BulkImageUploadDialog from './BulkImageUploadDialog'
@@ -171,7 +171,7 @@ export default function RecommendedCollectionItemsManager({
                   size="sm"
                   className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
                 >
-                  <Images className="mr-2 h-4 w-4" />
+                  <ImagePlus className="mr-2 h-4 w-4" />
                   Bulk Upload Images
                 </Button>
               )}
