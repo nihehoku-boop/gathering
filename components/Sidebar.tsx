@@ -615,6 +615,21 @@ export default function Sidebar() {
             <div className="pt-2">
               <div className="flex items-center gap-2">
                 <button
+                  onMouseEnter={() => {
+                    // Prefetch route and data on hover
+                    if (!prefetchedRoutes.current.has('/')) {
+                      prefetchedRoutes.current.add('/')
+                      // Prefetch the route
+                      router.prefetch('/')
+                      // Prefetch the API data
+                      fetch('/api/collections', { 
+                        method: 'GET',
+                        cache: 'force-cache',
+                        headers: { 'Cache-Control': 'public, max-age=60' }
+                      }).catch(() => {})
+                      console.log('[Prefetch] Prefetching / (Your Collections)')
+                    }
+                  }}
                   onClick={() => {
                     setIsCollectionsOpen(!isCollectionsOpen)
                     if (!isCollectionsOpen) {
