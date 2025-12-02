@@ -60,20 +60,6 @@ export async function GET(request: NextRequest) {
       }
       return nameMatch || descriptionMatch || categoryMatch || folderMatch || tagsMatch
     }).slice(0, limit)
-      include: {
-        folder: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        _count: {
-          select: { items: true },
-        },
-      },
-      take: limit,
-      orderBy: { name: 'asc' },
-    })
 
     // Search items within user's collections (including custom fields and other fields)
     const allItems = await prisma.item.findMany({
@@ -191,7 +177,7 @@ export async function GET(request: NextRequest) {
     )
 
     return NextResponse.json({
-      collections: filteredCollections.map((c) => ({
+      collections: collections.map((c) => ({
         id: c.id,
         name: c.name,
         description: c.description,
