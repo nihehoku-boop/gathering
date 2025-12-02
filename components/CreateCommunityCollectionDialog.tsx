@@ -58,6 +58,8 @@ export default function CreateCommunityCollectionDialog({
         setCoverImage('')
         setSelectedTags([])
         onOpenChange(false)
+        // Dispatch event to notify other components to refresh
+        window.dispatchEvent(new CustomEvent('communityCollectionsUpdated'))
         onSuccess()
       } else {
         const error = await res.json()

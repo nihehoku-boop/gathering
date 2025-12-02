@@ -76,6 +76,8 @@ export default function EditCommunityCollectionDialog({
 
       if (res.ok) {
         onOpenChange(false)
+        // Dispatch event to notify other components to refresh
+        window.dispatchEvent(new CustomEvent('communityCollectionsUpdated'))
         onSuccess()
       } else {
         const error = await res.json()

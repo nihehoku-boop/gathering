@@ -62,6 +62,18 @@ export default function CommunityCollectionsList() {
 
   useEffect(() => {
     fetchCollections()
+    
+    // Listen for updates when collections are created/updated
+    const handleUpdate = () => {
+      console.log('[CommunityCollectionsList] Received update event, refreshing...')
+      fetchCollections()
+    }
+    
+    window.addEventListener('communityCollectionsUpdated', handleUpdate)
+    
+    return () => {
+      window.removeEventListener('communityCollectionsUpdated', handleUpdate)
+    }
   }, [])
 
   const handleVote = async (collectionId: string) => {
@@ -187,8 +199,8 @@ export default function CommunityCollectionsList() {
       console.log('[CommunityCollectionsList] Fetching collections...')
       const startTime = performance.now()
       const res = await fetch('/api/community-collections?sortBy=popular', {
-        cache: 'force-cache',
-        headers: { 'Cache-Control': 'public, max-age=60' }
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
       })
       const endTime = performance.now()
       console.log(`[CommunityCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
