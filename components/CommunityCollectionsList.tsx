@@ -317,36 +317,6 @@ export default function CommunityCollectionsList() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            {/* Outer rotating ring */}
-            <div className="absolute inset-0 border-4 border-[#2a2d35] rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-transparent border-t-[var(--accent-color)] rounded-full animate-spin"></div>
-            
-            {/* Inner pulsing circle */}
-            <div className="absolute inset-4 border-4 border-[#2a2d35] rounded-full"></div>
-            <div className="absolute inset-4 border-4 border-transparent border-r-[var(--accent-color)] rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
-            
-            {/* Center dot */}
-            <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[var(--accent-color)] rounded-full animate-pulse"></div>
-          </div>
-          
-          <div className="space-y-2">
-            <p className="text-[#fafafa] text-lg font-medium">Loading community collections...</p>
-            <div className="flex items-center justify-center gap-1">
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div>
       <div className="mb-6 space-y-4">
@@ -533,7 +503,33 @@ export default function CommunityCollectionsList() {
         )}
       </div>
 
-      {collections.length === 0 ? (
+      {loading && collections.length === 0 ? (
+        <div className="min-h-[400px] flex items-center justify-center">
+          <div className="text-center">
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              {/* Outer rotating ring */}
+              <div className="absolute inset-0 border-4 border-[#2a2d35] rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-transparent border-t-[var(--accent-color)] rounded-full animate-spin"></div>
+              
+              {/* Inner pulsing circle */}
+              <div className="absolute inset-4 border-4 border-[#2a2d35] rounded-full"></div>
+              <div className="absolute inset-4 border-4 border-transparent border-r-[var(--accent-color)] rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
+              
+              {/* Center dot */}
+              <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[var(--accent-color)] rounded-full animate-pulse"></div>
+            </div>
+            
+            <div className="space-y-2">
+              <p className="text-[#fafafa] text-lg font-medium">Loading community collections...</p>
+              <div className="flex items-center justify-center gap-1">
+                <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
+                <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : collections.length === 0 ? (
         <Card className="bg-[#1a1d24] border-[#2a2d35]">
           <CardContent className="py-12 text-center">
             <BookOpen className="mx-auto h-12 w-12 text-[#353842] mb-4" />
@@ -542,6 +538,21 @@ export default function CommunityCollectionsList() {
             </h3>
             <p className="text-[#969696]">
               {session ? 'Be the first to create a community collection!' : 'Check back later for community collections!'}
+            </p>
+          </CardContent>
+        </Card>
+      ) : loading && filteredCollections.length === 0 ? (
+        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+          <CardContent className="py-12 text-center">
+            <div className="relative w-16 h-16 mx-auto mb-4">
+              <div className="absolute inset-0 border-4 border-[#2a2d35] rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-transparent border-t-[var(--accent-color)] rounded-full animate-spin"></div>
+            </div>
+            <h3 className="text-lg font-semibold text-[#fafafa] mb-2">
+              Searching...
+            </h3>
+            <p className="text-[#969696]">
+              Loading search results
             </p>
           </CardContent>
         </Card>
