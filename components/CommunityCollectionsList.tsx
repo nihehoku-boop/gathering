@@ -53,7 +53,8 @@ export default function CommunityCollectionsList() {
   const [currentPage, setCurrentPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [addingCollection, setAddingCollection] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchInput, setSearchInput] = useState('') // Immediate input value
+  const [searchQuery, setSearchQuery] = useState('') // Debounced search query
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'mostItems' | 'leastItems' | 'alphabetical' | 'popular'>('newest')
@@ -63,6 +64,15 @@ export default function CommunityCollectionsList() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [editingCollection, setEditingCollection] = useState<CommunityCollection | null>(null)
   const [managingCollectionId, setManagingCollectionId] = useState<string | null>(null)
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(searchInput)
+    }, 500) // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
   useEffect(() => {
     // Reset and fetch first page when filters/search/sort change
@@ -346,8 +356,8 @@ export default function CommunityCollectionsList() {
             <Input
               type="text"
               placeholder="Search collections by name, description, category, or creator..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
             />
           </div>
