@@ -42,6 +42,18 @@ export default function RecommendedCollectionsList() {
 
   useEffect(() => {
     fetchCollections()
+    
+    // Listen for updates from admin dashboard
+    const handleUpdate = () => {
+      console.log('[RecommendedCollectionsList] Received update event, refreshing...')
+      fetchCollections()
+    }
+    
+    window.addEventListener('recommendedCollectionsUpdated', handleUpdate)
+    
+    return () => {
+      window.removeEventListener('recommendedCollectionsUpdated', handleUpdate)
+    }
   }, [])
 
   const fetchCollections = async () => {
@@ -49,8 +61,8 @@ export default function RecommendedCollectionsList() {
       console.log('[RecommendedCollectionsList] Fetching collections...')
       const startTime = performance.now()
       const res = await fetch('/api/recommended-collections', {
-        cache: 'force-cache',
-        headers: { 'Cache-Control': 'public, max-age=60' }
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
       })
       const endTime = performance.now()
       console.log(`[RecommendedCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)

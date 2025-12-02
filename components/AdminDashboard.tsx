@@ -87,6 +87,8 @@ export default function AdminDashboard() {
       })
       if (res.ok) {
         fetchCollections()
+        // Dispatch event to notify other components to refresh
+        window.dispatchEvent(new CustomEvent('recommendedCollectionsUpdated'))
       } else {
         const error = await res.json()
         alert(`Error: ${error.error || 'Failed to update visibility'}`)

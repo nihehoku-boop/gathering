@@ -526,8 +526,8 @@ export default function Sidebar() {
                   // Prefetch the API data
                   fetch('/api/recommended-collections', { 
                     method: 'GET',
-                    cache: 'force-cache',
-                    headers: { 'Cache-Control': 'public, max-age=60' }
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
                   }).catch(() => {})
                   console.log('[Prefetch] Prefetching /recommended')
                 }
@@ -558,8 +558,8 @@ export default function Sidebar() {
                   // Prefetch the API data
                   fetch('/api/community-collections', { 
                     method: 'GET',
-                    cache: 'force-cache',
-                    headers: { 'Cache-Control': 'public, max-age=60' }
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
                   }).catch(() => {})
                   console.log('[Prefetch] Prefetching /community')
                 }
@@ -590,8 +590,8 @@ export default function Sidebar() {
                   // Prefetch the API data
                   fetch('/api/wishlist', { 
                     method: 'GET',
-                    cache: 'force-cache',
-                    headers: { 'Cache-Control': 'public, max-age=60' }
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
                   }).catch(() => {})
                   console.log('[Prefetch] Prefetching /wishlist')
                 }
@@ -624,8 +624,8 @@ export default function Sidebar() {
                       // Prefetch the API data
                       fetch('/api/collections', { 
                         method: 'GET',
-                        cache: 'force-cache',
-                        headers: { 'Cache-Control': 'public, max-age=60' }
+                        cache: 'no-store',
+                        headers: { 'Cache-Control': 'no-cache' }
                       }).catch(() => {})
                       console.log('[Prefetch] Prefetching / (Your Collections)')
                     }
