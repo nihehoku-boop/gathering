@@ -454,79 +454,90 @@ export default function BulkImportDialog({
             </TabsContent>
 
             <TabsContent value="csv" className="space-y-4 mt-4">
-              <div className="space-y-2">
-                <Label htmlFor="csvText">CSV Data *</Label>
-                <Textarea
-                  id="csvText"
-                  value={csvText}
-                  onChange={(e) => setCsvText(e.target.value)}
-                  placeholder="Format examples:&#10;number,name&#10;1,LTB #1&#10;2,LTB #2&#10;&#10;Or just names:&#10;LTB #1&#10;LTB #2&#10;&#10;Supports comma, semicolon, tab, pipe, or space delimiters"
-                  rows={10}
-                />
-              </div>
-              
-              <div className="border-t pt-4 space-y-4">
-                <div className="text-sm font-medium">CSV Parsing Options</div>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="csvDelimiter">Field Delimiter</Label>
-                  <select
-                    id="csvDelimiter"
-                    value={csvDelimiter}
-                    onChange={(e) => setCsvDelimiter(e.target.value)}
-                    className="w-full px-3 py-2 bg-background border border-input rounded-md text-sm"
-                  >
-                    <option value=",">Comma (,)</option>
-                    <option value=";">Semicolon (;)</option>
-                    <option value="\t">Tab</option>
-                    <option value="|">Pipe (|)</option>
-                    <option value=" ">Space</option>
-                  </select>
+                  <Label htmlFor="csvText">CSV Data *</Label>
+                  <Textarea
+                    id="csvText"
+                    value={csvText}
+                    onChange={(e) => setCsvText(e.target.value)}
+                    placeholder="Format examples:&#10;number,name&#10;1,LTB #1&#10;2,LTB #2&#10;&#10;Or just names:&#10;LTB #1&#10;LTB #2&#10;&#10;Supports comma, semicolon, tab, pipe, or space delimiters"
+                    rows={8}
+                  />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="csvNumberPattern">Number Detection</Label>
-                  <select
-                    id="csvNumberPattern"
-                    value={csvNumberPattern}
-                    onChange={(e) => setCsvNumberPattern(e.target.value)}
-                    className="w-full px-3 py-2 bg-background border border-input rounded-md text-sm"
-                  >
-                    <option value="auto">Auto-detect</option>
-                    <option value="first">First column is number</option>
-                    <option value="last">Last column is number</option>
-                    <option value="extract">Extract from name</option>
-                  </select>
-                </div>
-              </div>
+                <div className="border-t border-[#2a2d35] pt-4 space-y-4">
+                  <div className="space-y-1">
+                    <Label className="text-base font-semibold text-[#fafafa]">CSV Parsing Options</Label>
+                    <p className="text-xs text-[#969696]">Configure how the CSV data should be parsed</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="csvDelimiter" className="text-[#fafafa]">Field Delimiter *</Label>
+                      <select
+                        id="csvDelimiter"
+                        value={csvDelimiter}
+                        onChange={(e) => setCsvDelimiter(e.target.value)}
+                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                      >
+                        <option value=",">Comma (,)</option>
+                        <option value=";">Semicolon (;)</option>
+                        <option value="\t">Tab</option>
+                        <option value="|">Pipe (|)</option>
+                        <option value=" ">Space</option>
+                      </select>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="csvNumberPattern" className="text-[#fafafa]">Number Detection *</Label>
+                      <select
+                        id="csvNumberPattern"
+                        value={csvNumberPattern}
+                        onChange={(e) => setCsvNumberPattern(e.target.value)}
+                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                      >
+                        <option value="auto">Auto-detect</option>
+                        <option value="first">First column is number</option>
+                        <option value="last">Last column is number</option>
+                        <option value="extract">Extract from name</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={csvSkipHeader}
-                    onChange={(e) => setCsvSkipHeader(e.target.checked)}
-                    className="w-4 h-4"
-                  />
-                  <span className="text-sm">Skip first row (header)</span>
-                </label>
-                
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={csvTrimWhitespace}
-                    onChange={(e) => setCsvTrimWhitespace(e.target.checked)}
-                    className="w-4 h-4"
-                  />
-                  <span className="text-sm">Trim whitespace</span>
-                </label>
-              </div>
-              
-              {csvDetectedColumns.length > 0 && (
-                <div className="text-sm text-muted-foreground">
-                  Detected {csvDetectedColumns.length} column(s): {csvDetectedColumns.slice(0, 3).join(', ')}{csvDetectedColumns.length > 3 ? '...' : ''}
+                  <div className="flex items-center gap-6">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={csvSkipHeader}
+                        onChange={(e) => setCsvSkipHeader(e.target.checked)}
+                        className="w-4 h-4 rounded border-[#353842] bg-[#2a2d35] text-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+                      />
+                      <span className="text-sm text-[#fafafa]">Skip first row (header)</span>
+                    </label>
+                    
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={csvTrimWhitespace}
+                        onChange={(e) => setCsvTrimWhitespace(e.target.checked)}
+                        className="w-4 h-4 rounded border-[#353842] bg-[#2a2d35] text-[var(--accent-color)] focus:ring-[var(--accent-color)]"
+                      />
+                      <span className="text-sm text-[#fafafa]">Trim whitespace</span>
+                    </label>
+                  </div>
+                  
+                  {csvDetectedColumns.length > 0 && (
+                    <div className="text-sm text-[#969696] bg-[#2a2d35] p-3 rounded border border-[#353842]">
+                      <strong className="text-[#fafafa]">Detected {csvDetectedColumns.length} column(s):</strong>
+                      <div className="mt-1 font-mono text-xs">
+                        {csvDetectedColumns.map((col, i) => (
+                          <span key={i} className="mr-2">{i > 0 && '| '}"{col}"</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
               </div>
 
               {csvDetectedColumns.length > 0 && templateFields.length > 0 && (
