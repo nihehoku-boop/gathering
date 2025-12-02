@@ -16,6 +16,7 @@ import {
 import { AVAILABLE_TAGS, stringifyTags, getTagColor } from '@/lib/tags'
 import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X } from 'lucide-react'
+import ImageUpload from './ImageUpload'
 
 interface CreateRecommendedCollectionDialogProps {
   open: boolean
@@ -141,18 +142,24 @@ export default function CreateRecommendedCollectionDialog({
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="coverImage" className="text-[#fafafa]">Cover Image URL</Label>
-              <Input
-                id="coverImage"
-                type="url"
-                value={coverImage}
-                onChange={(e) => setCoverImage(e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+              <ImageUpload
+                value={coverImage || null}
+                onChange={(url) => setCoverImage(url || '')}
+                label="Cover Image"
+                aspectRatio="2/3"
+                maxSize={10}
               />
-              <p className="text-xs text-[#969696]">
-                Optional: Add a URL to a cover image for this collection
-              </p>
+              <div className="mt-2">
+                <Label htmlFor="coverImage-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Input
+                  id="coverImage-url"
+                  type="url"
+                  value={coverImage}
+                  onChange={(e) => setCoverImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label className="text-[#fafafa]">Tags</Label>
