@@ -357,6 +357,9 @@ export default function Sidebar() {
         const order = reordered.map(c => c.id)
         localStorage.setItem(orderKey, JSON.stringify(order))
         
+        // Dispatch custom event to notify CollectionsList
+        window.dispatchEvent(new Event('collectionOrderChanged'))
+        
         // Return reordered collections combined with others
         return [...otherCollections, ...reordered]
       }

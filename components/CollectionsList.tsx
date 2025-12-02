@@ -99,6 +99,30 @@ export default function CollectionsList() {
     fetchCollections()
   }, [])
 
+  // Listen for storage changes to sync with sidebar drag-and-drop
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key?.startsWith('collectionOrder_')) {
+        // Trigger a re-sort by updating collections state
+        // This will cause the useEffect to re-run and apply the new order
+        setCollections(prev => [...prev])
+      }
+    }
+
+    // Also listen for custom events from sidebar (for same-tab updates)
+    const handleCustomStorageChange = () => {
+      setCollections(prev => [...prev])
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('collectionOrderChanged', handleCustomStorageChange as EventListener)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('collectionOrderChanged', handleCustomStorageChange as EventListener)
+    }
+  }, [])
+
   useEffect(() => {
     // Check for updates for all collections that come from recommended collections
     // Run these checks in parallel after initial load to avoid blocking
