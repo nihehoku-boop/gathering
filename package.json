@@ -19,7 +19,8 @@
     "set-admin-password": "tsx scripts/set-admin-password.ts",
     "migrate-to-production": "tsx scripts/migrate-to-production.ts",
     "migrate-recommended-community": "tsx scripts/migrate-recommended-community.ts",
-    "set-recommended-public": "tsx scripts/set-recommended-collections-public.ts"
+    "set-recommended-public": "tsx scripts/set-recommended-collections-public.ts",
+    "seed:top-100-vinyls": "tsx scripts/seed-top-100-vinyls.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
