@@ -184,7 +184,14 @@ export default function CommunityCollectionsList() {
 
   const fetchCollections = async () => {
     try {
-      const res = await fetch('/api/community-collections?sortBy=popular')
+      console.log('[CommunityCollectionsList] Fetching collections...')
+      const startTime = performance.now()
+      const res = await fetch('/api/community-collections?sortBy=popular', {
+        cache: 'force-cache',
+        headers: { 'Cache-Control': 'public, max-age=60' }
+      })
+      const endTime = performance.now()
+      console.log(`[CommunityCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
       if (res.ok) {
         const data = await res.json()
         setCollections(data)
