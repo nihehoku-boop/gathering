@@ -96,9 +96,11 @@ export default function BulkImportDialog({
           ';': ';',
           '\t': '\t',
           '|': '|',
+          ' ': ' ',
           'tab': '\t',
           'semicolon': ';',
           'pipe': '|',
+          'space': ' ',
         }
         const delimiter = delimiterMap[csvDelimiter] || ','
         const parts = firstLine.split(delimiter).map(p => csvTrimWhitespace ? p.trim() : p)
@@ -156,9 +158,11 @@ export default function BulkImportDialog({
       ';': ';',
       '\t': '\t',
       '|': '|',
+      ' ': ' ',
       'tab': '\t',
       'semicolon': ';',
       'pipe': '|',
+      'space': ' ',
     }
     const delimiter = delimiterMap[csvDelimiter] || ','
 
@@ -456,7 +460,7 @@ export default function BulkImportDialog({
                   id="csvText"
                   value={csvText}
                   onChange={(e) => setCsvText(e.target.value)}
-                  placeholder="Format examples:&#10;number,name&#10;1,LTB #1&#10;2,LTB #2&#10;&#10;Or just names:&#10;LTB #1&#10;LTB #2&#10;&#10;Supports comma, semicolon, tab, or pipe delimiters"
+                  placeholder="Format examples:&#10;number,name&#10;1,LTB #1&#10;2,LTB #2&#10;&#10;Or just names:&#10;LTB #1&#10;LTB #2&#10;&#10;Supports comma, semicolon, tab, pipe, or space delimiters"
                   rows={10}
                 />
               </div>
@@ -474,6 +478,7 @@ export default function BulkImportDialog({
                     <option value=";">Semicolon (;)</option>
                     <option value="\t">Tab</option>
                     <option value="|">Pipe (|)</option>
+                    <option value=" ">Space</option>
                   </select>
                 </div>
                 
