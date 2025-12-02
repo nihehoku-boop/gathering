@@ -20,7 +20,8 @@
     "migrate-to-production": "tsx scripts/migrate-to-production.ts",
     "migrate-recommended-community": "tsx scripts/migrate-recommended-community.ts",
     "set-recommended-public": "tsx scripts/set-recommended-collections-public.ts",
-    "seed:top-100-vinyls": "tsx scripts/seed-top-100-vinyls.ts"
+    "seed:top-100-vinyls": "tsx scripts/seed-top-100-vinyls.ts",
+    "seed:pokemon-tcg": "tsx scripts/seed-pokemon-tcg-collections.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -32,6 +33,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@tcgdex/sdk": "^2.7.1",
     "@types/cheerio": "^0.22.35",
     "bcryptjs": "^3.0.3",
     "cheerio": "^1.1.2",
