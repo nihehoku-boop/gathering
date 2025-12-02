@@ -14,6 +14,9 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import ImageUpload from './ImageUpload'
+import { getTemplateFields } from '@/lib/item-templates'
+import { useAlert } from '@/hooks/useAlert'
+import AlertDialog from './ui/alert-dialog'
 
 interface EditRecommendedItemDialogProps {
   open: boolean
@@ -24,21 +27,42 @@ interface EditRecommendedItemDialogProps {
     number: number | null
     notes: string | null
     image: string | null
+    customFields?: string | Record<string, any>
   } | null
-  onSave: (itemId: string, data: { name: string; number: number | null; notes: string | null; image: string | null }) => Promise<void>
+  collectionTemplate?: string | null
+  customFieldDefinitions?: string | null
+  onSave: (itemId: string, data: { name: string; number: number | null; notes: string | null; image: string | null; customFields?: Record<string, any> }) => Promise<void>
 }
 
 export default function EditRecommendedItemDialog({
   open,
   onOpenChange,
   item,
+  collectionTemplate,
+  customFieldDefinitions,
   onSave,
 }: EditRecommendedItemDialogProps) {
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
   const [notes, setNotes] = useState('')
   const [image, setImage] = useState('')
+  const [customFields, setCustomFields] = useState<Record<string, any>>({})
   const [loading, setLoading] = useState(false)
+  const { alertDialog, showAlert, closeAlert } = useAlert()
+
+  // Get template fields - either from predefined template or custom field definitions
+  const templateFields = collectionTemplate === 'custom' && customFieldDefinitions
+    ? (() => {
+        try {
+          const parsed = typeof customFieldDefinitions === 'string'
+            ? JSON.parse(customFieldDefinitions)
+            : customFieldDefinitions
+          return Array.isArray(parsed) ? parsed : []
+        } catch {
+          return []
+        }
+      })()
+    : getTemplateFields(collectionTemplate)
 
   useEffect(() => {
     if (item) {
@@ -46,6 +70,20 @@ export default function EditRecommendedItemDialog({
       setNumber(item.number?.toString() || '')
       setNotes(item.notes || '')
       setImage(item.image || '')
+      
+      // Load customFields
+      if (item.customFields) {
+        try {
+          const parsed = typeof item.customFields === 'string' 
+            ? JSON.parse(item.customFields) 
+            : item.customFields
+          setCustomFields(parsed || {})
+        } catch {
+          setCustomFields({})
+        }
+      } else {
+        setCustomFields({})
+      }
     }
   }, [item])
 
@@ -53,18 +91,67 @@ export default function EditRecommendedItemDialog({
     e.preventDefault()
     if (!item) return
 
+    const trimmedName = name.trim()
+    if (!trimmedName) {
+      showAlert({
+        title: 'Validation Error',
+        message: 'Item name is required',
+        type: 'error',
+      })
+      return
+    }
+
     setLoading(true)
     try {
+      // Validate required custom fields
+      for (const field of templateFields) {
+        if (field.required) {
+          const value = customFields[field.id]
+          if (value === undefined || value === null || value === '') {
+            showAlert({
+              title: 'Validation Error',
+              message: `"${field.label}" is required`,
+              type: 'error',
+            })
+            setLoading(false)
+            return
+          }
+        }
+      }
+      
+      // Clean customFields - only include non-empty values
+      const cleanedCustomFields: Record<string, any> = {}
+      templateFields.forEach(field => {
+        const value = customFields[field.id]
+        if (value !== undefined && value !== null && value !== '') {
+          // Convert number fields
+          if (field.type === 'number' && typeof value === 'string') {
+            const numValue = parseInt(value)
+            if (!isNaN(numValue)) {
+              cleanedCustomFields[field.id] = numValue
+            }
+          } else {
+            cleanedCustomFields[field.id] = value
+          }
+        }
+      })
+      
       await onSave(item.id, {
-        name,
+        name: trimmedName,
         number: number ? parseInt(number) : null,
         notes: notes || null,
         image: image || null,
+        customFields: cleanedCustomFields,
       })
       onOpenChange(false)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving item:', error)
-      alert('Failed to save item')
+      const errorMessage = error?.message || 'Failed to save item'
+      showAlert({
+        title: 'Error',
+        message: errorMessage,
+        type: 'error',
+      })
     } finally {
       setLoading(false)
     }
@@ -74,15 +161,15 @@ export default function EditRecommendedItemDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35]">
-        <CardHeader>
+      <Card className="w-full max-w-md max-h-[90vh] bg-[#1a1d24] border-[#2a2d35] flex flex-col">
+        <CardHeader className="flex-shrink-0">
           <CardTitle className="text-[#fafafa]">Edit Item</CardTitle>
           <CardDescription className="text-[#969696]">
             Update item details and image
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <CardContent className="space-y-4 overflow-y-auto flex-1">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-[#fafafa]">Item Name *</Label>
               <Input
@@ -132,8 +219,83 @@ export default function EditRecommendedItemDialog({
                 className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
               />
             </div>
+            
+            {/* Template-specific fields */}
+            {templateFields.length > 0 && (
+              <div className="space-y-4 pt-4 border-t border-[#2a2d35]">
+                <div className="text-sm font-medium text-[#fafafa]">Template Fields</div>
+                {templateFields.map((field) => (
+                  <div key={field.id} className="space-y-2">
+                    <Label htmlFor={`custom-${field.id}`} className="text-[#fafafa]">
+                      {field.label}
+                      {field.required && <span className="text-[#FF3B30] ml-1">*</span>}
+                    </Label>
+                    {field.type === 'text' && (
+                      <Input
+                        id={`custom-${field.id}`}
+                        value={customFields[field.id] || ''}
+                        onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      />
+                    )}
+                    {field.type === 'number' && (
+                      <Input
+                        id={`custom-${field.id}`}
+                        type="number"
+                        min={field.min}
+                        max={field.max}
+                        value={customFields[field.id] || ''}
+                        onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      />
+                    )}
+                    {field.type === 'date' && (
+                      <Input
+                        id={`custom-${field.id}`}
+                        type="date"
+                        value={customFields[field.id] || ''}
+                        onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
+                        required={field.required}
+                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      />
+                    )}
+                    {field.type === 'select' && field.options && (
+                      <select
+                        id={`custom-${field.id}`}
+                        value={customFields[field.id] || ''}
+                        onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
+                        required={field.required}
+                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                      >
+                        <option value="">Select {field.label}</option>
+                        {field.options.map((option: string) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                    {field.type === 'textarea' && (
+                      <Textarea
+                        id={`custom-${field.id}`}
+                        value={customFields[field.id] || ''}
+                        onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        rows={3}
+                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
-          <CardFooter className="flex justify-end gap-2">
+          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35] pt-4">
             <Button
               type="button"
               variant="outline"
@@ -153,6 +315,18 @@ export default function EditRecommendedItemDialog({
           </CardFooter>
         </form>
       </Card>
+      <AlertDialog
+        open={alertDialog.open}
+        onOpenChange={(open) => !open && closeAlert()}
+        title={alertDialog.title}
+        message={alertDialog.message}
+        type={alertDialog.type}
+        confirmText={alertDialog.confirmText}
+        cancelText={alertDialog.cancelText}
+        showCancel={alertDialog.showCancel}
+        onConfirm={alertDialog.onConfirm}
+        onCancel={alertDialog.onCancel}
+      />
     </div>
   )
 }

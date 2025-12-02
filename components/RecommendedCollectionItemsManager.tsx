@@ -15,6 +15,7 @@ interface RecommendedItem {
   number: number | null
   notes: string | null
   image: string | null
+  customFields?: string | Record<string, any>
 }
 
 interface RecommendedCollection {
@@ -22,6 +23,8 @@ interface RecommendedCollection {
   name: string
   description: string | null
   category: string | null
+  template?: string | null
+  customFieldDefinitions?: string | null
   coverImage: string | null
   coverImageAspectRatio?: string | null
   items: RecommendedItem[]
@@ -92,7 +95,7 @@ export default function RecommendedCollectionItemsManager({
     }
   }
 
-  const handleSaveItem = async (itemId: string, data: { name: string; number: number | null; notes: string | null; image: string | null }) => {
+  const handleSaveItem = async (itemId: string, data: { name: string; number: number | null; notes: string | null; image: string | null; customFields?: Record<string, any> }) => {
     const res = await fetch(`/api/recommended-items/${itemId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -311,6 +314,8 @@ export default function RecommendedCollectionItemsManager({
         open={editingItem !== null}
         onOpenChange={(open) => !open && setEditingItem(null)}
         item={editingItem}
+        collectionTemplate={collection?.template || null}
+        customFieldDefinitions={collection?.customFieldDefinitions || null}
         onSave={handleSaveItem}
       />
       <CreateRecommendedItemDialog
