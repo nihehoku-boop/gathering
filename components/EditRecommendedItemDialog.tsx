@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import ImageUpload from './ImageUpload'
 
 interface EditRecommendedItemDialogProps {
   open: boolean
@@ -103,27 +104,23 @@ export default function EditRecommendedItemDialog({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="image" className="text-[#fafafa]">Image URL</Label>
-              <Input
-                id="image"
-                type="url"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+              <ImageUpload
+                value={image || null}
+                onChange={(url) => setImage(url || '')}
+                label="Image"
+                maxSize={10}
               />
-              {image && (
-                <div className="mt-2">
-                  <img
-                    src={image}
-                    alt="Preview"
-                    className="w-full h-48 object-cover rounded border border-[#2a2d35]"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
-                </div>
-              )}
+              <div className="mt-2">
+                <Label htmlFor="image-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Input
+                  id="image-url"
+                  type="url"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="notes" className="text-[#fafafa]">Notes</Label>
