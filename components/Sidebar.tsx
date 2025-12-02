@@ -581,6 +581,21 @@ export default function Sidebar() {
 
             {/* Wishlist */}
             <button
+              onMouseEnter={() => {
+                // Prefetch route and data on hover
+                if (!prefetchedRoutes.current.has('/wishlist')) {
+                  prefetchedRoutes.current.add('/wishlist')
+                  // Prefetch the route
+                  router.prefetch('/wishlist')
+                  // Prefetch the API data
+                  fetch('/api/wishlist', { 
+                    method: 'GET',
+                    cache: 'force-cache',
+                    headers: { 'Cache-Control': 'public, max-age=60' }
+                  }).catch(() => {})
+                  console.log('[Prefetch] Prefetching /wishlist')
+                }
+              }}
               onClick={() => {
                 router.push('/wishlist')
                 setIsSidebarOpen(false)
