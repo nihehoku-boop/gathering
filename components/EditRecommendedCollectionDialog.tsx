@@ -342,15 +342,15 @@ export default function EditRecommendedCollectionDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35]">
-        <CardHeader>
+      <Card className="w-full max-w-md max-h-[90vh] bg-[#1a1d24] border-[#2a2d35] flex flex-col">
+        <CardHeader className="flex-shrink-0">
           <CardTitle className="text-[#fafafa]">Edit Recommended Collection</CardTitle>
           <CardDescription className="text-[#969696]">
             Update collection details, cover image, and tags
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <CardContent className="space-y-4 overflow-y-auto flex-1">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-[#fafafa]">Collection Name *</Label>
               <Input
@@ -553,7 +553,7 @@ export default function EditRecommendedCollectionDialog({
               Uncheck to hide from public view
             </p>
           </CardContent>
-          <CardFooter className="flex justify-end gap-2">
+          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35] pt-4">
             <Button
               type="button"
               variant="outline"
