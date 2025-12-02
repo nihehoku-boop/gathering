@@ -24,7 +24,8 @@
     "seed:pokemon-tcg": "tsx scripts/seed-pokemon-tcg-collections.ts",
     "fix:pokemon-images": "tsx scripts/fix-pokemon-tcg-images.ts",
     "fix:pokemon-template": "tsx scripts/fix-pokemon-template.ts",
-    "update:pokemon-template-fields": "tsx scripts/update-pokemon-template-and-fields.ts"
+    "update:pokemon-template-fields": "tsx scripts/update-pokemon-template-and-fields.ts",
+    "check:pokemon-templates": "tsx scripts/check-pokemon-templates.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

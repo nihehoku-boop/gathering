@@ -46,6 +46,19 @@ export async function GET(
             { name: 'asc' },
           ],
         },
+        _count: {
+          select: {
+            items: true,
+          },
+        },
+      },
+    })
+
+    // Get total owned count
+    const ownedCount = await prisma.item.count({
+      where: {
+        collectionId,
+        isOwned: true,
       },
     })
 
@@ -56,9 +69,10 @@ export async function GET(
       )
     }
 
-    // Include share settings in the response to avoid a second API call
+    // Include share settings and owned count in the response to avoid a second API call
     const response = NextResponse.json({
       ...collection,
+      ownedCount, // Total owned items count
       // Share settings are already included in the select above (shareToken, isPublic)
     })
     // Add caching headers for collection data

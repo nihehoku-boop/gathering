@@ -78,6 +78,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [itemsPage, setItemsPage] = useState(1)
   const [hasMoreItems, setHasMoreItems] = useState(true)
   const [totalItemsCount, setTotalItemsCount] = useState(0)
+  const [totalOwnedCount, setTotalOwnedCount] = useState(0)
   // Use refs to track latest values for observer callback
   const hasMoreItemsRef = useRef(hasMoreItems)
   const itemsPageRef = useRef(itemsPage)
@@ -129,6 +130,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setIsPublic(data.isPublic || false)
         setShareToken(data.shareToken || null)
         setTotalItemsCount(data._count?.items || 0)
+        setTotalOwnedCount((data as any).ownedCount || 0)
       }
     } catch (error) {
       console.error('Error fetching collection:', error)
@@ -237,10 +239,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const toggleItemOwned = async (itemId: string, currentStatus: boolean) => {
     const newStatus = !currentStatus
     
-    // Optimistically update the UI immediately
-    setItems(prev => prev.map(item => 
-      item.id === itemId ? { ...item, isOwned: newStatus } : item
-    ))
+      // Optimistically update the UI immediately
+      setItems(prev => prev.map(item => 
+        item.id === itemId ? { ...item, isOwned: newStatus } : item
+      ))
+      // Update total owned count
+      setTotalOwnedCount(prev => currentStatus ? prev - 1 : prev + 1)
     
     try {
       const res = await fetch(`/api/items/${itemId}`, {
@@ -266,6 +270,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setItems(prev => prev.map(item => 
           item.id === itemId ? { ...item, isOwned: currentStatus } : item
         ))
+        setTotalOwnedCount(prev => currentStatus ? prev + 1 : prev - 1)
         const error = await res.json()
         console.error('Error updating item:', error)
       }
@@ -428,10 +433,19 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     const itemIdsArray = Array.from(selectedItems)
     const previousItems = [...items] // Store previous state for rollback
 
+    // Calculate how many items will change ownership status
+    const selectedCount = selectedItems.size
+    const currentlyOwnedInSelection = items.filter(item => selectedItems.has(item.id) && item.isOwned).length
+    const changeCount = isOwned 
+      ? (selectedCount - currentlyOwnedInSelection) // Items that will become owned
+      : -currentlyOwnedInSelection // Items that will become not owned
+
     // Optimistically update the UI immediately
     setItems(prev => prev.map(item => 
       selectedItems.has(item.id) ? { ...item, isOwned } : item
     ))
+    // Update total owned count
+    setTotalOwnedCount(prev => prev + changeCount)
 
     try {
       const res = await fetch('/api/items/bulk', {
@@ -450,6 +464,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       } else {
         // Revert on error
         setItems(previousItems)
+        setTotalOwnedCount(prev => prev - changeCount)
         const errorData = await res.json()
         showAlert({
           title: 'Error',
@@ -582,7 +597,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     )
   }
 
-  const ownedCount = items.filter(item => item.isOwned).length
+  // Use total owned count from API instead of calculating from loaded items
+  const ownedCount = totalOwnedCount
   const totalCount = totalItemsCount || items.length
   const progress = totalCount > 0 ? Math.round((ownedCount / totalCount) * 100) : 0
 
