@@ -234,17 +234,45 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   }, [items.length]) // Only depend on items.length to re-setup observer when items change
 
   const toggleItemOwned = async (itemId: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus
+    
+    // Optimistically update the UI immediately
+    setItems(prev => prev.map(item => 
+      item.id === itemId ? { ...item, isOwned: newStatus } : item
+    ))
+    
     try {
       const res = await fetch(`/api/items/${itemId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isOwned: !currentStatus }),
+        body: JSON.stringify({ isOwned: newStatus }),
       })
 
       if (res.ok) {
-        fetchCollection()
+        const data = await res.json()
+        // Update with server response to ensure sync
+        setItems(prev => prev.map(item => 
+          item.id === itemId ? { ...item, isOwned: data.isOwned } : item
+        ))
+        
+        // Handle achievements if any were unlocked
+        if (data.newlyUnlockedAchievements && data.newlyUnlockedAchievements.length > 0) {
+          // You might want to show a notification here
+          console.log('New achievements unlocked:', data.newlyUnlockedAchievements)
+        }
+      } else {
+        // Revert on error
+        setItems(prev => prev.map(item => 
+          item.id === itemId ? { ...item, isOwned: currentStatus } : item
+        ))
+        const error = await res.json()
+        console.error('Error updating item:', error)
       }
     } catch (error) {
+      // Revert on error
+      setItems(prev => prev.map(item => 
+        item.id === itemId ? { ...item, isOwned: currentStatus } : item
+      ))
       console.error('Error updating item:', error)
     }
   }
@@ -396,15 +424,22 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const handleBulkMarkOwned = async (isOwned: boolean) => {
     if (selectedItems.size === 0) return
 
+    const itemIdsArray = Array.from(selectedItems)
+    const previousItems = [...items] // Store previous state for rollback
+
+    // Optimistically update the UI immediately
+    setItems(prev => prev.map(item => 
+      selectedItems.has(item.id) ? { ...item, isOwned } : item
+    ))
+
     try {
       const res = await fetch('/api/items/bulk', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemIds: Array.from(selectedItems), updates: { isOwned } }),
+        body: JSON.stringify({ itemIds: itemIdsArray, updates: { isOwned } }),
       })
 
       if (res.ok) {
-        fetchCollection()
         clearSelection()
         showAlert({
           title: 'Success',
@@ -412,6 +447,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           type: 'success',
         })
       } else {
+        // Revert on error
+        setItems(previousItems)
         const errorData = await res.json()
         showAlert({
           title: 'Error',
@@ -420,6 +457,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         })
       }
     } catch (error) {
+      // Revert on error
+      setItems(previousItems)
       console.error('Error updating items:', error)
       showAlert({
         title: 'Error',
