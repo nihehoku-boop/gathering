@@ -173,9 +173,56 @@ export default function CollectionsList() {
       })
     }
 
+    // Sort collections
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name)
+        case 'name-desc':
+          return b.name.localeCompare(a.name)
+        case 'items-asc':
+          return (a._count.items || 0) - (b._count.items || 0)
+        case 'items-desc':
+          return (b._count.items || 0) - (a._count.items || 0)
+        case 'progress-asc':
+          return calculateProgress(a) - calculateProgress(b)
+        case 'progress-desc':
+          return calculateProgress(b) - calculateProgress(a)
+        case 'date-new':
+          const dateA = new Date(a.createdAt || 0).getTime()
+          const dateB = new Date(b.createdAt || 0).getTime()
+          return dateB - dateA
+        case 'date-old':
+          const dateAOld = new Date(a.createdAt || 0).getTime()
+          const dateBOld = new Date(b.createdAt || 0).getTime()
+          return dateAOld - dateBOld
+        default:
+          return 0
+      }
+    })
+
+    // If sortBy is 'name-asc' (default), also respect sidebar order from localStorage
+    if (sortBy === 'name-asc') {
+      const savedOrder = typeof window !== 'undefined' 
+        ? localStorage.getItem('collectionOrder_noFolder') 
+        : null
+      
+      if (savedOrder) {
+        try {
+          const order = JSON.parse(savedOrder) as string[]
+          const ordered = order
+            .map(id => filtered.find(c => c.id === id))
+            .filter(Boolean) as Collection[]
+          const unordered = filtered.filter(c => !order.includes(c.id))
+          filtered = [...ordered, ...unordered]
+        } catch {
+          // If parsing fails, keep current sort
+        }
+      }
+    }
 
     setFilteredCollections(filtered)
-  }, [searchQuery, selectedTags, collections])
+  }, [searchQuery, selectedTags, collections, sortBy])
 
   const checkForUpdates = async (collectionId: string) => {
     try {
