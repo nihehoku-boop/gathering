@@ -151,22 +151,133 @@ async function main() {
               continue
             }
 
-            // Create the community collection with all cards
+            // Process cards: fetch full card data to get variants, group by base name/number
+            console.log(`   🔍 Processing card variants...`)
+            const cardItems: any[] = []
+            const cardGroups = new Map<string, any[]>() // Group cards by base name/number
+
+            // First pass: group cards by base name/number
+            for (const cardResume of cards) {
+              const baseName = cardResume.name
+              const cardNumber = cardResume.localId || cardResume.number?.toString() || null
+              const baseKey = `${baseName}_${cardNumber || 'unknown'}`
+              
+              if (!cardGroups.has(baseKey)) {
+                cardGroups.set(baseKey, [])
+              }
+              cardGroups.get(baseKey)!.push(cardResume)
+            }
+
+            console.log(`   📊 Found ${cardGroups.size} unique cards (with ${cards.length} total entries including variants)`)
+
+            // Second pass: fetch full card data and create items with variant names
+            let processedCount = 0
+            for (const [baseKey, cardGroup] of cardGroups.entries()) {
+              for (let i = 0; i < cardGroup.length; i++) {
+                const cardResume = cardGroup[i]
+                try {
+                  // Fetch full card data to get variants and other details
+                  const fullCard = await cardResume.getCard()
+                  
+                  const baseName = fullCard.name
+                  const cardNumber = fullCard.localId || fullCard.number?.toString() || null
+                  
+                  // Get variant suffix
+                  const variants = fullCard.variants || {}
+                  const variantParts: string[] = []
+                  
+                  if (variants.holo) variantParts.push('Holo')
+                  if (variants.reverse) variantParts.push('Reverse Holo')
+                  if (variants.firstEdition) variantParts.push('First Edition')
+                  if (variants.normal && variantParts.length === 0) variantParts.push('Normal')
+                  
+                  // If multiple cards with same name/number, add index
+                  const variantSuffix = variantParts.length > 0 
+                    ? ` - ${variantParts.join(', ')}`
+                    : (cardGroup.length > 1 ? ` - Variant ${i + 1}` : '')
+                  
+                  // Create item name with variant
+                  const itemName = `${baseName}${variantSuffix}`
+                  
+                  // Map rarity to template options
+                  let rarity = fullCard.rarity || ''
+                  if (rarity) {
+                    // Map SDK rarity to template options
+                    const rarityLower = rarity.toLowerCase()
+                    if (rarityLower.includes('common')) rarity = 'Common'
+                    else if (rarityLower.includes('uncommon')) rarity = 'Uncommon'
+                    else if (rarityLower.includes('secret') && rarityLower.includes('rare')) rarity = 'Secret Rare'
+                    else if (rarityLower.includes('ultra') && rarityLower.includes('rare')) rarity = 'Ultra Rare'
+                    else if (rarityLower.includes('rare')) rarity = 'Rare'
+                    else if (rarityLower.includes('promo')) rarity = 'Promo'
+                    // Keep original if no match
+                  }
+                  
+                  // Build customFields for trading-card template
+                  const customFields: Record<string, any> = {
+                    set: setResume.name,
+                    cardNumber: cardNumber ? `${cardNumber}/${setData.cardCount?.total || setData.cardCount?.official || '?'}` : null,
+                    rarity: rarity || null,
+                    player: baseName, // Card name as player/character
+                  }
+                  
+                  // Remove null values
+                  Object.keys(customFields).forEach(key => {
+                    if (customFields[key] === null || customFields[key] === undefined) {
+                      delete customFields[key]
+                    }
+                  })
+                  
+                  cardItems.push({
+                    name: itemName,
+                    number: cardNumber ? parseInt(cardNumber) : null,
+                    notes: null, // Notes moved to customFields
+                    image: fullCard.getImageURL ? fullCard.getImageURL('low', 'webp') : (fullCard.image || null),
+                    customFields: JSON.stringify(customFields),
+                  })
+                  
+                  processedCount++
+                  if (processedCount % 10 === 0) {
+                    console.log(`   ⏳ Processed ${processedCount}/${cards.length} cards...`)
+                  }
+                  
+                  // Small delay to avoid rate limiting
+                  await new Promise(resolve => setTimeout(resolve, 50))
+                } catch (error) {
+                  console.error(`   ⚠️  Error fetching full card data for "${cardResume.name}":`, error)
+                  // Fallback: use cardResume data
+                  const cardNumber = cardResume.localId || cardResume.number?.toString() || null
+                  const variantSuffix = cardGroup.length > 1 ? ` - Variant ${i + 1}` : ''
+                  cardItems.push({
+                    name: `${cardResume.name}${variantSuffix}`,
+                    number: cardNumber ? parseInt(cardNumber) : null,
+                    notes: null,
+                    image: cardResume.getImageURL ? cardResume.getImageURL('low', 'webp') : (cardResume.image || null),
+                    customFields: JSON.stringify({
+                      set: setResume.name,
+                      cardNumber: cardNumber ? `${cardNumber}/${setData.cardCount?.total || setData.cardCount?.official || '?'}` : null,
+                      player: cardResume.name,
+                    }),
+                  })
+                  processedCount++
+                }
+              }
+            }
+
+            console.log(`   ✅ Processed ${cardItems.length} card items (with variants)`)
+
+            // Create the community collection with trading-card template
             const collection = await prisma.communityCollection.create({
               data: {
                 name: setResume.name,
-                description: setData.description || `Complete set of ${setResume.name} from the ${series.name} series. Contains ${cards.length} cards.`,
+                description: setData.description || `Complete set of ${setResume.name} from the ${series.name} series. Contains ${cardItems.length} cards.`,
                 category: 'Trading Cards',
+                template: 'trading-card', // Use trading-card template
                 coverImage: setData.logo || setData.symbol || null,
                 tags: JSON.stringify(['Pokemon', 'Trading Cards', series.name, 'TCG']),
                 userId: adminUser.id,
                 items: {
-                  create: cards.map((card: any, index: number) => ({
-                    name: card.name || `Card ${index + 1}`,
-                    number: card.number ? parseInt(card.number) || null : null,
-                    notes: card.rarity ? `Rarity: ${card.rarity}` : null,
-                    image: card.getImageURL ? card.getImageURL('low', 'webp') : (card.image || card.imageSmall || null),
-                  })),
+                  create: cardItems,
                 },
               },
               include: {
