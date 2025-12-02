@@ -507,7 +507,8 @@ export default function CommunityCollectionsList() {
 
         {(searchQuery || selectedCategory || selectedTags.length > 0) && (
           <p className="text-sm text-[#969696]">
-            Showing {filteredCollections.length} of {collections.length} collection{collections.length !== 1 ? 's' : ''}
+            Showing {filteredCollections.length} collection{filteredCollections.length !== 1 ? 's' : ''}
+            {hasMore && ` (more available - click "Load More" to see more)`}
           </p>
         )}
       </div>
