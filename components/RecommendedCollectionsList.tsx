@@ -46,7 +46,14 @@ export default function RecommendedCollectionsList() {
 
   const fetchCollections = async () => {
     try {
-      const res = await fetch('/api/recommended-collections')
+      console.log('[RecommendedCollectionsList] Fetching collections...')
+      const startTime = performance.now()
+      const res = await fetch('/api/recommended-collections', {
+        cache: 'force-cache',
+        headers: { 'Cache-Control': 'public, max-age=60' }
+      })
+      const endTime = performance.now()
+      console.log(`[RecommendedCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
       if (res.ok) {
         const data = await res.json()
         setCollections(data)

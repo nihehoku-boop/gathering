@@ -62,6 +62,7 @@ export default function Sidebar() {
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(true)
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
+  const prefetchedRoutes = useRef<Set<string>>(new Set())
   
   // Close sidebar when route changes on mobile
   useEffect(() => {
@@ -517,8 +518,19 @@ export default function Sidebar() {
             {/* Recommended */}
             <button
               onMouseEnter={() => {
-                // Prefetch recommended collections on hover
-                fetch('/api/recommended-collections', { method: 'GET' }).catch(() => {})
+                // Prefetch route and data on hover
+                if (!prefetchedRoutes.current.has('/recommended')) {
+                  prefetchedRoutes.current.add('/recommended')
+                  // Prefetch the route
+                  router.prefetch('/recommended')
+                  // Prefetch the API data
+                  fetch('/api/recommended-collections', { 
+                    method: 'GET',
+                    cache: 'force-cache',
+                    headers: { 'Cache-Control': 'public, max-age=60' }
+                  }).catch(() => {})
+                  console.log('[Prefetch] Prefetching /recommended')
+                }
               }}
               onClick={() => {
                 router.push('/recommended')
@@ -538,8 +550,19 @@ export default function Sidebar() {
             {/* Community Collections */}
             <button
               onMouseEnter={() => {
-                // Prefetch community collections on hover
-                fetch('/api/community-collections', { method: 'GET' }).catch(() => {})
+                // Prefetch route and data on hover
+                if (!prefetchedRoutes.current.has('/community')) {
+                  prefetchedRoutes.current.add('/community')
+                  // Prefetch the route
+                  router.prefetch('/community')
+                  // Prefetch the API data
+                  fetch('/api/community-collections', { 
+                    method: 'GET',
+                    cache: 'force-cache',
+                    headers: { 'Cache-Control': 'public, max-age=60' }
+                  }).catch(() => {})
+                  console.log('[Prefetch] Prefetching /community')
+                }
               }}
               onClick={() => {
                 router.push('/community')
@@ -608,8 +631,19 @@ export default function Sidebar() {
                 <div className="mt-1 ml-4 space-y-1 border-l border-[#2a2d35] pl-4">
                   <button
                     onMouseEnter={() => {
-                      // Prefetch user collections on hover
-                      fetch('/api/collections', { method: 'GET' }).catch(() => {})
+                      // Prefetch route and data on hover
+                      if (!prefetchedRoutes.current.has('/')) {
+                        prefetchedRoutes.current.add('/')
+                        // Prefetch the route
+                        router.prefetch('/')
+                        // Prefetch the API data
+                        fetch('/api/collections', { 
+                          method: 'GET',
+                          cache: 'force-cache',
+                          headers: { 'Cache-Control': 'public, max-age=60' }
+                        }).catch(() => {})
+                        console.log('[Prefetch] Prefetching /')
+                      }
                     }}
                     onClick={() => {
                       router.push('/')
