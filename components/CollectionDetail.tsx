@@ -17,6 +17,7 @@ import AlternativeCoversView from './AlternativeCoversView'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 import ItemCardSkeleton from './ItemCardSkeleton'
+import { getTemplateFields, type TemplateField } from '@/lib/item-templates'
 
 interface Item {
   id: string
@@ -56,6 +57,19 @@ const getCustomFieldDefinitions = (collection: Collection | null): any[] => {
   } catch {
     return []
   }
+}
+
+// Helper function to get template fields (either from predefined template or custom definitions)
+const getTemplateFieldsForCollection = (collection: Collection | null): TemplateField[] => {
+  if (!collection) return []
+  
+  // If it's a custom template, use customFieldDefinitions
+  if (collection.template === 'custom' && collection.customFieldDefinitions) {
+    return getCustomFieldDefinitions(collection) as TemplateField[]
+  }
+  
+  // Otherwise, use predefined template fields
+  return getTemplateFields(collection.template)
 }
 
 // Helper function to get custom fields from item
@@ -1201,12 +1215,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                               <span className="font-medium text-[#fafafa]">Notes:</span> {item.notes}
                             </div>
                           )}
-                          {/* Custom Fields */}
+                          {/* Custom Fields / Template Fields */}
                           {(() => {
-                            const customFieldDefs = getCustomFieldDefinitions(collection)
+                            const templateFields = getTemplateFieldsForCollection(collection)
                             const customFields = getItemCustomFields(item)
-                            if (customFieldDefs.length > 0 && Object.keys(customFields).length > 0) {
-                              return customFieldDefs.map((fieldDef) => {
+                            if (templateFields.length > 0 && Object.keys(customFields).length > 0) {
+                              return templateFields.map((fieldDef) => {
                                 const value = customFields[fieldDef.id]
                                 if (value === undefined || value === null || value === '') return null
                                 let displayValue = String(value)
@@ -1224,10 +1238,17 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                             }
                             return null
                           })()}
-                          {!item.wear && !item.personalRating && !item.logDate && !item.notes && 
-                           (!collection?.customFieldDefinitions || Object.keys(getItemCustomFields(item)).length === 0) && (
-                            <div className="text-[#666] italic">No additional information</div>
-                          )}
+                          {(() => {
+                            const templateFields = getTemplateFieldsForCollection(collection)
+                            const customFields = getItemCustomFields(item)
+                            const hasTemplateFields = templateFields.length > 0 && Object.keys(customFields).length > 0
+                            const hasStandardFields = item.wear || item.personalRating || item.logDate || item.notes
+                            
+                            if (!hasStandardFields && !hasTemplateFields) {
+                              return <div className="text-[#666] italic">No additional information</div>
+                            }
+                            return null
+                          })()}
                         </div>
                       )}
                     </div>
