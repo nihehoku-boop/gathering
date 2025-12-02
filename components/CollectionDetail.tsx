@@ -464,6 +464,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       } else {
         // Revert on error
         setItems(previousItems)
+        // Revert the owned count change
         setTotalOwnedCount(prev => prev - changeCount)
         const errorData = await res.json()
         showAlert({
