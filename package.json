@@ -21,7 +21,8 @@
     "migrate-recommended-community": "tsx scripts/migrate-recommended-community.ts",
     "set-recommended-public": "tsx scripts/set-recommended-collections-public.ts",
     "seed:top-100-vinyls": "tsx scripts/seed-top-100-vinyls.ts",
-    "seed:pokemon-tcg": "tsx scripts/seed-pokemon-tcg-collections.ts"
+    "seed:pokemon-tcg": "tsx scripts/seed-pokemon-tcg-collections.ts",
+    "fix:pokemon-images": "tsx scripts/fix-pokemon-tcg-images.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

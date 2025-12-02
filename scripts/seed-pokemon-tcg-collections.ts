@@ -165,7 +165,7 @@ async function main() {
                     name: card.name || `Card ${index + 1}`,
                     number: card.number ? parseInt(card.number) || null : null,
                     notes: card.rarity ? `Rarity: ${card.rarity}` : null,
-                    image: card.image || card.imageSmall || null,
+                    image: card.getImageURL ? card.getImageURL('low', 'webp') : (card.image || card.imageSmall || null),
                   })),
                 },
               },
