@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
+import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 
 const bricolageGrotesque = Bricolage_Grotesque({ 
   subsets: ['latin'],
@@ -72,6 +73,7 @@ export default async function RootLayout({
       </head>
       <body className={`${bricolageGrotesque.variable} ${bricolageGrotesque.className} antialiased`}>
         <Providers>{children}</Providers>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   )

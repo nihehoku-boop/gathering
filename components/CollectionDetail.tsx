@@ -16,6 +16,7 @@ import EditCollectionDialog from './EditCollectionDialog'
 import AlternativeCoversView from './AlternativeCoversView'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
+import ItemCardSkeleton from './ItemCardSkeleton'
 
 interface Item {
   id: string
@@ -548,8 +549,22 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
-          <div className="text-center text-[#969696]">Loading collection...</div>
+        <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+          <div className="container mx-auto px-6 py-8">
+            {/* Header Skeleton */}
+            <div className="mb-8 space-y-4 animate-pulse">
+              <div className="h-8 bg-[#2a2d35] rounded w-1/3"></div>
+              <div className="h-4 bg-[#2a2d35] rounded w-2/3"></div>
+              <div className="h-2 bg-[#2a2d35] rounded w-full"></div>
+            </div>
+            
+            {/* Items Grid Skeleton */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {[...Array(12)].map((_, i) => (
+                <ItemCardSkeleton key={i} />
+              ))}
+            </div>
+          </div>
         </div>
       </>
     )
@@ -1068,6 +1083,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                             className="object-cover"
                             loading="lazy"
+                            placeholder="blur"
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                             unoptimized={item.image.startsWith('/ltbcover/') || item.image.includes('localhost') || item.image.includes('tcgdx') || item.image.includes('tcgdex')}
                           />
                           {(() => {

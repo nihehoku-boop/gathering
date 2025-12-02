@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
 import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown } from 'lucide-react'
+import CollectionCardSkeleton from './CollectionCardSkeleton'
 import CreateCollectionDialog from './CreateCollectionDialog'
 import EditCollectionDialog from './EditCollectionDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
@@ -404,29 +405,21 @@ export default function CollectionsList() {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            {/* Outer rotating ring */}
-            <div className="absolute inset-0 border-4 border-[#2a2d35] rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-transparent border-t-[var(--accent-color)] rounded-full animate-spin"></div>
-            
-            {/* Inner pulsing circle */}
-            <div className="absolute inset-4 border-4 border-[#2a2d35] rounded-full"></div>
-            <div className="absolute inset-4 border-4 border-transparent border-r-[var(--accent-color)] rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
-            
-            {/* Center dot */}
-            <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[var(--accent-color)] rounded-full animate-pulse"></div>
+      <div>
+        {/* Search and Filter Skeleton */}
+        <div className="mb-8 space-y-4">
+          <div className="flex gap-3">
+            <div className="flex-1 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
+            <div className="w-24 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
+            <div className="w-32 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
           </div>
-          
-          <div className="space-y-2">
-            <p className="text-[#fafafa] text-lg font-medium">Loading collections...</p>
-            <div className="flex items-center justify-center gap-1">
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-            </div>
-          </div>
+        </div>
+
+        {/* Collection Cards Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <CollectionCardSkeleton key={i} />
+          ))}
         </div>
       </div>
     )
@@ -828,6 +821,8 @@ export default function CollectionsList() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition`}
                       loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                       unoptimized={collection.coverImage.startsWith('/ltbcover/') || collection.coverImage.includes('localhost') || collection.coverImage.includes('tcgdx') || collection.coverImage.includes('tcgdex')}
                     />
                   </div>

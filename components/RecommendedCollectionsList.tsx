@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { parseTags, getTagColor, AVAILABLE_TAGS } from '@/lib/tags'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
+import CollectionCardSkeleton from './CollectionCardSkeleton'
 
 interface RecommendedItem {
   id: string
@@ -180,29 +181,20 @@ export default function RecommendedCollectionsList() {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="text-center">
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            {/* Outer rotating ring */}
-            <div className="absolute inset-0 border-4 border-[#2a2d35] rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-transparent border-t-[var(--accent-color)] rounded-full animate-spin"></div>
-            
-            {/* Inner pulsing circle */}
-            <div className="absolute inset-4 border-4 border-[#2a2d35] rounded-full"></div>
-            <div className="absolute inset-4 border-4 border-transparent border-r-[var(--accent-color)] rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
-            
-            {/* Center dot */}
-            <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[var(--accent-color)] rounded-full animate-pulse"></div>
+      <div>
+        {/* Search and Filter Skeleton */}
+        <div className="mb-6 space-y-4">
+          <div className="flex gap-3">
+            <div className="flex-1 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
+            <div className="w-24 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
           </div>
-          
-          <div className="space-y-2">
-            <p className="text-[#fafafa] text-lg font-medium">Loading recommended collections...</p>
-            <div className="flex items-center justify-center gap-1">
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-              <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-            </div>
-          </div>
+        </div>
+
+        {/* Collection Cards Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <CollectionCardSkeleton key={i} />
+          ))}
         </div>
       </div>
     )
