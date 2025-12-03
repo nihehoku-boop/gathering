@@ -13,7 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { AVAILABLE_TAGS, stringifyTags, parseTags, getTagColor } from '@/lib/tags'
+import { stringifyTags, parseTags } from '@/lib/tags'
+import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES, TemplateField } from '@/lib/item-templates'
 import { X, Plus, Trash2, GripVertical } from 'lucide-react'
 import ImageUpload from './ImageUpload'
@@ -495,67 +496,12 @@ export default function EditRecommendedCollectionDialog({
                 </p>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label className="text-[#fafafa]">Tags</Label>
-              <div className="flex flex-wrap gap-2">
-                {AVAILABLE_TAGS.map((tag) => {
-                  const colors = getTagColor(tag)
-                  const isSelected = selectedTags.includes(tag)
-                  return (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => {
-                        if (selectedTags.includes(tag)) {
-                          setSelectedTags(selectedTags.filter(t => t !== tag))
-                        } else {
-                          setSelectedTags([...selectedTags, tag])
-                        }
-                      }}
-                      className={`px-3 py-1.5 rounded-full text-sm smooth-transition border ${
-                        isSelected
-                          ? 'opacity-100'
-                          : 'opacity-60 hover:opacity-100'
-                      }`}
-                      style={{
-                        backgroundColor: isSelected ? colors.bg : '#2a2d35',
-                        color: isSelected ? colors.text : '#fafafa',
-                        borderColor: isSelected ? colors.border : '#353842',
-                      }}
-                    >
-                      {tag}
-                    </button>
-                  )
-                })}
-              </div>
-              {selectedTags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {selectedTags.map((tag) => {
-                    const colors = getTagColor(tag)
-                    return (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full border"
-                        style={{
-                          backgroundColor: colors.bg,
-                          color: colors.text,
-                          borderColor: colors.border,
-                        }}
-                      >
-                        {tag}
-                        <button
-                          type="button"
-                          onClick={() => setSelectedTags(selectedTags.filter(t => t !== tag))}
-                          className="hover:opacity-70 smooth-transition"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+            <TagSelector
+              selectedTags={selectedTags}
+              onChange={setSelectedTags}
+              label="Tags"
+              allowCustom={true}
+            />
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"

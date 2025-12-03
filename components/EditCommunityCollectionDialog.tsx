@@ -13,7 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { AVAILABLE_TAGS, parseTags, stringifyTags, getTagColor } from '@/lib/tags'
+import { parseTags, stringifyTags } from '@/lib/tags'
+import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
 
@@ -205,35 +206,12 @@ export default function EditCommunityCollectionDialog({
                 className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
-            <div className="space-y-2">
-              <Label className="text-[#fafafa]">Tags</Label>
-              <div className="flex flex-wrap gap-2">
-                {AVAILABLE_TAGS.map((tag) => {
-                  const isSelected = selectedTags.includes(tag)
-                  const colors = getTagColor(tag)
-                  return (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => toggleTag(tag)}
-                      className={`px-3 py-1.5 rounded-full text-sm smooth-transition border ${
-                        isSelected ? 'opacity-100' : 'opacity-60 hover:opacity-100'
-                      }`}
-                      style={{
-                        backgroundColor: isSelected ? colors.bg : '#2a2d35',
-                        color: isSelected ? colors.text : '#fafafa',
-                        borderColor: isSelected ? colors.border : '#353842',
-                      }}
-                    >
-                      {tag}
-                      {isSelected && (
-                        <X className="inline-block ml-1 h-3 w-3" />
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
+            <TagSelector
+              selectedTags={selectedTags}
+              onChange={setSelectedTags}
+              label="Tags"
+              allowCustom={true}
+            />
           </CardContent>
           <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35] pt-4">
             <Button
