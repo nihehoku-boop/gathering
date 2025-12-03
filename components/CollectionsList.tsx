@@ -14,7 +14,8 @@ import CollectionCardSkeleton from './CollectionCardSkeleton'
 import CreateCollectionDialog from './CreateCollectionDialog'
 import EditCollectionDialog from './EditCollectionDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
-import { AVAILABLE_TAGS, parseTags, getTagColor } from '@/lib/tags'
+import { parseTags, getTagColor } from '@/lib/tags'
+import TagSelector from '@/components/TagSelector'
 import CollectionSyncDialog from './CollectionSyncDialog'
 import AlertDialog from './ui/alert-dialog'
 
@@ -580,43 +581,12 @@ export default function CollectionsList() {
           )}
         </div>
         
-        <div className="space-y-2">
-          <div className="text-sm text-[#969696]">Filter by tags:</div>
-          <div className="flex flex-wrap gap-2">
-            {AVAILABLE_TAGS.map((tag) => {
-              const colors = getTagColor(tag)
-              const isSelected = selectedTags.includes(tag)
-              return (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => toggleTag(tag)}
-                  className={`px-3 py-1.5 rounded-full text-sm smooth-transition border ${
-                    isSelected
-                      ? 'opacity-100'
-                      : 'opacity-60 hover:opacity-100'
-                  }`}
-                  style={{
-                    backgroundColor: isSelected ? colors.bg : '#2a2d35',
-                    color: isSelected ? colors.text : '#fafafa',
-                    borderColor: isSelected ? colors.border : '#353842',
-                  }}
-                >
-                  {tag}
-                </button>
-              )
-            })}
-          </div>
-          {selectedTags.length > 0 && (
-            <button
-              onClick={() => setSelectedTags([])}
-              className="text-xs text-[#666] hover:text-[#fafafa] smooth-transition flex items-center gap-1"
-            >
-              <X className="h-3 w-3" />
-              Clear filters
-            </button>
-          )}
-        </div>
+        <TagSelector
+          selectedTags={selectedTags}
+          onChange={setSelectedTags}
+          label="Filter by tags"
+          allowCustom={false}
+        />
         {(searchQuery || selectedTags.length > 0) && (
           <div className="text-sm text-[#666]">
             Showing {filteredCollections.length} of {collections.length} collections
