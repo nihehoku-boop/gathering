@@ -54,6 +54,8 @@ Edit `.env` and set:
 - `NEXTAUTH_URL="http://localhost:3000"`
 - `NEXTAUTH_SECRET` (generate a random string)
 - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (optional, for image uploads)
+- `RESEND_API_KEY` (required for email functionality - see EMAIL_SETUP.md)
+- `RESEND_FROM_EMAIL` (optional, defaults to onboarding@resend.dev)
 
 3. Set up the database:
 ```bash

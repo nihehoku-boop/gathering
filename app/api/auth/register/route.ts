@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { sendWelcomeEmail } from '@/lib/email'
 
 async function registerHandler(request: NextRequest) {
   try {
@@ -60,6 +61,12 @@ async function registerHandler(request: NextRequest) {
         email: true,
         name: true,
       },
+    })
+
+    // Send welcome email (non-blocking)
+    sendWelcomeEmail(user.email, user.name || undefined).catch((error) => {
+      console.error('Failed to send welcome email:', error)
+      // Don't fail registration if email fails
     })
 
     return NextResponse.json(

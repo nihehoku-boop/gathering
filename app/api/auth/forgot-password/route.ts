@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import crypto from 'crypto'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { sendPasswordResetEmail } from '@/lib/email'
 
 async function forgotPasswordHandler(request: NextRequest) {
   try {
@@ -58,17 +59,24 @@ async function forgotPasswordHandler(request: NextRequest) {
         },
       })
 
-      // In production, send email with reset link
-      // For now, we'll return the token in development
-      // In production, remove this and send email instead
+      // Generate reset link
       const resetLink = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`
       
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Password reset link (DEV ONLY):', resetLink)
-      }
+      // Send password reset email
+      const emailResult = await sendPasswordResetEmail(
+        user.email,
+        resetLink,
+        user.name || undefined
+      )
 
-      // TODO: Send email with reset link
-      // await sendPasswordResetEmail(user.email, resetLink)
+      if (!emailResult.success) {
+        // Log error but don't reveal to user (security best practice)
+        console.error('Failed to send password reset email:', emailResult.error)
+        // In development, log the link as fallback
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Password reset link (DEV fallback):', resetLink)
+        }
+      }
     }
 
     // Always return success to prevent email enumeration
