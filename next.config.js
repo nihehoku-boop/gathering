@@ -47,6 +47,14 @@ const nextConfig = {
         hostname: 'assets.tcgdex.net',
       },
       {
+        protocol: 'https',
+        hostname: 'cards.scryfall.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.scryfall.com',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },
