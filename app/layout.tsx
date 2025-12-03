@@ -107,8 +107,10 @@ export default async function RootLayout({
                 let c='${defaultAccentColor}';
                 try{c=localStorage.getItem('accentColor')||c}catch(e){}
                 const a=(c,p)=>{const n=parseInt(c.replace('#',''),16),m=Math.round(2.55*p),R=Math.max(0,Math.min(255,(n>>16)+m)),G=Math.max(0,Math.min(255,((n>>8)&0xFF)+m)),B=Math.max(0,Math.min(255,(n&0xFF)+m));return'#'+(0x1000000+R*0x10000+G*0x100+B).toString(16).slice(1)};
+                const h=(h)=>{const n=h.replace('#',''),r=parseInt(n.substring(0,2),16)/255,g=parseInt(n.substring(2,4),16)/255,b=parseInt(n.substring(4,6),16)/255,m=Math.max(r,g,b),i=Math.min(r,g,b),l=(m+i)/2;let s=0,d=0;if(m!==i){d=m-i;s=l>0.5?d/(2-m-i):d/(m+i);switch(m){case r:d=((g-b)/d+(g<b?6:0))/6;break;case g:d=((b-r)/d+2)/6;break;case b:d=((r-g)/d+4)/6;break}}return Math.round(d*360)+' '+Math.round(s*100)+'% '+Math.round(l*100)+'%'};
                 document.documentElement.style.setProperty('--accent-color',c);
                 document.documentElement.style.setProperty('--accent-color-hover',a(c,-20));
+                document.documentElement.style.setProperty('--ring',h(c));
               })();
             `,
           }}

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Settings, ArrowLeft } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
+import { hexToHsl } from '@/lib/color-utils'
 
 const ACCENT_COLORS = [
   { name: 'Yellow', value: '#FFD60A', class: 'bg-[#FFD60A]' },
@@ -50,6 +51,10 @@ export default function SettingsPage() {
           // Apply accent color
           document.documentElement.style.setProperty('--accent-color', savedAccentColor)
           document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(savedAccentColor, -20))
+          
+          // Also update ring color to match accent color (for focus states)
+          const accentHsl = hexToHsl(savedAccentColor)
+          document.documentElement.style.setProperty('--ring', accentHsl)
         }
         
         // Load sidebar progress setting from localStorage (still local)
@@ -61,6 +66,8 @@ export default function SettingsPage() {
         setAccentColor('#FFD60A')
         document.documentElement.style.setProperty('--accent-color', '#FFD60A')
         document.documentElement.style.setProperty('--accent-color-hover', '#E6C009')
+        const defaultHsl = hexToHsl('#FFD60A')
+        document.documentElement.style.setProperty('--ring', defaultHsl)
       } finally {
         setLoading(false)
       }
@@ -76,6 +83,10 @@ export default function SettingsPage() {
     const accentColorHover = adjustBrightness(color, -20)
     document.documentElement.style.setProperty('--accent-color', color)
     document.documentElement.style.setProperty('--accent-color-hover', accentColorHover)
+    
+    // Also update ring color to match accent color (for focus states)
+    const accentHsl = hexToHsl(color)
+    document.documentElement.style.setProperty('--ring', accentHsl)
     
     // Also update localStorage immediately
     localStorage.setItem('accentColor', color)
