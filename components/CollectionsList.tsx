@@ -580,23 +580,26 @@ export default function CollectionsList() {
             </div>
           )}
         </div>
-        
-        <TagSelector
-          selectedTags={selectedTags}
-          onChange={setSelectedTags}
-          label="Filter by tags"
-          allowCustom={false}
-        />
-        {(searchQuery || selectedTags.length > 0) && (
-          <div className="text-sm text-[#666]">
-            Showing {filteredCollections.length} of {collections.length} collections
-          </div>
-        )}
       </div>
 
       {collections.length > 0 && filteredCollections.length > 0 && (
-        <div className="mb-6 flex gap-2 justify-end items-center">
-          <div className="relative">
+        <div className="mb-6 flex gap-2 justify-between items-center flex-wrap">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <TagSelector
+              selectedTags={selectedTags}
+              onChange={setSelectedTags}
+              label="Filter by tags"
+              allowCustom={false}
+              compact={true}
+            />
+            {(searchQuery || selectedTags.length > 0) && (
+              <div className="text-sm text-[#666] whitespace-nowrap">
+                Showing {filteredCollections.length} of {collections.length} collections
+              </div>
+            )}
+          </div>
+          <div className="flex gap-2 items-center">
+            <div className="relative">
             <Button
               variant="outline"
               onClick={() => setShowSortMenu(!showSortMenu)}
@@ -666,8 +669,8 @@ export default function CollectionsList() {
                 </div>
               </>
             )}
-          </div>
-          <div className="relative">
+            </div>
+            <div className="relative">
             <Button
               variant="outline"
               onClick={() => setShowExportMenu(!showExportMenu)}
@@ -707,8 +710,8 @@ export default function CollectionsList() {
                 </div>
               </>
             )}
-          </div>
-          <Button
+            </div>
+            <Button
             variant="outline"
             onClick={() => setShowImportDialog(true)}
             className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
@@ -716,6 +719,7 @@ export default function CollectionsList() {
             <Upload className="mr-2 h-4 w-4" />
             Import Collections
           </Button>
+          </div>
         </div>
       )}
 

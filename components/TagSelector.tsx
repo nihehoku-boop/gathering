@@ -11,13 +11,15 @@ interface TagSelectorProps {
   onChange: (tags: string[]) => void
   label?: string
   allowCustom?: boolean
+  compact?: boolean // Compact mode for inline use
 }
 
 export default function TagSelector({ 
   selectedTags, 
   onChange, 
   label = 'Tags',
-  allowCustom = true 
+  allowCustom = true,
+  compact = false
 }: TagSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -70,6 +72,150 @@ export default function TagSelector({
     onChange(selectedTags.filter(t => t !== tag))
   }
 
+  if (compact) {
+    return (
+      <div className="flex items-center gap-2">
+        {/* Selected Tags Display - Inline */}
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {selectedTags.map((tag) => {
+              const colors = getTagColor(tag)
+              return (
+                <span
+                  key={tag}
+                  className="px-2 py-1 rounded-full text-xs border flex items-center gap-1 smooth-transition"
+                  style={{
+                    backgroundColor: colors.bg,
+                    color: colors.text,
+                    borderColor: colors.border,
+                  }}
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    className="hover:opacity-70 smooth-transition"
+                    aria-label={`Remove ${tag} tag`}
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Dropdown - Compact */}
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="px-3 py-1.5 bg-[#2a2d35] border border-[#353842] rounded-md text-sm text-[#fafafa] flex items-center gap-2 hover:border-[var(--accent-color)] smooth-transition whitespace-nowrap"
+          >
+            <span>
+              {selectedTags.length > 0 
+                ? `${selectedTags.length} tag${selectedTags.length !== 1 ? 's' : ''}`
+                : label}
+            </span>
+            {isOpen ? (
+              <ChevronUp className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronDown className="h-3.5 w-3.5" />
+            )}
+          </button>
+
+        {isOpen && (
+          <div className="absolute z-50 left-0 mt-1 w-64 bg-[#1a1d24] border border-[#2a2d35] rounded-md shadow-lg max-h-80 overflow-hidden flex flex-col">
+            {/* Search Input */}
+            <div className="p-2 border-b border-[#2a2d35]">
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#666]" />
+                <Input
+                  type="text"
+                  placeholder="Search tags..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8 bg-[#2a2d35] border-[#353842] text-[#fafafa] text-sm"
+                  autoFocus
+                />
+              </div>
+            </div>
+
+            {/* Tag List */}
+            <div className="overflow-y-auto flex-1 p-2">
+              {filteredTags.length > 0 ? (
+                <div className="space-y-1">
+                  {filteredTags.map((tag) => {
+                    const colors = getTagColor(tag)
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => {
+                          toggleTag(tag)
+                          setSearchQuery('')
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                      >
+                        <div
+                          className="w-3 h-3 rounded-full border"
+                          style={{
+                            backgroundColor: colors.bg,
+                            borderColor: colors.border,
+                          }}
+                        />
+                        <span className="text-[#fafafa]">{tag}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-4 text-[#666] text-sm">
+                  {searchQuery ? 'No tags found' : 'All tags selected'}
+                </div>
+              )}
+            </div>
+
+            {/* Custom Tag Input */}
+            {allowCustom && (
+              <div className="p-2 border-t border-[#2a2d35]">
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Create custom tag..."
+                    value={customTagInput}
+                    onChange={(e) => setCustomTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        addCustomTag()
+                      }
+                    }}
+                    className="flex-1 bg-[#2a2d35] border-[#353842] text-[#fafafa] text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={addCustomTag}
+                    disabled={!customTagInput.trim() || selectedTags.includes(customTagInput.trim())}
+                    className="px-3 py-2 bg-[var(--accent-color)] text-white rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed smooth-transition flex items-center gap-1"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add
+                  </button>
+                </div>
+                <p className="text-xs text-[#666] mt-1">
+                  Press Enter or click Add to create a custom tag
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+        </div>
+      </div>
+    )
+  }
+
+  // Regular (non-compact) mode
   return (
     <div className="space-y-2">
       <Label className="text-[#fafafa]">{label}</Label>
