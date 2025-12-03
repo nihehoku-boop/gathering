@@ -19,8 +19,8 @@ export default async function Home() {
       <Navbar />
       <main className="min-h-screen bg-[#0f1114] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
-          <div className="mb-10 animate-fade-up">
-            <h1 className="text-5xl font-semibold text-[#fafafa] mb-3 tracking-tight">
+          <div className="mb-10">
+            <h1 className="text-5xl font-semibold text-[#fafafa] mb-3 tracking-tight" style={{ contentVisibility: 'auto' }}>
               My Collections
             </h1>
             <p className="text-[#969696] text-lg flex flex-wrap items-center gap-1.5">

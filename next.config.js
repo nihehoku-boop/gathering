@@ -57,6 +57,10 @@ const nextConfig = {
   },
   // Compression
   compress: true,
+  // Performance optimizations
+  experimental: {
+    optimizeCss: true,
+  },
 }
 
 module.exports = nextConfig

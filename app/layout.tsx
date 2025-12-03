@@ -10,11 +10,26 @@ const bricolageGrotesque = Bricolage_Grotesque({
   display: 'swap',
   variable: '--font-bricolage-grotesque',
   weight: ['300', '400', '500', '600', '700'],
+  preload: true,
+  adjustFontFallback: true,
 })
+
+// Helper to safely create URL
+const getMetadataBase = (): URL => {
+  const url = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  try {
+    // If URL doesn't have protocol, add https
+    const urlWithProtocol = url.startsWith('http') ? url : `https://${url}`
+    return new URL(urlWithProtocol)
+  } catch {
+    return new URL('https://gathering-jade.vercel.app')
+  }
+}
 
 export const metadata: Metadata = {
   title: 'Gathering - Your Collection Manager',
   description: 'Track and manage your collections with ease',
+  metadataBase: getMetadataBase(),
 }
 
 const adjustBrightness = (color: string, percent: number) => {
@@ -39,34 +54,23 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {/* Resource hints for faster external resource loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://assets.tcgdex.net" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        
+        {/* Inline critical script for accent color - optimized */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                // Try to load from localStorage immediately (before React hydrates)
-                // This prevents flash of default color
-                let accentColor = '${defaultAccentColor}';
-                try {
-                  const cached = localStorage.getItem('accentColor');
-                  if (cached) {
-                    accentColor = cached;
-                  }
-                } catch(e) {
-                  // localStorage might not be available
-                }
-                
-                const adjustBrightness = (color, percent) => {
-                  const num = parseInt(color.replace('#', ''), 16);
-                  const amt = Math.round(2.55 * percent);
-                  const R = Math.max(0, Math.min(255, (num >> 16) + amt));
-                  const G = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amt));
-                  const B = Math.max(0, Math.min(255, (num & 0x0000FF) + amt));
-                  return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
-                };
-                
-                const accentColorHover = adjustBrightness(accentColor, -20);
-                document.documentElement.style.setProperty('--accent-color', accentColor);
-                document.documentElement.style.setProperty('--accent-color-hover', accentColorHover);
+                let c='${defaultAccentColor}';
+                try{c=localStorage.getItem('accentColor')||c}catch(e){}
+                const a=(c,p)=>{const n=parseInt(c.replace('#',''),16),m=Math.round(2.55*p),R=Math.max(0,Math.min(255,(n>>16)+m)),G=Math.max(0,Math.min(255,((n>>8)&0xFF)+m)),B=Math.max(0,Math.min(255,(n&0xFF)+m));return'#'+(0x1000000+R*0x10000+G*0x100+B).toString(16).slice(1)};
+                document.documentElement.style.setProperty('--accent-color',c);
+                document.documentElement.style.setProperty('--accent-color-hover',a(c,-20));
               })();
             `,
           }}
