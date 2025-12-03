@@ -4,6 +4,7 @@ import './globals.css'
 import { Providers } from './providers'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 const bricolageGrotesque = Bricolage_Grotesque({ 
   subsets: ['latin'],
@@ -80,6 +81,7 @@ export default async function RootLayout({
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
