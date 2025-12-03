@@ -1,16 +1,17 @@
-import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import CollectionsList from '@/components/CollectionsList'
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
+import LandingPage from '@/components/LandingPage'
 import { getBadgeEmoji } from '@/lib/badges'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
+  // Show landing page if not logged in, otherwise show collections
   if (!session) {
-    redirect('/auth/signin')
+    return <LandingPage />
   }
 
   return (
