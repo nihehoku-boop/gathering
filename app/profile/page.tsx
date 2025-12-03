@@ -23,6 +23,7 @@ export default function ProfilePage() {
   const [badge, setBadge] = useState('')
   const [bio, setBio] = useState('')
   const [bannerImage, setBannerImage] = useState('')
+  const [profileImage, setProfileImage] = useState('')
   const [profileTheme, setProfileTheme] = useState<{
     backgroundColor?: string
     backgroundGradient?: string
@@ -30,6 +31,7 @@ export default function ProfilePage() {
     fontSize?: 'small' | 'medium' | 'large'
   }>({})
   const [uploadingBanner, setUploadingBanner] = useState(false)
+  const [uploadingProfileImage, setUploadingProfileImage] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [stats, setStats] = useState({ collectionsCount: 0, itemsCount: 0 })
@@ -71,6 +73,7 @@ export default function ProfilePage() {
         setBadge(data.badge || '')
         setBio(data.bio || '')
         setBannerImage(data.bannerImage || '')
+        setProfileImage(data.image || '')
         try {
           const theme = data.profileTheme ? (typeof data.profileTheme === 'string' ? JSON.parse(data.profileTheme) : data.profileTheme) : {}
           setProfileTheme(theme)
@@ -137,13 +140,14 @@ export default function ProfilePage() {
         return
       }
 
-      // Update session with new name and badge
+      // Update session with new name, badge, and image
       await update({
         ...session,
         user: {
           ...session?.user,
           name: name.trim() || null,
           badge: badge || null,
+          image: profileImage || (session?.user as any)?.image || null,
         },
       })
 
@@ -157,6 +161,7 @@ export default function ProfilePage() {
           badge: badge || null,
           bio: bio.trim() || null,
           bannerImage: bannerImage || null,
+          profileImage: profileImage || null,
           profileTheme: JSON.stringify(profileTheme),
         }),
       })
@@ -250,21 +255,85 @@ export default function ProfilePage() {
                     </p>
                   </div>
 
-                  {(session.user as any)?.image && (
-                    <div className="space-y-2">
-                      <Label className="text-[#fafafa]">Profile Picture</Label>
-                      <div className="flex items-center gap-4">
-                        <img
-                          src={(session.user as any).image}
-                          alt="Profile"
-                          className="w-20 h-20 rounded-full border-2 border-[#353842]"
-                        />
-                        <p className="text-sm text-[#969696]">
-                          Profile picture is managed by your authentication provider
+                  <div className="space-y-2">
+                    <Label className="text-[#fafafa]">Profile Picture</Label>
+                    <div className="flex items-center gap-4">
+                      {profileImage || (session.user as any)?.image ? (
+                        <div className="relative">
+                          <img
+                            src={profileImage || (session.user as any).image}
+                            alt="Profile"
+                            className="w-20 h-20 rounded-full border-2 border-[#353842] object-cover"
+                          />
+                          {profileImage && (
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => setProfileImage('')}
+                              className="absolute -top-1 -right-1 h-6 w-6 rounded-full p-0"
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 rounded-full bg-[#2a2d35] border-2 border-[#353842] flex items-center justify-center">
+                          <User className="h-8 w-8 text-[#666]" />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <label className="cursor-pointer">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0]
+                              if (!file) return
+                              
+                              setUploadingProfileImage(true)
+                              try {
+                                const formData = new FormData()
+                                formData.append('file', file)
+                                
+                                const res = await fetch('/api/upload', {
+                                  method: 'POST',
+                                  body: formData,
+                                })
+                                
+                                if (res.ok) {
+                                  const data = await res.json()
+                                  setProfileImage(data.url)
+                                } else {
+                                  const error = await res.json()
+                                  alert(error.error || 'Failed to upload image')
+                                }
+                              } catch (error) {
+                                console.error('Error uploading profile image:', error)
+                                alert('Failed to upload image')
+                              } finally {
+                                setUploadingProfileImage(false)
+                              }
+                            }}
+                            disabled={uploadingProfileImage}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            disabled={uploadingProfileImage}
+                            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                          >
+                            <Upload className="h-4 w-4 mr-2" />
+                            {uploadingProfileImage ? 'Uploading...' : profileImage ? 'Change Picture' : 'Upload Picture'}
+                          </Button>
+                        </label>
+                        <p className="text-xs text-[#969696] mt-2">
+                          Upload a profile picture (recommended: square, at least 200x200px)
                         </p>
                       </div>
                     </div>
-                  )}
+                  </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="bio" className="text-[#fafafa]">Bio / About</Label>
@@ -307,46 +376,51 @@ export default function ProfilePage() {
                         <p className="text-sm text-[#969696] mb-4">
                           Upload a banner image for your profile (recommended: 1200x300px)
                         </p>
-                        <label className="cursor-pointer">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0]
-                              if (!file) return
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="banner-upload"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            
+                            setUploadingBanner(true)
+                            try {
+                              const formData = new FormData()
+                              formData.append('file', file)
                               
-                              setUploadingBanner(true)
-                              try {
-                                const formData = new FormData()
-                                formData.append('file', file)
-                                
-                                const res = await fetch('/api/upload', {
-                                  method: 'POST',
-                                  body: formData,
-                                })
-                                
-                                if (res.ok) {
-                                  const data = await res.json()
-                                  setBannerImage(data.url)
-                                } else {
-                                  const error = await res.json()
-                                  alert(error.error || 'Failed to upload image')
-                                }
-                              } catch (error) {
-                                console.error('Error uploading banner:', error)
-                                alert('Failed to upload image')
-                              } finally {
-                                setUploadingBanner(false)
+                              const res = await fetch('/api/upload', {
+                                method: 'POST',
+                                body: formData,
+                              })
+                              
+                              if (res.ok) {
+                                const data = await res.json()
+                                setBannerImage(data.url)
+                              } else {
+                                const error = await res.json()
+                                alert(error.error || 'Failed to upload image')
                               }
-                            }}
-                            disabled={uploadingBanner}
-                          />
+                            } catch (error) {
+                              console.error('Error uploading banner:', error)
+                              alert('Failed to upload image')
+                            } finally {
+                              setUploadingBanner(false)
+                            }
+                          }}
+                          disabled={uploadingBanner}
+                        />
+                        <label htmlFor="banner-upload" className="cursor-pointer inline-block">
                           <Button
                             type="button"
                             variant="outline"
                             disabled={uploadingBanner}
                             className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              document.getElementById('banner-upload')?.click()
+                            }}
                           >
                             <Upload className="h-4 w-4 mr-2" />
                             {uploadingBanner ? 'Uploading...' : 'Upload Banner'}

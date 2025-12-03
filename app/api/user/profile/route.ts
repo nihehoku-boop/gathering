@@ -69,7 +69,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, isPrivate, badge, accentColor, bio, bannerImage, profileTheme } = body
+    const { name, isPrivate, badge, accentColor, bio, bannerImage, profileImage, profileTheme } = body
 
     const updateData: any = {}
     if (name !== undefined) {
@@ -89,6 +89,9 @@ export async function PATCH(request: NextRequest) {
     }
     if (bannerImage !== undefined) {
       updateData.bannerImage = bannerImage || null
+    }
+    if (profileImage !== undefined) {
+      updateData.image = profileImage || null
     }
     if (profileTheme !== undefined) {
       // Validate that profileTheme is valid JSON
