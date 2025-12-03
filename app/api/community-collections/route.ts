@@ -18,12 +18,19 @@ export async function GET(request: NextRequest) {
     // Build where clause for filtering
     const where: any = {}
     
-    // Search filter - search in name, description, category, and user name/email
+    // Search filter - search in name, description, category, tags, item names, and user name/email
     if (searchQuery.trim()) {
+      const searchLower = searchQuery.toLowerCase()
       where.OR = [
         { name: { contains: searchQuery, mode: 'insensitive' } },
         { description: { contains: searchQuery, mode: 'insensitive' } },
         { category: { contains: searchQuery, mode: 'insensitive' } },
+        { tags: { contains: searchQuery, mode: 'insensitive' } }, // Search in tags JSON string
+        { items: { 
+          some: {
+            name: { contains: searchQuery, mode: 'insensitive' }
+          }
+        } },
         { user: { 
           OR: [
             { name: { contains: searchQuery, mode: 'insensitive' } },
