@@ -207,7 +207,7 @@ export default function AdminDashboard() {
                       variant="ghost"
                       size="icon"
                       onClick={() => setEditingCollection(collection)}
-                      className="hover:text-primary"
+                      className="hover:text-[var(--accent-color)]"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

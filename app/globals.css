@@ -23,7 +23,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 220 15% 20%; /* Subtle blue-gray borders */
     --input: 220 15% 18%;
-    --ring: 210 100% 50%;
+    --ring: var(--accent-color);
     --radius: 0.75rem; /* Slightly more rounded, Apple-style */
     
     /* Custom accent color (default: yellow) */
