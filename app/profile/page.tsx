@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, User } from 'lucide-react'
+import { ArrowLeft, User, Upload, X, Image as ImageIcon, Palette, Type, Layout } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 import { getAvailableBadges, getBadgeEmoji, isBadgeAvailable } from '@/lib/badges'
@@ -20,6 +21,15 @@ export default function ProfilePage() {
   const [email, setEmail] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
   const [badge, setBadge] = useState('')
+  const [bio, setBio] = useState('')
+  const [bannerImage, setBannerImage] = useState('')
+  const [profileTheme, setProfileTheme] = useState<{
+    backgroundColor?: string
+    backgroundGradient?: string
+    cardStyle?: 'default' | 'minimal' | 'bordered'
+    fontSize?: 'small' | 'medium' | 'large'
+  }>({})
+  const [uploadingBanner, setUploadingBanner] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [stats, setStats] = useState({ collectionsCount: 0, itemsCount: 0 })
@@ -59,6 +69,14 @@ export default function ProfilePage() {
         setName(data.name || '')
         setIsPrivate(data.isPrivate || false)
         setBadge(data.badge || '')
+        setBio(data.bio || '')
+        setBannerImage(data.bannerImage || '')
+        try {
+          const theme = data.profileTheme ? (typeof data.profileTheme === 'string' ? JSON.parse(data.profileTheme) : data.profileTheme) : {}
+          setProfileTheme(theme)
+        } catch (e) {
+          setProfileTheme({})
+        }
         setStats({
           collectionsCount: data.collectionsCount || 0,
           itemsCount: data.itemsCount || 0,
@@ -137,6 +155,9 @@ export default function ProfilePage() {
           name: name.trim() || null,
           isPrivate,
           badge: badge || null,
+          bio: bio.trim() || null,
+          bannerImage: bannerImage || null,
+          profileTheme: JSON.stringify(profileTheme),
         }),
       })
 
@@ -244,6 +265,99 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="bio" className="text-[#fafafa]">Bio / About</Label>
+                    <Textarea
+                      id="bio"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      placeholder="Tell others about yourself and your collections..."
+                      rows={4}
+                      maxLength={500}
+                      className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition resize-none"
+                    />
+                    <p className="text-xs text-[#969696]">
+                      {bio.length}/500 characters. This will be displayed on your public profile.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-[#fafafa]">Profile Banner</Label>
+                    {bannerImage ? (
+                      <div className="relative">
+                        <img
+                          src={bannerImage}
+                          alt="Banner"
+                          className="w-full h-48 object-cover rounded-lg border border-[#353842]"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setBannerImage('')}
+                          className="absolute top-2 right-2"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="border-2 border-dashed border-[#353842] rounded-lg p-8 text-center hover:border-[var(--accent-color)] smooth-transition">
+                        <ImageIcon className="h-12 w-12 text-[#666] mx-auto mb-4" />
+                        <p className="text-sm text-[#969696] mb-4">
+                          Upload a banner image for your profile (recommended: 1200x300px)
+                        </p>
+                        <label className="cursor-pointer">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0]
+                              if (!file) return
+                              
+                              setUploadingBanner(true)
+                              try {
+                                const formData = new FormData()
+                                formData.append('file', file)
+                                
+                                const res = await fetch('/api/upload', {
+                                  method: 'POST',
+                                  body: formData,
+                                })
+                                
+                                if (res.ok) {
+                                  const data = await res.json()
+                                  setBannerImage(data.url)
+                                } else {
+                                  const error = await res.json()
+                                  alert(error.error || 'Failed to upload image')
+                                }
+                              } catch (error) {
+                                console.error('Error uploading banner:', error)
+                                alert('Failed to upload image')
+                              } finally {
+                                setUploadingBanner(false)
+                              }
+                            }}
+                            disabled={uploadingBanner}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            disabled={uploadingBanner}
+                            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                          >
+                            <Upload className="h-4 w-4 mr-2" />
+                            {uploadingBanner ? 'Uploading...' : 'Upload Banner'}
+                          </Button>
+                        </label>
+                      </div>
+                    )}
+                    <p className="text-xs text-[#969696]">
+                      This banner will be displayed at the top of your public profile.
+                    </p>
+                  </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -413,6 +527,134 @@ export default function ProfilePage() {
                         )}
                       </>
                     )}
+                  </div>
+
+                  {/* Theme Customization Section */}
+                  <div className="space-y-4 pt-6 border-t border-[#353842]">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Palette className="h-5 w-5 text-[var(--accent-color)]" />
+                      <Label className="text-[#fafafa] text-lg">Profile Theme Customization</Label>
+                    </div>
+                    <p className="text-sm text-[#969696] mb-4">
+                      Customize how your public profile appears to others
+                    </p>
+
+                    {/* Background Color/Gradient */}
+                    <div className="space-y-3">
+                      <Label className="text-[#fafafa] flex items-center gap-2">
+                        <Layout className="h-4 w-4" />
+                        Background Style
+                      </Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label className="text-xs text-[#969696]">Background Color</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              type="color"
+                              value={profileTheme.backgroundColor || '#0f1114'}
+                              onChange={(e) => setProfileTheme({ ...profileTheme, backgroundColor: e.target.value, backgroundGradient: undefined })}
+                              className="w-20 h-10 p-1 bg-[#2a2d35] border-[#353842] cursor-pointer"
+                            />
+                            <Input
+                              type="text"
+                              value={profileTheme.backgroundColor || '#0f1114'}
+                              onChange={(e) => setProfileTheme({ ...profileTheme, backgroundColor: e.target.value, backgroundGradient: undefined })}
+                              placeholder="#0f1114"
+                              className="flex-1 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs text-[#969696]">Gradient (e.g., linear-gradient(135deg, #667eea 0%, #764ba2 100%))</Label>
+                          <Input
+                            type="text"
+                            value={profileTheme.backgroundGradient || ''}
+                            onChange={(e) => setProfileTheme({ ...profileTheme, backgroundGradient: e.target.value, backgroundColor: undefined })}
+                            placeholder="linear-gradient(...)"
+                            className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-xs text-[#666]">
+                        Choose either a solid color or a gradient. Gradient will override color if both are set.
+                      </p>
+                    </div>
+
+                    {/* Card Style */}
+                    <div className="space-y-3">
+                      <Label className="text-[#fafafa] flex items-center gap-2">
+                        <Layout className="h-4 w-4" />
+                        Card Style
+                      </Label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {(['default', 'minimal', 'bordered'] as const).map((style) => (
+                          <button
+                            key={style}
+                            type="button"
+                            onClick={() => setProfileTheme({ ...profileTheme, cardStyle: style })}
+                            className={`
+                              p-4 rounded-lg border-2 smooth-transition text-left
+                              ${profileTheme.cardStyle === style
+                                ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
+                                : 'border-[#353842] hover:border-[#666] bg-[#2a2d35]'
+                              }
+                            `}
+                          >
+                            <div className="text-sm font-medium text-[#fafafa] mb-1 capitalize">
+                              {style}
+                            </div>
+                            <div className="text-xs text-[#969696]">
+                              {style === 'default' && 'Standard card with shadow'}
+                              {style === 'minimal' && 'Clean, minimal design'}
+                              {style === 'bordered' && 'Emphasized borders'}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Font Size */}
+                    <div className="space-y-3">
+                      <Label className="text-[#fafafa] flex items-center gap-2">
+                        <Type className="h-4 w-4" />
+                        Font Size
+                      </Label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {(['small', 'medium', 'large'] as const).map((size) => (
+                          <button
+                            key={size}
+                            type="button"
+                            onClick={() => setProfileTheme({ ...profileTheme, fontSize: size })}
+                            className={`
+                              p-4 rounded-lg border-2 smooth-transition text-center
+                              ${profileTheme.fontSize === size
+                                ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
+                                : 'border-[#353842] hover:border-[#666] bg-[#2a2d35]'
+                              }
+                            `}
+                          >
+                            <div className="text-sm font-medium text-[#fafafa] capitalize">
+                              {size}
+                            </div>
+                            <div className={`text-[#969696] mt-1 ${size === 'small' ? 'text-xs' : size === 'medium' ? 'text-sm' : 'text-base'}`}>
+                              Sample Text
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setProfileTheme({})}
+                        className="border-[#353842] text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                      >
+                        Reset to Default
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="flex justify-end gap-2 pt-4">

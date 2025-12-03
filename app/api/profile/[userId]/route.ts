@@ -16,6 +16,9 @@ export async function GET(
         image: true,
         isPrivate: true,
         badge: true,
+        bio: true,
+        bannerImage: true,
+        profileTheme: true,
         collections: {
           select: {
             id: true,
@@ -89,6 +92,9 @@ export async function GET(
       email: user.email,
       image: user.image,
       badge: user.badge,
+      bio: user.bio,
+      bannerImage: user.bannerImage,
+      profileTheme: user.profileTheme,
       topCollections,
       totalCollections: user.collections.length,
       totalItems,

@@ -30,6 +30,9 @@ interface PublicProfile {
   email: string
   image: string | null
   badge: string | null
+  bio: string | null
+  bannerImage: string | null
+  profileTheme: string | null
   topCollections: Collection[]
   totalCollections: number
   totalItems: number
@@ -141,11 +144,43 @@ export default function PublicProfilePage() {
     )
   }
 
+  // Parse profile theme
+  let themeStyles: React.CSSProperties = {}
+  let cardClassName = 'bg-[#1a1d24] border-[#2a2d35]'
+  let fontSizeClass = ''
+  
+  try {
+    const theme = profile.profileTheme ? (typeof profile.profileTheme === 'string' ? JSON.parse(profile.profileTheme) : profile.profileTheme) : {}
+    
+    // Background style
+    if (theme.backgroundGradient) {
+      themeStyles.background = theme.backgroundGradient
+    } else if (theme.backgroundColor) {
+      themeStyles.backgroundColor = theme.backgroundColor
+    }
+    
+    // Card style
+    if (theme.cardStyle === 'minimal') {
+      cardClassName = 'bg-transparent border-none'
+    } else if (theme.cardStyle === 'bordered') {
+      cardClassName = 'bg-[#1a1d24] border-2 border-[var(--accent-color)]'
+    }
+    
+    // Font size
+    if (theme.fontSize === 'small') {
+      fontSizeClass = 'text-sm'
+    } else if (theme.fontSize === 'large') {
+      fontSizeClass = 'text-lg'
+    }
+  } catch (e) {
+    // Invalid theme, use defaults
+  }
+
   return (
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen lg:ml-64" style={themeStyles}>
         <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
@@ -161,18 +196,24 @@ export default function PublicProfilePage() {
           </div>
 
           <div className="max-w-4xl">
-            {/* Profile Header */}
-            <Card className="bg-[#1a1d24] border-[#2a2d35] mb-6">
+            {/* Profile Header with Banner */}
+            <Card className="bg-[#1a1d24] border-[#2a2d35] mb-6 overflow-hidden">
+              {profile.bannerImage && (
+                <div 
+                  className="w-full h-48 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${profile.bannerImage})` }}
+                />
+              )}
               <CardContent className="p-6">
-                <div className="flex items-center gap-6">
+                <div className="flex items-start gap-6">
                   {profile.image ? (
                     <img
                       src={profile.image}
                       alt={profile.name}
-                      className="w-24 h-24 rounded-full border-2 border-[#353842]"
+                      className={`w-24 h-24 rounded-full border-2 border-[#353842] ${profile.bannerImage ? '-mt-12 bg-[#1a1d24] p-1' : ''}`}
                     />
                   ) : (
-                    <div className="w-24 h-24 rounded-full bg-[#2a2d35] border-2 border-[#353842] flex items-center justify-center">
+                    <div className={`w-24 h-24 rounded-full bg-[#2a2d35] border-2 border-[#353842] flex items-center justify-center ${profile.bannerImage ? '-mt-12 bg-[#1a1d24]' : ''}`}>
                       <span className="text-3xl font-semibold text-[#fafafa]">
                         {profile.name.charAt(0).toUpperCase()}
                       </span>
@@ -187,6 +228,11 @@ export default function PublicProfilePage() {
                         {profile.name}
                       </h1>
                     </div>
+                    {profile.bio && (
+                      <p className="text-[#969696] mb-4 leading-relaxed">
+                        {profile.bio}
+                      </p>
+                    )}
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       <div>
                         <div className="text-sm text-[#969696]">Collections</div>
@@ -214,7 +260,7 @@ export default function PublicProfilePage() {
 
             {/* Top Collections */}
             {profile.topCollections.length > 0 ? (
-              <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <Card className={cardClassName}>
                 <CardHeader>
                   <CardTitle className="text-[#fafafa] flex items-center gap-2">
                     <Trophy className="h-5 w-5 text-[var(--accent-color)]" />

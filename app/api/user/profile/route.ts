@@ -20,6 +20,9 @@ export async function GET() {
         isPrivate: true,
         badge: true,
         accentColor: true,
+        bio: true,
+        bannerImage: true,
+        profileTheme: true,
         _count: {
           select: {
             collections: true,
@@ -66,7 +69,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, isPrivate, badge, accentColor } = body
+    const { name, isPrivate, badge, accentColor, bio, bannerImage, profileTheme } = body
 
     const updateData: any = {}
     if (name !== undefined) {
@@ -81,6 +84,28 @@ export async function PATCH(request: NextRequest) {
     if (accentColor !== undefined) {
       updateData.accentColor = accentColor || '#FFD60A'
     }
+    if (bio !== undefined) {
+      updateData.bio = bio || null
+    }
+    if (bannerImage !== undefined) {
+      updateData.bannerImage = bannerImage || null
+    }
+    if (profileTheme !== undefined) {
+      // Validate that profileTheme is valid JSON
+      try {
+        if (typeof profileTheme === 'string') {
+          JSON.parse(profileTheme)
+          updateData.profileTheme = profileTheme
+        } else {
+          updateData.profileTheme = JSON.stringify(profileTheme)
+        }
+      } catch (e) {
+        return NextResponse.json(
+          { error: 'Invalid profileTheme format. Must be valid JSON.' },
+          { status: 400 }
+        )
+      }
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
@@ -93,6 +118,9 @@ export async function PATCH(request: NextRequest) {
         isPrivate: true,
         badge: true,
         accentColor: true,
+        bio: true,
+        bannerImage: true,
+        profileTheme: true,
       },
     })
 

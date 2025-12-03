@@ -48,6 +48,9 @@ model User {
   isPrivate     Boolean   @default(false) // Hide from leaderboard and public profiles
   badge         String?   // Badge identifier (placeholder for now)
   accentColor   String?   @default("#FFD60A") // User's preferred accent color
+  bio           String?   // User's bio/about section
+  bannerImage   String?   // Profile banner/header image URL
+  profileTheme  String    @default("{}") // JSON object for theme customization (background, card style, font size)
   achievements  String    @default("[]") // JSON array of unlocked achievement IDs
   accounts      Account[]
   sessions      Session[]
