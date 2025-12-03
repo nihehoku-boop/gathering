@@ -283,46 +283,51 @@ export default function ProfilePage() {
                         </div>
                       )}
                       <div className="flex-1">
-                        <label className="cursor-pointer">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0]
-                              if (!file) return
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="profile-image-upload"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            
+                            setUploadingProfileImage(true)
+                            try {
+                              const formData = new FormData()
+                              formData.append('file', file)
                               
-                              setUploadingProfileImage(true)
-                              try {
-                                const formData = new FormData()
-                                formData.append('file', file)
-                                
-                                const res = await fetch('/api/upload', {
-                                  method: 'POST',
-                                  body: formData,
-                                })
-                                
-                                if (res.ok) {
-                                  const data = await res.json()
-                                  setProfileImage(data.url)
-                                } else {
-                                  const error = await res.json()
-                                  alert(error.error || 'Failed to upload image')
-                                }
-                              } catch (error) {
-                                console.error('Error uploading profile image:', error)
-                                alert('Failed to upload image')
-                              } finally {
-                                setUploadingProfileImage(false)
+                              const res = await fetch('/api/upload', {
+                                method: 'POST',
+                                body: formData,
+                              })
+                              
+                              if (res.ok) {
+                                const data = await res.json()
+                                setProfileImage(data.url)
+                              } else {
+                                const error = await res.json()
+                                alert(error.error || 'Failed to upload image')
                               }
-                            }}
-                            disabled={uploadingProfileImage}
-                          />
+                            } catch (error) {
+                              console.error('Error uploading profile image:', error)
+                              alert('Failed to upload image')
+                            } finally {
+                              setUploadingProfileImage(false)
+                            }
+                          }}
+                          disabled={uploadingProfileImage}
+                        />
+                        <label htmlFor="profile-image-upload" className="cursor-pointer inline-block">
                           <Button
                             type="button"
                             variant="outline"
                             disabled={uploadingProfileImage}
                             className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              document.getElementById('profile-image-upload')?.click()
+                            }}
                           >
                             <Upload className="h-4 w-4 mr-2" />
                             {uploadingProfileImage ? 'Uploading...' : profileImage ? 'Change Picture' : 'Upload Picture'}
