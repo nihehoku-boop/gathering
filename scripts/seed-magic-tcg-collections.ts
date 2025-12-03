@@ -2,9 +2,14 @@
  * Seed script to create Magic: The Gathering community collections for all sets
  * Uses Scryfall API to fetch sets and cards
  * 
+ * Magic: The Gathering has ~220 official sets (core sets, expansions, etc.)
+ * This script filters to ~340 valid physical sets (includes commander sets, masters sets, etc.)
+ * Excludes digital-only sets, promo packs, and special products
+ * 
  * Run with: npm run seed:magic-tcg
  * Test with single set: npm run seed:magic-tcg -- --test
  * Test with specific set: npm run seed:magic-tcg -- --test --set=khc
+ * Force recreate existing: npm run seed:magic-tcg -- --force
  */
 
 import { PrismaClient } from '@prisma/client'
