@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const bricolageGrotesque = Bricolage_Grotesque({ 
   subsets: ['latin'],
@@ -74,6 +75,7 @@ export default async function RootLayout({
       <body className={`${bricolageGrotesque.variable} ${bricolageGrotesque.className} antialiased`}>
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />
+        <SpeedInsights />
       </body>
     </html>
   )
