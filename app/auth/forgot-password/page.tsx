@@ -1,21 +1,20 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mail, Lock, AlertCircle } from 'lucide-react'
+import { Mail, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
-export default function SignInPage() {
+export default function ForgotPasswordPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,24 +22,60 @@ export default function SignInPage() {
     setLoading(true)
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       })
 
-      if (result?.ok) {
-        router.push('/')
-        router.refresh()
+      const data = await res.json()
+
+      if (res.ok) {
+        setSuccess(true)
       } else {
-        setError('Invalid email or password')
+        setError(data.error || 'Failed to send reset email')
       }
     } catch (error) {
-      console.error('Sign in error:', error)
+      console.error('Forgot password error:', error)
       setError('An error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (success) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
+        <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+          <CardContent className="py-16 text-center">
+            <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-6" />
+            <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+              Check Your Email
+            </h3>
+            <p className="text-[#969696] mb-6">
+              If an account with that email exists, we've sent a password reset link. Please check your email and follow the instructions.
+            </p>
+            <div className="space-y-3">
+              <Link href="/auth/signin">
+                <Button className="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition">
+                  Back to Sign In
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSuccess(false)
+                  setEmail('')
+                }}
+                className="w-full border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              >
+                Send Another Email
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -48,10 +83,10 @@ export default function SignInPage() {
       <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
         <CardHeader className="space-y-2">
           <CardTitle className="text-3xl font-semibold text-center text-[#fafafa] tracking-tight">
-            Welcome to Gathering
+            Forgot Password
           </CardTitle>
           <CardDescription className="text-center text-[#969696]">
-            Sign in to manage your collections
+            Enter your email address and we'll send you a link to reset your password
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -77,47 +112,24 @@ export default function SignInPage() {
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-[#fafafa]">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
-                />
-              </div>
-            </div>
             <Button 
               type="submit" 
               className="w-full accent-button text-white smooth-transition font-medium" 
               disabled={loading}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Sending...' : 'Send Reset Link'}
             </Button>
           </form>
-          <div className="mt-6 space-y-3 text-center">
-            <p className="text-sm text-[#969696]">
-              Don't have an account?{' '}
-              <Link 
-                href="/auth/signup" 
-                className="text-[var(--accent-color)] hover:underline font-medium"
+          <div className="mt-6 text-center">
+            <Link href="/auth/signin">
+              <Button
+                variant="ghost"
+                className="text-[#969696] hover:text-[#fafafa] smooth-transition"
               >
-                Sign up
-              </Link>
-            </p>
-            <p className="text-sm text-[#969696]">
-              <Link 
-                href="/auth/forgot-password" 
-                className="text-[var(--accent-color)] hover:underline font-medium"
-              >
-                Forgot your password?
-              </Link>
-            </p>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Sign In
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

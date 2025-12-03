@@ -190,9 +190,18 @@ export default function LandingPage() {
               <BookOpen className="h-6 w-6 text-[var(--accent-color)]" />
               <span className="text-xl font-bold text-[#fafafa]">Gathering</span>
             </div>
-            <div className="flex items-center gap-6 text-[#969696] text-sm">
+            <div className="flex items-center gap-6 text-[#969696] text-sm flex-wrap">
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">
                 About
+              </Link>
+              <Link href="/terms" className="hover:text-[#fafafa] smooth-transition">
+                Terms
+              </Link>
+              <Link href="/privacy" className="hover:text-[#fafafa] smooth-transition">
+                Privacy
+              </Link>
+              <Link href="/cookies" className="hover:text-[#fafafa] smooth-transition">
+                Cookies
               </Link>
               {session && (
                 <>
