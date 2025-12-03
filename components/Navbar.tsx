@@ -41,7 +41,7 @@ export default function Navbar() {
 
   return (
     <nav className="border-b border-[#2a2d35] glass sticky top-0 z-50 lg:ml-64 bg-[#1a1d24] animate-slide-in-right will-change-transform">
-      <div className="container mx-auto px-4 sm:px-6 py-4">
+      <div className="container mx-auto px-4 sm:px-6 py-6">
         <div className="flex justify-between items-center gap-4">
           {/* Mobile: Sidebar toggle button */}
           <button
