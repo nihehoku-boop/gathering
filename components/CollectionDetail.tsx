@@ -1121,9 +1121,16 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
               )}
             </div>
 
-            {items.length === 0 && loading === false && (
+            {items.length === 0 && !loading && !itemsLoading && (
               <div className="text-center py-12 text-[#969696]">
                 No items yet. Add your first item above!
+              </div>
+            )}
+            {items.length === 0 && (loading || itemsLoading) && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                {[...Array(6)].map((_, i) => (
+                  <ItemCardSkeleton key={i} />
+                ))}
               </div>
             )}
             {items.length > 0 && viewMode === 'cover' && (
