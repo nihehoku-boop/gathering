@@ -48,7 +48,7 @@
     "cloudinary": "^2.8.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.303.0",
-    "next": "^16.0.5",
+    "next": "^16.0.7",
     "next-auth": "^4.24.5",
     "next-cloudinary": "^6.17.5",
     "react": "^18.2.0",
