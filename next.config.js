@@ -63,6 +63,10 @@ const nextConfig = {
         hostname: 'image.tmdb.org', // Added for TMDB movie poster images
       },
       {
+        protocol: 'https',
+        hostname: 'www.themoviedb.org', // Added for TMDB logo attribution
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },
