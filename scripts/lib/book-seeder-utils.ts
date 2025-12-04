@@ -258,16 +258,57 @@ export async function createBookCollection(
     },
   })
 
+  // Don't return early - we want to continue adding books if collection exists
+  // Only skip if collection is already complete (has all books)
   if (existingCollection && !forceRecreate) {
-    console.log(`⚠️  Collection "${config.name}" already exists. Use --force to recreate.`)
-    return existingCollection
+    const itemCount = await prisma.communityItem.count({
+      where: { communityCollectionId: existingCollection.id },
+    })
+    // If collection has all books, return early
+    if (itemCount >= config.books.length) {
+      console.log(`✅ Collection "${config.name}" already complete with ${itemCount} books.`)
+      return existingCollection
+    }
+    // Otherwise, continue to add remaining books
   }
 
   if (existingCollection && forceRecreate) {
     console.log(`🔄 Recreating "${config.name}"...`)
+    await prisma.communityItem.deleteMany({
+      where: { communityCollectionId: existingCollection.id },
+    })
     await prisma.communityCollection.delete({
       where: { id: existingCollection.id },
     })
+    existingCollection = null
+  }
+
+  const BATCH_SIZE = 50 // Save to database every 50 books
+  let collection = existingCollection
+  let existingItemCount = 0
+
+  // If collection exists, continue from where we left off
+  if (collection) {
+    const items = await prisma.communityItem.findMany({
+      where: { communityCollectionId: collection.id },
+      select: { id: true },
+    })
+    existingItemCount = items.length
+    console.log(`📚 Found existing collection with ${existingItemCount} books. Continuing from book ${existingItemCount + 1}...\n`)
+  } else {
+    // Create collection first (empty)
+    const descriptionWithSource = `${config.description}\n\nSource: ${config.sourceUrl}`
+    collection = await prisma.communityCollection.create({
+      data: {
+        name: config.name,
+        description: descriptionWithSource,
+        category: 'Books',
+        template: 'book',
+        tags: JSON.stringify(config.tags),
+        userId: adminUserId,
+      },
+    })
+    console.log(`📦 Created collection "${config.name}" (will add books in batches)\n`)
   }
 
   console.log(`\n📖 Processing ${config.books.length} books for "${config.name}"...`)
@@ -286,11 +327,39 @@ export async function createBookCollection(
   const startTime = Date.now()
 
   // Process each book
-  for (let i = 0; i < config.books.length; i++) {
+  for (let i = existingItemCount; i < config.books.length; i++) {
+    // Check current count before processing each book
+    const currentCount = await prisma.communityItem.count({
+      where: { communityCollectionId: collection!.id },
+    })
+    
+    // If we've reached 1001, stop immediately
+    if (currentCount >= 1001) {
+      console.log(`\n✅ Reached target of 1001 books! Stopping import.`)
+      break
+    }
+    
+    // Update existingItemCount to current count
+    existingItemCount = currentCount
+    
     const book = config.books[i]
     const bookNumber = i + 1
 
     try {
+      // Check if this book already exists before processing
+      const existingItem = await prisma.communityItem.findFirst({
+        where: {
+          communityCollectionId: collection!.id,
+          name: { contains: book.title.substring(0, 30) }, // Check by title substring
+        },
+      })
+      
+      if (existingItem) {
+        console.log(`[${bookNumber}/${config.books.length}] ⏭️  "${book.title}" already exists, skipping...`)
+        skipped++
+        continue
+      }
+
       console.log(`[${bookNumber}/${config.books.length}] 📚 "${book.title}" by ${book.author}...`)
       
       const item = await processBook(book, i)
@@ -307,10 +376,63 @@ export async function createBookCollection(
       console.log(`   ✅ Added "${item.name}"${coverStatus}`)
       processed++
 
+      // Save to database in batches
+      if (bookItems.length >= BATCH_SIZE) {
+        console.log(`\n   💾 Saving batch of ${bookItems.length} books to database...`)
+        
+        // Check current count before saving
+        const countBefore = await prisma.communityItem.count({
+          where: { communityCollectionId: collection!.id },
+        })
+        
+        // Filter out items that might already exist (by name)
+        const existingNames = new Set(
+          (await prisma.communityItem.findMany({
+            where: { communityCollectionId: collection!.id },
+            select: { name: true },
+          })).map(item => item.name.toLowerCase().trim())
+        )
+        
+        const newItems = bookItems.filter(item => 
+          !existingNames.has(item.name.toLowerCase().trim())
+        )
+        
+        if (newItems.length > 0) {
+          await prisma.communityItem.createMany({
+            data: newItems.map(item => ({
+              name: item.name,
+              number: item.number,
+              notes: item.notes,
+              image: item.image,
+              customFields: item.customFields,
+              communityCollectionId: collection!.id,
+            })),
+          })
+          console.log(`   ✅ Saved ${newItems.length} new books (${bookItems.length - newItems.length} duplicates skipped)`)
+        } else {
+          console.log(`   ⚠️  All ${bookItems.length} items in this batch already exist, skipping`)
+        }
+        
+        bookItems = [] // Clear the batch
+        
+        // Update existingItemCount after saving
+        const countAfter = await prisma.communityItem.count({
+          where: { communityCollectionId: collection!.id },
+        })
+        existingItemCount = countAfter
+        
+        // If we've reached 1001, stop processing
+        if (countAfter >= 1001) {
+          console.log(`\n✅ Reached target of 1001 books! Stopping import.`)
+          break
+        }
+      }
+
       // Progress update every 10 books
       if (processed % 10 === 0) {
         const elapsed = Math.round((Date.now() - startTime) / 1000)
-        console.log(`\n   📊 Progress: ${processed} processed, ${skipped} skipped | Time: ${Math.round(elapsed / 60)}m ${elapsed % 60}s\n`)
+        const totalSaved = existingItemCount + processed - bookItems.length
+        console.log(`\n   📊 Progress: ${processed} processed, ${skipped} skipped, ${totalSaved} saved to DB | Time: ${Math.round(elapsed / 60)}m ${elapsed % 60}s\n`)
       }
     } catch (error) {
       console.error(`   ❌ Error processing "${book.title}":`, error)
@@ -318,25 +440,28 @@ export async function createBookCollection(
     }
   }
 
+  // Save any remaining books
+  if (bookItems.length > 0) {
+    console.log(`\n   💾 Saving final batch of ${bookItems.length} books to database...`)
+    await prisma.communityItem.createMany({
+      data: bookItems.map(item => ({
+        name: item.name,
+        number: item.number,
+        notes: item.notes,
+        image: item.image,
+        customFields: item.customFields,
+        communityCollectionId: collection!.id,
+      })),
+      skipDuplicates: true, // Prevent duplicates at database level
+    })
+    console.log(`   ✅ Saved ${bookItems.length} books to database`)
+  }
+
   console.log(`\n✅ Processed ${processed} books, skipped ${skipped}`)
-  console.log(`📦 Creating community collection...`)
-
-  // Add source link to description
-  const descriptionWithSource = `${config.description}\n\nSource: ${config.sourceUrl}`
-
-  // Create the community collection
-  const collection = await prisma.communityCollection.create({
-    data: {
-      name: config.name,
-      description: descriptionWithSource,
-      category: 'Books',
-      template: 'book',
-      tags: JSON.stringify(config.tags),
-      userId: adminUserId,
-      items: {
-        create: bookItems,
-      },
-    },
+  
+  // Refresh collection to get final count
+  collection = await prisma.communityCollection.findFirst({
+    where: { id: collection!.id },
     include: {
       items: true,
     },

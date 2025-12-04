@@ -246,7 +246,6 @@ const TIME_100: BookData[] = [
   { title: 'White Noise', author: 'Don DeLillo' },
   { title: 'White Teeth', author: 'Zadie Smith' },
   { title: 'Wide Sargasso Sea', author: 'Jean Rhys' },
-  { title: 'Zuleika Dobson', author: 'Max Beerbohm' },
 ]
 
 // BBC's The Big Read Top 100 (Complete list)
@@ -352,29 +351,6 @@ const BBC_BIG_READ: BookData[] = [
   { title: 'Girls in Love', author: 'Jacqueline Wilson' },
   { title: 'The Princess Diaries', author: 'Meg Cabot' },
   { title: 'Midnight\'s Children', author: 'Salman Rushdie' },
-  { title: 'Three Men in a Boat', author: 'Jerome K. Jerome' },
-  { title: 'Small Gods', author: 'Terry Pratchett' },
-  { title: 'The Beach', author: 'Alex Garland' },
-  { title: 'The Dracula', author: 'Bram Stoker' },
-  { title: 'Point Blanc', author: 'Anthony Horowitz' },
-  { title: 'The Pickwick Papers', author: 'Charles Dickens' },
-  { title: 'Stormbreaker', author: 'Anthony Horowitz' },
-  { title: 'The Wasp Factory', author: 'Iain Banks' },
-  { title: 'The Day of the Triffids', author: 'John Wyndham' },
-  { title: 'Tales of the City', author: 'Armistead Maupin' },
-  { title: 'The Moonstone', author: 'Wilkie Collins' },
-  { title: 'The Thirty-Nine Steps', author: 'John Buchan' },
-  { title: 'The Outsider', author: 'Albert Camus' },
-  { title: 'The Weirdstone of Brisingamen', author: 'Alan Garner' },
-  { title: 'The Witches', author: 'Roald Dahl' },
-  { title: 'The Picture of Dorian Gray', author: 'Oscar Wilde' },
-  { title: 'Shogun', author: 'James Clavell' },
-  { title: 'The Day of the Jackal', author: 'Frederick Forsyth' },
-  { title: 'The Voyage of the Dawn Treader', author: 'C. S. Lewis' },
-  { title: 'Mansfield Park', author: 'Jane Austen' },
-  { title: 'The Pillars of the Earth', author: 'Ken Follett' },
-  { title: 'The Adventures of Tom Sawyer', author: 'Mark Twain' },
-  { title: 'The Adventures of Huckleberry Finn', author: 'Mark Twain' },
 ]
 
 const COLLECTIONS = [

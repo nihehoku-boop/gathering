@@ -59,6 +59,10 @@ const nextConfig = {
         hostname: 'covers.openlibrary.org', // Added for book cover images
       },
       {
+        protocol: 'https',
+        hostname: 'image.tmdb.org', // Added for TMDB movie poster images
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },
