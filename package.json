@@ -36,6 +36,8 @@
     "seed:books-children-ya": "tsx scripts/seed-books-children-ya.ts",
     "seed:books-mystery-thriller": "tsx scripts/seed-books-mystery-thriller.ts",
     "seed:books-romance": "tsx scripts/seed-books-romance.ts",
+    "seed:books-scifi-fantasy": "tsx scripts/seed-books-scifi-fantasy.ts",
+    "seed:books-remaining-classics": "tsx scripts/seed-books-remaining-classics.ts",
     "fix:pokemon-images": "tsx scripts/fix-pokemon-tcg-images.ts",
     "fix:pokemon-template": "tsx scripts/fix-pokemon-template.ts",
     "update:pokemon-template-fields": "tsx scripts/update-pokemon-template-and-fields.ts",
