@@ -463,7 +463,7 @@ async function main() {
     const collection = await prisma.communityCollection.create({
       data: {
         name: 'Pulitzer Prize Winners for Fiction',
-        description: 'Complete list of Pulitzer Prize winners for Fiction from 1918 to 2024. The Pulitzer Prize for Fiction is awarded annually to distinguished fiction by an American author, preferably dealing with American life.',
+        description: 'Complete list of Pulitzer Prize winners for Fiction from 1918 to 2024. The Pulitzer Prize for Fiction is awarded annually to distinguished fiction by an American author, preferably dealing with American life.\n\nSource: https://www.pulitzer.org/prize-winners-by-category/218',
         category: 'Books',
         template: 'book',
         tags: JSON.stringify(['Books', 'Fiction', 'Pulitzer Prize', 'Awards', 'Classics', 'Literature']),
