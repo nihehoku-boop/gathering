@@ -554,11 +554,18 @@ export default function CommunityCollectionsList() {
                 }}
               >
                 {collection.coverImage && (
-                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35] flex-shrink-0">
+                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35] flex-shrink-0 relative">
                     <img
                       src={collection.coverImage}
                       alt={collection.name}
                       className={`w-full h-full ${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition`}
+                      crossOrigin="anonymous"
+                      loading="lazy"
+                      onError={(e) => {
+                        // Fallback if image fails to load
+                        console.error('Failed to load cover image:', collection.coverImage)
+                        e.currentTarget.style.display = 'none'
+                      }}
                     />
                   </div>
                 )}
