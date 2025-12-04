@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, startTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -168,23 +168,48 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     itemsLoadingRef.current = itemsLoading
   }, [itemsLoading])
 
-  const fetchItems = async (page: number = 1, append: boolean = false) => {
-    if (itemsLoadingRef.current) return // Prevent concurrent requests
+  // Prefetch cache for next page
+  const prefetchCacheRef = useRef<Map<number, any>>(new Map())
+  
+  const fetchItems = async (page: number = 1, append: boolean = false, useCache: boolean = false) => {
+    // Check cache first if useCache is true
+    if (useCache && prefetchCacheRef.current.has(page)) {
+      const cachedData = prefetchCacheRef.current.get(page)
+      prefetchCacheRef.current.delete(page) // Remove from cache after use
+      
+      startTransition(() => {
+        if (append) {
+          setItems(prev => [...prev, ...cachedData.items])
+        } else {
+          setItems(cachedData.items)
+        }
+        setHasMoreItems(cachedData.pagination.hasMore)
+        hasMoreItemsRef.current = cachedData.pagination.hasMore
+        setItemsPage(page)
+        itemsPageRef.current = page
+      })
+      return
+    }
+    
+    if (itemsLoadingRef.current && !useCache) return // Prevent concurrent requests (unless using cache)
     setItemsLoading(true)
     itemsLoadingRef.current = true
     try {
       const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50&sortBy=${sortBy}`)
       if (res.ok) {
         const data = await res.json()
-        if (append) {
-          setItems(prev => [...prev, ...data.items])
-        } else {
-          setItems(data.items)
-        }
-        setHasMoreItems(data.pagination.hasMore)
-        hasMoreItemsRef.current = data.pagination.hasMore
-        setItemsPage(page)
-        itemsPageRef.current = page
+        
+        startTransition(() => {
+          if (append) {
+            setItems(prev => [...prev, ...data.items])
+          } else {
+            setItems(data.items)
+          }
+          setHasMoreItems(data.pagination.hasMore)
+          hasMoreItemsRef.current = data.pagination.hasMore
+          setItemsPage(page)
+          itemsPageRef.current = page
+        })
       }
     } catch (error) {
       console.error('Error fetching items:', error)
@@ -193,6 +218,38 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       itemsLoadingRef.current = false
     }
   }
+
+  // Prefetch next page when we're halfway through current items
+  const prefetchNextPage = async (currentPage: number) => {
+    if (itemsLoadingRef.current || !hasMoreItemsRef.current) return
+    const nextPage = currentPage + 1
+    
+    // Don't prefetch if already in cache
+    if (prefetchCacheRef.current.has(nextPage)) return
+    
+    try {
+      const res = await fetch(`/api/collections/${collectionId}/items?page=${nextPage}&limit=50&sortBy=${sortBy}`)
+      if (res.ok) {
+        const data = await res.json()
+        prefetchCacheRef.current.set(nextPage, data)
+      }
+    } catch (error) {
+      // Silently fail prefetch
+    }
+  }
+
+  // Prefetch next page proactively when we're viewing items
+  useEffect(() => {
+    if (!hasMoreItems || items.length === 0) return
+    
+    // Prefetch next page when we have at least 30 items loaded
+    // This gives us time to fetch before user reaches the end
+    const nextPage = itemsPage + 1
+    
+    if (items.length >= 30 && !prefetchCacheRef.current.has(nextPage)) {
+      prefetchNextPage(itemsPage)
+    }
+  }, [items.length, itemsPage, hasMoreItems, collectionId, sortBy])
 
   // Silent infinite scroll - loads items as user scrolls without visible indicators
   useEffect(() => {
@@ -219,23 +276,32 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             if (entry.isIntersecting && hasMoreItemsRef.current && !itemsLoadingRef.current) {
               // Load next page silently using ref value
               const nextPage = itemsPageRef.current + 1
-              fetchItems(nextPage, true)
+              // Check if we have prefetched data, use it if available
+              if (prefetchCacheRef.current.has(nextPage)) {
+                fetchItems(nextPage, true, true)
+              } else {
+                // Fallback to normal fetch if no cache
+                fetchItems(nextPage, true, false)
+              }
             }
           })
         },
         {
-          rootMargin: '300px', // Start loading 300px before reaching the bottom
+          // Increased rootMargin to start loading much earlier
+          // 1000px = start loading when user is still 1000px away from bottom
+          // This gives plenty of time for the API call to complete
+          rootMargin: '1000px',
+          // Use threshold to trigger earlier
+          threshold: 0.01,
         }
       )
 
       observer.observe(lastItemElement)
     }
 
-    // Use requestAnimationFrame to ensure DOM has updated after React render
+    // Use single requestAnimationFrame for faster setup
     const rafId = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setupObserver()
-      })
+      setupObserver()
     })
 
     return () => {
