@@ -31,6 +31,8 @@
     "seed:books-hugo-nebula": "tsx scripts/seed-books-hugo-nebula.ts",
     "seed:books-remaining-awards": "tsx scripts/seed-books-remaining-awards.ts",
     "seed:books-classics": "tsx scripts/seed-books-classics.ts",
+    "seed:books-21st-century": "tsx scripts/seed-books-21st-century.ts",
+    "seed:books-nonfiction": "tsx scripts/seed-books-nonfiction.ts",
     "fix:pokemon-images": "tsx scripts/fix-pokemon-tcg-images.ts",
     "fix:pokemon-template": "tsx scripts/fix-pokemon-template.ts",
     "update:pokemon-template-fields": "tsx scripts/update-pokemon-template-and-fields.ts",
