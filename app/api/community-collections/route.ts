@@ -71,12 +71,14 @@ export async function GET(request: NextRequest) {
 
     // Get paginated community collections with their items and creator info
     // Note: For popular/score/mostItems/leastItems sorting, we need to fetch ALL and sort in memory
+    // Also need to fetch ALL when filtering by tags, since tags are stored as JSON and filtered in memory
     const needsInMemorySort = sortBy === 'popular' || sortBy === 'score' || sortBy === 'mostItems' || sortBy === 'leastItems'
+    const needsInMemoryFilter = tagArray.length > 0 // Need to fetch all when filtering by tags
     
-    // Determine pagination based on sort type
-    const fetchSkip = needsInMemorySort ? 0 : skip
-    const fetchTake = needsInMemorySort 
-      ? (totalCount > 0 ? totalCount + 1000 : 50000) // Fetch all when sorting in memory
+    // Determine pagination based on sort type and tag filtering
+    const fetchSkip = (needsInMemorySort || needsInMemoryFilter) ? 0 : skip
+    const fetchTake = (needsInMemorySort || needsInMemoryFilter)
+      ? (totalCount > 0 ? totalCount + 1000 : 50000) // Fetch all when sorting/filtering in memory
       : limit // Normal pagination for other sorts
 
     const collections = await prisma.communityCollection.findMany({
@@ -156,16 +158,10 @@ export async function GET(request: NextRequest) {
     let sortedCollections = collectionsWithVotes
     if (sortBy === 'popular' || sortBy === 'score') {
       sortedCollections = collectionsWithVotes.sort((a, b) => b.score - a.score)
-      // Apply pagination after sorting
-      sortedCollections = sortedCollections.slice(skip, skip + limit)
     } else if (sortBy === 'mostItems') {
       sortedCollections = collectionsWithVotes.sort((a, b) => (b._count?.items || 0) - (a._count?.items || 0))
-      // Apply pagination after sorting
-      sortedCollections = sortedCollections.slice(skip, skip + limit)
     } else if (sortBy === 'leastItems') {
       sortedCollections = collectionsWithVotes.sort((a, b) => (a._count?.items || 0) - (b._count?.items || 0))
-      // Apply pagination after sorting
-      sortedCollections = sortedCollections.slice(skip, skip + limit)
     } else if (sortBy === 'newest') {
       // Already sorted by createdAt desc
     } else if (sortBy === 'oldest') {
@@ -174,13 +170,16 @@ export async function GET(request: NextRequest) {
       // Already sorted by name asc
     }
 
-    // For tag filtering, we need to adjust the total count
-    // Since we filter tags after fetching, we can't get an accurate total count
-    // We'll use the filtered count as an approximation
-    const finalTotal = tagArray.length > 0 ? collectionsWithVotes.length : totalCount
-    const hasMore = tagArray.length > 0 
-      ? sortedCollections.length === limit // If we got a full page, there might be more
-      : skip + sortedCollections.length < totalCount
+    // Apply pagination after sorting/filtering (if we fetched all collections)
+    if (needsInMemorySort || needsInMemoryFilter) {
+      sortedCollections = sortedCollections.slice(skip, skip + limit)
+    }
+
+    // Calculate accurate total count after tag filtering
+    const finalTotal = tagArray.length > 0 
+      ? collectionsWithVotes.length // Total after tag filtering
+      : totalCount
+    const hasMore = skip + sortedCollections.length < finalTotal
 
     return NextResponse.json({
       collections: sortedCollections,
