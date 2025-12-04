@@ -1,0 +1,27 @@
+
+> gathering@0.1.1 seed:books-hugo-nebula
+> tsx scripts/seed-books-hugo-nebula.ts
+
+🌱 Starting Hugo & Nebula Award Winners collections seeding...
+📚 Using Open Library API...
+
+
+============================================================
+[1/2] Processing: Hugo Award Winners (Best Novel)
+============================================================
+
+⚠️  Collection "Hugo Award Winners (Best Novel)" already exists. Use --force to recreate.
+
+⏳ Waiting 2 seconds before next collection...
+
+
+============================================================
+[2/2] Processing: Nebula Award Winners (Best Novel)
+============================================================
+
+⚠️  Collection "Nebula Award Winners (Best Novel)" already exists. Use --force to recreate.
+
+============================================================
+🎉 All collections completed!
+============================================================
+

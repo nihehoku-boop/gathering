@@ -1,0 +1,22 @@
+
+> gathering@0.1.1 seed:books-all-awards
+> tsx scripts/seed-books-all-awards.ts
+
+✅ Loaded environment variables from .env.local
+🌱 Starting all major book award winner collections seeding...
+📚 Using Open Library API...
+
+✅ Using existing admin user: nihehoku@gmail.com
+
+📚 Processing 1 collection...
+
+============================================================
+[1/1] Processing: National Book Award Winners (Fiction)
+============================================================
+
+⚠️  Collection "National Book Award Winners (Fiction)" already exists. Use --force to recreate.
+
+============================================================
+🎉 All award collections completed!
+============================================================
+

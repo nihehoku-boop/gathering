@@ -275,9 +275,16 @@ async function main() {
     let processedSets = 0
     let skippedSets = 0
     let errorSets = 0
+    const totalSets = setsToProcess.length
+    const startTime = Date.now()
+
+    console.log(`\n🚀 Starting import of ${totalSets} sets...`)
+    console.log(`⏱️  Estimated time: 6-10 minutes\n`)
 
     // Process each set
-    for (const set of setsToProcess) {
+    for (let i = 0; i < setsToProcess.length; i++) {
+      const set = setsToProcess[i]
+      const setNumber = i + 1
       try {
         // Check if collection already exists
         const existingCollection = await prisma.communityCollection.findFirst({
@@ -289,21 +296,29 @@ async function main() {
         })
 
         if (existingCollection && !forceRecreate) {
-          console.log(`\n⏭️  Skipping "${set.name}" (${set.code}) - already exists`)
+          console.log(`\n[${setNumber}/${totalSets}] ⏭️  Skipping "${set.name}" (${set.code}) - already exists`)
           skippedSets++
           continue
         }
 
         if (existingCollection && forceRecreate) {
-          console.log(`\n🔄 Recreating "${set.name}" (${set.code})...`)
+          console.log(`\n[${setNumber}/${totalSets}] 🔄 Recreating "${set.name}" (${set.code})...`)
           await prisma.communityCollection.delete({
             where: { id: existingCollection.id },
           })
         }
 
-        console.log(`\n📦 Processing "${set.name}" (${set.code})...`)
+        console.log(`\n[${setNumber}/${totalSets}] 📦 Processing "${set.name}" (${set.code})...`)
         console.log(`   📅 Released: ${set.released_at || 'Unknown'}`)
         console.log(`   📊 Expected cards: ${set.card_count}`)
+        
+        // Calculate progress percentage
+        const progressPercent = Math.round((setNumber / totalSets) * 100)
+        const elapsed = Math.round((Date.now() - startTime) / 1000)
+        const avgTimePerSet = elapsed / setNumber
+        const remainingSets = totalSets - setNumber
+        const estimatedRemaining = Math.round((remainingSets * avgTimePerSet) / 60)
+        console.log(`   📈 Progress: ${progressPercent}% | Elapsed: ${Math.round(elapsed / 60)}m ${elapsed % 60}s | Est. remaining: ~${estimatedRemaining}m`)
 
         // Fetch all cards for this set
         console.log(`   🔍 Fetching cards from Scryfall...`)
@@ -420,22 +435,34 @@ async function main() {
 
         console.log(`   ✅ Created "${set.name}" with ${collection.items.length} cards`)
         processedSets++
+        
+        // Log running totals every 10 sets
+        if (processedSets % 10 === 0) {
+          const elapsed = Math.round((Date.now() - startTime) / 1000)
+          console.log(`\n   📊 Running totals: ${processedSets} processed, ${skippedSets} skipped, ${errorSets} errors | Time: ${Math.round(elapsed / 60)}m ${elapsed % 60}s\n`)
+        }
 
         // Small delay between sets to avoid overwhelming the API
         await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_SETS))
       } catch (error) {
-        console.error(`   ❌ Error processing set "${set.name}":`, error)
+        console.error(`\n[${setNumber}/${totalSets}] ❌ Error processing set "${set.name}":`, error)
         errorSets++
         // Continue with next set
       }
     }
 
+    const totalTime = Math.round((Date.now() - startTime) / 1000)
+    const minutes = Math.floor(totalTime / 60)
+    const seconds = totalTime % 60
+
     console.log('\n🎉 Magic: The Gathering seeding completed!')
-    console.log(`\n📊 Summary:`)
+    console.log(`\n📊 Final Summary:`)
     console.log(`   ✅ Processed: ${processedSets} sets`)
     console.log(`   ⏭️  Skipped: ${skippedSets} sets`)
     console.log(`   ❌ Errors: ${errorSets} sets`)
-    console.log(`   📦 Total sets available: ${setsToProcess.length}`)
+    console.log(`   📦 Total sets available: ${totalSets}`)
+    console.log(`   ⏱️  Total time: ${minutes}m ${seconds}s`)
+    console.log(`   ⚡ Average: ${totalSets > 0 ? Math.round(totalTime / totalSets) : 0}s per set`)
   } catch (error) {
     console.error('❌ Error seeding data:', error)
     throw error

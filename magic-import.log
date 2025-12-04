@@ -1,0 +1,3468 @@
+
+> gathering@0.1.1 seed:magic-tcg
+> tsx scripts/seed-magic-tcg-collections.ts
+
+✅ Loaded environment variables from .env.local
+🌱 Starting Magic: The Gathering collection seeding...
+📚 Using Scryfall API...
+✅ Using existing admin user: nihehoku@gmail.com
+📚 Fetching all Magic sets from Scryfall...
+✅ Found 1010 total sets
+
+📦 Filtered to 340 valid sets (excluding digital-only, promo packs, etc.)
+
+🚀 Starting import of 340 sets...
+⏱️  Estimated time: 6-10 minutes
+
+
+[1/340] ⏭️  Skipping "Teenage Mutant Ninja Turtles" (tmt) - already exists
+
+[2/340] 📦 Processing "Teenage Mutant Ninja Turtles Tokens" (ttmt)...
+   📅 Released: 2026-03-06
+   📊 Expected cards: 1
+   📈 Progress: 1% | Elapsed: 0m 0s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 1 cards
+   ✅ Processed 1 card items
+   ✅ Created "Teenage Mutant Ninja Turtles Tokens" with 1 cards
+
+[3/340] 📦 Processing "Teenage Mutant Ninja Turtles Eternal Tokens" (ttmc)...
+   📅 Released: 2026-03-06
+   📊 Expected cards: 4
+   📈 Progress: 1% | Elapsed: 0m 1s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 4 cards
+   ✅ Processed 4 card items
+   ✅ Created "Teenage Mutant Ninja Turtles Eternal Tokens" with 4 cards
+
+[4/340] 📦 Processing "Lorwyn Eclipsed" (ecl)...
+   📅 Released: 2026-01-23
+   📊 Expected cards: 33
+   📈 Progress: 1% | Elapsed: 0m 2s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 33 cards
+   ✅ Processed 33 card items
+   ✅ Created "Lorwyn Eclipsed" with 33 cards
+
+[5/340] 📦 Processing "Avatar: The Last Airbender" (tla)...
+   📅 Released: 2025-11-21
+   📊 Expected cards: 394
+   📈 Progress: 1% | Elapsed: 0m 3s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 394 cards
+   ✅ Processed 394 card items
+   ✅ Created "Avatar: The Last Airbender" with 394 cards
+
+[6/340] 📦 Processing "Avatar: The Last Airbender Beginner Box Front Cards" (ftla)...
+   📅 Released: 2025-11-21
+   📊 Expected cards: 10
+   📈 Progress: 2% | Elapsed: 0m 7s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 10 cards
+   ✅ Processed 10 card items
+   ✅ Created "Avatar: The Last Airbender Beginner Box Front Cards" with 10 cards
+
+[7/340] 📦 Processing "Avatar: The Last Airbender Tokens" (ttla)...
+   📅 Released: 2025-11-21
+   📊 Expected cards: 22
+   📈 Progress: 2% | Elapsed: 0m 8s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 22 cards
+   ✅ Processed 22 card items
+   ✅ Created "Avatar: The Last Airbender Tokens" with 22 cards
+
+[8/340] 📦 Processing "Avatar: The Last Airbender Eternal Tokens" (ttle)...
+   📅 Released: 2025-11-21
+   📊 Expected cards: 2
+   📈 Progress: 2% | Elapsed: 0m 11s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 2 cards
+   ✅ Processed 2 card items
+   ✅ Created "Avatar: The Last Airbender Eternal Tokens" with 2 cards
+
+[9/340] 📦 Processing "Avatar: The Last Airbender Jumpstart Front Cards" (jtla)...
+   📅 Released: 2025-11-21
+   📊 Expected cards: 46
+   📈 Progress: 3% | Elapsed: 0m 12s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 46 cards
+   ✅ Processed 46 card items
+   ✅ Created "Avatar: The Last Airbender Jumpstart Front Cards" with 46 cards
+
+[10/340] 📦 Processing "Marvel's Spider-Man Tokens" (tspm)...
+   📅 Released: 2025-09-26
+   📊 Expected cards: 7
+   📈 Progress: 3% | Elapsed: 0m 13s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 7 cards
+   ✅ Processed 7 card items
+   ✅ Created "Marvel's Spider-Man Tokens" with 7 cards
+
+[11/340] 📦 Processing "Marvel's Spider-Man" (spm)...
+   📅 Released: 2025-09-26
+   📊 Expected cards: 286
+   📈 Progress: 3% | Elapsed: 0m 15s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 286 cards
+   ✅ Processed 286 card items
+   ✅ Created "Marvel's Spider-Man" with 286 cards
+
+   📊 Running totals: 10 processed, 1 skipped, 0 errors | Time: 0m 17s
+
+
+[12/340] 📦 Processing "Edge of Eternities Art Series" (aeoe)...
+   📅 Released: 2025-08-01
+   📊 Expected cards: 54
+   📈 Progress: 4% | Elapsed: 0m 17s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Edge of Eternities Art Series" with 54 cards
+
+[13/340] 📦 Processing "Edge of Eternities Tokens" (teoe)...
+   📅 Released: 2025-08-01
+   📊 Expected cards: 12
+   📈 Progress: 4% | Elapsed: 0m 18s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 12 cards
+   ✅ Processed 12 card items
+   ✅ Created "Edge of Eternities Tokens" with 12 cards
+
+[14/340] 📦 Processing "Edge of Eternities Commander" (eoc)...
+   📅 Released: 2025-08-01
+   📊 Expected cards: 191
+   📈 Progress: 4% | Elapsed: 0m 19s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 191 cards
+   ✅ Processed 191 card items
+   ✅ Created "Edge of Eternities Commander" with 191 cards
+
+[15/340] 📦 Processing "Edge of Eternities Commander Tokens" (teoc)...
+   📅 Released: 2025-08-01
+   📊 Expected cards: 16
+   📈 Progress: 4% | Elapsed: 0m 22s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 16 cards
+   ✅ Processed 16 card items
+   ✅ Created "Edge of Eternities Commander Tokens" with 16 cards
+
+[16/340] 📦 Processing "Edge of Eternities" (eoe)...
+   📅 Released: 2025-08-01
+   📊 Expected cards: 399
+   📈 Progress: 5% | Elapsed: 0m 23s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 399 cards
+   ✅ Processed 399 card items
+   ✅ Created "Edge of Eternities" with 399 cards
+
+[17/340] 📦 Processing "Final Fantasy Tokens" (tfin)...
+   📅 Released: 2025-06-13
+   📊 Expected cards: 37
+   📈 Progress: 5% | Elapsed: 0m 27s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 37 cards
+   ✅ Processed 37 card items
+   ✅ Created "Final Fantasy Tokens" with 37 cards
+
+[18/340] 📦 Processing "Final Fantasy Art Series" (afin)...
+   📅 Released: 2025-06-13
+   📊 Expected cards: 53
+   📈 Progress: 5% | Elapsed: 0m 29s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 53 cards
+   ✅ Processed 53 card items
+   ✅ Created "Final Fantasy Art Series" with 53 cards
+
+[19/340] 📦 Processing "Final Fantasy Commander" (fic)...
+   📅 Released: 2025-06-13
+   📊 Expected cards: 486
+   📈 Progress: 6% | Elapsed: 1m 30s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 486 cards
+   ✅ Processed 486 card items
+   ✅ Created "Final Fantasy Commander" with 486 cards
+
+[20/340] 📦 Processing "Final Fantasy Commander Tokens" (tfic)...
+   📅 Released: 2025-06-13
+   📊 Expected cards: 11
+   📈 Progress: 6% | Elapsed: 1m 37s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 11 cards
+   ✅ Processed 11 card items
+   ✅ Created "Final Fantasy Commander Tokens" with 11 cards
+
+[21/340] 📦 Processing "Final Fantasy" (fin)...
+   📅 Released: 2025-06-13
+   📊 Expected cards: 599
+   📈 Progress: 6% | Elapsed: 1m 39s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 595 cards
+   ✅ Processed 595 card items
+   ✅ Created "Final Fantasy" with 595 cards
+
+   📊 Running totals: 20 processed, 1 skipped, 0 errors | Time: 1m 50s
+
+
+[22/340] 📦 Processing "Tarkir: Dragonstorm Tokens" (ttdm)...
+   📅 Released: 2025-04-11
+   📊 Expected cards: 16
+   📈 Progress: 6% | Elapsed: 1m 51s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 16 cards
+   ✅ Processed 16 card items
+   ✅ Created "Tarkir: Dragonstorm Tokens" with 16 cards
+
+[23/340] 📦 Processing "Tarkir: Dragonstorm Art Series" (atdm)...
+   📅 Released: 2025-04-11
+   📊 Expected cards: 54
+   📈 Progress: 7% | Elapsed: 1m 53s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Tarkir: Dragonstorm Art Series" with 54 cards
+
+[24/340] 📦 Processing "Tarkir: Dragonstorm Commander Tokens" (ttdc)...
+   📅 Released: 2025-04-11
+   📊 Expected cards: 34
+   📈 Progress: 7% | Elapsed: 1m 54s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 34 cards
+   ✅ Processed 34 card items
+   ✅ Created "Tarkir: Dragonstorm Commander Tokens" with 34 cards
+
+[25/340] 📦 Processing "Tarkir: Dragonstorm Commander" (tdc)...
+   📅 Released: 2025-04-11
+   📊 Expected cards: 413
+   📈 Progress: 7% | Elapsed: 1m 56s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 413 cards
+   ✅ Processed 413 card items
+   ✅ Created "Tarkir: Dragonstorm Commander" with 413 cards
+
+[26/340] 📦 Processing "Tarkir: Dragonstorm" (tdm)...
+   📅 Released: 2025-04-11
+   📊 Expected cards: 427
+   📈 Progress: 8% | Elapsed: 1m 0s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 427 cards
+   ✅ Processed 427 card items
+   ✅ Created "Tarkir: Dragonstorm" with 427 cards
+
+[27/340] 📦 Processing "Aetherdrift Art Series" (adft)...
+   📅 Released: 2025-02-14
+   📊 Expected cards: 54
+   📈 Progress: 8% | Elapsed: 1m 4s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Aetherdrift Art Series" with 54 cards
+
+[28/340] 📦 Processing "Aetherdrift Commander" (drc)...
+   📅 Released: 2025-02-14
+   📊 Expected cards: 184
+   📈 Progress: 8% | Elapsed: 1m 5s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 184 cards
+   ✅ Processed 184 card items
+   ✅ Created "Aetherdrift Commander" with 184 cards
+
+[29/340] 📦 Processing "Aetherdrift Tokens" (tdft)...
+   📅 Released: 2025-02-14
+   📊 Expected cards: 14
+   📈 Progress: 9% | Elapsed: 1m 10s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "Aetherdrift Tokens" with 14 cards
+
+[30/340] 📦 Processing "Aetherdrift" (dft)...
+   📅 Released: 2025-02-14
+   📊 Expected cards: 553
+   📈 Progress: 9% | Elapsed: 1m 11s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 553 cards
+   ✅ Processed 553 card items
+   ✅ Created "Aetherdrift" with 553 cards
+
+[31/340] 📦 Processing "Aetherdrift Commander Tokens" (tdrc)...
+   📅 Released: 2025-02-14
+   📊 Expected cards: 17
+   📈 Progress: 9% | Elapsed: 1m 17s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 17 cards
+   ✅ Processed 17 card items
+   ✅ Created "Aetherdrift Commander Tokens" with 17 cards
+
+   📊 Running totals: 30 processed, 1 skipped, 0 errors | Time: 1m 18s
+
+
+[32/340] 📦 Processing "Innistrad Remastered Art Series" (ainr)...
+   📅 Released: 2025-01-24
+   📊 Expected cards: 25
+   📈 Progress: 9% | Elapsed: 1m 19s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 25 cards
+   ✅ Processed 25 card items
+   ✅ Created "Innistrad Remastered Art Series" with 25 cards
+
+[33/340] 📦 Processing "Innistrad Remastered" (inr)...
+   📅 Released: 2025-01-24
+   📊 Expected cards: 495
+   📈 Progress: 10% | Elapsed: 1m 20s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 495 cards
+   ✅ Processed 495 card items
+   ✅ Created "Innistrad Remastered" with 495 cards
+
+[34/340] 📦 Processing "Innistrad Remastered Tokens" (tinr)...
+   📅 Released: 2025-01-24
+   📊 Expected cards: 27
+   📈 Progress: 10% | Elapsed: 1m 26s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 27 cards
+   ✅ Processed 27 card items
+   ✅ Created "Innistrad Remastered Tokens" with 27 cards
+
+[35/340] 📦 Processing "Foundations Art Series" (afdn)...
+   📅 Released: 2024-11-15
+   📊 Expected cards: 55
+   📈 Progress: 10% | Elapsed: 1m 28s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 55 cards
+   ✅ Processed 55 card items
+   ✅ Created "Foundations Art Series" with 55 cards
+
+[36/340] 📦 Processing "Foundations" (fdn)...
+   📅 Released: 2024-11-15
+   📊 Expected cards: 730
+   📈 Progress: 11% | Elapsed: 1m 29s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 730 cards
+   ✅ Processed 730 card items
+   ✅ Created "Foundations" with 730 cards
+
+[37/340] 📦 Processing "Foundations Front Cards" (ffdn)...
+   📅 Released: 2024-11-15
+   📊 Expected cards: 10
+   📈 Progress: 11% | Elapsed: 2m 40s | Est. remaining: ~14m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 10 cards
+   ✅ Processed 10 card items
+   ✅ Created "Foundations Front Cards" with 10 cards
+
+[38/340] 📦 Processing "Foundations Tokens" (tfdn)...
+   📅 Released: 2024-11-15
+   📊 Expected cards: 33
+   📈 Progress: 11% | Elapsed: 2m 41s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 33 cards
+   ✅ Processed 33 card items
+   ✅ Created "Foundations Tokens" with 33 cards
+
+[39/340] 📦 Processing "Duskmourn: House of Horror Commander" (dsc)...
+   📅 Released: 2024-09-27
+   📊 Expected cards: 373
+   📈 Progress: 11% | Elapsed: 2m 43s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 373 cards
+   ✅ Processed 373 card items
+   ✅ Created "Duskmourn: House of Horror Commander" with 373 cards
+
+[40/340] 📦 Processing "Duskmourn: House of Horror" (dsk)...
+   📅 Released: 2024-09-27
+   📊 Expected cards: 418
+   📈 Progress: 12% | Elapsed: 2m 46s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 418 cards
+   ✅ Processed 418 card items
+   ✅ Created "Duskmourn: House of Horror" with 418 cards
+
+[41/340] 📦 Processing "Duskmourn: House of Horror Tokens" (tdsk)...
+   📅 Released: 2024-09-27
+   📊 Expected cards: 19
+   📈 Progress: 12% | Elapsed: 2m 50s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 19 cards
+   ✅ Processed 19 card items
+   ✅ Created "Duskmourn: House of Horror Tokens" with 19 cards
+
+   📊 Running totals: 40 processed, 1 skipped, 0 errors | Time: 2m 53s
+
+
+[42/340] 📦 Processing "Duskmourn Commander Tokens" (tdsc)...
+   📅 Released: 2024-09-27
+   📊 Expected cards: 23
+   📈 Progress: 12% | Elapsed: 2m 53s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 23 cards
+   ✅ Processed 23 card items
+   ✅ Created "Duskmourn Commander Tokens" with 23 cards
+
+[43/340] 📦 Processing "Duskmourn: House of Horror Art Series" (adsk)...
+   📅 Released: 2024-09-27
+   📊 Expected cards: 54
+   📈 Progress: 13% | Elapsed: 2m 55s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Duskmourn: House of Horror Art Series" with 54 cards
+
+[44/340] 📦 Processing "Bloomburrow Commander Tokens" (tblc)...
+   📅 Released: 2024-08-02
+   📊 Expected cards: 41
+   📈 Progress: 13% | Elapsed: 2m 56s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 41 cards
+   ✅ Processed 41 card items
+   ✅ Created "Bloomburrow Commander Tokens" with 41 cards
+
+[45/340] 📦 Processing "Bloomburrow Tokens" (tblb)...
+   📅 Released: 2024-08-02
+   📊 Expected cards: 30
+   📈 Progress: 13% | Elapsed: 2m 59s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 30 cards
+   ✅ Processed 30 card items
+   ✅ Created "Bloomburrow Tokens" with 30 cards
+
+[46/340] 📦 Processing "Bloomburrow Art Series" (ablb)...
+   📅 Released: 2024-08-02
+   📊 Expected cards: 54
+   📈 Progress: 14% | Elapsed: 2m 0s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Bloomburrow Art Series" with 54 cards
+
+[47/340] 📦 Processing "Mystery Booster 2" (mb2)...
+   📅 Released: 2024-08-02
+   📊 Expected cards: 385
+   📈 Progress: 14% | Elapsed: 2m 1s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 385 cards
+   ✅ Processed 385 card items
+   ✅ Created "Mystery Booster 2" with 385 cards
+
+[48/340] 📦 Processing "Bloomburrow Commander" (blc)...
+   📅 Released: 2024-08-02
+   📊 Expected cards: 356
+   📈 Progress: 14% | Elapsed: 2m 4s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 356 cards
+   ✅ Processed 356 card items
+   ✅ Created "Bloomburrow Commander" with 356 cards
+
+[49/340] 📦 Processing "Bloomburrow" (blb)...
+   📅 Released: 2024-08-02
+   📊 Expected cards: 398
+   📈 Progress: 14% | Elapsed: 2m 9s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 398 cards
+   ✅ Processed 398 card items
+   ✅ Created "Bloomburrow" with 398 cards
+
+[50/340] 📦 Processing "Assassin's Creed Tokens" (tacr)...
+   📅 Released: 2024-07-05
+   📊 Expected cards: 8
+   📈 Progress: 15% | Elapsed: 2m 13s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 8 cards
+   ✅ Processed 8 card items
+   ✅ Created "Assassin's Creed Tokens" with 8 cards
+
+[51/340] 📦 Processing "Assassin's Creed Art Series" (aacr)...
+   📅 Released: 2024-07-05
+   📊 Expected cards: 20
+   📈 Progress: 15% | Elapsed: 2m 14s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 20 cards
+   ✅ Processed 20 card items
+   ✅ Created "Assassin's Creed Art Series" with 20 cards
+
+   📊 Running totals: 50 processed, 1 skipped, 0 errors | Time: 2m 15s
+
+
+[52/340] 📦 Processing "Assassin's Creed" (acr)...
+   📅 Released: 2024-07-05
+   📊 Expected cards: 309
+   📈 Progress: 15% | Elapsed: 2m 15s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 309 cards
+   ✅ Processed 309 card items
+   ✅ Created "Assassin's Creed" with 309 cards
+
+[53/340] 📦 Processing "Modern Horizons 3 Commander Tokens" (tm3c)...
+   📅 Released: 2024-06-14
+   📊 Expected cards: 28
+   📈 Progress: 16% | Elapsed: 2m 18s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 28 cards
+   ✅ Processed 28 card items
+   ✅ Created "Modern Horizons 3 Commander Tokens" with 28 cards
+
+[54/340] 📦 Processing "Modern Horizons 3" (mh3)...
+   📅 Released: 2024-06-14
+   📊 Expected cards: 528
+   📈 Progress: 16% | Elapsed: 2m 20s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 528 cards
+   ✅ Processed 528 card items
+   ✅ Created "Modern Horizons 3" with 528 cards
+
+[55/340] 📦 Processing "Modern Horizons 3 Commander" (m3c)...
+   📅 Released: 2024-06-14
+   📊 Expected cards: 398
+   📈 Progress: 16% | Elapsed: 2m 26s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 398 cards
+   ✅ Processed 398 card items
+   ✅ Created "Modern Horizons 3 Commander" with 398 cards
+
+[56/340] 📦 Processing "Modern Horizons 3 Tokens" (tmh3)...
+   📅 Released: 2024-06-14
+   📊 Expected cards: 43
+   📈 Progress: 16% | Elapsed: 3m 32s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 43 cards
+   ✅ Processed 43 card items
+   ✅ Created "Modern Horizons 3 Tokens" with 43 cards
+
+[57/340] 📦 Processing "Modern Horizons 3 Art Series" (amh3)...
+   📅 Released: 2024-06-14
+   📊 Expected cards: 54
+   📈 Progress: 17% | Elapsed: 3m 35s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Modern Horizons 3 Art Series" with 54 cards
+
+[58/340] 📦 Processing "Modern Horizons 2 Timeshifts" (h2r)...
+   📅 Released: 2024-06-07
+   📊 Expected cards: 16
+   📈 Progress: 17% | Elapsed: 3m 36s | Est. remaining: ~13m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 16 cards
+   ✅ Processed 16 card items
+   ✅ Created "Modern Horizons 2 Timeshifts" with 16 cards
+
+[59/340] 📦 Processing "Outlaws of Thunder Junction Art Series" (aotj)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 54
+   📈 Progress: 17% | Elapsed: 3m 37s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 54 cards
+   ✅ Processed 54 card items
+   ✅ Created "Outlaws of Thunder Junction Art Series" with 54 cards
+
+[60/340] 📦 Processing "Outlaws of Thunder Junction Tokens" (totj)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 19
+   📈 Progress: 18% | Elapsed: 3m 38s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 19 cards
+   ✅ Processed 19 card items
+   ✅ Created "Outlaws of Thunder Junction Tokens" with 19 cards
+
+[61/340] 📦 Processing "The Big Score" (big)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 95
+   📈 Progress: 18% | Elapsed: 3m 40s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 95 cards
+   ✅ Processed 95 card items
+   ✅ Created "The Big Score" with 95 cards
+
+   📊 Running totals: 60 processed, 1 skipped, 0 errors | Time: 3m 41s
+
+
+[62/340] 📦 Processing "Outlaws of Thunder Junction Commander" (otc)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 342
+   📈 Progress: 18% | Elapsed: 3m 41s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 342 cards
+   ✅ Processed 342 card items
+   ✅ Created "Outlaws of Thunder Junction Commander" with 342 cards
+
+[63/340] 📦 Processing "Outlaws of Thunder Junction Commander Tokens" (totc)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 41
+   📈 Progress: 19% | Elapsed: 3m 45s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 41 cards
+   ✅ Processed 41 card items
+   ✅ Created "Outlaws of Thunder Junction Commander Tokens" with 41 cards
+
+[64/340] 📦 Processing "The Big Score Tokens" (tbig)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 7
+   📈 Progress: 19% | Elapsed: 3m 46s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 7 cards
+   ✅ Processed 7 card items
+   ✅ Created "The Big Score Tokens" with 7 cards
+
+[65/340] 📦 Processing "Breaking News Tokens" (totp)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 5
+   📈 Progress: 19% | Elapsed: 3m 48s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 5 cards
+   ✅ Processed 5 card items
+   ✅ Created "Breaking News Tokens" with 5 cards
+
+[66/340] 📦 Processing "Outlaws of Thunder Junction" (otj)...
+   📅 Released: 2024-04-19
+   📊 Expected cards: 374
+   📈 Progress: 19% | Elapsed: 3m 49s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 374 cards
+   ✅ Processed 374 card items
+   ✅ Created "Outlaws of Thunder Junction" with 374 cards
+
+[67/340] 📦 Processing "Fallout Tokens" (tpip)...
+   📅 Released: 2024-03-08
+   📊 Expected cards: 22
+   📈 Progress: 20% | Elapsed: 3m 53s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 22 cards
+   ✅ Processed 22 card items
+   ✅ Created "Fallout Tokens" with 22 cards
+
+[68/340] 📦 Processing "Fallout" (pip)...
+   📅 Released: 2024-03-08
+   📊 Expected cards: 1068
+   📈 Progress: 20% | Elapsed: 3m 55s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ⏳ Fetched 875 cards so far...
+   ⏳ Fetched 1050 cards so far...
+   ✅ Fetched 1068 cards
+   ✅ Processed 1068 card items
+   ✅ Created "Fallout" with 1068 cards
+
+[69/340] 📦 Processing "Ravnica: Clue Edition" (clu)...
+   📅 Released: 2024-02-23
+   📊 Expected cards: 284
+   📈 Progress: 20% | Elapsed: 3m 6s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 284 cards
+   ✅ Processed 284 card items
+   ✅ Created "Ravnica: Clue Edition" with 284 cards
+
+[70/340] 📦 Processing "Murders at Karlov Manor Commander Tokens" (tmkc)...
+   📅 Released: 2024-02-09
+   📊 Expected cards: 31
+   📈 Progress: 21% | Elapsed: 3m 9s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 31 cards
+   ✅ Processed 31 card items
+   ✅ Created "Murders at Karlov Manor Commander Tokens" with 31 cards
+
+[71/340] 📦 Processing "Murders at Karlov Manor Tokens" (tmkm)...
+   📅 Released: 2024-02-09
+   📊 Expected cards: 22
+   📈 Progress: 21% | Elapsed: 3m 10s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 22 cards
+   ✅ Processed 22 card items
+   ✅ Created "Murders at Karlov Manor Tokens" with 22 cards
+
+   📊 Running totals: 70 processed, 1 skipped, 0 errors | Time: 3m 11s
+
+
+[72/340] 📦 Processing "Murders at Karlov Manor Art Series" (amkm)...
+   📅 Released: 2024-02-09
+   📊 Expected cards: 49
+   📈 Progress: 21% | Elapsed: 3m 12s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 49 cards
+   ✅ Processed 49 card items
+   ✅ Created "Murders at Karlov Manor Art Series" with 49 cards
+
+[73/340] 📦 Processing "Murders at Karlov Manor Commander" (mkc)...
+   📅 Released: 2024-02-09
+   📊 Expected cards: 358
+   📈 Progress: 21% | Elapsed: 3m 13s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 358 cards
+   ✅ Processed 358 card items
+   ✅ Created "Murders at Karlov Manor Commander" with 358 cards
+
+[74/340] 📦 Processing "Murders at Karlov Manor" (mkm)...
+   📅 Released: 2024-02-09
+   📊 Expected cards: 451
+   📈 Progress: 22% | Elapsed: 3m 17s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 440 cards
+   ✅ Processed 440 card items
+   ✅ Created "Murders at Karlov Manor" with 440 cards
+
+[75/340] 📦 Processing "Ravnica Remastered" (rvr)...
+   📅 Released: 2024-01-12
+   📊 Expected cards: 531
+   📈 Progress: 22% | Elapsed: 3m 22s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 531 cards
+   ✅ Processed 531 card items
+   ✅ Created "Ravnica Remastered" with 531 cards
+
+[76/340] 📦 Processing "Ravnica Remastered Tokens" (trvr)...
+   📅 Released: 2024-01-12
+   📊 Expected cards: 20
+   📈 Progress: 22% | Elapsed: 3m 27s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 20 cards
+   ✅ Processed 20 card items
+   ✅ Created "Ravnica Remastered Tokens" with 20 cards
+
+[77/340] 📦 Processing "The Lost Caverns of Ixalan Art Series" (alci)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 81
+   📈 Progress: 23% | Elapsed: 3m 28s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "The Lost Caverns of Ixalan Art Series" with 81 cards
+
+[78/340] 📦 Processing "The Lost Caverns of Ixalan Substitute Cards" (slci)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 1
+   📈 Progress: 23% | Elapsed: 3m 29s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 1 cards
+   ✅ Processed 1 card items
+   ✅ Created "The Lost Caverns of Ixalan Substitute Cards" with 1 cards
+
+[79/340] 📦 Processing "Jurassic World Collection Tokens" (trex)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 2
+   📈 Progress: 23% | Elapsed: 4m 30s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 2 cards
+   ✅ Processed 2 card items
+   ✅ Created "Jurassic World Collection Tokens" with 2 cards
+
+[80/340] 📦 Processing "The Lost Caverns of Ixalan Commander" (lcc)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 370
+   📈 Progress: 24% | Elapsed: 4m 31s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 370 cards
+   ✅ Processed 370 card items
+   ✅ Created "The Lost Caverns of Ixalan Commander" with 370 cards
+
+[81/340] 📦 Processing "The Lost Caverns of Ixalan" (lci)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 416
+   📈 Progress: 24% | Elapsed: 4m 36s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 416 cards
+   ✅ Processed 416 card items
+   ✅ Created "The Lost Caverns of Ixalan" with 416 cards
+
+   📊 Running totals: 80 processed, 1 skipped, 0 errors | Time: 4m 40s
+
+
+[82/340] 📦 Processing "The Lost Caverns of Ixalan Commander Tokens" (tlcc)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 18
+   📈 Progress: 24% | Elapsed: 4m 41s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 18 cards
+   ✅ Processed 18 card items
+   ✅ Created "The Lost Caverns of Ixalan Commander Tokens" with 18 cards
+
+[83/340] 📦 Processing "The Lost Caverns of Ixalan Tokens" (tlci)...
+   📅 Released: 2023-11-17
+   📊 Expected cards: 19
+   📈 Progress: 24% | Elapsed: 4m 42s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 19 cards
+   ✅ Processed 19 card items
+   ✅ Created "The Lost Caverns of Ixalan Tokens" with 19 cards
+
+[84/340] 📦 Processing "Tales of Middle-earth Scene Box" (altc)...
+   📅 Released: 2023-11-04
+   📊 Expected cards: 24
+   📈 Progress: 25% | Elapsed: 4m 44s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 24 cards
+   ✅ Processed 24 card items
+   ✅ Created "Tales of Middle-earth Scene Box" with 24 cards
+
+[85/340] 📦 Processing "Doctor Who" (who)...
+   📅 Released: 2023-10-13
+   📊 Expected cards: 1178
+   📈 Progress: 25% | Elapsed: 4m 45s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ⏳ Fetched 875 cards so far...
+   ⏳ Fetched 1050 cards so far...
+   ✅ Fetched 1178 cards
+   ✅ Processed 1178 card items
+   ✅ Created "Doctor Who" with 1178 cards
+
+[86/340] 📦 Processing "Doctor Who Tokens" (twho)...
+   📅 Released: 2023-10-13
+   📊 Expected cards: 64
+   📈 Progress: 25% | Elapsed: 4m 55s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 64 cards
+   ✅ Processed 64 card items
+   ✅ Created "Doctor Who Tokens" with 64 cards
+
+[87/340] 📦 Processing "Wilds of Eldraine Tokens" (twoe)...
+   📅 Released: 2023-09-08
+   📊 Expected cards: 18
+   📈 Progress: 26% | Elapsed: 4m 58s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 18 cards
+   ✅ Processed 18 card items
+   ✅ Created "Wilds of Eldraine Tokens" with 18 cards
+
+[88/340] 📦 Processing "Wilds of Eldraine Commander Tokens" (twoc)...
+   📅 Released: 2023-09-08
+   📊 Expected cards: 10
+   📈 Progress: 26% | Elapsed: 4m 59s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 10 cards
+   ✅ Processed 10 card items
+   ✅ Created "Wilds of Eldraine Commander Tokens" with 10 cards
+
+[89/340] 📦 Processing "WOE Japanese Promo Tokens" (wwoe)...
+   📅 Released: 2023-09-08
+   📊 Expected cards: 6
+   📈 Progress: 26% | Elapsed: 4m 0s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 6 cards
+   ✅ Processed 6 card items
+   ✅ Created "WOE Japanese Promo Tokens" with 6 cards
+
+[90/340] 📦 Processing "Wilds of Eldraine Commander" (woc)...
+   📅 Released: 2023-09-08
+   📊 Expected cards: 173
+   📈 Progress: 26% | Elapsed: 4m 2s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 173 cards
+   ✅ Processed 173 card items
+   ✅ Created "Wilds of Eldraine Commander" with 173 cards
+
+[91/340] 📦 Processing "Wilds of Eldraine Art Series" (awoe)...
+   📅 Released: 2023-09-08
+   📊 Expected cards: 81
+   📈 Progress: 27% | Elapsed: 4m 4s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Wilds of Eldraine Art Series" with 81 cards
+
+   📊 Running totals: 90 processed, 1 skipped, 0 errors | Time: 4m 4s
+
+
+[92/340] 📦 Processing "Wilds of Eldraine" (woe)...
+   📅 Released: 2023-09-08
+   📊 Expected cards: 381
+   📈 Progress: 27% | Elapsed: 4m 5s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 381 cards
+   ✅ Processed 381 card items
+   ✅ Created "Wilds of Eldraine" with 381 cards
+
+[93/340] 📦 Processing "Commander Masters Art Series" (acmm)...
+   📅 Released: 2023-08-04
+   📊 Expected cards: 81
+   📈 Progress: 27% | Elapsed: 4m 11s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Commander Masters Art Series" with 81 cards
+
+[94/340] 📦 Processing "Commander Masters Tokens" (tcmm)...
+   📅 Released: 2023-08-04
+   📊 Expected cards: 81
+   📈 Progress: 28% | Elapsed: 4m 12s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Commander Masters Tokens" with 81 cards
+
+[95/340] 📦 Processing "Commander Masters" (cmm)...
+   📅 Released: 2023-08-04
+   📊 Expected cards: 1067
+   📈 Progress: 28% | Elapsed: 4m 15s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ⏳ Fetched 875 cards so far...
+   ⏳ Fetched 1050 cards so far...
+   ✅ Fetched 1067 cards
+   ✅ Processed 1067 card items
+   ✅ Created "Commander Masters" with 1067 cards
+
+[96/340] 📦 Processing "Tales of Middle-earth Commander" (ltc)...
+   📅 Released: 2023-06-23
+   📊 Expected cards: 591
+   📈 Progress: 28% | Elapsed: 4m 26s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 591 cards
+   ✅ Processed 591 card items
+   ✅ Created "Tales of Middle-earth Commander" with 591 cards
+
+[97/340] 📦 Processing "Tales of Middle-earth Tokens" (tltr)...
+   📅 Released: 2023-06-23
+   📊 Expected cards: 25
+   📈 Progress: 29% | Elapsed: 5m 33s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 25 cards
+   ✅ Processed 25 card items
+   ✅ Created "Tales of Middle-earth Tokens" with 25 cards
+
+[98/340] 📦 Processing "The Lord of the Rings: Tales of Middle-earth" (ltr)...
+   📅 Released: 2023-06-23
+   📊 Expected cards: 856
+   📈 Progress: 29% | Elapsed: 5m 34s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 856 cards
+   ✅ Processed 856 card items
+   ✅ Created "The Lord of the Rings: Tales of Middle-earth" with 856 cards
+
+[99/340] 📦 Processing "Tales of Middle-earth Art Series" (altr)...
+   📅 Released: 2023-06-23
+   📊 Expected cards: 81
+   📈 Progress: 29% | Elapsed: 5m 48s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Tales of Middle-earth Art Series" with 81 cards
+
+[100/340] 📦 Processing "March of the Machine: The Aftermath" (mat)...
+   📅 Released: 2023-05-12
+   📊 Expected cards: 230
+   📈 Progress: 29% | Elapsed: 5m 49s | Est. remaining: ~12m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 230 cards
+   ✅ Processed 230 card items
+   ✅ Created "March of the Machine: The Aftermath" with 230 cards
+
+[101/340] 📦 Processing "March of the Machine Commander Tokens" (tmoc)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 46
+   📈 Progress: 30% | Elapsed: 5m 51s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 46 cards
+   ✅ Processed 46 card items
+   ✅ Created "March of the Machine Commander Tokens" with 46 cards
+
+   📊 Running totals: 100 processed, 1 skipped, 0 errors | Time: 5m 53s
+
+
+[102/340] 📦 Processing "MOM Japanese Promo Tokens" (wmom)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 12
+   📈 Progress: 30% | Elapsed: 5m 54s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 12 cards
+   ✅ Processed 12 card items
+   ✅ Created "MOM Japanese Promo Tokens" with 12 cards
+
+[103/340] 📦 Processing "Multiverse Legends Tokens" (tmul)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 2
+   📈 Progress: 30% | Elapsed: 5m 55s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 2 cards
+   ✅ Processed 2 card items
+   ✅ Created "Multiverse Legends Tokens" with 2 cards
+
+[104/340] 📦 Processing "March of the Machine Commander" (moc)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 450
+   📈 Progress: 31% | Elapsed: 5m 56s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 450 cards
+   ✅ Processed 450 card items
+   ✅ Created "March of the Machine Commander" with 450 cards
+
+[105/340] 📦 Processing "March of the Machine Art Series" (amom)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 81
+   📈 Progress: 31% | Elapsed: 5m 1s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "March of the Machine Art Series" with 81 cards
+
+[106/340] 📦 Processing "March of the Machine" (mom)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 387
+   📈 Progress: 31% | Elapsed: 5m 2s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 387 cards
+   ✅ Processed 387 card items
+   ✅ Created "March of the Machine" with 387 cards
+
+[107/340] 📦 Processing "March of the Machine Tokens" (tmom)...
+   📅 Released: 2023-04-21
+   📊 Expected cards: 23
+   📈 Progress: 31% | Elapsed: 5m 7s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 23 cards
+   ✅ Processed 23 card items
+   ✅ Created "March of the Machine Tokens" with 23 cards
+
+[108/340] 📦 Processing "Phyrexia: All Will Be One" (one)...
+   📅 Released: 2023-02-10
+   📊 Expected cards: 479
+   📈 Progress: 32% | Elapsed: 5m 8s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 479 cards
+   ✅ Processed 479 card items
+   ✅ Created "Phyrexia: All Will Be One" with 479 cards
+
+[109/340] 📦 Processing "Phyrexia: All Will Be One Commander" (onc)...
+   📅 Released: 2023-02-10
+   📊 Expected cards: 174
+   📈 Progress: 32% | Elapsed: 5m 13s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 174 cards
+   ✅ Processed 174 card items
+   ✅ Created "Phyrexia: All Will Be One Commander" with 174 cards
+
+[110/340] 📦 Processing "Phyrexia: All Will Be One Commander Tokens" (tonc)...
+   📅 Released: 2023-02-03
+   📊 Expected cards: 23
+   📈 Progress: 32% | Elapsed: 5m 16s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 23 cards
+   ✅ Processed 23 card items
+   ✅ Created "Phyrexia: All Will Be One Commander Tokens" with 23 cards
+
+[111/340] 📦 Processing "Phyrexia: All Will Be One Tokens" (tone)...
+   📅 Released: 2023-02-03
+   📊 Expected cards: 14
+   📈 Progress: 33% | Elapsed: 5m 17s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "Phyrexia: All Will Be One Tokens" with 14 cards
+
+   📊 Running totals: 110 processed, 1 skipped, 0 errors | Time: 5m 18s
+
+
+[112/340] 📦 Processing "Phyrexia: All Will Be One Art Series" (aone)...
+   📅 Released: 2023-02-03
+   📊 Expected cards: 81
+   📈 Progress: 33% | Elapsed: 5m 18s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Phyrexia: All Will Be One Art Series" with 81 cards
+
+[113/340] 📦 Processing "Dominaria Remastered Tokens" (tdmr)...
+   📅 Released: 2023-01-13
+   📊 Expected cards: 14
+   📈 Progress: 33% | Elapsed: 5m 20s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "Dominaria Remastered Tokens" with 14 cards
+
+[114/340] 📦 Processing "Dominaria Remastered" (dmr)...
+   📅 Released: 2023-01-13
+   📊 Expected cards: 457
+   📈 Progress: 34% | Elapsed: 5m 21s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 457 cards
+   ✅ Processed 457 card items
+   ✅ Created "Dominaria Remastered" with 457 cards
+
+[115/340] 📦 Processing "Starter Commander Deck Tokens" (tscd)...
+   📅 Released: 2022-12-02
+   📊 Expected cards: 27
+   📈 Progress: 34% | Elapsed: 5m 24s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 27 cards
+   ✅ Processed 27 card items
+   ✅ Created "Starter Commander Deck Tokens" with 27 cards
+
+[116/340] 📦 Processing "Jumpstart 2022 Front Cards" (fj22)...
+   📅 Released: 2022-12-02
+   📊 Expected cards: 46
+   📈 Progress: 34% | Elapsed: 5m 26s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 46 cards
+   ✅ Processed 46 card items
+   ✅ Created "Jumpstart 2022 Front Cards" with 46 cards
+
+[117/340] 📦 Processing "Jumpstart 2022" (j22)...
+   📅 Released: 2022-12-02
+   📊 Expected cards: 835
+   📈 Progress: 34% | Elapsed: 5m 27s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 835 cards
+   ✅ Processed 835 card items
+   ✅ Created "Jumpstart 2022" with 835 cards
+
+[118/340] 📦 Processing "The Brothers' War Commander" (brc)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 209
+   📈 Progress: 35% | Elapsed: 6m 35s | Est. remaining: ~11m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 209 cards
+   ✅ Processed 209 card items
+   ✅ Created "The Brothers' War Commander" with 209 cards
+
+[119/340] 📦 Processing "Transformers Tokens" (tbot)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 2
+   📈 Progress: 35% | Elapsed: 6m 37s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 2 cards
+   ✅ Processed 2 card items
+   ✅ Created "Transformers Tokens" with 2 cards
+
+[120/340] 📦 Processing "The Brothers' War Tokens" (tbro)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 12
+   📈 Progress: 35% | Elapsed: 6m 38s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 12 cards
+   ✅ Processed 12 card items
+   ✅ Created "The Brothers' War Tokens" with 12 cards
+
+[121/340] 📦 Processing "The Brothers' War Art Series" (abro)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 81
+   📈 Progress: 36% | Elapsed: 6m 39s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "The Brothers' War Art Series" with 81 cards
+
+   📊 Running totals: 120 processed, 1 skipped, 0 errors | Time: 6m 40s
+
+
+[122/340] 📦 Processing "The Brothers' War Commander Tokens" (tbrc)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 14
+   📈 Progress: 36% | Elapsed: 6m 40s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "The Brothers' War Commander Tokens" with 14 cards
+
+[123/340] 📦 Processing "The Brothers' War Jumpstart Front Cards" (fbro)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 5
+   📈 Progress: 36% | Elapsed: 6m 42s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 5 cards
+   ✅ Processed 5 card items
+   ✅ Created "The Brothers' War Jumpstart Front Cards" with 5 cards
+
+[124/340] 📦 Processing "The Brothers' War" (bro)...
+   📅 Released: 2022-11-18
+   📊 Expected cards: 399
+   📈 Progress: 36% | Elapsed: 6m 43s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 399 cards
+   ✅ Processed 399 card items
+   ✅ Created "The Brothers' War" with 399 cards
+
+[125/340] 📦 Processing "Secret Lair Countdown" (slc)...
+   📅 Released: 2022-11-01
+   📊 Expected cards: 84
+   📈 Progress: 37% | Elapsed: 6m 48s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 84 cards
+   ✅ Processed 84 card items
+   ✅ Created "Secret Lair Countdown" with 84 cards
+
+[126/340] 📦 Processing "Game Night: Free-for-All Tokens" (tgn3)...
+   📅 Released: 2022-10-14
+   📊 Expected cards: 10
+   📈 Progress: 37% | Elapsed: 6m 49s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 10 cards
+   ✅ Processed 10 card items
+   ✅ Created "Game Night: Free-for-All Tokens" with 10 cards
+
+[127/340] 📦 Processing "Game Night: Free-for-All" (gn3)...
+   📅 Released: 2022-10-14
+   📊 Expected cards: 135
+   📈 Progress: 37% | Elapsed: 6m 51s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 135 cards
+   ✅ Processed 135 card items
+   ✅ Created "Game Night: Free-for-All" with 135 cards
+
+[128/340] 📦 Processing "Unfinity" (unf)...
+   📅 Released: 2022-10-07
+   📊 Expected cards: 639
+   📈 Progress: 38% | Elapsed: 6m 53s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 639 cards
+   ✅ Processed 639 card items
+   ✅ Created "Unfinity" with 639 cards
+
+[129/340] 📦 Processing "Unfinity Tokens" (tunf)...
+   📅 Released: 2022-10-07
+   📊 Expected cards: 14
+   📈 Progress: 38% | Elapsed: 6m 59s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "Unfinity Tokens" with 14 cards
+
+[130/340] 📦 Processing "Warhammer 40,000 Commander" (40k)...
+   📅 Released: 2022-10-07
+   📊 Expected cards: 617
+   📈 Progress: 38% | Elapsed: 6m 0s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 617 cards
+   ✅ Processed 617 card items
+   ✅ Created "Warhammer 40,000 Commander" with 617 cards
+
+[131/340] 📦 Processing "Warhammer 40,000 Tokens" (t40k)...
+   📅 Released: 2022-10-07
+   📊 Expected cards: 31
+   📈 Progress: 39% | Elapsed: 6m 6s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 31 cards
+   ✅ Processed 31 card items
+   ✅ Created "Warhammer 40,000 Tokens" with 31 cards
+
+   📊 Running totals: 130 processed, 1 skipped, 0 errors | Time: 6m 7s
+
+
+[132/340] 📦 Processing "Dominaria United Tokens" (tdmu)...
+   📅 Released: 2022-09-09
+   📊 Expected cards: 26
+   📈 Progress: 39% | Elapsed: 6m 8s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 26 cards
+   ✅ Processed 26 card items
+   ✅ Created "Dominaria United Tokens" with 26 cards
+
+[133/340] 📦 Processing "Dominaria United Art Series" (admu)...
+   📅 Released: 2022-09-09
+   📊 Expected cards: 81
+   📈 Progress: 39% | Elapsed: 6m 10s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Dominaria United Art Series" with 81 cards
+
+[134/340] 📦 Processing "Dominaria United Jumpstart Front Cards" (fdmu)...
+   📅 Released: 2022-09-09
+   📊 Expected cards: 10
+   📈 Progress: 39% | Elapsed: 6m 11s | Est. remaining: ~10m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 10 cards
+   ✅ Processed 10 card items
+   ✅ Created "Dominaria United Jumpstart Front Cards" with 10 cards
+
+[135/340] 📦 Processing "Dominaria United" (dmu)...
+   📅 Released: 2022-09-09
+   📊 Expected cards: 453
+   📈 Progress: 40% | Elapsed: 6m 12s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 453 cards
+   ✅ Processed 453 card items
+   ✅ Created "Dominaria United" with 453 cards
+
+[136/340] 📦 Processing "Dominaria United Commander" (dmc)...
+   📅 Released: 2022-09-09
+   📊 Expected cards: 240
+   📈 Progress: 40% | Elapsed: 6m 17s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 240 cards
+   ✅ Processed 240 card items
+   ✅ Created "Dominaria United Commander" with 240 cards
+
+[137/340] 📦 Processing "Dominaria United Commander Tokens" (tdmc)...
+   📅 Released: 2022-09-09
+   📊 Expected cards: 12
+   📈 Progress: 40% | Elapsed: 6m 19s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 12 cards
+   ✅ Processed 12 card items
+   ✅ Created "Dominaria United Commander Tokens" with 12 cards
+
+[138/340] 📦 Processing "Double Masters 2022" (2x2)...
+   📅 Released: 2022-07-08
+   📊 Expected cards: 579
+   📈 Progress: 41% | Elapsed: 6m 20s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 579 cards
+   ✅ Processed 579 card items
+   ✅ Created "Double Masters 2022" with 579 cards
+
+[139/340] 📦 Processing "Double Masters 2022 Tokens" (t2x2)...
+   📅 Released: 2022-07-08
+   📊 Expected cards: 24
+   📈 Progress: 41% | Elapsed: 6m 25s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 24 cards
+   ✅ Processed 24 card items
+   ✅ Created "Double Masters 2022 Tokens" with 24 cards
+
+[140/340] 📦 Processing "Commander Legends: Battle for Baldur's Gate" (clb)...
+   📅 Released: 2022-06-10
+   📊 Expected cards: 936
+   📈 Progress: 41% | Elapsed: 6m 27s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ⏳ Fetched 875 cards so far...
+   ✅ Fetched 936 cards
+   ✅ Processed 936 card items
+   ✅ Created "Commander Legends: Battle for Baldur's Gate" with 936 cards
+
+[141/340] 📦 Processing "Battle for Baldur's Gate Tokens" (tclb)...
+   📅 Released: 2022-06-10
+   📊 Expected cards: 51
+   📈 Progress: 41% | Elapsed: 7m 38s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 51 cards
+   ✅ Processed 51 card items
+   ✅ Created "Battle for Baldur's Gate Tokens" with 51 cards
+
+   📊 Running totals: 140 processed, 1 skipped, 0 errors | Time: 7m 39s
+
+
+[142/340] 📦 Processing "Battle for Baldur's Gate Art Series" (aclb)...
+   📅 Released: 2022-06-10
+   📊 Expected cards: 81
+   📈 Progress: 42% | Elapsed: 7m 40s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Battle for Baldur's Gate Art Series" with 81 cards
+
+[143/340] 📦 Processing "Streets of New Capenna Tokens" (tsnc)...
+   📅 Released: 2022-04-29
+   📊 Expected cards: 19
+   📈 Progress: 42% | Elapsed: 7m 41s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 19 cards
+   ✅ Processed 19 card items
+   ✅ Created "Streets of New Capenna Tokens" with 19 cards
+
+[144/340] 📦 Processing "Streets of New Capenna" (snc)...
+   📅 Released: 2022-04-29
+   📊 Expected cards: 513
+   📈 Progress: 42% | Elapsed: 7m 43s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 513 cards
+   ✅ Processed 513 card items
+   ✅ Created "Streets of New Capenna" with 513 cards
+
+[145/340] 📦 Processing "New Capenna Commander Tokens" (tncc)...
+   📅 Released: 2022-04-29
+   📊 Expected cards: 36
+   📈 Progress: 43% | Elapsed: 7m 49s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 36 cards
+   ✅ Processed 36 card items
+   ✅ Created "New Capenna Commander Tokens" with 36 cards
+
+[146/340] 📦 Processing "New Capenna Commander" (ncc)...
+   📅 Released: 2022-04-29
+   📊 Expected cards: 447
+   📈 Progress: 43% | Elapsed: 7m 51s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 447 cards
+   ✅ Processed 447 card items
+   ✅ Created "New Capenna Commander" with 447 cards
+
+[147/340] 📦 Processing "New Capenna Art Series" (asnc)...
+   📅 Released: 2022-04-29
+   📊 Expected cards: 81
+   📈 Progress: 43% | Elapsed: 7m 55s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "New Capenna Art Series" with 81 cards
+
+[148/340] 📦 Processing "Kamigawa: Neon Dynasty Tokens" (tneo)...
+   📅 Released: 2022-02-18
+   📊 Expected cards: 19
+   📈 Progress: 44% | Elapsed: 7m 56s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 19 cards
+   ✅ Processed 19 card items
+   ✅ Created "Kamigawa: Neon Dynasty Tokens" with 19 cards
+
+[149/340] 📦 Processing "Neon Dynasty Commander Tokens" (tnec)...
+   📅 Released: 2022-02-18
+   📊 Expected cards: 12
+   📈 Progress: 44% | Elapsed: 7m 57s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 12 cards
+   ✅ Processed 12 card items
+   ✅ Created "Neon Dynasty Commander Tokens" with 12 cards
+
+[150/340] 📦 Processing "Kamigawa: Neon Dynasty" (neo)...
+   📅 Released: 2022-02-18
+   📊 Expected cards: 531
+   📈 Progress: 44% | Elapsed: 7m 58s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 531 cards
+   ✅ Processed 531 card items
+   ✅ Created "Kamigawa: Neon Dynasty" with 531 cards
+
+[151/340] 📦 Processing "Neon Dynasty Commander" (nec)...
+   📅 Released: 2022-02-18
+   📊 Expected cards: 179
+   📈 Progress: 44% | Elapsed: 7m 4s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 179 cards
+   ✅ Processed 179 card items
+   ✅ Created "Neon Dynasty Commander" with 179 cards
+
+   📊 Running totals: 150 processed, 1 skipped, 0 errors | Time: 7m 6s
+
+
+[152/340] 📦 Processing "Neon Dynasty Art Series" (aneo)...
+   📅 Released: 2022-02-18
+   📊 Expected cards: 81
+   📈 Progress: 45% | Elapsed: 7m 6s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Neon Dynasty Art Series" with 81 cards
+
+[153/340] 📦 Processing "Innistrad: Double Feature" (dbl)...
+   📅 Released: 2022-01-28
+   📊 Expected cards: 535
+   📈 Progress: 45% | Elapsed: 7m 8s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ✅ Fetched 535 cards
+   ✅ Processed 535 card items
+   ✅ Created "Innistrad: Double Feature" with 535 cards
+
+[154/340] 📦 Processing "Innistrad: Crimson Vow Tokens" (tvow)...
+   📅 Released: 2021-11-19
+   📊 Expected cards: 21
+   📈 Progress: 45% | Elapsed: 7m 14s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 21 cards
+   ✅ Processed 21 card items
+   ✅ Created "Innistrad: Crimson Vow Tokens" with 21 cards
+
+[155/340] 📦 Processing "Innistrad: Crimson Vow" (vow)...
+   📅 Released: 2021-11-19
+   📊 Expected cards: 423
+   📈 Progress: 46% | Elapsed: 7m 16s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 423 cards
+   ✅ Processed 423 card items
+   ✅ Created "Innistrad: Crimson Vow" with 423 cards
+
+[156/340] 📦 Processing "Crimson Vow Art Series" (avow)...
+   📅 Released: 2021-11-19
+   📊 Expected cards: 81
+   📈 Progress: 46% | Elapsed: 7m 21s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Crimson Vow Art Series" with 81 cards
+
+[157/340] 📦 Processing "Crimson Vow Commander" (voc)...
+   📅 Released: 2021-11-19
+   📊 Expected cards: 188
+   📈 Progress: 46% | Elapsed: 7m 22s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 188 cards
+   ✅ Processed 188 card items
+   ✅ Created "Crimson Vow Commander" with 188 cards
+
+[158/340] 📦 Processing "Midnight Hunt Commander" (mic)...
+   📅 Released: 2021-09-24
+   📊 Expected cards: 187
+   📈 Progress: 46% | Elapsed: 7m 26s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 187 cards
+   ✅ Processed 187 card items
+   ✅ Created "Midnight Hunt Commander" with 187 cards
+
+[159/340] 📦 Processing "Innistrad: Midnight Hunt Tokens" (tmid)...
+   📅 Released: 2021-09-24
+   📊 Expected cards: 19
+   📈 Progress: 47% | Elapsed: 7m 29s | Est. remaining: ~9m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 19 cards
+   ✅ Processed 19 card items
+   ✅ Created "Innistrad: Midnight Hunt Tokens" with 19 cards
+
+[160/340] 📦 Processing "Midnight Hunt Art Series" (amid)...
+   📅 Released: 2021-09-24
+   📊 Expected cards: 81
+   📈 Progress: 47% | Elapsed: 8m 30s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Midnight Hunt Art Series" with 81 cards
+
+[161/340] 📦 Processing "Innistrad: Midnight Hunt" (mid)...
+   📅 Released: 2021-09-24
+   📊 Expected cards: 399
+   📈 Progress: 47% | Elapsed: 8m 31s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 398 cards
+   ✅ Processed 398 card items
+   ✅ Created "Innistrad: Midnight Hunt" with 398 cards
+
+   📊 Running totals: 160 processed, 1 skipped, 0 errors | Time: 8m 36s
+
+
+[162/340] 📦 Processing "Forgotten Realms Commander" (afc)...
+   📅 Released: 2021-07-23
+   📊 Expected cards: 331
+   📈 Progress: 48% | Elapsed: 8m 37s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 331 cards
+   ✅ Processed 331 card items
+   ✅ Created "Forgotten Realms Commander" with 331 cards
+
+[163/340] 📦 Processing "Adventures in the Forgotten Realms Art Series" (aafr)...
+   📅 Released: 2021-07-23
+   📊 Expected cards: 81
+   📈 Progress: 48% | Elapsed: 8m 40s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Adventures in the Forgotten Realms Art Series" with 81 cards
+
+[164/340] 📦 Processing "Adventures in the Forgotten Realms Tokens" (tafr)...
+   📅 Released: 2021-07-23
+   📊 Expected cards: 22
+   📈 Progress: 48% | Elapsed: 8m 42s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 22 cards
+   ✅ Processed 22 card items
+   ✅ Created "Adventures in the Forgotten Realms Tokens" with 22 cards
+
+[165/340] 📦 Processing "Adventures in the Forgotten Realms" (afr)...
+   📅 Released: 2021-07-23
+   📊 Expected cards: 424
+   📈 Progress: 49% | Elapsed: 8m 43s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 424 cards
+   ✅ Processed 424 card items
+   ✅ Created "Adventures in the Forgotten Realms" with 424 cards
+
+[166/340] 📦 Processing "Modern Horizons 2 Tokens" (tmh2)...
+   📅 Released: 2021-06-18
+   📊 Expected cards: 21
+   📈 Progress: 49% | Elapsed: 8m 48s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 21 cards
+   ✅ Processed 21 card items
+   ✅ Created "Modern Horizons 2 Tokens" with 21 cards
+
+[167/340] 📦 Processing "Modern Horizons 2 Art Series" (amh2)...
+   📅 Released: 2021-06-18
+   📊 Expected cards: 162
+   📈 Progress: 49% | Elapsed: 8m 51s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 162 cards
+   ✅ Processed 162 card items
+   ✅ Created "Modern Horizons 2 Art Series" with 162 cards
+
+[168/340] 📦 Processing "Modern Horizons 2" (mh2)...
+   📅 Released: 2021-06-18
+   📊 Expected cards: 494
+   📈 Progress: 49% | Elapsed: 8m 52s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 494 cards
+   ✅ Processed 494 card items
+   ✅ Created "Modern Horizons 2" with 494 cards
+
+[169/340] 📦 Processing "Strixhaven: School of Mages Tokens" (tstx)...
+   📅 Released: 2021-04-23
+   📊 Expected cards: 9
+   📈 Progress: 50% | Elapsed: 8m 56s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 9 cards
+   ✅ Processed 9 card items
+   ✅ Created "Strixhaven: School of Mages Tokens" with 9 cards
+
+[170/340] 📦 Processing "Commander 2021" (c21)...
+   📅 Released: 2021-04-23
+   📊 Expected cards: 409
+   📈 Progress: 50% | Elapsed: 8m 57s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 409 cards
+   ✅ Processed 409 card items
+   ✅ Created "Commander 2021" with 409 cards
+
+[171/340] 📦 Processing "Strixhaven Art Series" (astx)...
+   📅 Released: 2021-04-23
+   📊 Expected cards: 162
+   📈 Progress: 50% | Elapsed: 8m 1s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 162 cards
+   ✅ Processed 162 card items
+   ✅ Created "Strixhaven Art Series" with 162 cards
+
+   📊 Running totals: 170 processed, 1 skipped, 0 errors | Time: 8m 2s
+
+
+[172/340] 📦 Processing "Strixhaven: School of Mages" (stx)...
+   📅 Released: 2021-04-23
+   📊 Expected cards: 393
+   📈 Progress: 51% | Elapsed: 8m 3s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 393 cards
+   ✅ Processed 393 card items
+   ✅ Created "Strixhaven: School of Mages" with 393 cards
+
+[173/340] 📦 Processing "Time Spiral Remastered" (tsr)...
+   📅 Released: 2021-03-19
+   📊 Expected cards: 411
+   📈 Progress: 51% | Elapsed: 8m 8s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 411 cards
+   ✅ Processed 411 card items
+   ✅ Created "Time Spiral Remastered" with 411 cards
+
+[174/340] 📦 Processing "Kaldheim" (khm)...
+   📅 Released: 2021-02-05
+   📊 Expected cards: 426
+   📈 Progress: 51% | Elapsed: 8m 12s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 426 cards
+   ✅ Processed 426 card items
+   ✅ Created "Kaldheim" with 426 cards
+
+[175/340] 📦 Processing "Kaldheim Tokens" (tkhm)...
+   📅 Released: 2021-02-05
+   📊 Expected cards: 23
+   📈 Progress: 51% | Elapsed: 8m 17s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 23 cards
+   ✅ Processed 23 card items
+   ✅ Created "Kaldheim Tokens" with 23 cards
+
+[176/340] 📦 Processing "Kaldheim Art Series" (akhm)...
+   📅 Released: 2021-02-05
+   📊 Expected cards: 81
+   📈 Progress: 52% | Elapsed: 8m 19s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Kaldheim Art Series" with 81 cards
+
+[177/340] 📦 Processing "Kaldheim Commander" (khc)...
+   📅 Released: 2021-02-05
+   📊 Expected cards: 119
+   📈 Progress: 52% | Elapsed: 8m 20s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 119 cards
+   ✅ Processed 119 card items
+   ✅ Created "Kaldheim Commander" with 119 cards
+
+[178/340] 📦 Processing "Commander Legends" (cmr)...
+   📅 Released: 2020-11-20
+   📊 Expected cards: 718
+   📈 Progress: 52% | Elapsed: 8m 22s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 718 cards
+   ✅ Processed 718 card items
+   ✅ Created "Commander Legends" with 718 cards
+
+[179/340] 📦 Processing "Commander Legends Tokens" (tcmr)...
+   📅 Released: 2020-11-20
+   📊 Expected cards: 23
+   📈 Progress: 53% | Elapsed: 8m 28s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 23 cards
+   ✅ Processed 23 card items
+   ✅ Created "Commander Legends Tokens" with 23 cards
+
+[180/340] 📦 Processing "The List" (plst)...
+   📅 Released: 2020-09-26
+   📊 Expected cards: 5050
+   📈 Progress: 53% | Elapsed: 9m 30s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ⏳ Fetched 875 cards so far...
+   ⏳ Fetched 1050 cards so far...
+   ⏳ Fetched 1225 cards so far...
+   ⏳ Fetched 1400 cards so far...
+   ⏳ Fetched 1575 cards so far...
+   ⏳ Fetched 1750 cards so far...
+   ⏳ Fetched 1925 cards so far...
+   ⏳ Fetched 2100 cards so far...
+   ⏳ Fetched 2275 cards so far...
+   ⏳ Fetched 2450 cards so far...
+   ⏳ Fetched 2625 cards so far...
+   ⏳ Fetched 2800 cards so far...
+   ⏳ Fetched 2975 cards so far...
+   ⏳ Fetched 3150 cards so far...
+   ⏳ Fetched 3325 cards so far...
+   ⏳ Fetched 3500 cards so far...
+   ⏳ Fetched 3675 cards so far...
+   ⏳ Fetched 3850 cards so far...
+   ⏳ Fetched 4025 cards so far...
+   ⏳ Fetched 4200 cards so far...
+   ⏳ Fetched 4375 cards so far...
+   ⏳ Fetched 4550 cards so far...
+   ⏳ Fetched 4725 cards so far...
+   ⏳ Fetched 4900 cards so far...
+   ✅ Fetched 5047 cards
+   ✅ Processed 5047 card items
+   ✅ Created "The List" with 5047 cards
+
+[181/340] 📦 Processing "Zendikar Rising Commander" (znc)...
+   📅 Released: 2020-09-25
+   📊 Expected cards: 142
+   📈 Progress: 53% | Elapsed: 9m 13s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 142 cards
+   ✅ Processed 142 card items
+   ✅ Created "Zendikar Rising Commander" with 142 cards
+
+   📊 Running totals: 180 processed, 1 skipped, 0 errors | Time: 9m 14s
+
+
+[182/340] 📦 Processing "Zendikar Rising Tokens" (tznr)...
+   📅 Released: 2020-09-25
+   📊 Expected cards: 12
+   📈 Progress: 54% | Elapsed: 9m 15s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 12 cards
+   ✅ Processed 12 card items
+   ✅ Created "Zendikar Rising Tokens" with 12 cards
+
+[183/340] 📦 Processing "Zendikar Rising" (znr)...
+   📅 Released: 2020-09-25
+   📊 Expected cards: 408
+   📈 Progress: 54% | Elapsed: 9m 16s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 407 cards
+   ✅ Processed 407 card items
+   ✅ Created "Zendikar Rising" with 407 cards
+
+[184/340] 📦 Processing "Zendikar Rising Art Series" (aznr)...
+   📅 Released: 2020-09-25
+   📊 Expected cards: 81
+   📈 Progress: 54% | Elapsed: 9m 20s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Zendikar Rising Art Series" with 81 cards
+
+[185/340] 📦 Processing "Double Masters" (2xm)...
+   📅 Released: 2020-08-07
+   📊 Expected cards: 384
+   📈 Progress: 54% | Elapsed: 9m 21s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 384 cards
+   ✅ Processed 384 card items
+   ✅ Created "Double Masters" with 384 cards
+
+[186/340] 📦 Processing "Double Masters Tokens" (t2xm)...
+   📅 Released: 2020-08-07
+   📊 Expected cards: 31
+   📈 Progress: 55% | Elapsed: 9m 25s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 31 cards
+   ✅ Processed 31 card items
+   ✅ Created "Double Masters Tokens" with 31 cards
+
+[187/340] 📦 Processing "Jumpstart" (jmp)...
+   📅 Released: 2020-07-17
+   📊 Expected cards: 497
+   📈 Progress: 55% | Elapsed: 9m 27s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 497 cards
+   ✅ Processed 497 card items
+   ✅ Created "Jumpstart" with 497 cards
+
+[188/340] 📦 Processing "Core Set 2021 Tokens" (tm21)...
+   📅 Released: 2020-07-03
+   📊 Expected cards: 20
+   📈 Progress: 55% | Elapsed: 10m 30s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 20 cards
+   ✅ Processed 20 card items
+   ✅ Created "Core Set 2021 Tokens" with 20 cards
+
+[189/340] 📦 Processing "Core Set 2021" (m21)...
+   📅 Released: 2020-07-03
+   📊 Expected cards: 397
+   📈 Progress: 56% | Elapsed: 10m 32s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 397 cards
+   ✅ Processed 397 card items
+   ✅ Created "Core Set 2021" with 397 cards
+
+[190/340] 📦 Processing "Signature Spellbook: Chandra" (ss3)...
+   📅 Released: 2020-06-26
+   📊 Expected cards: 8
+   📈 Progress: 56% | Elapsed: 10m 36s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 8 cards
+   ✅ Processed 8 card items
+   ✅ Created "Signature Spellbook: Chandra" with 8 cards
+
+[191/340] 📦 Processing "Secret Lair: Ultimate Edition" (slu)...
+   📅 Released: 2020-05-29
+   📊 Expected cards: 16
+   📈 Progress: 56% | Elapsed: 10m 37s | Est. remaining: ~8m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 16 cards
+   ✅ Processed 16 card items
+   ✅ Created "Secret Lair: Ultimate Edition" with 16 cards
+
+   📊 Running totals: 190 processed, 1 skipped, 0 errors | Time: 10m 38s
+
+
+[192/340] 📦 Processing "Ikoria: Lair of Behemoths Tokens" (tiko)...
+   📅 Released: 2020-04-24
+   📊 Expected cards: 14
+   📈 Progress: 56% | Elapsed: 10m 38s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "Ikoria: Lair of Behemoths Tokens" with 14 cards
+
+[193/340] 📦 Processing "Ikoria: Lair of Behemoths" (iko)...
+   📅 Released: 2020-04-24
+   📊 Expected cards: 390
+   📈 Progress: 57% | Elapsed: 10m 39s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 388 cards
+   ✅ Processed 388 card items
+   ✅ Created "Ikoria: Lair of Behemoths" with 388 cards
+
+[194/340] 📦 Processing "Commander 2020" (c20)...
+   📅 Released: 2020-04-17
+   📊 Expected cards: 322
+   📈 Progress: 57% | Elapsed: 10m 43s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 322 cards
+   ✅ Processed 322 card items
+   ✅ Created "Commander 2020" with 322 cards
+
+[195/340] 📦 Processing "Unsanctioned" (und)...
+   📅 Released: 2020-02-29
+   📊 Expected cards: 96
+   📈 Progress: 57% | Elapsed: 10m 46s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 96 cards
+   ✅ Processed 96 card items
+   ✅ Created "Unsanctioned" with 96 cards
+
+[196/340] 📦 Processing "Theros Beyond Death Tokens" (tthb)...
+   📅 Released: 2020-01-24
+   📊 Expected cards: 14
+   📈 Progress: 58% | Elapsed: 10m 47s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 14 cards
+   ✅ Processed 14 card items
+   ✅ Created "Theros Beyond Death Tokens" with 14 cards
+
+[197/340] 📦 Processing "Theros Beyond Death" (thb)...
+   📅 Released: 2020-01-24
+   📊 Expected cards: 358
+   📈 Progress: 58% | Elapsed: 10m 48s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 358 cards
+   ✅ Processed 358 card items
+   ✅ Created "Theros Beyond Death" with 358 cards
+
+[198/340] 📦 Processing "Secret Lair Drop" (sld)...
+   📅 Released: 2019-12-02
+   📊 Expected cards: 2302
+   📈 Progress: 58% | Elapsed: 10m 52s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ⏳ Fetched 875 cards so far...
+   ⏳ Fetched 1050 cards so far...
+   ⏳ Fetched 1225 cards so far...
+   ⏳ Fetched 1400 cards so far...
+   ⏳ Fetched 1575 cards so far...
+   ⏳ Fetched 1750 cards so far...
+   ⏳ Fetched 1925 cards so far...
+   ⏳ Fetched 2100 cards so far...
+   ⏳ Fetched 2275 cards so far...
+   ✅ Fetched 2302 cards
+   ✅ Processed 2302 card items
+   ✅ Created "Secret Lair Drop" with 2302 cards
+
+[199/340] 📦 Processing "Game Night 2019" (gn2)...
+   📅 Released: 2019-11-15
+   📊 Expected cards: 64
+   📈 Progress: 59% | Elapsed: 10m 12s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 64 cards
+   ✅ Processed 64 card items
+   ✅ Created "Game Night 2019" with 64 cards
+
+[200/340] 📦 Processing "Throne of Eldraine Tokens" (teld)...
+   📅 Released: 2019-10-04
+   📊 Expected cards: 20
+   📈 Progress: 59% | Elapsed: 10m 13s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 20 cards
+   ✅ Processed 20 card items
+   ✅ Created "Throne of Eldraine Tokens" with 20 cards
+
+[201/340] 📦 Processing "Throne of Eldraine" (eld)...
+   📅 Released: 2019-10-04
+   📊 Expected cards: 398
+   📈 Progress: 59% | Elapsed: 10m 15s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 398 cards
+   ✅ Processed 398 card items
+   ✅ Created "Throne of Eldraine" with 398 cards
+
+   📊 Running totals: 200 processed, 1 skipped, 0 errors | Time: 10m 19s
+
+
+[202/340] 📦 Processing "Commander 2019" (c19)...
+   📅 Released: 2019-08-23
+   📊 Expected cards: 302
+   📈 Progress: 59% | Elapsed: 10m 19s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 302 cards
+   ✅ Processed 302 card items
+   ✅ Created "Commander 2019" with 302 cards
+
+[203/340] 📦 Processing "2018 Heroes of the Realm" (ph18)...
+   📅 Released: 2019-08-01
+   📊 Expected cards: 5
+   📈 Progress: 60% | Elapsed: 11m 31s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 4 cards
+   ✅ Processed 4 card items
+   ✅ Created "2018 Heroes of the Realm" with 4 cards
+
+[204/340] 📦 Processing "Core Set 2020" (m20)...
+   📅 Released: 2019-07-12
+   📊 Expected cards: 346
+   📈 Progress: 60% | Elapsed: 11m 32s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 345 cards
+   ✅ Processed 345 card items
+   ✅ Created "Core Set 2020" with 345 cards
+
+[205/340] 📦 Processing "Signature Spellbook: Gideon" (ss2)...
+   📅 Released: 2019-06-28
+   📊 Expected cards: 8
+   📈 Progress: 60% | Elapsed: 11m 35s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 8 cards
+   ✅ Processed 8 card items
+   ✅ Created "Signature Spellbook: Gideon" with 8 cards
+
+[206/340] 📦 Processing "Modern Horizons" (mh1)...
+   📅 Released: 2019-06-14
+   📊 Expected cards: 255
+   📈 Progress: 61% | Elapsed: 11m 36s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 255 cards
+   ✅ Processed 255 card items
+   ✅ Created "Modern Horizons" with 255 cards
+
+[207/340] 📦 Processing "Modern Horizons Tokens" (tmh1)...
+   📅 Released: 2019-05-30
+   📊 Expected cards: 21
+   📈 Progress: 61% | Elapsed: 11m 39s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 21 cards
+   ✅ Processed 21 card items
+   ✅ Created "Modern Horizons Tokens" with 21 cards
+
+[208/340] 📦 Processing "War of the Spark" (war)...
+   📅 Released: 2019-05-03
+   📊 Expected cards: 312
+   📈 Progress: 61% | Elapsed: 11m 40s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 312 cards
+   ✅ Processed 312 card items
+   ✅ Created "War of the Spark" with 312 cards
+
+[209/340] 📦 Processing "RNA Guild Kit" (gk2)...
+   📅 Released: 2019-02-15
+   📊 Expected cards: 133
+   📈 Progress: 61% | Elapsed: 11m 43s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 133 cards
+   ✅ Processed 133 card items
+   ✅ Created "RNA Guild Kit" with 133 cards
+
+[210/340] 📦 Processing "Ravnica Allegiance" (rna)...
+   📅 Released: 2019-01-25
+   📊 Expected cards: 273
+   📈 Progress: 62% | Elapsed: 11m 45s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 273 cards
+   ✅ Processed 273 card items
+   ✅ Created "Ravnica Allegiance" with 273 cards
+
+[211/340] 📦 Processing "Ultimate Masters" (uma)...
+   📅 Released: 2018-12-07
+   📊 Expected cards: 254
+   📈 Progress: 62% | Elapsed: 11m 47s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 254 cards
+   ✅ Processed 254 card items
+   ✅ Created "Ultimate Masters" with 254 cards
+
+   📊 Running totals: 210 processed, 1 skipped, 0 errors | Time: 11m 49s
+
+
+[212/340] 📦 Processing "GRN Guild Kit" (gk1)...
+   📅 Released: 2018-11-02
+   📊 Expected cards: 127
+   📈 Progress: 62% | Elapsed: 11m 50s | Est. remaining: ~7m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 127 cards
+   ✅ Processed 127 card items
+   ✅ Created "GRN Guild Kit" with 127 cards
+
+[213/340] 📦 Processing "Guilds of Ravnica" (grn)...
+   📅 Released: 2018-10-05
+   📊 Expected cards: 273
+   📈 Progress: 63% | Elapsed: 11m 51s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 273 cards
+   ✅ Processed 273 card items
+   ✅ Created "Guilds of Ravnica" with 273 cards
+
+[214/340] 📦 Processing "Commander 2018" (c18)...
+   📅 Released: 2018-08-10
+   📊 Expected cards: 307
+   📈 Progress: 63% | Elapsed: 11m 53s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 307 cards
+   ✅ Processed 307 card items
+   ✅ Created "Commander 2018" with 307 cards
+
+[215/340] 📦 Processing "Core Set 2019" (m19)...
+   📅 Released: 2018-07-13
+   📊 Expected cards: 314
+   📈 Progress: 63% | Elapsed: 11m 56s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 314 cards
+   ✅ Processed 314 card items
+   ✅ Created "Core Set 2019" with 314 cards
+
+[216/340] 📦 Processing "Global Series Jiang Yanggu & Mu Yanling" (gs1)...
+   📅 Released: 2018-06-22
+   📊 Expected cards: 41
+   📈 Progress: 64% | Elapsed: 11m 59s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 41 cards
+   ✅ Processed 41 card items
+   ✅ Created "Global Series Jiang Yanggu & Mu Yanling" with 41 cards
+
+[217/340] 📦 Processing "Signature Spellbook: Jace" (ss1)...
+   📅 Released: 2018-06-15
+   📊 Expected cards: 8
+   📈 Progress: 64% | Elapsed: 11m 0s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 8 cards
+   ✅ Processed 8 card items
+   ✅ Created "Signature Spellbook: Jace" with 8 cards
+
+[218/340] 📦 Processing "Battlebond" (bbd)...
+   📅 Released: 2018-06-08
+   📊 Expected cards: 256
+   📈 Progress: 64% | Elapsed: 11m 1s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 256 cards
+   ✅ Processed 256 card items
+   ✅ Created "Battlebond" with 256 cards
+
+[219/340] 📦 Processing "Commander Anthology Volume II" (cm2)...
+   📅 Released: 2018-06-08
+   📊 Expected cards: 312
+   📈 Progress: 64% | Elapsed: 11m 4s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 312 cards
+   ✅ Processed 312 card items
+   ✅ Created "Commander Anthology Volume II" with 312 cards
+
+[220/340] 📦 Processing "Dominaria" (dom)...
+   📅 Released: 2018-04-27
+   📊 Expected cards: 280
+   📈 Progress: 65% | Elapsed: 11m 6s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 280 cards
+   ✅ Processed 280 card items
+   ✅ Created "Dominaria" with 280 cards
+
+[221/340] 📦 Processing "Duel Decks: Elves vs. Inventors" (ddu)...
+   📅 Released: 2018-04-06
+   📊 Expected cards: 76
+   📈 Progress: 65% | Elapsed: 11m 9s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 76 cards
+   ✅ Processed 76 card items
+   ✅ Created "Duel Decks: Elves vs. Inventors" with 76 cards
+
+   📊 Running totals: 220 processed, 1 skipped, 0 errors | Time: 11m 10s
+
+
+[222/340] 📦 Processing "Masters 25" (a25)...
+   📅 Released: 2018-03-16
+   📊 Expected cards: 249
+   📈 Progress: 65% | Elapsed: 11m 10s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Masters 25" with 249 cards
+
+[223/340] 📦 Processing "Rivals of Ixalan" (rix)...
+   📅 Released: 2018-01-19
+   📊 Expected cards: 205
+   📈 Progress: 66% | Elapsed: 11m 13s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 205 cards
+   ✅ Processed 205 card items
+   ✅ Created "Rivals of Ixalan" with 205 cards
+
+[224/340] 📦 Processing "Unstable" (ust)...
+   📅 Released: 2017-12-08
+   📊 Expected cards: 268
+   📈 Progress: 66% | Elapsed: 11m 16s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 268 cards
+   ✅ Processed 268 card items
+   ✅ Created "Unstable" with 268 cards
+
+[225/340] 📦 Processing "Iconic Masters" (ima)...
+   📅 Released: 2017-11-17
+   📊 Expected cards: 249
+   📈 Progress: 66% | Elapsed: 11m 19s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Iconic Masters" with 249 cards
+
+[226/340] 📦 Processing "Duel Decks: Merfolk vs. Goblins" (ddt)...
+   📅 Released: 2017-10-24
+   📊 Expected cards: 63
+   📈 Progress: 66% | Elapsed: 11m 21s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 63 cards
+   ✅ Processed 63 card items
+   ✅ Created "Duel Decks: Merfolk vs. Goblins" with 63 cards
+
+[227/340] 📦 Processing "Ixalan" (xln)...
+   📅 Released: 2017-09-29
+   📊 Expected cards: 289
+   📈 Progress: 67% | Elapsed: 11m 22s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 289 cards
+   ✅ Processed 289 card items
+   ✅ Created "Ixalan" with 289 cards
+
+[228/340] 📦 Processing "Commander 2017" (c17)...
+   📅 Released: 2017-08-25
+   📊 Expected cards: 309
+   📈 Progress: 67% | Elapsed: 11m 25s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 309 cards
+   ✅ Processed 309 card items
+   ✅ Created "Commander 2017" with 309 cards
+
+[229/340] 📦 Processing "Hour of Devastation" (hou)...
+   📅 Released: 2017-07-14
+   📊 Expected cards: 209
+   📈 Progress: 67% | Elapsed: 11m 27s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 209 cards
+   ✅ Processed 209 card items
+   ✅ Created "Hour of Devastation" with 209 cards
+
+[230/340] 📦 Processing "Commander Anthology" (cma)...
+   📅 Released: 2017-06-09
+   📊 Expected cards: 320
+   📈 Progress: 68% | Elapsed: 12m 30s | Est. remaining: ~6m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 320 cards
+   ✅ Processed 320 card items
+   ✅ Created "Commander Anthology" with 320 cards
+
+[231/340] 📦 Processing "Amonkhet" (akh)...
+   📅 Released: 2017-04-28
+   📊 Expected cards: 287
+   📈 Progress: 68% | Elapsed: 12m 33s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 287 cards
+   ✅ Processed 287 card items
+   ✅ Created "Amonkhet" with 287 cards
+
+   📊 Running totals: 230 processed, 1 skipped, 0 errors | Time: 12m 36s
+
+
+[232/340] 📦 Processing "Duel Decks: Mind vs. Might" (dds)...
+   📅 Released: 2017-03-31
+   📊 Expected cards: 65
+   📈 Progress: 68% | Elapsed: 12m 36s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 65 cards
+   ✅ Processed 65 card items
+   ✅ Created "Duel Decks: Mind vs. Might" with 65 cards
+
+[233/340] 📦 Processing "Modern Masters 2017" (mm3)...
+   📅 Released: 2017-03-17
+   📊 Expected cards: 249
+   📈 Progress: 69% | Elapsed: 12m 38s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Modern Masters 2017" with 249 cards
+
+[234/340] 📦 Processing "Aether Revolt" (aer)...
+   📅 Released: 2017-01-20
+   📊 Expected cards: 197
+   📈 Progress: 69% | Elapsed: 12m 41s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 194 cards
+   ✅ Processed 194 card items
+   ✅ Created "Aether Revolt" with 194 cards
+
+[235/340] 📦 Processing "Commander 2016" (c16)...
+   📅 Released: 2016-11-11
+   📊 Expected cards: 351
+   📈 Progress: 69% | Elapsed: 12m 44s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 351 cards
+   ✅ Processed 351 card items
+   ✅ Created "Commander 2016" with 351 cards
+
+[236/340] 📦 Processing "Kaladesh" (kld)...
+   📅 Released: 2016-09-30
+   📊 Expected cards: 278
+   📈 Progress: 69% | Elapsed: 12m 47s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 274 cards
+   ✅ Processed 274 card items
+   ✅ Created "Kaladesh" with 274 cards
+
+[237/340] 📦 Processing "Duel Decks: Nissa vs. Ob Nixilis" (ddr)...
+   📅 Released: 2016-09-02
+   📊 Expected cards: 76
+   📈 Progress: 70% | Elapsed: 12m 51s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 76 cards
+   ✅ Processed 76 card items
+   ✅ Created "Duel Decks: Nissa vs. Ob Nixilis" with 76 cards
+
+[238/340] 📦 Processing "Conspiracy: Take the Crown" (cn2)...
+   📅 Released: 2016-08-26
+   📊 Expected cards: 222
+   📈 Progress: 70% | Elapsed: 12m 52s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 222 cards
+   ✅ Processed 222 card items
+   ✅ Created "Conspiracy: Take the Crown" with 222 cards
+
+[239/340] 📦 Processing "Eldritch Moon" (emn)...
+   📅 Released: 2016-07-22
+   📊 Expected cards: 208
+   📈 Progress: 70% | Elapsed: 12m 55s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 208 cards
+   ✅ Processed 208 card items
+   ✅ Created "Eldritch Moon" with 208 cards
+
+[240/340] 📦 Processing "Eternal Masters" (ema)...
+   📅 Released: 2016-06-10
+   📊 Expected cards: 249
+   📈 Progress: 71% | Elapsed: 12m 57s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Eternal Masters" with 249 cards
+
+[241/340] 📦 Processing "Shadows over Innistrad" (soi)...
+   📅 Released: 2016-04-08
+   📊 Expected cards: 302
+   📈 Progress: 71% | Elapsed: 12m 0s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 297 cards
+   ✅ Processed 297 card items
+   ✅ Created "Shadows over Innistrad" with 297 cards
+
+   📊 Running totals: 240 processed, 1 skipped, 0 errors | Time: 12m 3s
+
+
+[242/340] 📦 Processing "Duel Decks: Blessed vs. Cursed" (ddq)...
+   📅 Released: 2016-02-26
+   📊 Expected cards: 80
+   📈 Progress: 71% | Elapsed: 12m 3s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 80 cards
+   ✅ Processed 80 card items
+   ✅ Created "Duel Decks: Blessed vs. Cursed" with 80 cards
+
+[243/340] 📦 Processing "Oath of the Gatewatch" (ogw)...
+   📅 Released: 2016-01-22
+   📊 Expected cards: 187
+   📈 Progress: 71% | Elapsed: 12m 4s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 186 cards
+   ✅ Processed 186 card items
+   ✅ Created "Oath of the Gatewatch" with 186 cards
+
+[244/340] 📦 Processing "Battle for Zendikar" (bfz)...
+   📅 Released: 2015-10-02
+   📊 Expected cards: 299
+   📈 Progress: 72% | Elapsed: 12m 7s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 299 cards
+   ✅ Processed 299 card items
+   ✅ Created "Battle for Zendikar" with 299 cards
+
+[245/340] 📦 Processing "Duel Decks: Zendikar vs. Eldrazi" (ddp)...
+   📅 Released: 2015-08-28
+   📊 Expected cards: 80
+   📈 Progress: 72% | Elapsed: 12m 10s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 80 cards
+   ✅ Processed 80 card items
+   ✅ Created "Duel Decks: Zendikar vs. Eldrazi" with 80 cards
+
+[246/340] 📦 Processing "Magic Origins" (ori)...
+   📅 Released: 2015-07-17
+   📊 Expected cards: 288
+   📈 Progress: 72% | Elapsed: 12m 11s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 288 cards
+   ✅ Processed 288 card items
+   ✅ Created "Magic Origins" with 288 cards
+
+[247/340] 📦 Processing "Modern Masters 2015" (mm2)...
+   📅 Released: 2015-05-22
+   📊 Expected cards: 249
+   📈 Progress: 73% | Elapsed: 12m 13s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Modern Masters 2015" with 249 cards
+
+[248/340] 📦 Processing "Dragons of Tarkir" (dtk)...
+   📅 Released: 2015-03-27
+   📊 Expected cards: 264
+   📈 Progress: 73% | Elapsed: 12m 16s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 264 cards
+   ✅ Processed 264 card items
+   ✅ Created "Dragons of Tarkir" with 264 cards
+
+[249/340] 📦 Processing "Duel Decks: Elspeth vs. Kiora" (ddo)...
+   📅 Released: 2015-02-27
+   📊 Expected cards: 67
+   📈 Progress: 73% | Elapsed: 12m 19s | Est. remaining: ~5m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 67 cards
+   ✅ Processed 67 card items
+   ✅ Created "Duel Decks: Elspeth vs. Kiora" with 67 cards
+
+[250/340] 📦 Processing "Fate Reforged" (frf)...
+   📅 Released: 2015-01-23
+   📊 Expected cards: 191
+   📈 Progress: 74% | Elapsed: 12m 20s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 191 cards
+   ✅ Processed 191 card items
+   ✅ Created "Fate Reforged" with 191 cards
+
+[251/340] 📦 Processing "Duel Decks Anthology: Garruk vs. Liliana" (gvl)...
+   📅 Released: 2014-12-05
+   📊 Expected cards: 63
+   📈 Progress: 74% | Elapsed: 12m 22s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 63 cards
+   ✅ Processed 63 card items
+   ✅ Created "Duel Decks Anthology: Garruk vs. Liliana" with 63 cards
+
+   📊 Running totals: 250 processed, 1 skipped, 0 errors | Time: 12m 23s
+
+
+[252/340] 📦 Processing "Duel Decks Anthology: Jace vs. Chandra" (jvc)...
+   📅 Released: 2014-12-05
+   📊 Expected cards: 62
+   📈 Progress: 74% | Elapsed: 12m 23s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 62 cards
+   ✅ Processed 62 card items
+   ✅ Created "Duel Decks Anthology: Jace vs. Chandra" with 62 cards
+
+[253/340] 📦 Processing "Duel Decks Anthology: Elves vs. Goblins" (evg)...
+   📅 Released: 2014-12-05
+   📊 Expected cards: 62
+   📈 Progress: 74% | Elapsed: 12m 24s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 62 cards
+   ✅ Processed 62 card items
+   ✅ Created "Duel Decks Anthology: Elves vs. Goblins" with 62 cards
+
+[254/340] 📦 Processing "Duel Decks Anthology: Divine vs. Demonic" (dvd)...
+   📅 Released: 2014-12-05
+   📊 Expected cards: 62
+   📈 Progress: 75% | Elapsed: 12m 26s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 62 cards
+   ✅ Processed 62 card items
+   ✅ Created "Duel Decks Anthology: Divine vs. Demonic" with 62 cards
+
+[255/340] 📦 Processing "Khans of Tarkir" (ktk)...
+   📅 Released: 2014-09-26
+   📊 Expected cards: 293
+   📈 Progress: 75% | Elapsed: 12m 27s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 293 cards
+   ✅ Processed 293 card items
+   ✅ Created "Khans of Tarkir" with 293 cards
+
+[256/340] 📦 Processing "Duel Decks: Speed vs. Cunning" (ddn)...
+   📅 Released: 2014-09-05
+   📊 Expected cards: 82
+   📈 Progress: 75% | Elapsed: 13m 30s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 82 cards
+   ✅ Processed 82 card items
+   ✅ Created "Duel Decks: Speed vs. Cunning" with 82 cards
+
+[257/340] 📦 Processing "Magic 2015" (m15)...
+   📅 Released: 2014-07-18
+   📊 Expected cards: 284
+   📈 Progress: 76% | Elapsed: 13m 31s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 284 cards
+   ✅ Processed 284 card items
+   ✅ Created "Magic 2015" with 284 cards
+
+[258/340] 📦 Processing "Conspiracy" (cns)...
+   📅 Released: 2014-06-06
+   📊 Expected cards: 210
+   📈 Progress: 76% | Elapsed: 13m 33s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 210 cards
+   ✅ Processed 210 card items
+   ✅ Created "Conspiracy" with 210 cards
+
+[259/340] 📦 Processing "Journey into Nyx" (jou)...
+   📅 Released: 2014-05-02
+   📊 Expected cards: 165
+   📈 Progress: 76% | Elapsed: 13m 35s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Journey into Nyx" with 165 cards
+
+[260/340] 📦 Processing "Duel Decks: Jace vs. Vraska" (ddm)...
+   📅 Released: 2014-03-14
+   📊 Expected cards: 88
+   📈 Progress: 76% | Elapsed: 13m 37s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 88 cards
+   ✅ Processed 88 card items
+   ✅ Created "Duel Decks: Jace vs. Vraska" with 88 cards
+
+[261/340] 📦 Processing "Born of the Gods" (bng)...
+   📅 Released: 2014-02-07
+   📊 Expected cards: 165
+   📈 Progress: 77% | Elapsed: 13m 38s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Born of the Gods" with 165 cards
+
+   📊 Running totals: 260 processed, 1 skipped, 0 errors | Time: 13m 39s
+
+
+[262/340] 📦 Processing "Theros" (ths)...
+   📅 Released: 2013-09-27
+   📊 Expected cards: 249
+   📈 Progress: 77% | Elapsed: 13m 39s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Theros" with 249 cards
+
+[263/340] 📦 Processing "Duel Decks: Heroes vs. Monsters" (ddl)...
+   📅 Released: 2013-09-06
+   📊 Expected cards: 81
+   📈 Progress: 77% | Elapsed: 13m 42s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Duel Decks: Heroes vs. Monsters" with 81 cards
+
+[264/340] 📦 Processing "Magic 2014" (m14)...
+   📅 Released: 2013-07-19
+   📊 Expected cards: 249
+   📈 Progress: 78% | Elapsed: 13m 43s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Magic 2014" with 249 cards
+
+[265/340] 📦 Processing "Modern Masters" (mma)...
+   📅 Released: 2013-06-07
+   📊 Expected cards: 229
+   📈 Progress: 78% | Elapsed: 13m 45s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 229 cards
+   ✅ Processed 229 card items
+   ✅ Created "Modern Masters" with 229 cards
+
+[266/340] 📦 Processing "Dragon's Maze" (dgm)...
+   📅 Released: 2013-05-03
+   📊 Expected cards: 156
+   📈 Progress: 78% | Elapsed: 13m 48s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 156 cards
+   ✅ Processed 156 card items
+   ✅ Created "Dragon's Maze" with 156 cards
+
+[267/340] 📦 Processing "Duel Decks: Sorin vs. Tibalt" (ddk)...
+   📅 Released: 2013-03-15
+   📊 Expected cards: 80
+   📈 Progress: 79% | Elapsed: 13m 49s | Est. remaining: ~4m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 80 cards
+   ✅ Processed 80 card items
+   ✅ Created "Duel Decks: Sorin vs. Tibalt" with 80 cards
+
+[268/340] 📦 Processing "Gatecrash" (gtc)...
+   📅 Released: 2013-02-01
+   📊 Expected cards: 249
+   📈 Progress: 79% | Elapsed: 13m 50s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Gatecrash" with 249 cards
+
+[269/340] 📦 Processing "Return to Ravnica" (rtr)...
+   📅 Released: 2012-10-05
+   📊 Expected cards: 274
+   📈 Progress: 79% | Elapsed: 13m 52s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 274 cards
+   ✅ Processed 274 card items
+   ✅ Created "Return to Ravnica" with 274 cards
+
+[270/340] 📦 Processing "Duel Decks: Izzet vs. Golgari" (ddj)...
+   📅 Released: 2012-09-07
+   📊 Expected cards: 90
+   📈 Progress: 79% | Elapsed: 13m 55s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 90 cards
+   ✅ Processed 90 card items
+   ✅ Created "Duel Decks: Izzet vs. Golgari" with 90 cards
+
+[271/340] 📦 Processing "Magic 2013" (m13)...
+   📅 Released: 2012-07-13
+   📊 Expected cards: 249
+   📈 Progress: 80% | Elapsed: 13m 56s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Magic 2013" with 249 cards
+
+   📊 Running totals: 270 processed, 1 skipped, 0 errors | Time: 13m 58s
+
+
+[272/340] 📦 Processing "Avacyn Restored" (avr)...
+   📅 Released: 2012-05-04
+   📊 Expected cards: 244
+   📈 Progress: 80% | Elapsed: 13m 58s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 244 cards
+   ✅ Processed 244 card items
+   ✅ Created "Avacyn Restored" with 244 cards
+
+[273/340] 📦 Processing "Open the Helvault" (phel)...
+   📅 Released: 2012-04-28
+   📊 Expected cards: 6
+   📈 Progress: 80% | Elapsed: 13m 0s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 6 cards
+   ✅ Processed 6 card items
+   ✅ Created "Open the Helvault" with 6 cards
+
+[274/340] 📦 Processing "Duel Decks: Venser vs. Koth" (ddi)...
+   📅 Released: 2012-03-30
+   📊 Expected cards: 77
+   📈 Progress: 81% | Elapsed: 13m 1s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 77 cards
+   ✅ Processed 77 card items
+   ✅ Created "Duel Decks: Venser vs. Koth" with 77 cards
+
+[275/340] 📦 Processing "Dark Ascension" (dka)...
+   📅 Released: 2012-02-03
+   📊 Expected cards: 158
+   📈 Progress: 81% | Elapsed: 13m 2s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 158 cards
+   ✅ Processed 158 card items
+   ✅ Created "Dark Ascension" with 158 cards
+
+[276/340] 📦 Processing "Innistrad" (isd)...
+   📅 Released: 2011-09-30
+   📊 Expected cards: 264
+   📈 Progress: 81% | Elapsed: 13m 4s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 264 cards
+   ✅ Processed 264 card items
+   ✅ Created "Innistrad" with 264 cards
+
+[277/340] 📦 Processing "Duel Decks: Ajani vs. Nicol Bolas" (ddh)...
+   📅 Released: 2011-09-02
+   📊 Expected cards: 80
+   📈 Progress: 81% | Elapsed: 13m 6s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 80 cards
+   ✅ Processed 80 card items
+   ✅ Created "Duel Decks: Ajani vs. Nicol Bolas" with 80 cards
+
+[278/340] 📦 Processing "Magic 2012" (m12)...
+   📅 Released: 2011-07-15
+   📊 Expected cards: 249
+   📈 Progress: 82% | Elapsed: 13m 8s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Magic 2012" with 249 cards
+
+[279/340] 📦 Processing "New Phyrexia" (nph)...
+   📅 Released: 2011-05-13
+   📊 Expected cards: 175
+   📈 Progress: 82% | Elapsed: 13m 10s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 175 cards
+   ✅ Processed 175 card items
+   ✅ Created "New Phyrexia" with 175 cards
+
+[280/340] 📦 Processing "Duel Decks: Knights vs. Dragons" (ddg)...
+   📅 Released: 2011-04-01
+   📊 Expected cards: 81
+   📈 Progress: 82% | Elapsed: 13m 12s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 81 cards
+   ✅ Processed 81 card items
+   ✅ Created "Duel Decks: Knights vs. Dragons" with 81 cards
+
+[281/340] 📦 Processing "Mirrodin Besieged" (mbs)...
+   📅 Released: 2011-02-04
+   📊 Expected cards: 155
+   📈 Progress: 83% | Elapsed: 13m 13s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 155 cards
+   ✅ Processed 155 card items
+   ✅ Created "Mirrodin Besieged" with 155 cards
+
+   📊 Running totals: 280 processed, 1 skipped, 0 errors | Time: 13m 14s
+
+
+[282/340] 📦 Processing "Scars of Mirrodin" (som)...
+   📅 Released: 2010-10-01
+   📊 Expected cards: 249
+   📈 Progress: 83% | Elapsed: 13m 15s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Scars of Mirrodin" with 249 cards
+
+[283/340] 📦 Processing "Duel Decks: Elspeth vs. Tezzeret" (ddf)...
+   📅 Released: 2010-09-03
+   📊 Expected cards: 79
+   📈 Progress: 83% | Elapsed: 13m 17s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 79 cards
+   ✅ Processed 79 card items
+   ✅ Created "Duel Decks: Elspeth vs. Tezzeret" with 79 cards
+
+[284/340] 📦 Processing "Magic 2011" (m11)...
+   📅 Released: 2010-07-16
+   📊 Expected cards: 249
+   📈 Progress: 84% | Elapsed: 13m 18s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Magic 2011" with 249 cards
+
+[285/340] 📦 Processing "Duels of the Planeswalkers" (dpa)...
+   📅 Released: 2010-06-04
+   📊 Expected cards: 113
+   📈 Progress: 84% | Elapsed: 13m 20s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 113 cards
+   ✅ Processed 113 card items
+   ✅ Created "Duels of the Planeswalkers" with 113 cards
+
+[286/340] 📦 Processing "Rise of the Eldrazi" (roe)...
+   📅 Released: 2010-04-23
+   📊 Expected cards: 248
+   📈 Progress: 84% | Elapsed: 13m 21s | Est. remaining: ~3m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 248 cards
+   ✅ Processed 248 card items
+   ✅ Created "Rise of the Eldrazi" with 248 cards
+
+[287/340] 📦 Processing "Duel Decks: Phyrexia vs. the Coalition" (dde)...
+   📅 Released: 2010-03-19
+   📊 Expected cards: 71
+   📈 Progress: 84% | Elapsed: 13m 24s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 71 cards
+   ✅ Processed 71 card items
+   ✅ Created "Duel Decks: Phyrexia vs. the Coalition" with 71 cards
+
+[288/340] 📦 Processing "Worldwake" (wwk)...
+   📅 Released: 2010-02-05
+   📊 Expected cards: 145
+   📈 Progress: 85% | Elapsed: 13m 25s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 145 cards
+   ✅ Processed 145 card items
+   ✅ Created "Worldwake" with 145 cards
+
+[289/340] 📦 Processing "Duel Decks: Garruk vs. Liliana" (ddd)...
+   📅 Released: 2009-10-30
+   📊 Expected cards: 63
+   📈 Progress: 85% | Elapsed: 13m 26s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 63 cards
+   ✅ Processed 63 card items
+   ✅ Created "Duel Decks: Garruk vs. Liliana" with 63 cards
+
+[290/340] 📦 Processing "Zendikar" (zen)...
+   📅 Released: 2009-10-02
+   📊 Expected cards: 269
+   📈 Progress: 85% | Elapsed: 13m 28s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 269 cards
+   ✅ Processed 269 card items
+   ✅ Created "Zendikar" with 269 cards
+
+[291/340] 📦 Processing "Magic 2010" (m10)...
+   📅 Released: 2009-07-17
+   📊 Expected cards: 249
+   📈 Progress: 86% | Elapsed: 14m 30s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 249 cards
+   ✅ Processed 249 card items
+   ✅ Created "Magic 2010" with 249 cards
+
+   📊 Running totals: 290 processed, 1 skipped, 0 errors | Time: 14m 31s
+
+
+[292/340] 📦 Processing "Alara Reborn" (arb)...
+   📅 Released: 2009-04-30
+   📊 Expected cards: 145
+   📈 Progress: 86% | Elapsed: 14m 32s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 145 cards
+   ✅ Processed 145 card items
+   ✅ Created "Alara Reborn" with 145 cards
+
+[293/340] 📦 Processing "Duel Decks: Divine vs. Demonic" (ddc)...
+   📅 Released: 2009-04-10
+   📊 Expected cards: 62
+   📈 Progress: 86% | Elapsed: 14m 33s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 62 cards
+   ✅ Processed 62 card items
+   ✅ Created "Duel Decks: Divine vs. Demonic" with 62 cards
+
+[294/340] 📦 Processing "Conflux" (con)...
+   📅 Released: 2009-02-06
+   📊 Expected cards: 145
+   📈 Progress: 86% | Elapsed: 14m 34s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 145 cards
+   ✅ Processed 145 card items
+   ✅ Created "Conflux" with 145 cards
+
+[295/340] 📦 Processing "Duel Decks: Jace vs. Chandra" (dd2)...
+   📅 Released: 2008-11-07
+   📊 Expected cards: 64
+   📈 Progress: 87% | Elapsed: 14m 36s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 64 cards
+   ✅ Processed 64 card items
+   ✅ Created "Duel Decks: Jace vs. Chandra" with 64 cards
+
+[296/340] 📦 Processing "Shards of Alara" (ala)...
+   📅 Released: 2008-10-03
+   📊 Expected cards: 250
+   📈 Progress: 87% | Elapsed: 14m 37s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 250 cards
+   ✅ Processed 250 card items
+   ✅ Created "Shards of Alara" with 250 cards
+
+[297/340] 📦 Processing "Eventide" (eve)...
+   📅 Released: 2008-07-25
+   📊 Expected cards: 180
+   📈 Progress: 87% | Elapsed: 14m 40s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 180 cards
+   ✅ Processed 180 card items
+   ✅ Created "Eventide" with 180 cards
+
+[298/340] 📦 Processing "Shadowmoor" (shm)...
+   📅 Released: 2008-05-02
+   📊 Expected cards: 302
+   📈 Progress: 88% | Elapsed: 14m 42s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 302 cards
+   ✅ Processed 302 card items
+   ✅ Created "Shadowmoor" with 302 cards
+
+[299/340] 📦 Processing "Morningtide" (mor)...
+   📅 Released: 2008-02-01
+   📊 Expected cards: 150
+   📈 Progress: 88% | Elapsed: 14m 45s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 150 cards
+   ✅ Processed 150 card items
+   ✅ Created "Morningtide" with 150 cards
+
+[300/340] 📦 Processing "Duel Decks: Elves vs. Goblins" (dd1)...
+   📅 Released: 2007-11-16
+   📊 Expected cards: 62
+   📈 Progress: 88% | Elapsed: 14m 46s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 62 cards
+   ✅ Processed 62 card items
+   ✅ Created "Duel Decks: Elves vs. Goblins" with 62 cards
+
+[301/340] 📦 Processing "Lorwyn" (lrw)...
+   📅 Released: 2007-10-12
+   📊 Expected cards: 301
+   📈 Progress: 89% | Elapsed: 14m 48s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 301 cards
+   ✅ Processed 301 card items
+   ✅ Created "Lorwyn" with 301 cards
+
+   📊 Running totals: 300 processed, 1 skipped, 0 errors | Time: 14m 50s
+
+
+[302/340] 📦 Processing "Tenth Edition" (10e)...
+   📅 Released: 2007-07-13
+   📊 Expected cards: 510
+   📈 Progress: 89% | Elapsed: 14m 50s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 510 cards
+   ✅ Processed 510 card items
+   ✅ Created "Tenth Edition" with 510 cards
+
+[303/340] 📦 Processing "Future Sight" (fut)...
+   📅 Released: 2007-05-04
+   📊 Expected cards: 180
+   📈 Progress: 89% | Elapsed: 14m 53s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 180 cards
+   ✅ Processed 180 card items
+   ✅ Created "Future Sight" with 180 cards
+
+[304/340] 📦 Processing "Planar Chaos" (plc)...
+   📅 Released: 2007-02-02
+   📊 Expected cards: 165
+   📈 Progress: 89% | Elapsed: 14m 56s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Planar Chaos" with 165 cards
+
+[305/340] 📦 Processing "Time Spiral" (tsp)...
+   📅 Released: 2006-10-06
+   📊 Expected cards: 301
+   📈 Progress: 90% | Elapsed: 14m 58s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 301 cards
+   ✅ Processed 301 card items
+   ✅ Created "Time Spiral" with 301 cards
+
+[306/340] 📦 Processing "Time Spiral Timeshifted" (tsb)...
+   📅 Released: 2006-10-06
+   📊 Expected cards: 121
+   📈 Progress: 90% | Elapsed: 14m 1s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 121 cards
+   ✅ Processed 121 card items
+   ✅ Created "Time Spiral Timeshifted" with 121 cards
+
+[307/340] 📦 Processing "Coldsnap" (csp)...
+   📅 Released: 2006-07-21
+   📊 Expected cards: 155
+   📈 Progress: 90% | Elapsed: 14m 3s | Est. remaining: ~2m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 155 cards
+   ✅ Processed 155 card items
+   ✅ Created "Coldsnap" with 155 cards
+
+[308/340] 📦 Processing "Dissension" (dis)...
+   📅 Released: 2006-05-05
+   📊 Expected cards: 180
+   📈 Progress: 91% | Elapsed: 14m 5s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 180 cards
+   ✅ Processed 180 card items
+   ✅ Created "Dissension" with 180 cards
+
+[309/340] 📦 Processing "Guildpact" (gpt)...
+   📅 Released: 2006-02-03
+   📊 Expected cards: 167
+   📈 Progress: 91% | Elapsed: 14m 7s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Guildpact" with 165 cards
+
+[310/340] 📦 Processing "Ravnica: City of Guilds" (rav)...
+   📅 Released: 2005-10-07
+   📊 Expected cards: 306
+   📈 Progress: 91% | Elapsed: 14m 8s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 306 cards
+   ✅ Processed 306 card items
+   ✅ Created "Ravnica: City of Guilds" with 306 cards
+
+[311/340] 📦 Processing "Ninth Edition" (9ed)...
+   📅 Released: 2005-07-29
+   📊 Expected cards: 710
+   📈 Progress: 91% | Elapsed: 14m 10s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 709 cards
+   ✅ Processed 709 card items
+   ✅ Created "Ninth Edition" with 709 cards
+
+   📊 Running totals: 310 processed, 1 skipped, 0 errors | Time: 14m 15s
+
+
+[312/340] 📦 Processing "Saviors of Kamigawa" (sok)...
+   📅 Released: 2005-06-03
+   📊 Expected cards: 165
+   📈 Progress: 92% | Elapsed: 14m 15s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Saviors of Kamigawa" with 165 cards
+
+[313/340] 📦 Processing "Betrayers of Kamigawa" (bok)...
+   📅 Released: 2005-02-04
+   📊 Expected cards: 165
+   📈 Progress: 92% | Elapsed: 14m 17s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Betrayers of Kamigawa" with 165 cards
+
+[314/340] 📦 Processing "Unhinged" (unh)...
+   📅 Released: 2004-11-19
+   📊 Expected cards: 168
+   📈 Progress: 92% | Elapsed: 14m 18s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 168 cards
+   ✅ Processed 168 card items
+   ✅ Created "Unhinged" with 168 cards
+
+[315/340] 📦 Processing "Champions of Kamigawa" (chk)...
+   📅 Released: 2004-10-01
+   📊 Expected cards: 307
+   📈 Progress: 93% | Elapsed: 14m 20s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 307 cards
+   ✅ Processed 307 card items
+   ✅ Created "Champions of Kamigawa" with 307 cards
+
+[316/340] 📦 Processing "Fifth Dawn" (5dn)...
+   📅 Released: 2004-06-04
+   📊 Expected cards: 165
+   📈 Progress: 93% | Elapsed: 14m 22s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Fifth Dawn" with 165 cards
+
+[317/340] 📦 Processing "Darksteel" (dst)...
+   📅 Released: 2004-02-06
+   📊 Expected cards: 165
+   📈 Progress: 93% | Elapsed: 14m 23s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 165 cards
+   ✅ Processed 165 card items
+   ✅ Created "Darksteel" with 165 cards
+
+[318/340] 📦 Processing "Mirrodin" (mrd)...
+   📅 Released: 2003-10-02
+   📊 Expected cards: 306
+   📈 Progress: 94% | Elapsed: 14m 25s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 306 cards
+   ✅ Processed 306 card items
+   ✅ Created "Mirrodin" with 306 cards
+
+[319/340] 📦 Processing "Eighth Edition" (8ed)...
+   📅 Released: 2003-07-28
+   📊 Expected cards: 711
+   📈 Progress: 94% | Elapsed: 14m 27s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 710 cards
+   ✅ Processed 710 card items
+   ✅ Created "Eighth Edition" with 710 cards
+
+[320/340] 📦 Processing "Scourge" (scg)...
+   📅 Released: 2003-05-26
+   📊 Expected cards: 143
+   📈 Progress: 94% | Elapsed: 15m 33s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Scourge" with 143 cards
+
+[321/340] 📦 Processing "Legions" (lgn)...
+   📅 Released: 2003-02-03
+   📊 Expected cards: 145
+   📈 Progress: 94% | Elapsed: 15m 35s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 145 cards
+   ✅ Processed 145 card items
+   ✅ Created "Legions" with 145 cards
+
+   📊 Running totals: 320 processed, 1 skipped, 0 errors | Time: 15m 36s
+
+
+[322/340] 📦 Processing "Vintage Championship" (ovnt)...
+   📅 Released: 2003-01-01
+   📊 Expected cards: 35
+   📈 Progress: 95% | Elapsed: 15m 37s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 35 cards
+   ✅ Processed 35 card items
+   ✅ Created "Vintage Championship" with 35 cards
+
+[323/340] 📦 Processing "Onslaught" (ons)...
+   📅 Released: 2002-10-07
+   📊 Expected cards: 351
+   📈 Progress: 95% | Elapsed: 15m 38s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 350 cards
+   ✅ Processed 350 card items
+   ✅ Created "Onslaught" with 350 cards
+
+[324/340] 📦 Processing "Judgment" (jud)...
+   📅 Released: 2002-05-27
+   📊 Expected cards: 143
+   📈 Progress: 95% | Elapsed: 15m 44s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Judgment" with 143 cards
+
+[325/340] 📦 Processing "Torment" (tor)...
+   📅 Released: 2002-02-04
+   📊 Expected cards: 143
+   📈 Progress: 96% | Elapsed: 15m 45s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Torment" with 143 cards
+
+[326/340] 📦 Processing "Deckmasters" (dkm)...
+   📅 Released: 2001-12-01
+   📊 Expected cards: 58
+   📈 Progress: 96% | Elapsed: 15m 47s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 58 cards
+   ✅ Processed 58 card items
+   ✅ Created "Deckmasters" with 58 cards
+
+[327/340] 📦 Processing "Odyssey" (ody)...
+   📅 Released: 2001-10-01
+   📊 Expected cards: 353
+   📈 Progress: 96% | Elapsed: 15m 48s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 350 cards
+   ✅ Processed 350 card items
+   ✅ Created "Odyssey" with 350 cards
+
+[328/340] 📦 Processing "Apocalypse" (apc)...
+   📅 Released: 2001-06-04
+   📊 Expected cards: 143
+   📈 Progress: 96% | Elapsed: 15m 51s | Est. remaining: ~1m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Apocalypse" with 143 cards
+
+[329/340] 📦 Processing "Seventh Edition" (7ed)...
+   📅 Released: 2001-04-11
+   📊 Expected cards: 708
+   📈 Progress: 97% | Elapsed: 15m 53s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ⏳ Fetched 525 cards so far...
+   ⏳ Fetched 700 cards so far...
+   ✅ Fetched 708 cards
+   ✅ Processed 708 card items
+   ✅ Created "Seventh Edition" with 708 cards
+
+[330/340] 📦 Processing "Planeshift" (pls)...
+   📅 Released: 2001-02-05
+   📊 Expected cards: 146
+   📈 Progress: 97% | Elapsed: 15m 1s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 146 cards
+   ✅ Processed 146 card items
+   ✅ Created "Planeshift" with 146 cards
+
+[331/340] 📦 Processing "Invasion" (inv)...
+   📅 Released: 2000-10-02
+   📊 Expected cards: 354
+   📈 Progress: 97% | Elapsed: 15m 2s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 354 cards
+   ✅ Processed 354 card items
+   ✅ Created "Invasion" with 354 cards
+
+   📊 Running totals: 330 processed, 1 skipped, 0 errors | Time: 15m 6s
+
+
+[332/340] 📦 Processing "Beatdown Box Set" (btd)...
+   📅 Released: 2000-10-01
+   📊 Expected cards: 90
+   📈 Progress: 98% | Elapsed: 15m 6s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 90 cards
+   ✅ Processed 90 card items
+   ✅ Created "Beatdown Box Set" with 90 cards
+
+[333/340] 📦 Processing "Prophecy" (pcy)...
+   📅 Released: 2000-06-05
+   📊 Expected cards: 144
+   📈 Progress: 98% | Elapsed: 15m 7s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 144 cards
+   ✅ Processed 144 card items
+   ✅ Created "Prophecy" with 144 cards
+
+[334/340] 📦 Processing "Starter 2000" (s00)...
+   📅 Released: 2000-04-01
+   📊 Expected cards: 20
+   📈 Progress: 98% | Elapsed: 15m 9s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 20 cards
+   ✅ Processed 20 card items
+   ✅ Created "Starter 2000" with 20 cards
+
+[335/340] 📦 Processing "Nemesis" (nem)...
+   📅 Released: 2000-02-14
+   📊 Expected cards: 143
+   📈 Progress: 99% | Elapsed: 15m 9s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Nemesis" with 143 cards
+
+[336/340] 📦 Processing "Mercadian Masques" (mmq)...
+   📅 Released: 1999-10-04
+   📊 Expected cards: 350
+   📈 Progress: 99% | Elapsed: 15m 11s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ✅ Fetched 350 cards
+   ✅ Processed 350 card items
+   ✅ Created "Mercadian Masques" with 350 cards
+
+[337/340] 📦 Processing "Urza's Destiny" (uds)...
+   📅 Released: 1999-06-07
+   📊 Expected cards: 143
+   📈 Progress: 99% | Elapsed: 15m 13s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Urza's Destiny" with 143 cards
+
+[338/340] 📦 Processing "Urza's Legacy" (ulg)...
+   📅 Released: 1999-02-15
+   📊 Expected cards: 143
+   📈 Progress: 99% | Elapsed: 15m 15s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 143 cards
+   ✅ Processed 143 card items
+   ✅ Created "Urza's Legacy" with 143 cards
+
+[339/340] 📦 Processing "Urza's Saga" (usg)...
+   📅 Released: 1998-10-12
+   📊 Expected cards: 357
+   📈 Progress: 100% | Elapsed: 15m 16s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ⏳ Fetched 175 cards so far...
+   ⏳ Fetched 350 cards so far...
+   ✅ Fetched 357 cards
+   ✅ Processed 357 card items
+   ✅ Created "Urza's Saga" with 357 cards
+
+[340/340] 📦 Processing "Celebration Cards" (pcel)...
+   📅 Released: 1996-08-14
+   📊 Expected cards: 9
+   📈 Progress: 100% | Elapsed: 15m 20s | Est. remaining: ~0m
+   🔍 Fetching cards from Scryfall...
+   ✅ Fetched 9 cards
+   ✅ Processed 9 card items
+   ✅ Created "Celebration Cards" with 9 cards
+
+🎉 Magic: The Gathering seeding completed!
+
+📊 Final Summary:
+   ✅ Processed: 339 sets
+   ⏭️  Skipped: 1 sets
+   ❌ Errors: 0 sets
+   📦 Total sets available: 340
+   ⏱️  Total time: 15m 20s
+   ⚡ Average: 3s per set
