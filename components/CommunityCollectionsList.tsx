@@ -53,6 +53,7 @@ export default function CommunityCollectionsList() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
+  const [totalCount, setTotalCount] = useState<number>(0)
   const [addingCollection, setAddingCollection] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState('') // Immediate input value
   const [searchQuery, setSearchQuery] = useState('') // Debounced search query
@@ -212,6 +213,7 @@ export default function CommunityCollectionsList() {
         }
         setHasMore(data.pagination.hasMore)
         setCurrentPage(page)
+        setTotalCount(data.pagination.total || 0)
       }
     } catch (error) {
       console.error('Error fetching community collections:', error)
@@ -496,12 +498,11 @@ export default function CommunityCollectionsList() {
           </Card>
         )}
 
-        {(searchQuery || selectedCategory || selectedTags.length > 0) && (
-          <p className="text-sm text-[#969696]">
-            Showing {filteredCollections.length} collection{filteredCollections.length !== 1 ? 's' : ''}
-            {hasMore && ` (more available - click "Load More" to see more)`}
-          </p>
-        )}
+        <p className="text-sm text-[#969696]">
+          {filteredCollections.length} out of {totalCount} community collection{totalCount !== 1 ? 's' : ''}
+          {(searchQuery || selectedCategory || selectedTags.length > 0) && ' (filtered)'}
+          {hasMore && ` - more available, click "Load More" to see more`}
+        </p>
       </div>
 
       {loading && collections.length === 0 ? (
