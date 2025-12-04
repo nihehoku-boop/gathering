@@ -72,12 +72,14 @@ export async function GET(request: NextRequest) {
     // Get paginated community collections with their items and creator info
     // Note: For popular/score/mostItems/leastItems sorting, we need to fetch ALL and sort in memory
     // Also need to fetch ALL when filtering by tags, since tags are stored as JSON and filtered in memory
+    // Also need to fetch ALL when filtering by category to ensure proper sorting across all matching collections
     const needsInMemorySort = sortBy === 'popular' || sortBy === 'score' || sortBy === 'mostItems' || sortBy === 'leastItems'
     const needsInMemoryFilter = tagArray.length > 0 // Need to fetch all when filtering by tags
+    const needsFetchAll = needsInMemorySort || needsInMemoryFilter || (category && category.trim() !== '') // Fetch all when category filter is active
     
-    // Determine pagination based on sort type and tag filtering
-    const fetchSkip = (needsInMemorySort || needsInMemoryFilter) ? 0 : skip
-    const fetchTake = (needsInMemorySort || needsInMemoryFilter)
+    // Determine pagination based on sort type and filtering
+    const fetchSkip = needsFetchAll ? 0 : skip
+    const fetchTake = needsFetchAll
       ? (totalCount > 0 ? totalCount + 1000 : 50000) // Fetch all when sorting/filtering in memory
       : limit // Normal pagination for other sorts
 
@@ -171,7 +173,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Apply pagination after sorting/filtering (if we fetched all collections)
-    if (needsInMemorySort || needsInMemoryFilter) {
+    if (needsFetchAll) {
       sortedCollections = sortedCollections.slice(skip, skip + limit)
     }
 
