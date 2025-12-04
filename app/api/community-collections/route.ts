@@ -73,25 +73,17 @@ export async function GET(request: NextRequest) {
     // Note: For popular/score/mostItems/leastItems sorting, we need to fetch ALL and sort in memory
     const needsInMemorySort = sortBy === 'popular' || sortBy === 'score' || sortBy === 'mostItems' || sortBy === 'leastItems'
     
-    // Build the query - for in-memory sorting, fetch all collections (no limit)
-    const queryOptions: any = {
-      where,
-      orderBy,
-    }
-    
-    if (needsInMemorySort) {
-      // Fetch all collections when sorting in memory
-      // Use a very large number to ensure we get everything (Prisma doesn't support unlimited)
-      queryOptions.take = totalCount > 0 ? totalCount + 1000 : 50000
-      queryOptions.skip = 0
-    } else {
-      // Normal pagination for other sorts
-      queryOptions.skip = skip
-      queryOptions.take = limit
-    }
+    // Determine pagination based on sort type
+    const fetchSkip = needsInMemorySort ? 0 : skip
+    const fetchTake = needsInMemorySort 
+      ? (totalCount > 0 ? totalCount + 1000 : 50000) // Fetch all when sorting in memory
+      : limit // Normal pagination for other sorts
 
     const collections = await prisma.communityCollection.findMany({
-      ...queryOptions,
+      where,
+      orderBy,
+      skip: fetchSkip,
+      take: fetchTake,
       include: {
         items: {
           orderBy: [
