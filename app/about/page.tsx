@@ -107,6 +107,34 @@ export default function AboutPage() {
                 </p>
               </CardContent>
             </Card>
+
+            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <CardHeader>
+                <CardTitle className="text-[#fafafa]">Data Sources & Attribution</CardTitle>
+                <CardDescription className="text-[#969696]">
+                  APIs and services we use
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0f1114] rounded-lg border border-[#2a2d35]">
+                  <div className="flex-shrink-0">
+                    <img 
+                      src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692cc94f794c356c81506d9bfc7d01065f5a8c1370c85545e2.svg" 
+                      alt="TMDb Logo" 
+                      className="h-8 w-auto"
+                    />
+                  </div>
+                  <div className="flex-1 text-[#969696] text-sm">
+                    <p className="mb-2">
+                      <strong className="text-[#fafafa]">The Movie Database (TMDb)</strong> - Movie data and poster images for film collections are provided by TMDb.
+                    </p>
+                    <p className="text-xs italic">
+                      This product uses the TMDb API but is not endorsed or certified by TMDb.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

@@ -262,8 +262,8 @@ async function createFilmCollection(
   console.log(`\n✅ Processed ${processed} films, skipped ${skipped}`)
   console.log(`📦 Creating community collection...`)
 
-  // Add source link to description
-  const descriptionWithSource = `${config.description}\n\nSource: ${config.sourceUrl}`
+  // Add source link and TMDB attribution to description
+  const descriptionWithSource = `${config.description}\n\nSource: ${config.sourceUrl}\n\nThis product uses the TMDb API but is not endorsed or certified by TMDb. Movie data and images provided by The Movie Database (TMDb).`
 
   // Create the community collection
   const collection = await prisma.communityCollection.create({
