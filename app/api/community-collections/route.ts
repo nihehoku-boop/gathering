@@ -57,6 +57,10 @@ export async function GET(request: NextRequest) {
       // For popular/score, we'll need to sort after calculating votes
       // So we'll fetch all and sort in memory, but limit the fetch
       orderBy = { createdAt: 'desc' }
+    } else if (sortBy === 'mostItems' || sortBy === 'leastItems') {
+      // For item count sorting, we need to fetch all and sort in memory
+      // since we need to count items for each collection
+      orderBy = { createdAt: 'desc' }
     } else if (sortBy === 'newest') {
       orderBy = { createdAt: 'desc' }
     } else if (sortBy === 'oldest') {
@@ -66,9 +70,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Get paginated community collections with their items and creator info
-    // Note: For popular/score sorting, we need to fetch more and sort in memory
-    const fetchLimit = (sortBy === 'popular' || sortBy === 'score') ? 1000 : limit
-    const fetchSkip = (sortBy === 'popular' || sortBy === 'score') ? 0 : skip
+    // Note: For popular/score/mostItems/leastItems sorting, we need to fetch more and sort in memory
+    const needsInMemorySort = sortBy === 'popular' || sortBy === 'score' || sortBy === 'mostItems' || sortBy === 'leastItems'
+    const fetchLimit = needsInMemorySort ? 1000 : limit
+    const fetchSkip = needsInMemorySort ? 0 : skip
 
     const collections = await prisma.communityCollection.findMany({
       where,
@@ -143,10 +148,18 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Sort collections (especially for popular/score)
+    // Sort collections (especially for popular/score/mostItems/leastItems)
     let sortedCollections = collectionsWithVotes
     if (sortBy === 'popular' || sortBy === 'score') {
       sortedCollections = collectionsWithVotes.sort((a, b) => b.score - a.score)
+      // Apply pagination after sorting
+      sortedCollections = sortedCollections.slice(skip, skip + limit)
+    } else if (sortBy === 'mostItems') {
+      sortedCollections = collectionsWithVotes.sort((a, b) => (b._count?.items || 0) - (a._count?.items || 0))
+      // Apply pagination after sorting
+      sortedCollections = sortedCollections.slice(skip, skip + limit)
+    } else if (sortBy === 'leastItems') {
+      sortedCollections = collectionsWithVotes.sort((a, b) => (a._count?.items || 0) - (b._count?.items || 0))
       // Apply pagination after sorting
       sortedCollections = sortedCollections.slice(skip, skip + limit)
     } else if (sortBy === 'newest') {
@@ -155,10 +168,6 @@ export async function GET(request: NextRequest) {
       // Already sorted by createdAt asc
     } else if (sortBy === 'alphabetical') {
       // Already sorted by name asc
-    } else if (sortBy === 'mostItems') {
-      sortedCollections = collectionsWithVotes.sort((a, b) => (b._count?.items || 0) - (a._count?.items || 0))
-    } else if (sortBy === 'leastItems') {
-      sortedCollections = collectionsWithVotes.sort((a, b) => (a._count?.items || 0) - (b._count?.items || 0))
     }
 
     // For tag filtering, we need to adjust the total count
