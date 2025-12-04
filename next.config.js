@@ -55,6 +55,10 @@ const nextConfig = {
         hostname: 'api.scryfall.com',
       },
       {
+        protocol: 'https',
+        hostname: 'covers.openlibrary.org', // Added for book cover images
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },

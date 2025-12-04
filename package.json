@@ -24,6 +24,7 @@
     "seed:pokemon-tcg": "tsx scripts/seed-pokemon-tcg-collections.ts",
     "seed:magic-tcg": "tsx scripts/seed-magic-tcg-collections.ts",
     "seed:yugioh-tcg": "tsx scripts/seed-yugioh-tcg-collections.ts",
+    "seed:books-pulitzer": "tsx scripts/seed-books-pulitzer.ts",
     "fix:pokemon-images": "tsx scripts/fix-pokemon-tcg-images.ts",
     "fix:pokemon-template": "tsx scripts/fix-pokemon-template.ts",
     "update:pokemon-template-fields": "tsx scripts/update-pokemon-template-and-fields.ts",
