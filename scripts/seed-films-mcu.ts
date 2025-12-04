@@ -145,7 +145,7 @@ async function createFilmCollection(
       // Build customFields JSON for film template
       const customFields = {
         director: movieData.director,
-        releaseYear: movieData.year,
+        year: movieData.year,
         format: 'Blu-ray', // Default format
         edition: `${phase} - MCU`, // Phase information
         region: 'Region A/1', // Default region

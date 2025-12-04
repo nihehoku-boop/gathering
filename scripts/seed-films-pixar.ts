@@ -132,7 +132,7 @@ async function createFilmCollection(
       // Build customFields JSON for film template
       const customFields = {
         director: movieData.director,
-        releaseYear: movieData.year,
+        year: movieData.year,
         format: 'Blu-ray', // Default format
         edition: 'Pixar Animation', // Special edition marker
         region: 'Region A/1', // Default region
