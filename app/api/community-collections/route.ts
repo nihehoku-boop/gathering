@@ -70,16 +70,28 @@ export async function GET(request: NextRequest) {
     }
 
     // Get paginated community collections with their items and creator info
-    // Note: For popular/score/mostItems/leastItems sorting, we need to fetch more and sort in memory
+    // Note: For popular/score/mostItems/leastItems sorting, we need to fetch ALL and sort in memory
     const needsInMemorySort = sortBy === 'popular' || sortBy === 'score' || sortBy === 'mostItems' || sortBy === 'leastItems'
-    const fetchLimit = needsInMemorySort ? 1000 : limit
-    const fetchSkip = needsInMemorySort ? 0 : skip
-
-    const collections = await prisma.communityCollection.findMany({
+    
+    // Build the query - for in-memory sorting, fetch all collections (no limit)
+    const queryOptions: any = {
       where,
       orderBy,
-      skip: fetchSkip,
-      take: fetchLimit,
+    }
+    
+    if (needsInMemorySort) {
+      // Fetch all collections when sorting in memory
+      // Use a very large number to ensure we get everything (Prisma doesn't support unlimited)
+      queryOptions.take = totalCount > 0 ? totalCount + 1000 : 50000
+      queryOptions.skip = 0
+    } else {
+      // Normal pagination for other sorts
+      queryOptions.skip = skip
+      queryOptions.take = limit
+    }
+
+    const collections = await prisma.communityCollection.findMany({
+      ...queryOptions,
       include: {
         items: {
           orderBy: [
