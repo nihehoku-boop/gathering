@@ -169,22 +169,26 @@ export default function AboutPage() {
                       >
                         <button
                           onClick={() => toggleFaq(index)}
-                          className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-[#1a1d24] transition-colors"
+                          className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-[#1a1d24] transition-colors"
                         >
-                          <h3 className="text-[#fafafa] font-semibold pr-4">{faq.question}</h3>
+                          <h3 className="text-[#fafafa] font-semibold pr-6 text-base">{faq.question}</h3>
                           {isOpen ? (
-                            <ChevronUp className="h-5 w-5 text-[var(--accent-color)] flex-shrink-0" />
+                            <ChevronUp className="h-5 w-5 text-[var(--accent-color)] flex-shrink-0 transition-transform duration-200" />
                           ) : (
-                            <ChevronDown className="h-5 w-5 text-[#969696] flex-shrink-0" />
+                            <ChevronDown className="h-5 w-5 text-[#969696] flex-shrink-0 transition-transform duration-200" />
                           )}
                         </button>
-                        {isOpen && (
-                          <div className="px-4 pb-3 pt-0">
+                        <div
+                          className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                            isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                          }`}
+                        >
+                          <div className="px-5 pb-5 pt-2">
                             <p className="text-[#969696] text-sm leading-relaxed">
                               {faq.answer}
                             </p>
                           </div>
-                        )}
+                        </div>
                       </div>
                     )
                   })}
