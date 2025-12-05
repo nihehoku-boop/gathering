@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, Info } from 'lucide-react'
+import { ArrowLeft, Info, HelpCircle } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 
@@ -130,6 +130,105 @@ export default function AboutPage() {
                     </p>
                     <p className="text-xs italic">
                       This product uses the TMDb API but is not endorsed or certified by TMDb.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <HelpCircle className="h-5 w-5 text-[var(--accent-color)]" />
+                  <CardTitle className="text-[#fafafa]">Frequently Asked Questions</CardTitle>
+                </div>
+                <CardDescription className="text-[#969696]">
+                  Common questions about Gathering
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">How do I create a collection?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Click the "Create Collection" button on the main page. Give your collection a name, choose a category, and optionally add a description, cover image, and tags. You can also select a template (like Comic Book, Trading Card, Film, etc.) to get pre-configured fields.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">How do I add items to my collection?</h3>
+                    <p className="text-[#969696] text-sm">
+                      You can add items individually by clicking the "Add Item" button, or use the "Bulk Import" feature to add multiple items at once. Bulk Import supports numbered series (e.g., "LTB #1" to "LTB #550"), CSV files, or manual list pasting.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">What are recommended collections?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Recommended collections are curated collections created by admins, such as "Academy Award Best Picture Winners" or "Studio Ghibli Collection". You can browse them and add them to your account with one click. If the collection is updated by admins, you can sync those updates to your copy.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">What are community collections?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Community collections are collections created by other users that they've made public. You can browse, search, and filter through thousands of community collections. If you find one you like, you can add it to your account.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">How do I mark items as owned?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Click the checkbox next to an item to mark it as owned. You can also select multiple items and use the bulk actions menu to mark them all at once. The progress bar at the top of each collection shows how many items you own.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">Can I customize the appearance?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Yes! You can change your accent color in the settings, which affects buttons, links, and other UI elements. You can also customize your profile with a bio, banner image, and theme settings.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">What templates are available?</h3>
+                    <p className="text-[#969696] text-sm">
+                      We offer templates for Comic Books, Trading Cards, Books, Video Games, Films/Blu-rays, and more. Each template comes with relevant fields pre-configured. You can also use the "Custom" template to define your own fields.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">How do I share my collections?</h3>
+                    <p className="text-[#969696] text-sm">
+                      You can make your collections public and share them with others. Use the share button on a collection to get a shareable link. You can also publish collections to the community for others to discover.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">Is my data secure?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Yes, your data is stored securely in our database. By default, your collections are private and only visible to you. You control what you share publicly. We use industry-standard security practices to protect your information.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">Can I export my collections?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Yes! You can export your collections as CSV files. Use the export button on the collections page to download your data. This is useful for backups or importing into other systems.
+                    </p>
+                  </div>
+
+                  <div className="border-b border-[#2a2d35] pb-4">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">How do I organize my collections?</h3>
+                    <p className="text-[#969696] text-sm">
+                      You can organize collections using folders. Create folders to group related collections together. You can also use tags to categorize and filter your collections. Drag and drop collections in the sidebar to reorder them.
+                    </p>
+                  </div>
+
+                  <div className="pb-2">
+                    <h3 className="text-[#fafafa] font-semibold mb-2">How do I reset my password?</h3>
+                    <p className="text-[#969696] text-sm">
+                      Click "Forgot Password" on the sign-in page. Enter your email address and you'll receive a password reset link. Click the link in the email to set a new password.
                     </p>
                   </div>
                 </div>
