@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
     const tagArray = tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []
 
     // Get total count with filters applied (excluding tags, which we'll filter after)
+    // Note: category is already in where clause, so totalCount includes category filter
     const totalCount = await prisma.communityCollection.count({ where })
 
     // Build orderBy based on sortBy
