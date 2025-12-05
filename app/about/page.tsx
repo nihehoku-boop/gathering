@@ -93,51 +93,6 @@ export default function AboutPage() {
 
             <Card className="bg-[#1a1d24] border-[#2a2d35]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">Technology</CardTitle>
-                <CardDescription className="text-[#969696]">
-                  Built with modern web technologies
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4 text-[#969696]">
-                <p>
-                  Gathering is built using Next.js 14, React, TypeScript, Prisma, and SQLite. The platform features a modern, responsive design with a dark theme optimized for extended use.
-                </p>
-                <p>
-                  Your data is stored securely and locally, giving you full control over your collections and privacy.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
-              <CardHeader>
-                <CardTitle className="text-[#fafafa]">Data Sources & Attribution</CardTitle>
-                <CardDescription className="text-[#969696]">
-                  APIs and services we use
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start gap-4 p-4 bg-[#0f1114] rounded-lg border border-[#2a2d35]">
-                  <div className="flex-shrink-0">
-                    <img 
-                      src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692cc94f794c356c81506d9bfc7d01065f5a8c1370c85545e2.svg" 
-                      alt="TMDb Logo" 
-                      className="h-8 w-auto"
-                    />
-                  </div>
-                  <div className="flex-1 text-[#969696] text-sm">
-                    <p className="mb-2">
-                      <strong className="text-[#fafafa]">The Movie Database (TMDb)</strong> - Movie data and poster images for film collections are provided by TMDb.
-                    </p>
-                    <p className="text-xs italic">
-                      This product uses the TMDb API but is not endorsed or certified by TMDb.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
-              <CardHeader>
                 <div className="flex items-center gap-2">
                   <HelpCircle className="h-5 w-5 text-[var(--accent-color)]" />
                   <CardTitle className="text-[#fafafa]">Frequently Asked Questions</CardTitle>
@@ -229,6 +184,71 @@ export default function AboutPage() {
                     <h3 className="text-[#fafafa] font-semibold mb-2">How do I reset my password?</h3>
                     <p className="text-[#969696] text-sm">
                       Click "Forgot Password" on the sign-in page. Enter your email address and you'll receive a password reset link. Click the link in the email to set a new password.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <CardHeader>
+                <CardTitle className="text-[#fafafa]">About the Developer</CardTitle>
+                <CardDescription className="text-[#969696]">
+                  The story behind Gathering
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 text-[#969696]">
+                <p>
+                  Hi! I'm <strong className="text-[#fafafa]">Nico "Henske"</strong>, the creator of Gathering. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
+                </p>
+                <p>
+                  That's why I built Gathering - a modern, intuitive platform designed by a collector, for collectors. Whether you're tracking comics, trading cards, books, films, or any other collectibles, Gathering provides the tools you need to stay organized and see your progress at a glance.
+                </p>
+                <p className="text-sm italic border-t border-[#2a2d35] pt-4">
+                  <strong className="text-[#fafafa]">Development Note:</strong> This platform was developed with the assistance of AI tools for certain coding tasks, including code generation, debugging, and optimization. All design decisions, feature planning, and final implementation were made by the developer.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <CardHeader>
+                <CardTitle className="text-[#fafafa]">Technology</CardTitle>
+                <CardDescription className="text-[#969696]">
+                  Built with modern web technologies
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 text-[#969696]">
+                <p>
+                  Gathering is built using Next.js 14, React, TypeScript, Prisma, and SQLite. The platform features a modern, responsive design with a dark theme optimized for extended use.
+                </p>
+                <p>
+                  Your data is stored securely and locally, giving you full control over your collections and privacy.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <CardHeader>
+                <CardTitle className="text-[#fafafa]">Data Sources & Attribution</CardTitle>
+                <CardDescription className="text-[#969696]">
+                  APIs and services we use
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0f1114] rounded-lg border border-[#2a2d35]">
+                  <div className="flex-shrink-0">
+                    <img 
+                      src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692cc94f794c356c81506d9bfc7d01065f5a8c1370c85545e2.svg" 
+                      alt="TMDb Logo" 
+                      className="h-8 w-auto"
+                    />
+                  </div>
+                  <div className="flex-1 text-[#969696] text-sm">
+                    <p className="mb-2">
+                      <strong className="text-[#fafafa]">The Movie Database (TMDb)</strong> - Movie data and poster images for film collections are provided by TMDb.
+                    </p>
+                    <p className="text-xs italic">
+                      This product uses the TMDb API but is not endorsed or certified by TMDb.
                     </p>
                   </div>
                 </div>
