@@ -45,6 +45,7 @@
     "seed:films-mcu": "tsx scripts/seed-films-mcu.ts",
     "seed:films-pixar": "tsx scripts/seed-films-pixar.ts",
     "seed:films-afi-top-100": "tsx scripts/seed-films-afi-top-100.ts",
+    "seed:comics-european": "tsx scripts/seed-comics-european.ts",
     "fix:pokemon-images": "tsx scripts/fix-pokemon-tcg-images.ts",
     "fix:pokemon-template": "tsx scripts/fix-pokemon-template.ts",
     "update:pokemon-template-fields": "tsx scripts/update-pokemon-template-and-fields.ts",

@@ -26,6 +26,7 @@ export default function UserManagement() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [updatingUsers, setUpdatingUsers] = useState<Set<string>>(new Set())
+  const [totalCount, setTotalCount] = useState(0)
 
   useEffect(() => {
     fetchUsers()
@@ -42,6 +43,7 @@ export default function UserManagement() {
       if (res.ok) {
         const data = await res.json()
         setUsers(data.users || [])
+        setTotalCount(data.pagination?.total || 0)
       }
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -82,10 +84,19 @@ export default function UserManagement() {
   return (
     <Card className="bg-[#1a1d24] border-[#2a2d35]">
       <CardHeader>
-        <CardTitle className="text-[#fafafa]">User Management</CardTitle>
-        <CardDescription className="text-[#969696]">
-          Manage user verification status
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-[#fafafa]">User Management</CardTitle>
+            <CardDescription className="text-[#969696]">
+              Manage user verification status
+            </CardDescription>
+          </div>
+          {!loading && totalCount > 0 && (
+            <div className="text-sm text-[#969696]">
+              {users.length} of {totalCount} {totalCount === 1 ? 'member' : 'members'}
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Search */}
