@@ -53,9 +53,10 @@ export const authOptions: NextAuthOptions = {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { id: user.id },
-              select: { isAdmin: true, badge: true, accentColor: true },
+              select: { isAdmin: true, isVerified: true, badge: true, accentColor: true },
             })
             token.isAdmin = dbUser?.isAdmin || false
+            token.isVerified = dbUser?.isVerified || false
             token.badge = dbUser?.badge || null
             token.accentColor = dbUser?.accentColor || '#FFD60A'
           } catch (error) {
@@ -67,9 +68,10 @@ export const authOptions: NextAuthOptions = {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { id: token.id as string },
-              select: { isAdmin: true, badge: true, accentColor: true },
+              select: { isAdmin: true, isVerified: true, badge: true, accentColor: true },
             })
             token.isAdmin = dbUser?.isAdmin || false
+            token.isVerified = dbUser?.isVerified || false
             token.badge = dbUser?.badge || null
             token.accentColor = dbUser?.accentColor || '#FFD60A'
           } catch (error) {
@@ -86,6 +88,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user && token.id) {
         session.user.id = token.id as string
         session.user.isAdmin = (token.isAdmin as boolean) || false
+        session.user.isVerified = (token.isVerified as boolean) || false
         session.user.badge = (token.badge as string | null) || null
         session.user.accentColor = (token.accentColor as string) || '#FFD60A'
       }

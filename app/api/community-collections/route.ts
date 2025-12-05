@@ -108,6 +108,7 @@ export async function GET(request: NextRequest) {
             email: true,
             image: true,
             badge: true,
+            isVerified: true,
           },
         },
         votes: {
@@ -240,6 +241,7 @@ export async function POST(request: NextRequest) {
             email: true,
             image: true,
             badge: true,
+            isVerified: true,
           },
         },
       },

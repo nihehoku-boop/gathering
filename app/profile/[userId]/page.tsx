@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { ArrowLeft, User, Lock, Trophy } from 'lucide-react'
+import { ArrowLeft, User, Lock, Trophy, CheckCircle2 } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 import { parseTags, getTagColor } from '@/lib/tags'
@@ -29,6 +29,7 @@ interface PublicProfile {
   name: string
   email: string
   image: string | null
+  isVerified: boolean
   badge: string | null
   bio: string | null
   bannerImage: string | null
@@ -226,6 +227,9 @@ export default function PublicProfilePage() {
                           <span className="text-2xl">{getBadgeEmoji(profile.badge) || profile.badge}</span>
                         )}
                         {profile.name}
+                        {profile.isVerified && (
+                          <CheckCircle2 className="h-6 w-6 text-blue-500 flex-shrink-0" title="Verified account" />
+                        )}
                       </h1>
                     </div>
                     {profile.bio && (

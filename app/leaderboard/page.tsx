@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Trophy, Medal, Award, ArrowLeft, Crown } from 'lucide-react'
+import { Trophy, Medal, Award, ArrowLeft, Crown, CheckCircle2 } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 import { getBadgeEmoji } from '@/lib/badges'
@@ -15,6 +15,7 @@ interface LeaderboardEntry {
   name: string
   email: string
   image: string | null
+  isVerified: boolean
   badge: string | null
   totalItems: number
   ownedItems: number
@@ -134,8 +135,11 @@ export default function LeaderboardPage() {
                         {getRankIcon(currentUserRank)}
                       </div>
                       <div className="flex-1">
-                        <div className="font-semibold text-[#fafafa] text-lg">
+                        <div className="font-semibold text-[#fafafa] text-lg flex items-center gap-2">
                           {leaderboard[currentUserRank - 1].name}
+                          {leaderboard[currentUserRank - 1].isVerified && (
+                            <CheckCircle2 className="h-5 w-5 text-blue-500 flex-shrink-0" title="Verified account" />
+                          )}
                         </div>
                         <div className="text-sm text-[#969696]">
                           {leaderboard[currentUserRank - 1].ownedItems} / {leaderboard[currentUserRank - 1].totalItems} items owned
@@ -206,6 +210,9 @@ export default function LeaderboardPage() {
                                 >
                                   {entry.name}
                                 </button>
+                                {entry.isVerified && (
+                                  <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" title="Verified account" />
+                                )}
                                 {isCurrentUser && (
                                   <span className="ml-2 text-xs text-[#969696]">(You)</span>
                                 )}

@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Trash2, Plus, Edit, List, Download, Eye, EyeOff } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users } from 'lucide-react'
 import CreateRecommendedCollectionDialog from './CreateRecommendedCollectionDialog'
 import EditRecommendedCollectionDialog from './EditRecommendedCollectionDialog'
 import RecommendedCollectionItemsManager from './RecommendedCollectionItemsManager'
 import BulkImportDialog from './BulkImportDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
+import UserManagement from './UserManagement'
 import { parseTags, getTagColor } from '@/lib/tags'
 
 interface RecommendedItem {
@@ -114,9 +116,28 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Recommended Collections</h2>
+    <Tabs defaultValue="collections" className="w-full">
+      <TabsList className="mb-6 bg-[#1a1d24] border border-[#2a2d35]">
+        <TabsTrigger 
+          value="collections" 
+          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[#969696] data-[state=active]:text-black"
+        >
+          <List className="mr-2 h-4 w-4" />
+          Recommended Collections
+        </TabsTrigger>
+        <TabsTrigger 
+          value="users" 
+          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[#969696] data-[state=active]:text-black"
+        >
+          <Users className="mr-2 h-4 w-4" />
+          User Management
+        </TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="collections">
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-[#fafafa]">Recommended Collections</h2>
         <div className="flex gap-2">
           <Button 
             onClick={() => setShowImportDialog(true)}
@@ -299,7 +320,13 @@ export default function AdminDashboard() {
           />
         )
       })()}
-    </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="users">
+        <UserManagement />
+      </TabsContent>
+    </Tabs>
   )
 }
 

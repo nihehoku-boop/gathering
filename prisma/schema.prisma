@@ -46,6 +46,7 @@ model User {
   image         String?
   isAdmin       Boolean   @default(false)
   isPrivate     Boolean   @default(false) // Hide from leaderboard and public profiles
+  isVerified    Boolean   @default(false) // Verified account badge (admin-only)
   badge         String?   // Badge identifier (placeholder for now)
   accentColor   String?   @default("#FFD60A") // User's preferred accent color
   bio           String?   // User's bio/about section

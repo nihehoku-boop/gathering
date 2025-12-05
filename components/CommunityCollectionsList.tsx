@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, BookOpen, Search, Edit, Trash2, User, List, Filter as FilterIcon, X, ChevronDown, ChevronUp, Heart } from 'lucide-react'
+import { Plus, BookOpen, Search, Edit, Trash2, User, List, Filter as FilterIcon, X, ChevronDown, ChevronUp, Heart, CheckCircle2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { parseTags, getTagColor, AVAILABLE_TAGS } from '@/lib/tags'
 import CreateCommunityCollectionDialog from './CreateCommunityCollectionDialog'
@@ -37,6 +37,7 @@ interface CommunityCollection {
     email: string
     image: string | null
     badge: string | null
+    isVerified: boolean
   }
   createdAt: string
   upvotes?: number
@@ -572,6 +573,9 @@ export default function CommunityCollectionsList() {
                         <span className="text-sm">{getBadgeEmoji(collection.user.badge) || collection.user.badge}</span>
                       )}
                       {collection.user.name || collection.user.email}
+                      {collection.user.isVerified && (
+                        <CheckCircle2 className="h-3 w-3 text-blue-500 flex-shrink-0" title="Verified account" />
+                      )}
                     </span>
                   </div>
                   {collection.category && (

@@ -13,6 +13,7 @@ export async function GET() {
         name: true,
         email: true,
         image: true,
+        isVerified: true,
         badge: true,
         collections: {
           select: {
@@ -44,6 +45,7 @@ export async function GET() {
           name: user.name || user.email,
           email: user.email,
           image: user.image,
+          isVerified: user.isVerified,
           badge: user.badge,
           totalItems,
           ownedItems,
