@@ -3,7 +3,7 @@
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, PanelLeft } from 'lucide-react'
+import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, PanelLeft, CheckCircle2 } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import { getBadgeEmoji } from '@/lib/badges'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
