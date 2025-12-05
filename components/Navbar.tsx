@@ -97,7 +97,9 @@ export default function Navbar() {
                     )}
                     {session.user?.name || session.user?.email}
                     {(session.user as any)?.isVerified && (
-                      <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" title="Verified account" />
+                      <span title="Verified account">
+                        <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                      </span>
                     )}
                   </span>
                 </button>

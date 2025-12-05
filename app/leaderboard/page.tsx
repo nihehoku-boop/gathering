@@ -138,7 +138,9 @@ export default function LeaderboardPage() {
                         <div className="font-semibold text-[#fafafa] text-lg flex items-center gap-2">
                           {leaderboard[currentUserRank - 1].name}
                           {leaderboard[currentUserRank - 1].isVerified && (
-                            <CheckCircle2 className="h-5 w-5 text-blue-500 flex-shrink-0" title="Verified account" />
+                            <span title="Verified account">
+                              <CheckCircle2 className="h-5 w-5 text-blue-500 flex-shrink-0" />
+                            </span>
                           )}
                         </div>
                         <div className="text-sm text-[#969696]">
@@ -211,7 +213,9 @@ export default function LeaderboardPage() {
                                   {entry.name}
                                 </button>
                                 {entry.isVerified && (
-                                  <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" title="Verified account" />
+                                  <span title="Verified account">
+                                    <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                                  </span>
                                 )}
                                 {isCurrentUser && (
                                   <span className="ml-2 text-xs text-[#969696]">(You)</span>

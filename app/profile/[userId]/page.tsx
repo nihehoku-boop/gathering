@@ -228,7 +228,9 @@ export default function PublicProfilePage() {
                         )}
                         {profile.name}
                         {profile.isVerified && (
-                          <CheckCircle2 className="h-6 w-6 text-blue-500 flex-shrink-0" title="Verified account" />
+                          <span title="Verified account">
+                            <CheckCircle2 className="h-6 w-6 text-blue-500 flex-shrink-0" />
+                          </span>
                         )}
                       </h1>
                     </div>

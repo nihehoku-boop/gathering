@@ -574,7 +574,9 @@ export default function CommunityCollectionsList() {
                       )}
                       {collection.user.name || collection.user.email}
                       {collection.user.isVerified && (
-                        <CheckCircle2 className="h-3 w-3 text-blue-500 flex-shrink-0" title="Verified account" />
+                        <span title="Verified account">
+                          <CheckCircle2 className="h-3 w-3 text-blue-500 flex-shrink-0" />
+                        </span>
                       )}
                     </span>
                   </div>
