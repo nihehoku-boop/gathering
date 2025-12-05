@@ -10,6 +10,62 @@ import Navbar from '@/components/Navbar'
 
 export default function AboutPage() {
   const router = useRouter()
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index)
+  }
+
+  const faqItems = [
+    {
+      question: "How do I create a collection?",
+      answer: "Click the \"Create Collection\" button on the main page. Give your collection a name, choose a category, and optionally add a description, cover image, and tags. You can also select a template (like Comic Book, Trading Card, Film, etc.) to get pre-configured fields."
+    },
+    {
+      question: "How do I add items to my collection?",
+      answer: "You can add items individually by clicking the \"Add Item\" button, or use the \"Bulk Import\" feature to add multiple items at once. Bulk Import supports numbered series (e.g., \"LTB #1\" to \"LTB #550\"), CSV files, or manual list pasting."
+    },
+    {
+      question: "What are recommended collections?",
+      answer: "Recommended collections are curated collections created by admins, such as \"Academy Award Best Picture Winners\" or \"Studio Ghibli Collection\". You can browse them and add them to your account with one click. If the collection is updated by admins, you can sync those updates to your copy."
+    },
+    {
+      question: "What are community collections?",
+      answer: "Community collections are collections created by other users that they've made public. You can browse, search, and filter through thousands of community collections. If you find one you like, you can add it to your account."
+    },
+    {
+      question: "How do I mark items as owned?",
+      answer: "Click the checkbox next to an item to mark it as owned. You can also select multiple items and use the bulk actions menu to mark them all at once. The progress bar at the top of each collection shows how many items you own."
+    },
+    {
+      question: "Can I customize the appearance?",
+      answer: "Yes! You can change your accent color in the settings, which affects buttons, links, and other UI elements. You can also customize your profile with a bio, banner image, and theme settings."
+    },
+    {
+      question: "What templates are available?",
+      answer: "We offer templates for Comic Books, Trading Cards, Books, Video Games, Films/Blu-rays, and more. Each template comes with relevant fields pre-configured. You can also use the \"Custom\" template to define your own fields."
+    },
+    {
+      question: "How do I share my collections?",
+      answer: "You can make your collections public and share them with others. Use the share button on a collection to get a shareable link. You can also publish collections to the community for others to discover."
+    },
+    {
+      question: "Is my data secure?",
+      answer: "Yes, your data is stored securely in our database. By default, your collections are private and only visible to you. You control what you share publicly. We use industry-standard security practices to protect your information."
+    },
+    {
+      question: "Can I export my collections?",
+      answer: "Yes! You can export your collections as CSV files. Use the export button on the collections page to download your data. This is useful for backups or importing into other systems."
+    },
+    {
+      question: "How do I organize my collections?",
+      answer: "You can organize collections using folders. Create folders to group related collections together. You can also use tags to categorize and filter your collections. Drag and drop collections in the sidebar to reorder them."
+    },
+    {
+      question: "How do I reset my password?",
+      answer: "Click \"Forgot Password\" on the sign-in page. Enter your email address and you'll receive a password reset link. Click the link in the email to set a new password."
+    }
+  ]
 
   return (
     <>
