@@ -65,13 +65,13 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-3xl font-semibold text-center text-[#fafafa] tracking-tight">
+          <CardTitle className="text-3xl font-semibold text-center text-[var(--text-primary)] tracking-tight">
             Create Account
           </CardTitle>
-          <CardDescription className="text-center text-[#969696]">
+          <CardDescription className="text-center text-[var(--text-secondary)]">
             Sign up to start collecting
           </CardDescription>
         </CardHeader>
@@ -79,10 +79,10 @@ export default function SignUpPage() {
           {success ? (
             <div className="text-center py-8">
               <CheckCircle className="mx-auto h-16 w-16 text-[var(--accent-color)] mb-4" />
-              <h3 className="text-xl font-semibold text-[#fafafa] mb-2">
+              <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
                 Account Created!
               </h3>
-              <p className="text-[#969696]">
+              <p className="text-[var(--text-secondary)]">
                 Redirecting to sign in...
               </p>
             </div>
@@ -96,23 +96,23 @@ export default function SignUpPage() {
               )}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[#fafafa]">Name (optional)</Label>
+                  <Label htmlFor="name" className="text-[var(--text-primary)]">Name (optional)</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                     <Input
                       id="name"
                       type="text"
                       placeholder="Your name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[#fafafa]">Email *</Label>
+                  <Label htmlFor="email" className="text-[var(--text-primary)]">Email *</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                     <Input
                       id="email"
                       type="email"
@@ -120,14 +120,14 @@ export default function SignUpPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-[#fafafa]">Password *</Label>
+                  <Label htmlFor="password" className="text-[var(--text-primary)]">Password *</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                     <Input
                       id="password"
                       type="password"
@@ -136,17 +136,17 @@ export default function SignUpPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                     />
                   </div>
-                  <p className="text-xs text-[#969696]">
+                  <p className="text-xs text-[var(--text-secondary)]">
                     Password must be at least 6 characters long
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-[#fafafa]">Confirm Password *</Label>
+                  <Label htmlFor="confirmPassword" className="text-[var(--text-primary)]">Confirm Password *</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                     <Input
                       id="confirmPassword"
                       type="password"
@@ -154,7 +154,7 @@ export default function SignUpPage() {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
-                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      className="pl-10 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                     />
                   </div>
                 </div>
@@ -167,7 +167,7 @@ export default function SignUpPage() {
                 </Button>
               </form>
               <div className="mt-6 text-center">
-                <p className="text-sm text-[#969696]">
+                <p className="text-sm text-[var(--text-secondary)]">
                   Already have an account?{' '}
                   <Link 
                     href="/auth/signin" 

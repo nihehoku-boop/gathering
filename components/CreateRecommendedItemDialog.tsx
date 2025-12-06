@@ -80,46 +80,46 @@ export default function CreateRecommendedItemDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35]">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)]">
         <CardHeader>
-          <CardTitle className="text-[#fafafa]">Add Item</CardTitle>
-          <CardDescription className="text-[#969696]">
+          <CardTitle className="text-[var(--text-primary)]">Add Item</CardTitle>
+          <CardDescription className="text-[var(--text-secondary)]">
             Add a new item to this recommended collection
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-[#fafafa]">Item Name *</Label>
+              <Label htmlFor="name" className="text-[var(--text-primary)]">Item Name *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., Tintin in America"
                 required
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="number" className="text-[#fafafa]">Number</Label>
+              <Label htmlFor="number" className="text-[var(--text-primary)]">Number</Label>
               <Input
                 id="number"
                 type="number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
                 placeholder="e.g., 1, 2, 3"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="notes" className="text-[#fafafa]">Notes</Label>
+              <Label htmlFor="notes" className="text-[var(--text-primary)]">Notes</Label>
               <Textarea
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Optional notes about this item"
                 rows={3}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="space-y-2">
@@ -130,14 +130,14 @@ export default function CreateRecommendedItemDialog({
                 maxSize={10}
               />
               <div className="mt-2">
-                <Label htmlFor="image-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Label htmlFor="image-url" className="text-sm text-[var(--text-secondary)]">Or enter URL manually</Label>
                 <Input
                   id="image-url"
                   type="url"
                   value={image}
                   onChange={(e) => setImage(e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition mt-1"
                 />
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function CreateRecommendedItemDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={loading}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
             >
               Cancel
             </Button>
