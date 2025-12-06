@@ -29,6 +29,50 @@
     /* Custom accent color (default: yellow) */
     --accent-color: #FFD60A;
     --accent-color-hover: #E6C009;
+    
+    /* Theme-specific colors */
+    --bg-primary: #0f1114;
+    --bg-secondary: #1a1d24;
+    --bg-tertiary: #2a2d35;
+    --bg-hover: #353842;
+    --text-primary: #fafafa;
+    --text-secondary: #969696;
+    --text-muted: #666;
+    --border-color: #2a2d35;
+    --border-hover: #353842;
+  }
+  
+  :root.light {
+    /* Light theme colors */
+    --background: 0 0% 98%; /* Light gray background */
+    --foreground: 220 20% 8%; /* Dark text */
+    --card: 0 0% 100%; /* White card background */
+    --card-foreground: 220 20% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 8%;
+    --primary: 210 100% 50%; /* Apple blue #007AFF */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%; /* Light gray secondary */
+    --secondary-foreground: 220 20% 8%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%; /* Darker muted text */
+    --accent: 0 0% 96%;
+    --accent-foreground: 220 20% 8%;
+    --destructive: 0 84% 60%; /* Apple red #FF3B30 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%; /* Light gray borders */
+    --input: 0 0% 96%;
+    
+    /* Theme-specific colors for light mode */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-hover: #dee2e6;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+    --border-color: #dee2e6;
+    --border-hover: #ced4da;
   }
 }
 
@@ -37,9 +81,16 @@
     @apply border-border;
   }
   body {
-    @apply text-[#fafafa] antialiased;
-    background-color: hsl(220, 20%, 8%);
+    @apply antialiased;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
     font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  body.light {
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
   }
 }
 

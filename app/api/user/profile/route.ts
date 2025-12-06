@@ -20,6 +20,7 @@ export async function GET() {
         isPrivate: true,
         badge: true,
         accentColor: true,
+        themeMode: true,
         bio: true,
         bannerImage: true,
         profileTheme: true,
@@ -69,7 +70,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, isPrivate, badge, accentColor, bio, bannerImage, profileImage, profileTheme } = body
+    const { name, isPrivate, badge, accentColor, themeMode, bio, bannerImage, profileImage, profileTheme } = body
 
     const updateData: any = {}
     if (name !== undefined) {
@@ -83,6 +84,9 @@ export async function PATCH(request: NextRequest) {
     }
     if (accentColor !== undefined) {
       updateData.accentColor = accentColor || '#FFD60A'
+    }
+    if (themeMode !== undefined) {
+      updateData.themeMode = themeMode === 'light' ? 'light' : 'dark'
     }
     if (bio !== undefined) {
       updateData.bio = bio || null
@@ -121,6 +125,7 @@ export async function PATCH(request: NextRequest) {
         isPrivate: true,
         badge: true,
         accentColor: true,
+        themeMode: true,
         bio: true,
         bannerImage: true,
         profileTheme: true,

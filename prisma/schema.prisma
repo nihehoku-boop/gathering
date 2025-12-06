@@ -49,6 +49,7 @@ model User {
   isVerified    Boolean   @default(false) // Verified account badge (admin-only)
   badge         String?   // Badge identifier (placeholder for now)
   accentColor   String?   @default("#FFD60A") // User's preferred accent color
+  themeMode     String?   @default("dark") // Theme mode: "dark" or "light"
   bio           String?   // User's bio/about section
   bannerImage   String?   // Profile banner/header image URL
   profileTheme  String    @default("{}") // JSON object for theme customization (background, card style, font size)

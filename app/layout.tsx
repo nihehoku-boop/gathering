@@ -90,7 +90,7 @@ export default async function RootLayout({
   const defaultAccentColorHover = adjustBrightness(defaultAccentColor, -20)
 
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Resource hints for faster external resource loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -99,11 +99,17 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://assets.tcgdex.net" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         
-        {/* Inline critical script for accent color - optimized */}
+        {/* Inline critical script for accent color and theme - optimized */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                // Apply theme immediately to prevent flash
+                let t='dark';
+                try{t=localStorage.getItem('themeMode')||'dark'}catch(e){}
+                if(t==='light'){document.documentElement.classList.add('light');document.documentElement.classList.remove('dark');}else{document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');}
+                
+                // Apply accent color
                 let c='${defaultAccentColor}';
                 try{c=localStorage.getItem('accentColor')||c}catch(e){}
                 const a=(c,p)=>{const n=parseInt(c.replace('#',''),16),m=Math.round(2.55*p),R=Math.max(0,Math.min(255,(n>>16)+m)),G=Math.max(0,Math.min(255,((n>>8)&0xFF)+m)),B=Math.max(0,Math.min(255,(n&0xFF)+m));return'#'+(0x1000000+R*0x10000+G*0x100+B).toString(16).slice(1)};

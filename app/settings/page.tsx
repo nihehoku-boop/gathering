@@ -6,10 +6,11 @@ import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Settings, ArrowLeft } from 'lucide-react'
+import { Settings, ArrowLeft, Moon, Sun } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 import { hexToHsl } from '@/lib/color-utils'
+import { useTheme } from '@/components/ThemeProvider'
 
 const ACCENT_COLORS = [
   { name: 'Yellow', value: '#FFD60A', class: 'bg-[#FFD60A]' },
@@ -34,6 +35,7 @@ const adjustBrightness = (color: string, percent: number) => {
 export default function SettingsPage() {
   const router = useRouter()
   const { data: session, update } = useSession()
+  const { theme, toggleTheme } = useTheme()
   const [accentColor, setAccentColor] = useState('#FFD60A')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
   const [loading, setLoading] = useState(true)
@@ -158,6 +160,40 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Theme Mode */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-[#fafafa]">Theme Mode</Label>
+                    <p className="text-sm text-[#969696]">
+                      Switch between dark and light mode
+                    </p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={theme === 'light'}
+                      onChange={toggleTheme}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)]"></div>
+                  </label>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#969696]">
+                  {theme === 'dark' ? (
+                    <>
+                      <Moon className="h-4 w-4" />
+                      <span>Dark mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sun className="h-4 w-4" />
+                      <span>Light mode</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              
               {/* Accent Color */}
               <div className="space-y-3">
                 <Label className="text-[#fafafa]">Accent Color</Label>
