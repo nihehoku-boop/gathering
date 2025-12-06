@@ -767,7 +767,7 @@ export default function CollectionsList() {
                 setSelectedTags([])
               }}
               variant="outline"
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
             >
               Clear filters
             </Button>
@@ -953,7 +953,7 @@ export default function CollectionsList() {
                     </div>
                   </div>
                   {collection.description && (
-                    <CardDescription className="mt-3 text-[#969696]">
+                    <CardDescription className="mt-3 text-[var(--text-secondary)]">
                       {collection.description}
                     </CardDescription>
                   )}
@@ -961,7 +961,7 @@ export default function CollectionsList() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#969696]">Progress</span>
+                      <span className="text-[var(--text-secondary)]">Progress</span>
                       <span className="font-semibold text-[var(--text-primary)]">{progress}%</span>
                     </div>
                     <Progress value={progress} className="h-1.5" />

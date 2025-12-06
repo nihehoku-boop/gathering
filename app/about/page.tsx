@@ -111,9 +111,9 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">Features</CardTitle>
+                <CardTitle className="text-[var(--text-primary)]">Features</CardTitle>
                 <CardDescription className="text-[#969696]">
                   What you can do with Sammlerei
                 </CardDescription>
@@ -122,37 +122,37 @@ export default function AboutPage() {
                 <ul className="space-y-3 text-[#969696]">
                   <li className="flex items-start gap-3">
                     <span className="text-[var(--accent-color)] mt-1">•</span>
-                    <span><strong className="text-[#fafafa]">Create Collections:</strong> Organize your items into custom collections with tags, descriptions, and cover images</span>
+                    <span><strong className="text-[var(--text-primary)]">Create Collections:</strong> Organize your items into custom collections with tags, descriptions, and cover images</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-[var(--accent-color)] mt-1">•</span>
-                    <span><strong className="text-[#fafafa]">Track Progress:</strong> Mark items as owned and see your collection progress with visual progress bars</span>
+                    <span><strong className="text-[var(--text-primary)]">Track Progress:</strong> Mark items as owned and see your collection progress with visual progress bars</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-[var(--accent-color)] mt-1">•</span>
-                    <span><strong className="text-[#fafafa]">Recommended Collections:</strong> Discover curated collections recommended by admins and add them to your account</span>
+                    <span><strong className="text-[var(--text-primary)]">Recommended Collections:</strong> Discover curated collections recommended by admins and add them to your account</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-[var(--accent-color)] mt-1">•</span>
-                    <span><strong className="text-[#fafafa]">Auto-Updates:</strong> Get notified when recommended collections are updated and sync changes to your collections</span>
+                    <span><strong className="text-[var(--text-primary)]">Auto-Updates:</strong> Get notified when recommended collections are updated and sync changes to your collections</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-[var(--accent-color)] mt-1">•</span>
-                    <span><strong className="text-[#fafafa]">Customizable:</strong> Personalize your experience with accent colors and display preferences</span>
+                    <span><strong className="text-[var(--text-primary)]">Customizable:</strong> Personalize your experience with accent colors and display preferences</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-[var(--accent-color)] mt-1">•</span>
-                    <span><strong className="text-[#fafafa]">Bulk Import:</strong> Quickly add multiple items using numbered series, CSV, or manual lists</span>
+                    <span><strong className="text-[var(--text-primary)]">Bulk Import:</strong> Quickly add multiple items using numbered series, CSV, or manual lists</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <HelpCircle className="h-5 w-5 text-[var(--accent-color)]" />
-                  <CardTitle className="text-[#fafafa]">Frequently Asked Questions</CardTitle>
+                  <CardTitle className="text-[var(--text-primary)]">Frequently Asked Questions</CardTitle>
                 </div>
                 <CardDescription className="text-[#969696]">
                   Common questions about Sammlerei

@@ -1274,25 +1274,25 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         )}
                       </button>
                       {expandedItems.has(item.id) && (
-                        <div className="mt-2 pt-2 border-t border-[#2a2d35] space-y-1 text-xs">
+                        <div className="mt-2 pt-2 border-t border-[var(--border-color)] space-y-1 text-xs">
                           {item.wear && (
-                            <div className="text-[#969696]">
-                              <span className="font-medium text-[#fafafa]">Wear:</span> {item.wear}
+                            <div className="text-[var(--text-secondary)]">
+                              <span className="font-medium text-[var(--text-primary)]">Wear:</span> {item.wear}
                             </div>
                           )}
                           {item.personalRating && (
-                            <div className="text-[#969696]">
-                              <span className="font-medium text-[#fafafa]">Rating:</span> {item.personalRating}/10
+                            <div className="text-[var(--text-secondary)]">
+                              <span className="font-medium text-[var(--text-primary)]">Rating:</span> {item.personalRating}/10
                             </div>
                           )}
                           {item.logDate && (
-                            <div className="text-[#969696]">
-                              <span className="font-medium text-[#fafafa]">Date:</span> {new Date(item.logDate).toLocaleDateString()}
+                            <div className="text-[var(--text-secondary)]">
+                              <span className="font-medium text-[var(--text-primary)]">Date:</span> {new Date(item.logDate).toLocaleDateString()}
                             </div>
                           )}
                           {item.notes && (
-                            <div className="text-[#969696]">
-                              <span className="font-medium text-[#fafafa]">Notes:</span> {item.notes}
+                            <div className="text-[var(--text-secondary)]">
+                              <span className="font-medium text-[var(--text-primary)]">Notes:</span> {item.notes}
                             </div>
                           )}
                           {/* Custom Fields / Template Fields */}
@@ -1416,7 +1416,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     className={`rounded-lg border transition-colors animate-fade-up cursor-pointer ${
                       item.isOwned
                         ? 'bg-[#1a2e1a] border-[#34C759]' // Keep green for owned items
-                        : 'bg-[#1a1d24] border-[#2a2d35]'
+                        : 'bg-[var(--bg-secondary)] border-[var(--border-color)]'
                     } ${isSelectionMode && selectedItems.has(item.id) ? 'ring-2 ring-[var(--accent-color)]' : ''}`}
                     style={{
                       animationDelay: `${index * 30}ms`,
@@ -1455,12 +1455,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </button>
                     )}
                     <div className="flex-1">
-                      <div className="font-medium text-[#fafafa]">
+                      <div className="font-medium text-[var(--text-primary)]">
                         {item.number && `#${item.number} - `}
                         {item.name}
                       </div>
                       {item.notes && !expandedItems.has(item.id) && (
-                        <div className="text-sm text-[#969696] line-clamp-1">
+                        <div className="text-sm text-[var(--text-secondary)] line-clamp-1">
                           {item.notes}
                         </div>
                       )}
@@ -1475,7 +1475,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         }
                         setExpandedItems(newExpanded)
                       }}
-                      className="flex items-center gap-1 text-sm text-[#969696] hover:text-[var(--accent-color)] smooth-transition"
+                      className="flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--accent-color)] smooth-transition"
                     >
                       <Info className="h-4 w-4" />
                       {expandedItems.has(item.id) ? (
@@ -1562,13 +1562,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           </div>
                         )}
                         {item.personalRating && (
-                          <div className="text-[#969696]">
-                            <span className="font-medium text-[#fafafa]">Rating:</span> {item.personalRating}/10
+                          <div className="text-[var(--text-secondary)]">
+                            <span className="font-medium text-[var(--text-primary)]">Rating:</span> {item.personalRating}/10
                           </div>
                         )}
                         {item.logDate && (
-                          <div className="text-[#969696]">
-                            <span className="font-medium text-[#fafafa]">Date:</span> {new Date(item.logDate).toLocaleDateString()}
+                          <div className="text-[var(--text-secondary)]">
+                            <span className="font-medium text-[var(--text-primary)]">Date:</span> {new Date(item.logDate).toLocaleDateString()}
                           </div>
                         )}
                         {item.notes && (
@@ -1591,8 +1591,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 } catch {}
                               }
                               return (
-                                <div key={fieldDef.id} className="text-[#969696]">
-                                  <span className="font-medium text-[#fafafa]">{fieldDef.label}:</span> {displayValue}
+                                <div key={fieldDef.id} className="text-[var(--text-secondary)]">
+                                  <span className="font-medium text-[var(--text-primary)]">{fieldDef.label}:</span> {displayValue}
                                 </div>
                               )
                             }).filter(Boolean)
@@ -1601,7 +1601,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         })()}
                         {!item.wear && !item.personalRating && !item.logDate && !item.notes && 
                          (!collection?.customFieldDefinitions || Object.keys(getItemCustomFields(item)).length === 0) && (
-                          <div className="text-[#666] italic">No additional information</div>
+                          <div className="text-[var(--text-muted)] italic">No additional information</div>
                         )}
                       </div>
                     )}
