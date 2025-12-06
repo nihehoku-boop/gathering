@@ -561,9 +561,9 @@ export default function CollectionsList() {
                         >
                           <Users className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
-                            <div className="text-sm text-[#fafafa]">{collection.name}</div>
+                            <div className="text-sm text-[var(--text-primary)]">{collection.name}</div>
                             {collection.description && (
-                              <div className="text-xs text-[#666] truncate">{collection.description}</div>
+                              <div className="text-xs text-[var(--text-muted)] truncate">{collection.description}</div>
                             )}
                           </div>
                         </button>
@@ -573,7 +573,7 @@ export default function CollectionsList() {
                   {searchResults.collections.length === 0 && 
                    searchResults.items.length === 0 && 
                    searchResults.communityCollections.length === 0 && (
-                    <div className="p-4 text-center text-[#969696]">No results found</div>
+                    <div className="p-4 text-center text-[var(--text-secondary)]">No results found</div>
                   )}
                 </>
               ) : null}
@@ -593,7 +593,7 @@ export default function CollectionsList() {
               compact={true}
             />
             {(searchQuery || selectedTags.length > 0) && (
-              <div className="text-sm text-[#666] whitespace-nowrap">
+              <div className="text-sm text-[var(--text-muted)] whitespace-nowrap">
                 Showing {filteredCollections.length} of {collections.length} collections
               </div>
             )}
@@ -603,7 +603,7 @@ export default function CollectionsList() {
             <Button
               variant="outline"
               onClick={() => setShowSortMenu(!showSortMenu)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
             >
               <ArrowUpDown className="mr-2 h-4 w-4" />
               Sort
@@ -614,55 +614,55 @@ export default function CollectionsList() {
                   className="fixed inset-0 z-10" 
                   onClick={() => setShowSortMenu(false)}
                 />
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-20 overflow-hidden">
-                  <div className="px-3 py-2 text-xs font-semibold text-[#969696] uppercase border-b border-[#2a2d35]">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                  <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
                     Sort by
                   </div>
                   <button
                     onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'name-asc' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Name (A-Z)
                   </button>
                   <button
                     onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'name-desc' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Name (Z-A)
                   </button>
                   <button
                     onClick={() => { setSortBy('items-desc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'items-desc' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'items-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Most Items
                   </button>
                   <button
                     onClick={() => { setSortBy('items-asc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'items-asc' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'items-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Fewest Items
                   </button>
                   <button
                     onClick={() => { setSortBy('progress-desc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'progress-desc' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'progress-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Highest Progress
                   </button>
                   <button
                     onClick={() => { setSortBy('progress-asc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'progress-asc' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'progress-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Lowest Progress
                   </button>
                   <button
                     onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'date-new' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'date-new' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Newest First
                   </button>
                   <button
                     onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'date-old' ? 'bg-[#2a2d35]' : ''}`}
+                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'date-old' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                   >
                     Oldest First
                   </button>
@@ -674,7 +674,7 @@ export default function CollectionsList() {
             <Button
               variant="outline"
               onClick={() => setShowExportMenu(!showExportMenu)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
             >
               <Download className="mr-2 h-4 w-4" />
               Export All
@@ -686,13 +686,13 @@ export default function CollectionsList() {
                   className="fixed inset-0 z-10" 
                   onClick={() => setShowExportMenu(false)}
                 />
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-20 overflow-hidden">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
                   <button
                     onClick={() => {
                       window.open('/api/collections/export?format=json', '_blank')
                       setShowExportMenu(false)
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                    className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                   >
                     <Download className="h-4 w-4" />
                     Export All as JSON
@@ -702,7 +702,7 @@ export default function CollectionsList() {
                       window.open('/api/collections/export?format=csv', '_blank')
                       setShowExportMenu(false)
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition flex items-center gap-2 border-t border-[#2a2d35]"
+                    className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
                   >
                     <Download className="h-4 w-4" />
                     Export All as CSV
@@ -714,7 +714,7 @@ export default function CollectionsList() {
             <Button
             variant="outline"
             onClick={() => setShowImportDialog(true)}
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
           >
             <Upload className="mr-2 h-4 w-4" />
             Import Collections
@@ -724,13 +724,13 @@ export default function CollectionsList() {
       )}
 
       {collections.length === 0 ? (
-        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-16 text-center">
-            <BookOpen className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-            <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+            <BookOpen className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               No collections yet
             </h3>
-            <p className="text-[#969696] mb-6">
+            <p className="text-[var(--text-secondary)] mb-6">
               Start tracking your collections by creating your first one!
             </p>
             <Button 
@@ -752,13 +752,13 @@ export default function CollectionsList() {
           </CardContent>
         </Card>
       ) : filteredCollections.length === 0 ? (
-        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-16 text-center">
-            <Search className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-            <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+            <Search className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               No collections found
             </h3>
-            <p className="text-[#969696] mb-6">
+            <p className="text-[var(--text-secondary)] mb-6">
               Try adjusting your search or filter criteria
             </p>
             <Button
@@ -780,14 +780,14 @@ export default function CollectionsList() {
             return (
               <Card
                 key={collection.id}
-                className="bg-[#1a1d24] border-[#2a2d35] hover:border-[#353842] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up"
+                className="bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up"
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
                 onClick={() => router.push(`/collections/${collection.id}`)}
               >
                 {collection.coverImage && (
-                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35] relative">
+                  <div className="w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative">
                     <Image
                       src={collection.coverImage}
                       alt={collection.name}
@@ -811,7 +811,7 @@ export default function CollectionsList() {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
-                      <CardTitle className="text-xl text-[#fafafa]">{collection.name}</CardTitle>
+                      <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
                       <div className="flex flex-wrap gap-2 mt-2">
                         {collection.folder && (
                           <span className="text-xs text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded-full inline-block border border-[var(--accent-color)]/30" title={`Folder: ${collection.folder.name}`}>
@@ -819,7 +819,7 @@ export default function CollectionsList() {
                           </span>
                         )}
                         {collection.category && (
-                          <span className="text-xs text-[#969696] bg-[#2a2d35] px-2 py-1 rounded-full inline-block" title={collection.category}>
+                          <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-block" title={collection.category}>
                             {collection.category}
                           </span>
                         )}
@@ -854,7 +854,7 @@ export default function CollectionsList() {
                                 e.stopPropagation()
                                 handleSync(collection.id)
                               }}
-                              className="text-[#FF9500] hover:text-[#FF9500] hover:bg-[#2a2d35] smooth-transition relative"
+                              className="text-[#FF9500] hover:text-[#FF9500] hover:bg-[var(--bg-tertiary)] smooth-transition relative"
                               title={updateStatus.isCustomized ? 'Update available (customized)' : 'Update available'}
                             >
                               <RefreshCw className="h-4 w-4" />
@@ -923,7 +923,7 @@ export default function CollectionsList() {
                             },
                           })
                         }}
-                        className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] smooth-transition"
+                        className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                         title="Share to Community"
                       >
                         <Users className="h-4 w-4" />
@@ -935,7 +935,7 @@ export default function CollectionsList() {
                           e.stopPropagation()
                           setEditingCollection(collection)
                         }}
-                        className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] hover:bg-[#2a2d35] smooth-transition"
+                        className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -946,7 +946,7 @@ export default function CollectionsList() {
                           e.stopPropagation()
                           handleDelete(collection.id)
                         }}
-                        className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[#2a2d35] smooth-transition"
+                        className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[var(--bg-tertiary)] smooth-transition"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

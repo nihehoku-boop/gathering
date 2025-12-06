@@ -94,7 +94,7 @@ export default function AchievementsPage() {
           <div className="container mx-auto px-6 py-8">
             <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
-                <Lock className="mx-auto h-16 w-16 text-[#353842] mb-6" />
+                <Lock className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
                 <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   Sign in required
                 </h3>
@@ -200,7 +200,7 @@ export default function AchievementsPage() {
                             className={`p-4 rounded-lg border transition-all ${
                               unlocked
                                 ? 'bg-[var(--bg-tertiary)] border-[var(--accent-color)]/50'
-                                : 'bg-[#1a1d24] border-[var(--border-hover)] opacity-60'
+                                : 'bg-[var(--bg-secondary)] border-[var(--border-hover)] opacity-60'
                             }`}
                           >
                             <div className="flex items-start gap-3">
@@ -210,7 +210,7 @@ export default function AchievementsPage() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   <h3 className={`font-semibold ${
-                                    unlocked ? 'text-[var(--text-primary)]' : 'text-[#666]'
+                                    unlocked ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'
                                   }`}>
                                     {achievement.name}
                                   </h3>
@@ -228,7 +228,7 @@ export default function AchievementsPage() {
                                   )}
                                 </div>
                                 <p className={`text-sm ${
-                                  unlocked ? 'text-[var(--text-secondary)]' : 'text-[#666]'
+                                  unlocked ? 'text-[var(--text-secondary)]' : 'text-[var(--text-muted)]'
                                 }`}>
                                   {achievement.description}
                                 </p>

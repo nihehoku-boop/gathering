@@ -953,7 +953,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         variant="outline"
                         size="sm"
                         onClick={() => setShowSortMenu(!showSortMenu)}
-                        className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                        className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       >
                         <ArrowUpDown className="mr-2 h-4 w-4" />
                         Sort
@@ -964,67 +964,67 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         className="fixed inset-0 z-10" 
                         onClick={() => setShowSortMenu(false)}
                       />
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-20 overflow-hidden">
-                        <div className="px-3 py-2 text-xs font-semibold text-[#969696] uppercase border-b border-[#2a2d35]">
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                        <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
                           Sort by
                         </div>
                         <button
                           onClick={() => { setSortBy('number-asc'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'number-asc' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'number-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Number (Low to High)
                         </button>
                         <button
                           onClick={() => { setSortBy('number-desc'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'number-desc' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'number-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Number (High to Low)
                         </button>
                         <button
                           onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'name-asc' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'name-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Name (A-Z)
                         </button>
                         <button
                           onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'name-desc' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Name (Z-A)
                         </button>
                         <button
                           onClick={() => { setSortBy('owned'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'owned' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'owned' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Owned First
                         </button>
                         <button
                           onClick={() => { setSortBy('not-owned'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'not-owned' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'not-owned' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Not Owned First
                         </button>
                         <button
                           onClick={() => { setSortBy('rating-high'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'rating-high' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'rating-high' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Rating (High to Low)
                         </button>
                         <button
                           onClick={() => { setSortBy('rating-low'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'rating-low' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'rating-low' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Rating (Low to High)
                         </button>
                         <button
                           onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition border-t border-[#2a2d35] ${sortBy === 'date-new' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'date-new' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Date Added (Newest)
                         </button>
                         <button
                           onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
-                          className={`w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${sortBy === 'date-old' ? 'bg-[#2a2d35]' : ''}`}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'date-old' ? 'bg-[var(--bg-tertiary)]' : ''}`}
                         >
                           Date Added (Oldest)
                         </button>
@@ -1036,7 +1036,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       variant={viewMode === 'cover' ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setViewMode('cover')}
-                      className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                      className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                     >
                       <Grid3x3 className="mr-2 h-4 w-4" />
                       Cover
@@ -1045,7 +1045,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       variant={viewMode === 'list' ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setViewMode('list')}
-                      className={viewMode === 'list' ? 'accent-button text-white' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                      className={viewMode === 'list' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                     >
                       <List className="mr-2 h-4 w-4" />
                       List
@@ -1063,7 +1063,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     type="button"
                     variant="outline"
                     onClick={() => setShowBulkImport(true)}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                     size="icon"
                     title="Bulk Import Items"
                   >
@@ -1086,7 +1086,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       placeholder="Item name (e.g., Book #1)"
                       value={newItemName}
                       onChange={(e) => setNewItemName(e.target.value)}
-                      className="flex-1 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                      className="flex-1 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
                       autoFocus
                     />
                     <Input
@@ -1094,7 +1094,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       placeholder="Number"
                       value={newItemNumber}
                       onChange={(e) => setNewItemNumber(e.target.value)}
-                      className="w-24 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                      className="w-24 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
                     />
                     <Button 
                       type="submit" 
@@ -1112,7 +1112,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         setNewItemName('')
                         setNewItemNumber('')
                       }}
-                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -1122,7 +1122,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             </div>
 
             {items.length === 0 && !loading && !itemsLoading && (
-              <div className="text-center py-12 text-[#969696]">
+              <div className="text-center py-12 text-[var(--text-secondary)]">
                 No items yet. Add your first item above!
               </div>
             )}
@@ -1142,7 +1142,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     className={`relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer ${
                       item.isOwned
                         ? 'border-[#34C759] shadow-md'
-                        : 'border-[#2a2d35] hover:border-[#353842]'
+                        : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
                     } ${isSelectionMode && selectedItems.has(item.id) ? 'ring-2 ring-[var(--accent-color)]' : ''}`}
                     style={{
                       animationDelay: `${index * 30}ms`,
@@ -1163,7 +1163,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
                             selectedItems.has(item.id)
                               ? 'bg-[var(--accent-color)] border-[var(--accent-color)]'
-                              : 'bg-[#1a1d24]/90 border-[#353842] hover:border-[var(--accent-color)]'
+                              : 'bg-[var(--bg-secondary)]/90 border-[var(--border-hover)] hover:border-[var(--accent-color)]'
                           }`}
                         >
                           {selectedItems.has(item.id) && <Check className="h-4 w-4 text-white" />}
@@ -1171,7 +1171,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </div>
                     )}
                     <div 
-                      className="bg-[#2a2d35] relative"
+                      className="bg-[var(--bg-tertiary)] relative"
                       style={{
                         aspectRatio: collection.coverImageAspectRatio 
                           ? collection.coverImageAspectRatio.replace(':', '/')
@@ -1208,7 +1208,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                       e.stopPropagation()
                                       setViewingAlternatives(item)
                                     }}
-                                    className="absolute bottom-2 left-2 bg-[#1a1d24]/90 hover:bg-[#2a2d35] text-[#fafafa] text-xs px-2 py-1 rounded-full border border-[#353842] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity smooth-transition z-10"
+                                    className="absolute bottom-2 left-2 bg-[var(--bg-secondary)]/90 hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] text-xs px-2 py-1 rounded-full border border-[var(--border-hover)] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity smooth-transition z-10"
                                     title={`${altImages.length} alternative cover${altImages.length !== 1 ? 's' : ''}`}
                                   >
                                     <ImageIcon className="h-3 w-3" />
@@ -1225,10 +1225,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#2a2d35] to-[#1a1d24]">
                           <div className="text-center p-2">
-                            <div className="text-xs font-semibold text-[#969696]">
+                            <div className="text-xs font-semibold text-[var(--text-secondary)]">
                               {item.number && `#${item.number}`}
                             </div>
-                            <div className="text-xs text-[#666] mt-1 line-clamp-2">
+                            <div className="text-xs text-[var(--text-muted)] mt-1 line-clamp-2">
                               {item.name}
                             </div>
                           </div>
@@ -1240,15 +1240,15 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-md ${
                             item.isOwned
                               ? 'bg-[#34C759] border-[#30D158] text-white'
-                              : 'bg-[#1a1d24] border-[#353842] hover:border-[#34C759]'
+                              : 'bg-[var(--bg-secondary)] border-[var(--border-hover)] hover:border-[#34C759]'
                           }`}
                         >
                           {item.isOwned && <Check className="h-3 w-3" />}
                         </button>
                       )}
                     </div>
-                    <div className="p-2 bg-[#1a1d24]">
-                      <div className="text-xs font-medium truncate text-[#fafafa]">
+                    <div className="p-2 bg-[var(--bg-secondary)]">
+                      <div className="text-xs font-medium truncate text-[var(--text-primary)]">
                         {item.number && `#${item.number} `}
                         {item.name}
                       </div>
@@ -1263,7 +1263,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           }
                           setExpandedItems(newExpanded)
                         }}
-                        className="mt-1 flex items-center gap-1 text-xs text-[#969696] hover:text-[var(--accent-color)] smooth-transition"
+                        className="mt-1 flex items-center gap-1 text-xs text-[var(--text-secondary)] hover:text-[var(--accent-color)] smooth-transition"
                       >
                         <Info className="h-3 w-3" />
                         <span>Info</span>
@@ -1310,8 +1310,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                   } catch {}
                                 }
                                 return (
-                                  <div key={fieldDef.id} className="text-[#969696]">
-                                    <span className="font-medium text-[#fafafa]">{fieldDef.label}:</span> {displayValue}
+                                  <div key={fieldDef.id} className="text-[var(--text-secondary)]">
+                                    <span className="font-medium text-[var(--text-primary)]">{fieldDef.label}:</span> {displayValue}
                                   </div>
                                 )
                               }).filter(Boolean)
@@ -1325,7 +1325,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                             const hasStandardFields = item.wear || item.personalRating || item.logDate || item.notes
                             
                             if (!hasStandardFields && !hasTemplateFields) {
-                              return <div className="text-[#666] italic">No additional information</div>
+                              return <div className="text-[var(--text-muted)] italic">No additional information</div>
                             }
                             return null
                           })()}
@@ -1415,7 +1415,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     data-last-item={index === sortedItems.length - 1 ? true : undefined}
                     className={`rounded-lg border transition-colors animate-fade-up cursor-pointer ${
                       item.isOwned
-                        ? 'bg-[#1a2e1a] border-[#34C759]'
+                        ? 'bg-[#1a2e1a] border-[#34C759]' // Keep green for owned items
                         : 'bg-[#1a1d24] border-[#2a2d35]'
                     } ${isSelectionMode && selectedItems.has(item.id) ? 'ring-2 ring-[var(--accent-color)]' : ''}`}
                     style={{

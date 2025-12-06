@@ -663,7 +663,7 @@ export default function Sidebar() {
 
               {/* Collections List */}
               {isCollectionsOpen && (
-                <div className="mt-1 ml-4 space-y-1 border-l border-[#2a2d35] pl-4">
+                <div className="mt-1 ml-4 space-y-1 border-l border-[var(--border-color)] pl-4">
                   <button
                     onMouseEnter={() => {
                       // Prefetch route and data on hover
@@ -687,8 +687,8 @@ export default function Sidebar() {
                     className={cn(
                       "w-full flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm",
                       pathname === '/'
-                        ? "bg-[#2a2d35] text-[#fafafa]"
-                        : "text-[#666] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                        ? "bg-[var(--bg-tertiary)] text-[var(--text-primary)]"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                     )}
                   >
                     <span>All Collections</span>
@@ -716,7 +716,7 @@ export default function Sidebar() {
                         }}
                         placeholder="Folder name..."
                         autoFocus
-                        className="flex-1 px-2 py-1 text-xs bg-[#2a2d35] border border-[#3a3d45] rounded text-[#fafafa] placeholder-[#666] focus:outline-none focus:border-[var(--accent-color)]"
+                        className="flex-1 px-2 py-1 text-xs bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-color)]"
                       />
                       <button
                         onClick={handleCreateFolder}
@@ -730,7 +730,7 @@ export default function Sidebar() {
                           setNewFolderName('')
                           setShowNewFolderInput(false)
                         }}
-                        className="p-1 text-[#666] hover:text-[#fafafa] smooth-transition"
+                        className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] smooth-transition"
                         title="Cancel"
                       >
                         <X className="h-3 w-3" />
@@ -750,7 +750,7 @@ export default function Sidebar() {
                             onClick={() => toggleFolder(folder.id)}
                             className={cn(
                               "flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm relative",
-                              "text-[#666] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                              "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                             )}
                           >
                             {isOpen ? (
@@ -773,14 +773,14 @@ export default function Sidebar() {
                                     }
                                   }}
                                   autoFocus
-                                  className="flex-1 px-1 text-xs bg-[#1a1d24] border border-[var(--accent-color)] rounded text-[#fafafa] focus:outline-none"
+                                  className="flex-1 px-1 text-xs bg-[var(--bg-secondary)] border border-[var(--accent-color)] rounded text-[var(--text-primary)] focus:outline-none"
                                   onClick={(e) => e.stopPropagation()}
                                 />
                               ) : (
                                 <span className="truncate flex-1">{folder.name}</span>
                               )}
                               {folder._count && (
-                                <span className="text-xs text-[#666] flex-shrink-0">({folder._count.collections})</span>
+                                <span className="text-xs text-[var(--text-muted)] flex-shrink-0">({folder._count.collections})</span>
                               )}
                             </div>
                           </button>
@@ -790,7 +790,7 @@ export default function Sidebar() {
                                 e.stopPropagation()
                                 setEditingFolder(folder.id)
                               }}
-                              className="p-1 text-[#666] hover:text-[var(--accent-color)] smooth-transition"
+                              className="p-1 text-[var(--text-muted)] hover:text-[var(--accent-color)] smooth-transition"
                               title="Rename folder"
                             >
                               <Edit className="h-3 w-3" />
@@ -805,7 +805,7 @@ export default function Sidebar() {
                           </div>
                         </div>
                         {isOpen && folderCollections.length > 0 && (
-                          <div className="ml-6 space-y-1 border-l border-[#2a2d35] pl-3">
+                          <div className="ml-6 space-y-1 border-l border-[var(--border-color)] pl-3">
                             <DndContext
                               sensors={sensors}
                               collisionDetection={closestCenter}
@@ -872,21 +872,21 @@ export default function Sidebar() {
                       setShowCreateDialog(true)
                     }
                   }}
-                  className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
                   title="Create new collection"
                 >
                   <Plus className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => setShowNewFolderInput(true)}
-                  className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
                   title="Create new folder"
                 >
                   <FolderPlus className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => router.push('/settings')}
-                  className="p-2 text-[#666] hover:text-[var(--accent-color)] hover:bg-[#2a2d35] rounded-full smooth-transition"
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
                   title="Settings"
                 >
                   <Settings className="h-5 w-5" />
@@ -897,19 +897,19 @@ export default function Sidebar() {
 
           {/* Overall Progress */}
           {session?.user?.id && collections.length > 0 && showProgress && (
-            <div className="p-4 border-t border-[#2a2d35] bg-[#1a1d24]">
+            <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-secondary)]">
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#969696] font-medium">Overall Progress</span>
-                  <span className="text-[#fafafa] font-semibold">
+                  <span className="text-[var(--text-secondary)] font-medium">Overall Progress</span>
+                  <span className="text-[var(--text-primary)] font-semibold">
                     {ownedItems} / {totalItems}
                   </span>
                 </div>
                 <Progress 
                   value={percentage} 
-                  className="h-2 bg-[#2a2d35]"
+                  className="h-2"
                 />
-                <div className="text-xs text-[#666] text-center">
+                <div className="text-xs text-[var(--text-muted)] text-center">
                   {percentage}% complete
                 </div>
               </div>

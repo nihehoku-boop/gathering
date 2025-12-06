@@ -71,33 +71,33 @@ export default function AboutPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
             </div>
             <div className="flex items-center gap-3 mb-3">
-              <Info className="h-8 w-8 text-[#fafafa]" />
-              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">About Sammlerei</h1>
+              <Info className="h-8 w-8 text-[var(--text-primary)]" />
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">About Sammlerei</h1>
             </div>
-            <p className="text-[#969696] text-lg mb-10">
+            <p className="text-[var(--text-secondary)] text-lg mb-10">
               Learn more about this collection management platform
             </p>
           </div>
 
           <div className="max-w-4xl space-y-6">
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">What is Sammlerei?</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">What is Sammlerei?</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   A modern platform for managing your collections
                 </CardDescription>
               </CardHeader>
@@ -196,34 +196,34 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">About the Developer</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">About the Developer</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   The story behind Sammlerei
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 text-[#969696]">
+              <CardContent className="space-y-4 text-[var(--text-secondary)]">
                 <p>
-                  Hi! I'm <strong className="text-[#fafafa]">Nico "Henske"</strong>, the creator of Sammlerei. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
+                  Hi! I'm <strong className="text-[var(--text-primary)]">Nico "Henske"</strong>, the creator of Sammlerei. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
                 </p>
                 <p>
                   That's why I built Sammlerei - a modern, intuitive platform designed by a collector, for collectors. Whether you're tracking comics, trading cards, books, films, or any other collectibles, Sammlerei provides the tools you need to stay organized and see your progress at a glance.
                 </p>
-                <p className="text-sm italic border-t border-[#2a2d35] pt-4">
-                  <strong className="text-[#fafafa]">Development Note:</strong> This platform was developed with the assistance of AI tools for certain coding tasks, including code generation, debugging, and optimization. All design decisions, feature planning, and final implementation were made by the developer.
+                <p className="text-sm italic border-t border-[var(--border-color)] pt-4">
+                  <strong className="text-[var(--text-primary)]">Development Note:</strong> This platform was developed with the assistance of AI tools for certain coding tasks, including code generation, debugging, and optimization. All design decisions, feature planning, and final implementation were made by the developer.
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">Technology</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">Technology</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   Built with modern web technologies
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 text-[#969696]">
+              <CardContent className="space-y-4 text-[var(--text-secondary)]">
                 <p>
                   Sammlerei is built using Next.js 14, React, TypeScript, Prisma, and SQLite. The platform features a modern, responsive design with a dark theme optimized for extended use.
                 </p>
@@ -233,15 +233,15 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">Data Sources & Attribution</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">Data Sources & Attribution</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   APIs and services we use
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-start gap-4 p-4 bg-[#0f1114] rounded-lg border border-[#2a2d35]">
+                <div className="flex items-start gap-4 p-4 bg-[var(--bg-primary)] rounded-lg border border-[var(--border-color)]">
                   <div className="flex-shrink-0">
                     <img 
                       src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692cc94f794c356c81506d9bfc7d01065f5a8c1370c85545e2.svg" 
@@ -249,9 +249,9 @@ export default function AboutPage() {
                       className="h-8 w-auto"
                     />
                   </div>
-                  <div className="flex-1 text-[#969696] text-sm">
+                  <div className="flex-1 text-[var(--text-secondary)] text-sm">
                     <p className="mb-2">
-                      <strong className="text-[#fafafa]">The Movie Database (TMDb)</strong> - Movie data and poster images for film collections are provided by TMDb.
+                      <strong className="text-[var(--text-primary)]">The Movie Database (TMDb)</strong> - Movie data and poster images for film collections are provided by TMDb.
                     </p>
                     <p className="text-xs italic">
                       This product uses the TMDb API but is not endorsed or certified by TMDb.

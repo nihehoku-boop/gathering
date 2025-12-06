@@ -96,7 +96,7 @@ export default function StatisticsPage() {
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -213,7 +213,7 @@ export default function StatisticsPage() {
                       .map(([tag, count]) => (
                         <div
                           key={tag}
-                          className="bg-[#2a2d35] border border-[var(--border-hover)] px-3 py-1 rounded-full text-sm"
+                          className="bg-[var(--bg-tertiary)] border border-[var(--border-hover)] px-3 py-1 rounded-full text-sm"
                         >
                           <span className="text-[var(--text-primary)]">{tag}</span>
                           <span className="text-[var(--text-secondary)] ml-2">({count})</span>
@@ -277,7 +277,7 @@ export default function StatisticsPage() {
                 {statistics.collectionsByItemCount.map((collection) => (
                   <div
                     key={collection.id}
-                    className="flex justify-between items-center p-3 bg-[#2a2d35] rounded-lg border border-[var(--border-hover)] hover:border-[var(--accent-color)] smooth-transition cursor-pointer"
+                    className="flex justify-between items-center p-3 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-hover)] hover:border-[var(--accent-color)] smooth-transition cursor-pointer"
                     onClick={() => router.push(`/collections/${collection.id}`)}
                   >
                     <div>

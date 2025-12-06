@@ -86,7 +86,7 @@ export default function LeaderboardPage() {
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -110,7 +110,7 @@ export default function LeaderboardPage() {
           ) : leaderboard.length === 0 ? (
             <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
-                <Trophy className="mx-auto h-16 w-16 text-[#353842] mb-6" />
+                <Trophy className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
                 <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   No rankings yet
                 </h3>
@@ -122,7 +122,7 @@ export default function LeaderboardPage() {
           ) : (
             <div className="max-w-4xl space-y-4">
               {session && currentUserRank > 0 && (
-                <Card className={`bg-[#1a1d24] border-2 ${getRankColor(currentUserRank)}`}>
+                <Card className={`bg-[var(--bg-secondary)] border-2 ${getRankColor(currentUserRank)}`}>
                   <CardHeader>
                     <CardTitle className="text-[var(--text-primary)] flex items-center gap-2">
                       <Award className="h-5 w-5 text-[var(--accent-color)]" />
@@ -192,7 +192,7 @@ export default function LeaderboardPage() {
                               className="w-10 h-10 rounded-full border-2 border-[var(--border-hover)] flex-shrink-0"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-[#2a2d35] border-2 border-[var(--border-hover)] flex items-center justify-center flex-shrink-0">
+                            <div className="w-10 h-10 rounded-full bg-[var(--bg-tertiary)] border-2 border-[var(--border-hover)] flex items-center justify-center flex-shrink-0">
                               <span className="text-sm font-semibold text-[var(--text-primary)]">
                                 {entry.name.charAt(0).toUpperCase()}
                               </span>
@@ -225,7 +225,7 @@ export default function LeaderboardPage() {
                             <div className="text-sm text-[var(--text-secondary)]">
                               {entry.ownedItems} / {entry.totalItems} items owned
                             </div>
-                            <div className="mt-1 w-full bg-[#2a2d35] rounded-full h-1.5 overflow-hidden">
+                            <div className="mt-1 w-full bg-[var(--bg-tertiary)] rounded-full h-1.5 overflow-hidden">
                               <div
                                 className="h-full bg-[var(--accent-color)] smooth-transition"
                                 style={{ width: `${progress}%` }}
