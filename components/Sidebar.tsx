@@ -393,14 +393,14 @@ export default function Sidebar() {
         className={cn(
           "w-full flex items-center gap-2 px-3 py-2 rounded-full text-left smooth-transition text-sm truncate group",
           isCollectionActive(collection.id)
-            ? "bg-[#2a2d35] text-[#fafafa]"
-            : "text-[#666] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+            ? "bg-[var(--bg-tertiary)] text-[var(--text-primary)]"
+            : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
         )}
       >
         <div
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing text-[#666] hover:text-[#fafafa] opacity-0 group-hover:opacity-100 smooth-transition p-1 -ml-1"
+          className="cursor-grab active:cursor-grabbing text-[var(--text-muted)] hover:text-[var(--text-primary)] opacity-0 group-hover:opacity-100 smooth-transition p-1 -ml-1"
           title="Drag to reorder"
         >
           <GripVertical className="h-3 w-3" />
@@ -461,7 +461,7 @@ export default function Sidebar() {
       {/* Sidebar with swipe to close */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-full w-64 bg-[#1a1d24] border-r border-[#2a2d35] z-50 transition-transform duration-300 ease-in-out will-change-transform",
+          "fixed left-0 top-0 h-full w-64 bg-[var(--bg-secondary)] border-r border-[var(--border-color)] z-50 transition-transform duration-300 ease-in-out will-change-transform",
           "lg:translate-x-0",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
@@ -501,13 +501,13 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#2a2d35]">
-            <h2 className="text-xl font-semibold text-[#fafafa] tracking-tight">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
               Gathering
             </h2>
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden text-[#969696] hover:text-[#fafafa] smooth-transition"
+              className="lg:hidden text-[var(--text-secondary)] hover:text-[var(--text-primary)] smooth-transition"
             >
               <X className="h-5 w-5" />
             </button>
@@ -540,7 +540,7 @@ export default function Sidebar() {
                 "w-full flex items-center gap-3 px-4 py-3 rounded-full text-left smooth-transition",
                 isActive('/recommended')
                   ? "bg-[var(--accent-color)] text-white"
-                  : "text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
               )}
             >
               <Star className="h-5 w-5" />
@@ -572,7 +572,7 @@ export default function Sidebar() {
                 "w-full flex items-center gap-3 px-4 py-3 rounded-full text-left smooth-transition",
                 isActive('/community')
                   ? "bg-[var(--accent-color)] text-white"
-                  : "text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
               )}
             >
               <Users className="h-5 w-5" />
@@ -604,7 +604,7 @@ export default function Sidebar() {
                 "w-full flex items-center gap-3 px-4 py-3 rounded-full text-left smooth-transition",
                 isActive('/wishlist')
                   ? "bg-[var(--accent-color)] text-white"
-                  : "text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
               )}
             >
               <Heart className="h-5 w-5" />
@@ -641,7 +641,7 @@ export default function Sidebar() {
                     "flex-1 flex items-center justify-between px-4 py-3 rounded-full text-left smooth-transition",
                     isActive('/') && !isCollectionsOpen
                       ? "bg-[var(--accent-color)] text-white"
-                      : "text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35]"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                   )}
                 >
                   <div className="flex items-center gap-3">

@@ -18,13 +18,13 @@ export default async function Home() {
     <>
       <Sidebar />
       <Navbar />
-      <main className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <main className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
           <div className="mb-10">
-            <h1 className="text-5xl font-semibold text-[#fafafa] mb-3 tracking-tight" style={{ contentVisibility: 'auto' }}>
+            <h1 className="text-5xl font-semibold text-[var(--text-primary)] mb-3 tracking-tight" style={{ contentVisibility: 'auto' }}>
               My Collections
             </h1>
-            <p className="text-[#969696] text-lg flex flex-wrap items-center gap-1.5">
+            <p className="text-[var(--text-secondary)] text-lg flex flex-wrap items-center gap-1.5">
               <span>Welcome back,</span>
               <span className="flex items-center gap-1.5 whitespace-nowrap">
                 {session.user?.badge && <span className="text-xl flex-shrink-0">{getBadgeEmoji(session.user.badge) || session.user.badge}</span>}
