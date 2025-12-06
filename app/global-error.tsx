@@ -9,11 +9,11 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#0f1114]">
+      <body className="bg-[var(--bg-primary)]">
         <div className="min-h-screen flex items-center justify-center px-4">
           <div className="text-center max-w-md">
-            <h1 className="text-4xl font-semibold text-[#fafafa] mb-4 tracking-tight">Something went wrong!</h1>
-            <p className="text-[#969696] mb-8 text-lg">
+            <h1 className="text-4xl font-semibold text-[var(--text-primary)] mb-4 tracking-tight">Something went wrong!</h1>
+            <p className="text-[var(--text-secondary)] mb-8 text-lg">
               {error.message || 'An unexpected error occurred'}
             </p>
             <button

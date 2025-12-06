@@ -40,20 +40,20 @@ export default function Navbar() {
   ] : []
 
   return (
-    <nav className="border-b border-[#2a2d35] glass sticky top-0 z-50 lg:ml-64 bg-[#1a1d24] animate-slide-in-right will-change-transform">
+    <nav className="border-b border-[var(--border-color)] glass sticky top-0 z-50 lg:ml-64 bg-[var(--bg-secondary)] animate-slide-in-right will-change-transform">
       <div className="container mx-auto px-4 sm:px-6 py-5">
         <div className="flex justify-between items-center gap-4">
           {/* Mobile: Sidebar toggle button */}
           <button
             onClick={toggleSidebar}
-            className="lg:hidden text-[#969696] hover:text-[#fafafa] smooth-transition p-2 -ml-2"
+            className="lg:hidden text-[var(--text-secondary)] hover:text-[var(--text-primary)] smooth-transition p-2 -ml-2"
             aria-label="Open sidebar"
           >
             <PanelLeft className="h-6 w-6" />
           </button>
 
           {/* Mobile: Logo in center */}
-          <h1 className="lg:hidden text-xl font-semibold text-[#fafafa] tracking-tight flex-1 text-center">
+          <h1 className="lg:hidden text-xl font-semibold text-[var(--text-primary)] tracking-tight flex-1 text-center">
             Gathering
           </h1>
 
@@ -68,7 +68,7 @@ export default function Navbar() {
                   className={`text-sm smooth-transition flex items-center gap-1.5 ${
                     pathname === item.path 
                       ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -87,11 +87,11 @@ export default function Navbar() {
                   className={`text-sm smooth-transition flex items-center gap-1.5 ${
                     pathname === '/profile' 
                       ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[#969696] hover:text-[#fafafa]'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <User className="h-4 w-4" />
-                  <span className="text-[#fafafa] flex items-center gap-1.5">
+                  <span className="text-[var(--text-primary)] flex items-center gap-1.5">
                     {session.user?.badge && (
                       <span className="text-base">{getBadgeEmoji(session.user.badge) || session.user.badge}</span>
                     )}
@@ -107,7 +107,7 @@ export default function Navbar() {
                   variant="ghost"
                   size="sm"
                   onClick={() => signOut({ callbackUrl: '/auth/signin' })}
-                  className="text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Sign Out
@@ -122,7 +122,7 @@ export default function Navbar() {
               {/* Profile picture/avatar */}
               <button
                 onClick={() => router.push('/profile')}
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2a2d35] hover:bg-[#353842] smooth-transition overflow-hidden"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] smooth-transition overflow-hidden"
                 aria-label="Profile"
               >
                 {(session.user as any)?.image ? (
@@ -132,7 +132,7 @@ export default function Navbar() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <User className="h-4 w-4 text-[#969696]" />
+                  <User className="h-4 w-4 text-[var(--text-secondary)]" />
                 )}
               </button>
               
@@ -141,7 +141,7 @@ export default function Navbar() {
                 <button
                   ref={menuButtonRef}
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="text-[#969696] hover:text-[#fafafa] smooth-transition p-2"
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] smooth-transition p-2"
                   aria-label="Open menu"
                 >
                   {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

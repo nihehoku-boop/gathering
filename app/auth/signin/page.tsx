@@ -44,13 +44,13 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-3xl font-semibold text-center text-[#fafafa] tracking-tight">
+          <CardTitle className="text-3xl font-semibold text-center text-[var(--text-primary)] tracking-tight">
             Welcome to Gathering
           </CardTitle>
-          <CardDescription className="text-center text-[#969696]">
+          <CardDescription className="text-center text-[var(--text-secondary)]">
             Sign in to manage your collections
           </CardDescription>
         </CardHeader>
@@ -63,9 +63,9 @@ export default function SignInPage() {
           )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[#fafafa]">Email</Label>
+              <Label htmlFor="email" className="text-[var(--text-primary)]">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                 <Input
                   id="email"
                   type="email"
@@ -73,14 +73,14 @@ export default function SignInPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="pl-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[#fafafa]">Password</Label>
+              <Label htmlFor="password" className="text-[var(--text-primary)]">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                 <Input
                   id="password"
                   type="password"
@@ -88,7 +88,7 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="pl-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function SignInPage() {
             </Button>
           </form>
           <div className="mt-6 space-y-3 text-center">
-            <p className="text-sm text-[#969696]">
+            <p className="text-sm text-[var(--text-secondary)]">
               Don't have an account?{' '}
               <Link 
                 href="/auth/signup" 
@@ -110,7 +110,7 @@ export default function SignInPage() {
                 Sign up
               </Link>
             </p>
-            <p className="text-sm text-[#969696]">
+            <p className="text-sm text-[var(--text-secondary)]">
               <Link 
                 href="/auth/forgot-password" 
                 className="text-[var(--accent-color)] hover:underline font-medium"

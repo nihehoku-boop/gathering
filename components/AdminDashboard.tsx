@@ -119,17 +119,17 @@ export default function AdminDashboard() {
 
   return (
     <Tabs defaultValue="collections" className="w-full">
-      <TabsList className="mb-6 bg-[#1a1d24] border border-[#2a2d35]">
+      <TabsList className="mb-6 bg-[var(--bg-secondary)] border border-[var(--border-color)]">
         <TabsTrigger 
           value="collections" 
-          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[#969696] data-[state=active]:text-black"
+          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[var(--text-secondary)] data-[state=active]:text-black"
         >
           <List className="mr-2 h-4 w-4" />
           Recommended Collections
         </TabsTrigger>
         <TabsTrigger 
           value="users" 
-          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[#969696] data-[state=active]:text-black"
+          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[var(--text-secondary)] data-[state=active]:text-black"
         >
           <Users className="mr-2 h-4 w-4" />
           User Management
@@ -139,7 +139,7 @@ export default function AdminDashboard() {
       <TabsContent value="collections">
         <div>
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-[#fafafa]">Recommended Collections</h2>
+            <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Recommended Collections</h2>
         <div className="flex gap-2">
           <Button 
             onClick={() => setShowImportDialog(true)}
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
           <Button 
             onClick={() => setShowConvertDialog(true)}
             variant="outline"
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
           >
             <Plus className="mr-2 h-4 w-4" />
             Convert Collection

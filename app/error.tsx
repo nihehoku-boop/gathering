@@ -15,10 +15,10 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
       <div className="text-center max-w-md">
-        <h1 className="text-4xl font-semibold text-[#fafafa] mb-4 tracking-tight">Something went wrong!</h1>
-        <p className="text-[#969696] mb-8 text-lg">
+        <h1 className="text-4xl font-semibold text-[var(--text-primary)] mb-4 tracking-tight">Something went wrong!</h1>
+        <p className="text-[var(--text-secondary)] mb-8 text-lg">
           {error.message || 'An unexpected error occurred'}
         </p>
         <div className="flex gap-4 justify-center">
@@ -31,7 +31,7 @@ export default function Error({
           <Button 
             variant="outline" 
             onClick={() => window.location.href = '/'}
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
           >
             Go home
           </Button>

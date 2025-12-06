@@ -103,12 +103,12 @@ export default function ConvertCollectionToRecommendedDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-2xl bg-[#1a1d24] border-[#2a2d35] max-h-[90vh] flex flex-col">
+      <Card className="w-full max-w-2xl bg-[var(--bg-secondary)] border-[var(--border-color)] max-h-[90vh] flex flex-col">
         <CardHeader className="flex-shrink-0">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-[#fafafa]">Convert Collection to Recommended</CardTitle>
-              <CardDescription className="text-[#969696]">
+              <CardTitle className="text-[var(--text-primary)]">Convert Collection to Recommended</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
                 Select a user collection to convert into a recommended collection
               </CardDescription>
             </div>
@@ -116,7 +116,7 @@ export default function ConvertCollectionToRecommendedDialog({
               variant="ghost"
               size="icon"
               onClick={() => onOpenChange(false)}
-              className="text-[#969696] hover:text-[#fafafa]"
+              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -125,13 +125,13 @@ export default function ConvertCollectionToRecommendedDialog({
         <CardContent className="flex-1 min-h-0 flex flex-col">
           {/* Search */}
           <div className="relative mb-4 flex-shrink-0">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
             <Input
               type="text"
               placeholder="Search collections..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-[#0f1114] border-[#2a2d35] text-[#fafafa] placeholder:text-[#969696] focus:border-[var(--accent-color)]"
+              className="pl-10 bg-[var(--bg-primary)] border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent-color)]"
             />
           </div>
 
@@ -142,17 +142,17 @@ export default function ConvertCollectionToRecommendedDialog({
                 <Loader2 className="h-6 w-6 animate-spin text-[var(--accent-color)]" />
               </div>
             ) : collections.length === 0 ? (
-              <div className="text-center py-8 text-[#969696]">
+              <div className="text-center py-8 text-[var(--text-secondary)]">
                 No collections found
               </div>
             ) : (
               collections.map((collection) => (
                 <div
                   key={collection.id}
-                  className={`p-3 bg-[#0f1114] rounded-lg border transition-colors cursor-pointer ${
+                  className={`p-3 bg-[var(--bg-primary)] rounded-lg border transition-colors cursor-pointer ${
                     selectedCollectionId === collection.id
                       ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/10'
-                      : 'border-[#2a2d35] hover:border-[#353842]'
+                      : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
                   }`}
                   onClick={() => setSelectedCollectionId(collection.id)}
                 >
@@ -166,19 +166,19 @@ export default function ConvertCollectionToRecommendedDialog({
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-[#fafafa] font-medium truncate">{collection.name}</h3>
+                        <h3 className="text-[var(--text-primary)] font-medium truncate">{collection.name}</h3>
                         {collection.category && (
-                          <span className="px-2 py-0.5 text-xs bg-[#2a2d35] text-[#969696] rounded">
+                          <span className="px-2 py-0.5 text-xs bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded">
                             {collection.category}
                           </span>
                         )}
                       </div>
                       {collection.description && (
-                        <p className="text-sm text-[#969696] line-clamp-2 mb-2">
+                        <p className="text-sm text-[var(--text-secondary)] line-clamp-2 mb-2">
                           {collection.description}
                         </p>
                       )}
-                      <div className="text-xs text-[#969696]">
+                      <div className="text-xs text-[var(--text-secondary)]">
                         {collection._count.items} items • By {collection.user.name || collection.user.email}
                       </div>
                     </div>
@@ -188,12 +188,12 @@ export default function ConvertCollectionToRecommendedDialog({
             )}
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35]">
+        <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[var(--border-color)]">
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
           >
             Cancel
           </Button>
