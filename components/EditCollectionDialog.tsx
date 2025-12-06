@@ -402,10 +402,10 @@ export default function EditCollectionDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto animate-fade-in">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] my-8 max-h-[90vh] flex flex-col animate-scale-in">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] my-8 max-h-[90vh] flex flex-col animate-scale-in">
         <CardHeader className="flex-shrink-0">
           <CardTitle className="text-[var(--text-primary)]">Edit Collection</CardTitle>
-          <CardDescription className="text-[#969696]">
+          <CardDescription className="text-[var(--text-secondary)]">
             Update collection details and tags
           </CardDescription>
         </CardHeader>
@@ -419,7 +419,7 @@ export default function EditCollectionDialog({
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., Marvel Comics, Vintage Toys"
                 required
-                className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -430,7 +430,7 @@ export default function EditCollectionDialog({
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   placeholder="e.g., Comics, Books, Cards"
-                  className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
                 />
               </div>
               <div className="space-y-2">
@@ -439,7 +439,7 @@ export default function EditCollectionDialog({
                   id="folder"
                   value={folderId}
                   onChange={(e) => setFolderId(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                  className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                 >
                   <option value="">No Folder</option>
                   {folders.map((folder) => (
@@ -531,7 +531,7 @@ export default function EditCollectionDialog({
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Optional description of your collection"
                 rows={3}
-                className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="space-y-2">
