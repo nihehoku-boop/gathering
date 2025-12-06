@@ -90,15 +90,15 @@ export default function AchievementsPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
           <div className="container mx-auto px-6 py-8">
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
                 <Lock className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   Sign in required
                 </h3>
-                <p className="text-[#969696]">
+                <p className="text-[var(--text-secondary)]">
                   Please sign in to view your achievements.
                 </p>
               </CardContent>
@@ -113,14 +113,14 @@ export default function AchievementsPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -128,10 +128,10 @@ export default function AchievementsPage() {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <Trophy className="h-8 w-8 text-[var(--accent-color)]" />
-              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">Achievements</h1>
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Achievements</h1>
             </div>
             <div className="flex items-center justify-between mb-10">
-              <p className="text-[#969696] text-lg">
+              <p className="text-[var(--text-secondary)] text-lg">
                 Track your collecting milestones and unlock badges
               </p>
               <Button
@@ -145,23 +145,23 @@ export default function AchievementsPage() {
           </div>
 
           {/* Progress Summary */}
-          <Card className="bg-[#1a1d24] border-[#2a2d35] mb-6">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] mb-6">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#fafafa] mb-1">
+                  <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-1">
                     {totalUnlocked} / {totalAchievements}
                   </h2>
-                  <p className="text-[#969696]">Achievements Unlocked</p>
+                  <p className="text-[var(--text-secondary)]">Achievements Unlocked</p>
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-[var(--accent-color)]">
                     {completionPercentage}%
                   </div>
-                  <p className="text-sm text-[#969696]">Complete</p>
+                  <p className="text-sm text-[var(--text-secondary)]">Complete</p>
                 </div>
               </div>
-              <div className="w-full bg-[#2a2d35] rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-3 overflow-hidden">
                 <div
                   className="h-full bg-[var(--accent-color)] smooth-transition"
                   style={{ width: `${completionPercentage}%` }}
@@ -171,20 +171,20 @@ export default function AchievementsPage() {
           </Card>
 
           {loading ? (
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
-                <div className="text-[#969696]">Loading achievements...</div>
+                <div className="text-[var(--text-secondary)]">Loading achievements...</div>
               </CardContent>
             </Card>
           ) : (
             <div className="space-y-6">
               {Object.entries(categories).map(([category, achievements]) => (
-                <Card key={category} className="bg-[#1a1d24] border-[#2a2d35]">
+                <Card key={category} className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
                   <CardHeader>
-                    <CardTitle className="text-[#fafafa] capitalize">
+                    <CardTitle className="text-[var(--text-primary)] capitalize">
                       {category} Achievements
                     </CardTitle>
-                    <CardDescription className="text-[#969696]">
+                    <CardDescription className="text-[var(--text-secondary)]">
                       {achievements.filter(a => isUnlocked(a.id)).length} / {achievements.length} unlocked
                     </CardDescription>
                   </CardHeader>
@@ -199,8 +199,8 @@ export default function AchievementsPage() {
                             key={achievement.id}
                             className={`p-4 rounded-lg border transition-all ${
                               unlocked
-                                ? 'bg-[#2a2d35] border-[var(--accent-color)]/50'
-                                : 'bg-[#1a1d24] border-[#353842] opacity-60'
+                                ? 'bg-[var(--bg-tertiary)] border-[var(--accent-color)]/50'
+                                : 'bg-[#1a1d24] border-[var(--border-hover)] opacity-60'
                             }`}
                           >
                             <div className="flex items-start gap-3">
@@ -210,7 +210,7 @@ export default function AchievementsPage() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   <h3 className={`font-semibold ${
-                                    unlocked ? 'text-[#fafafa]' : 'text-[#666]'
+                                    unlocked ? 'text-[var(--text-primary)]' : 'text-[#666]'
                                   }`}>
                                     {achievement.name}
                                   </h3>
@@ -228,7 +228,7 @@ export default function AchievementsPage() {
                                   )}
                                 </div>
                                 <p className={`text-sm ${
-                                  unlocked ? 'text-[#969696]' : 'text-[#666]'
+                                  unlocked ? 'text-[var(--text-secondary)]' : 'text-[#666]'
                                 }`}>
                                   {achievement.description}
                                 </p>
