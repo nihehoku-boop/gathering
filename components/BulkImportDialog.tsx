@@ -466,20 +466,20 @@ export default function BulkImportDialog({
                   />
                 </div>
                 
-                <div className="border-t border-[#2a2d35] pt-4 space-y-4">
+                <div className="border-t border-[var(--border-color)] pt-4 space-y-4">
                   <div className="space-y-1">
-                    <Label className="text-base font-semibold text-[#fafafa]">CSV Parsing Options</Label>
-                    <p className="text-xs text-[#969696]">Configure how the CSV data should be parsed</p>
+                    <Label className="text-base font-semibold text-[var(--text-primary)]">CSV Parsing Options</Label>
+                    <p className="text-xs text-[var(--text-secondary)]">Configure how the CSV data should be parsed</p>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="csvDelimiter" className="text-[#fafafa]">Field Delimiter *</Label>
+                      <Label htmlFor="csvDelimiter" className="text-[var(--text-primary)]">Field Delimiter *</Label>
                       <select
                         id="csvDelimiter"
                         value={csvDelimiter}
                         onChange={(e) => setCsvDelimiter(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                        className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                       >
                         <option value=",">Comma (,)</option>
                         <option value=";">Semicolon (;)</option>
@@ -490,12 +490,12 @@ export default function BulkImportDialog({
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="csvNumberPattern" className="text-[#fafafa]">Number Detection *</Label>
+                      <Label htmlFor="csvNumberPattern" className="text-[var(--text-primary)]">Number Detection *</Label>
                       <select
                         id="csvNumberPattern"
                         value={csvNumberPattern}
                         onChange={(e) => setCsvNumberPattern(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                        className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                       >
                         <option value="auto">Auto-detect</option>
                         <option value="first">First column is number</option>
@@ -513,7 +513,7 @@ export default function BulkImportDialog({
                         onChange={(e) => setCsvSkipHeader(e.target.checked)}
                         className="w-4 h-4 rounded border-[#353842] bg-[#2a2d35] text-[var(--accent-color)] focus:ring-[var(--accent-color)]"
                       />
-                      <span className="text-sm text-[#fafafa]">Skip first row (header)</span>
+                      <span className="text-sm text-[var(--text-primary)]">Skip first row (header)</span>
                     </label>
                     
                     <label className="flex items-center gap-2 cursor-pointer">
@@ -523,13 +523,13 @@ export default function BulkImportDialog({
                         onChange={(e) => setCsvTrimWhitespace(e.target.checked)}
                         className="w-4 h-4 rounded border-[#353842] bg-[#2a2d35] text-[var(--accent-color)] focus:ring-[var(--accent-color)]"
                       />
-                      <span className="text-sm text-[#fafafa]">Trim whitespace</span>
+                      <span className="text-sm text-[var(--text-primary)]">Trim whitespace</span>
                     </label>
                   </div>
                   
                   {csvDetectedColumns.length > 0 && (
-                    <div className="text-sm text-[#969696] bg-[#2a2d35] p-3 rounded border border-[#353842]">
-                      <strong className="text-[#fafafa]">Detected {csvDetectedColumns.length} column(s):</strong>
+                    <div className="text-sm text-[var(--text-secondary)] bg-[#2a2d35] p-3 rounded border border-[#353842]">
+                      <strong className="text-[var(--text-primary)]">Detected {csvDetectedColumns.length} column(s):</strong>
                       <div className="mt-1 font-mono text-xs">
                         {csvDetectedColumns.map((col, i) => (
                           <span key={i} className="mr-2">{i > 0 && '| '}"{col}"</span>

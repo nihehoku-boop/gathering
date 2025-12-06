@@ -185,8 +185,8 @@ export default function RecommendedCollectionsList() {
         {/* Search and Filter Skeleton */}
         <div className="mb-6 space-y-4">
           <div className="flex gap-3">
-            <div className="flex-1 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
-            <div className="w-24 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
+            <div className="flex-1 h-10 bg-[var(--bg-tertiary)] rounded-md animate-pulse"></div>
+            <div className="w-24 h-10 bg-[var(--bg-tertiary)] rounded-md animate-pulse"></div>
           </div>
         </div>
 
@@ -205,19 +205,19 @@ export default function RecommendedCollectionsList() {
       <div className="mb-6 space-y-4">
         <div className="flex gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
             <Input
               type="text"
               placeholder="Search collections by name, description, or category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+              className="pl-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
             />
           </div>
           <Button
             variant="outline"
             onClick={() => setShowFilters(!showFilters)}
-            className={`border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${
+            className={`border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${
               (selectedCategory || selectedTags.length > 0) ? 'border-[var(--accent-color)]' : ''
             }`}
           >
@@ -232,10 +232,10 @@ export default function RecommendedCollectionsList() {
         </div>
 
         {showFilters && (
-          <Card className="bg-[#1a1d24] border-[#2a2d35] p-4">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] p-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-[#fafafa]">Filters</h3>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)]">Filters</h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -243,7 +243,7 @@ export default function RecommendedCollectionsList() {
                     setSelectedCategory('')
                     setSelectedTags([])
                   }}
-                  className="text-xs text-[#969696] hover:text-[#fafafa]"
+                  className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   Clear All
                 </Button>
@@ -252,25 +252,25 @@ export default function RecommendedCollectionsList() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Category Filter */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#969696]">Category</label>
+                  <label className="text-xs font-medium text-[var(--text-secondary)]">Category</label>
                   <div className="relative">
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
+                      className="w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
                     >
                       <option value="">All Categories</option>
                       {getUniqueCategories().map(category => (
                         <option key={category} value={category}>{category}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696] pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)] pointer-events-none" />
                   </div>
                 </div>
 
                 {/* Tag Filter */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#969696]">Tags</label>
+                  <label className="text-xs font-medium text-[var(--text-secondary)]">Tags</label>
                   <div className="flex flex-wrap gap-2">
                     {AVAILABLE_TAGS.map((tag) => {
                       const isSelected = selectedTags.includes(tag)
@@ -298,12 +298,12 @@ export default function RecommendedCollectionsList() {
 
                 {/* Sort Filter */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#969696]">Sort By</label>
+                  <label className="text-xs font-medium text-[var(--text-secondary)]">Sort By</label>
                   <div className="relative">
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as any)}
-                      className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
+                      className="w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
                     >
                       <option value="newest">Newest First</option>
                       <option value="oldest">Oldest First</option>
@@ -311,7 +311,7 @@ export default function RecommendedCollectionsList() {
                       <option value="leastItems">Least Items</option>
                       <option value="alphabetical">Alphabetical</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696] pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)] pointer-events-none" />
                   </div>
                 </div>
               </div>
@@ -319,7 +319,7 @@ export default function RecommendedCollectionsList() {
               {(selectedCategory || selectedTags.length > 0) && (
                 <div className="flex flex-wrap gap-2 pt-2 border-t border-[#2a2d35]">
                   {selectedCategory && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#2a2d35] text-[#fafafa] rounded-full text-xs">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-full text-xs">
                       Category: {selectedCategory}
                       <button
                         onClick={() => setSelectedCategory('')}
@@ -358,32 +358,32 @@ export default function RecommendedCollectionsList() {
         )}
 
         {(searchQuery || selectedCategory || selectedTags.length > 0) && (
-          <p className="text-sm text-[#969696]">
+          <p className="text-sm text-[var(--text-secondary)]">
             Showing {filteredCollections.length} of {collections.length} collection{collections.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
 
       {collections.length === 0 ? (
-        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-12 text-center">
             <BookOpen className="mx-auto h-12 w-12 text-[#353842] mb-4" />
-            <h3 className="text-lg font-semibold text-[#fafafa] mb-2">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
               No recommended collections available
             </h3>
-            <p className="text-[#969696]">
+            <p className="text-[var(--text-secondary)]">
               Check back later for curated collections!
             </p>
           </CardContent>
         </Card>
       ) : filteredCollections.length === 0 ? (
-        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-12 text-center">
             <Search className="mx-auto h-12 w-12 text-[#353842] mb-4" />
-            <h3 className="text-lg font-semibold text-[#fafafa] mb-2">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
               No collections found
             </h3>
-            <p className="text-[#969696]">
+            <p className="text-[var(--text-secondary)]">
               Try adjusting your search query
             </p>
           </CardContent>
@@ -393,13 +393,13 @@ export default function RecommendedCollectionsList() {
           {filteredCollections.map((collection, index) => (
             <Card 
               key={collection.id} 
-              className="bg-[#1a1d24] border-[#2a2d35] hover:border-[#353842] hover-lift cursor-pointer overflow-hidden smooth-transition group relative flex flex-col h-full animate-fade-up"
+              className="bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group relative flex flex-col h-full animate-fade-up"
               style={{
                 animationDelay: `${index * 50}ms`,
               }}
             >
               {collection.coverImage && (
-                <div className="w-full h-48 overflow-hidden bg-[#2a2d35] flex-shrink-0">
+                <div className="w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] flex-shrink-0">
                   <img
                     src={collection.coverImage}
                     alt={collection.name}
@@ -408,16 +408,16 @@ export default function RecommendedCollectionsList() {
                 </div>
               )}
               <CardHeader className="flex-shrink-0">
-                <CardTitle className="text-xl text-[#fafafa]">{collection.name}</CardTitle>
+                <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
                 {collection.category && (
                   <div className="mt-1">
-                    <span className="text-xs text-[#969696] bg-[#2a2d35] px-2 py-1 rounded-full inline-block" title={collection.category}>
+                    <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-block" title={collection.category}>
                       {collection.category}
                     </span>
                   </div>
                 )}
                 {collection.description && (
-                  <CardDescription className="mt-2 text-[#969696] line-clamp-3">
+                  <CardDescription className="mt-2 text-[var(--text-secondary)] line-clamp-3">
                     {collection.description}
                   </CardDescription>
                 )}
@@ -447,7 +447,7 @@ export default function RecommendedCollectionsList() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-end">
                 <div className="space-y-4">
-                  <p className="text-sm text-[#969696]">
+                  <p className="text-sm text-[var(--text-secondary)]">
                     {collection.items.length} items included
                   </p>
                   <div className="flex justify-end">

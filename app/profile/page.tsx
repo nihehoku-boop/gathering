@@ -194,76 +194,76 @@ export default function ProfilePage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
             </div>
             <div className="flex items-center gap-3 mb-3">
-              <User className="h-8 w-8 text-[#fafafa]" />
-              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">Edit Profile</h1>
+              <User className="h-8 w-8 text-[var(--text-primary)]" />
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Edit Profile</h1>
             </div>
-            <p className="text-[#969696] text-lg mb-10">
+            <p className="text-[var(--text-secondary)] text-lg mb-10">
               Update your profile information
             </p>
           </div>
 
           <div className="max-w-2xl">
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">Profile Information</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">Profile Information</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   Manage your account details
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-[#fafafa]">Display Name</Label>
+                    <Label htmlFor="name" className="text-[var(--text-primary)]">Display Name</Label>
                     <Input
                       id="name"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter your display name"
-                      className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                      className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                     />
-                    <p className="text-xs text-[#969696]">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       This name will be displayed throughout the application
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-[#fafafa]">Email</Label>
+                    <Label htmlFor="email" className="text-[var(--text-primary)]">Email</Label>
                     <Input
                       id="email"
                       type="email"
                       value={email}
                       disabled
-                      className="bg-[#2a2d35] border-[#353842] text-[#666] cursor-not-allowed"
+                      className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-muted)] cursor-not-allowed"
                     />
-                    <p className="text-xs text-[#969696]">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       Email cannot be changed. It's used for authentication.
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-[#fafafa]">Profile Picture</Label>
+                    <Label className="text-[var(--text-primary)]">Profile Picture</Label>
                     <div className="flex items-center gap-4">
                       {profileImage || (session.user as any)?.image ? (
                         <div className="relative">
                           <img
                             src={profileImage || (session.user as any).image}
                             alt="Profile"
-                            className="w-20 h-20 rounded-full border-2 border-[#353842] object-cover"
+                            className="w-20 h-20 rounded-full border-2 border-[var(--border-hover)] object-cover"
                           />
                           {profileImage && (
                             <Button
@@ -278,8 +278,8 @@ export default function ProfilePage() {
                           )}
                         </div>
                       ) : (
-                        <div className="w-20 h-20 rounded-full bg-[#2a2d35] border-2 border-[#353842] flex items-center justify-center">
-                          <User className="h-8 w-8 text-[#666]" />
+                        <div className="w-20 h-20 rounded-full bg-[#2a2d35] border-2 border-[var(--border-hover)] flex items-center justify-center">
+                          <User className="h-8 w-8 text-[var(--text-muted)]" />
                         </div>
                       )}
                       <div className="flex-1">
@@ -323,7 +323,7 @@ export default function ProfilePage() {
                             type="button"
                             variant="outline"
                             disabled={uploadingProfileImage}
-                            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                             onClick={(e) => {
                               e.preventDefault()
                               document.getElementById('profile-image-upload')?.click()
@@ -333,7 +333,7 @@ export default function ProfilePage() {
                             {uploadingProfileImage ? 'Uploading...' : profileImage ? 'Change Picture' : 'Upload Picture'}
                           </Button>
                         </label>
-                        <p className="text-xs text-[#969696] mt-2">
+                        <p className="text-xs text-[var(--text-secondary)] mt-2">
                           Upload a profile picture (recommended: square, at least 200x200px)
                         </p>
                       </div>
@@ -341,7 +341,7 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="bio" className="text-[#fafafa]">Bio / About</Label>
+                    <Label htmlFor="bio" className="text-[var(--text-primary)]">Bio / About</Label>
                     <Textarea
                       id="bio"
                       value={bio}
@@ -349,21 +349,21 @@ export default function ProfilePage() {
                       placeholder="Tell others about yourself and your collections..."
                       rows={4}
                       maxLength={500}
-                      className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition resize-none"
+                      className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition resize-none"
                     />
-                    <p className="text-xs text-[#969696]">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       {bio.length}/500 characters. This will be displayed on your public profile.
                     </p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-[#fafafa]">Profile Banner</Label>
+                    <Label className="text-[var(--text-primary)]">Profile Banner</Label>
                     {bannerImage ? (
                       <div className="relative">
                         <img
                           src={bannerImage}
                           alt="Banner"
-                          className="w-full h-48 object-cover rounded-lg border border-[#353842]"
+                          className="w-full h-48 object-cover rounded-lg border border-[var(--border-hover)]"
                         />
                         <Button
                           type="button"
@@ -376,9 +376,9 @@ export default function ProfilePage() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="border-2 border-dashed border-[#353842] rounded-lg p-8 text-center hover:border-[var(--accent-color)] smooth-transition">
-                        <ImageIcon className="h-12 w-12 text-[#666] mx-auto mb-4" />
-                        <p className="text-sm text-[#969696] mb-4">
+                      <div className="border-2 border-dashed border-[var(--border-hover)] rounded-lg p-8 text-center hover:border-[var(--accent-color)] smooth-transition">
+                        <ImageIcon className="h-12 w-12 text-[var(--text-muted)] mx-auto mb-4" />
+                        <p className="text-sm text-[var(--text-secondary)] mb-4">
                           Upload a banner image for your profile (recommended: 1200x300px)
                         </p>
                         <input
@@ -421,7 +421,7 @@ export default function ProfilePage() {
                             type="button"
                             variant="outline"
                             disabled={uploadingBanner}
-                            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                             onClick={(e) => {
                               e.preventDefault()
                               document.getElementById('banner-upload')?.click()
@@ -433,7 +433,7 @@ export default function ProfilePage() {
                         </label>
                       </div>
                     )}
-                    <p className="text-xs text-[#969696]">
+                    <p className="text-xs text-[var(--text-secondary)]">
                       This banner will be displayed at the top of your public profile.
                     </p>
                   </div>
@@ -441,8 +441,8 @@ export default function ProfilePage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label className="text-[#fafafa]">Privacy Settings</Label>
-                        <p className="text-xs text-[#969696] mt-1">
+                        <Label className="text-[var(--text-primary)]">Privacy Settings</Label>
+                        <p className="text-xs text-[var(--text-secondary)] mt-1">
                           Hide your profile from leaderboards and public profiles
                         </p>
                       </div>
@@ -461,8 +461,8 @@ export default function ProfilePage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label className="text-[#fafafa]">Badge</Label>
-                        <p className="text-xs text-[#969696]">
+                        <Label className="text-[var(--text-primary)]">Badge</Label>
+                        <p className="text-xs text-[var(--text-secondary)]">
                           Choose a badge to display next to your name. Unlock more badges by earning achievements!
                         </p>
                       </div>
@@ -471,20 +471,20 @@ export default function ProfilePage() {
                         variant="outline"
                         size="sm"
                         onClick={fetchProfileStats}
-                        className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                        className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                       >
                         Refresh
                       </Button>
                     </div>
                     {loading ? (
-                      <div className="text-center py-8 text-[#969696]">Loading badges...</div>
+                      <div className="text-center py-8 text-[var(--text-secondary)]">Loading badges...</div>
                     ) : (
                       <>
                         <div className="space-y-4">
                           {/* Basic Badges Section */}
                           <div>
-                            <h3 className="text-sm font-medium text-[#fafafa] mb-2">Basic Badges</h3>
-                            <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-2 p-4 bg-[#2a2d35] rounded-lg border border-[#353842]">
+                            <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Basic Badges</h3>
+                            <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-2 p-4 bg-[#2a2d35] rounded-lg border border-[var(--border-hover)]">
                               {availableBadges
                                 .filter(b => b.source === 'basic')
                                 .map((badgeOption) => {
@@ -499,7 +499,7 @@ export default function ProfilePage() {
                                         transition-all smooth-transition
                                         ${isSelected
                                           ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20 scale-110'
-                                          : 'border-[#353842] hover:border-[#666] hover:bg-[#353842]'
+                                          : 'border-[var(--border-hover)] hover:border-[#666] hover:bg-[#353842]'
                                         }
                                       `}
                                       title={badgeOption.name}
@@ -513,11 +513,11 @@ export default function ProfilePage() {
 
                           {/* Achievement Badges Section */}
                           <div>
-                            <h3 className="text-sm font-medium text-[#fafafa] mb-2">
+                            <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">
                               Achievement Badges ({availableBadges.filter(b => b.source === 'achievement').length})
                             </h3>
                             {availableBadges.filter(b => b.source === 'achievement').length > 0 ? (
-                              <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-2 p-4 bg-[#2a2d35] rounded-lg border border-[#353842] max-h-64 overflow-y-auto">
+                              <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-2 p-4 bg-[#2a2d35] rounded-lg border border-[var(--border-hover)] max-h-64 overflow-y-auto">
                                 {availableBadges
                                   .filter(b => b.source === 'achievement')
                                   .map((badgeOption) => {
@@ -535,7 +535,7 @@ export default function ProfilePage() {
                                           transition-all smooth-transition relative
                                           ${isSelected
                                             ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20 scale-110'
-                                            : 'border-[#353842] hover:border-[#666] hover:bg-[#353842]'
+                                            : 'border-[var(--border-hover)] hover:border-[#666] hover:bg-[#353842]'
                                           }
                                         `}
                                         title={`${badgeOption.name} (Achievement)`}
@@ -549,20 +549,20 @@ export default function ProfilePage() {
                                   })}
                               </div>
                             ) : (
-                              <div className="text-sm text-[#969696] p-4 bg-[#2a2d35] rounded-lg border border-[#353842]">
+                              <div className="text-sm text-[var(--text-secondary)] p-4 bg-[#2a2d35] rounded-lg border border-[var(--border-hover)]">
                                 <p>Unlock achievements to get more badges! 🎯</p>
-                                <p className="text-xs text-[#666] mt-2">
+                                <p className="text-xs text-[var(--text-muted)] mt-2">
                                   Go to the Achievements page and click "Check for New Achievements" to unlock badges.
                                 </p>
                                 {unlockedAchievements.length > 0 && (
-                                  <div className="mt-3 p-2 bg-[#1a1d24] rounded border border-[#353842]">
+                                  <div className="mt-3 p-2 bg-[#1a1d24] rounded border border-[var(--border-hover)]">
                                     <p className="text-xs text-[#FFD60A] mb-1">
                                       Debug: You have {unlockedAchievements.length} unlocked achievement(s)
                                     </p>
-                                    <p className="text-xs text-[#969696]">
+                                    <p className="text-xs text-[var(--text-secondary)]">
                                       Available badges: {availableBadges.length} total ({availableBadges.filter(b => b.source === 'basic').length} basic, {availableBadges.filter(b => b.source === 'achievement').length} achievement)
                                     </p>
-                                    <p className="text-xs text-[#666] mt-1">
+                                    <p className="text-xs text-[var(--text-muted)] mt-1">
                                       Check browser console (F12) for detailed logs.
                                     </p>
                                   </div>
@@ -581,7 +581,7 @@ export default function ProfilePage() {
                                 transition-all smooth-transition
                                 ${!badge
                                   ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20 text-[var(--accent-color)]'
-                                  : 'border-[#353842] text-[#969696] hover:border-[#666] hover:text-[#fafafa]'
+                                  : 'border-[var(--border-hover)] text-[var(--text-secondary)] hover:border-[#666] hover:text-[var(--text-primary)]'
                                 }
                               `}
                             >
@@ -590,7 +590,7 @@ export default function ProfilePage() {
                           </div>
                         </div>
                         {badge && (
-                          <div className="flex items-center gap-2 text-sm text-[#969696]">
+                          <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                             <span>Selected:</span>
                             <span className="text-xl">{getBadgeEmoji(badge) || badge}</span>
                             {badge.startsWith('achievement_') && (
@@ -602,66 +602,66 @@ export default function ProfilePage() {
                           </div>
                         )}
                         {!badge && (
-                          <div className="text-sm text-[#666] italic">No badge selected</div>
+                          <div className="text-sm text-[var(--text-muted)] italic">No badge selected</div>
                         )}
                       </>
                     )}
                   </div>
 
                   {/* Theme Customization Section */}
-                  <div className="space-y-4 pt-6 border-t border-[#353842]">
+                  <div className="space-y-4 pt-6 border-t border-[var(--border-hover)]">
                     <div className="flex items-center gap-2 mb-4">
                       <Palette className="h-5 w-5 text-[var(--accent-color)]" />
-                      <Label className="text-[#fafafa] text-lg">Profile Theme Customization</Label>
+                      <Label className="text-[var(--text-primary)] text-lg">Profile Theme Customization</Label>
                     </div>
-                    <p className="text-sm text-[#969696] mb-4">
+                    <p className="text-sm text-[var(--text-secondary)] mb-4">
                       Customize how your public profile appears to others
                     </p>
 
                     {/* Background Color/Gradient */}
                     <div className="space-y-3">
-                      <Label className="text-[#fafafa] flex items-center gap-2">
+                      <Label className="text-[var(--text-primary)] flex items-center gap-2">
                         <Layout className="h-4 w-4" />
                         Background Style
                       </Label>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                          <Label className="text-xs text-[#969696]">Background Color</Label>
+                          <Label className="text-xs text-[var(--text-secondary)]">Background Color</Label>
                           <div className="flex gap-2">
                             <Input
                               type="color"
                               value={profileTheme.backgroundColor || '#0f1114'}
                               onChange={(e) => setProfileTheme({ ...profileTheme, backgroundColor: e.target.value, backgroundGradient: undefined })}
-                              className="w-20 h-10 p-1 bg-[#2a2d35] border-[#353842] cursor-pointer"
+                              className="w-20 h-10 p-1 bg-[var(--bg-tertiary)] border-[var(--border-hover)] cursor-pointer"
                             />
                             <Input
                               type="text"
                               value={profileTheme.backgroundColor || '#0f1114'}
                               onChange={(e) => setProfileTheme({ ...profileTheme, backgroundColor: e.target.value, backgroundGradient: undefined })}
                               placeholder="#0f1114"
-                              className="flex-1 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                              className="flex-1 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs text-[#969696]">Gradient (e.g., linear-gradient(135deg, #667eea 0%, #764ba2 100%))</Label>
+                          <Label className="text-xs text-[var(--text-secondary)]">Gradient (e.g., linear-gradient(135deg, #667eea 0%, #764ba2 100%))</Label>
                           <Input
                             type="text"
                             value={profileTheme.backgroundGradient || ''}
                             onChange={(e) => setProfileTheme({ ...profileTheme, backgroundGradient: e.target.value, backgroundColor: undefined })}
                             placeholder="linear-gradient(...)"
-                            className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                            className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                           />
                         </div>
                       </div>
-                      <p className="text-xs text-[#666]">
+                      <p className="text-xs text-[var(--text-muted)]">
                         Choose either a solid color or a gradient. Gradient will override color if both are set.
                       </p>
                     </div>
 
                     {/* Card Style */}
                     <div className="space-y-3">
-                      <Label className="text-[#fafafa] flex items-center gap-2">
+                      <Label className="text-[var(--text-primary)] flex items-center gap-2">
                         <Layout className="h-4 w-4" />
                         Card Style
                       </Label>
@@ -675,14 +675,14 @@ export default function ProfilePage() {
                               p-4 rounded-lg border-2 smooth-transition text-left
                               ${profileTheme.cardStyle === style
                                 ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
-                                : 'border-[#353842] hover:border-[#666] bg-[#2a2d35]'
+                                : 'border-[var(--border-hover)] hover:border-[#666] bg-[#2a2d35]'
                               }
                             `}
                           >
-                            <div className="text-sm font-medium text-[#fafafa] mb-1 capitalize">
+                            <div className="text-sm font-medium text-[var(--text-primary)] mb-1 capitalize">
                               {style}
                             </div>
-                            <div className="text-xs text-[#969696]">
+                            <div className="text-xs text-[var(--text-secondary)]">
                               {style === 'default' && 'Standard card with shadow'}
                               {style === 'minimal' && 'Clean, minimal design'}
                               {style === 'bordered' && 'Emphasized borders'}
@@ -694,7 +694,7 @@ export default function ProfilePage() {
 
                     {/* Font Size */}
                     <div className="space-y-3">
-                      <Label className="text-[#fafafa] flex items-center gap-2">
+                      <Label className="text-[var(--text-primary)] flex items-center gap-2">
                         <Type className="h-4 w-4" />
                         Font Size
                       </Label>
@@ -708,14 +708,14 @@ export default function ProfilePage() {
                               p-4 rounded-lg border-2 smooth-transition text-center
                               ${profileTheme.fontSize === size
                                 ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
-                                : 'border-[#353842] hover:border-[#666] bg-[#2a2d35]'
+                                : 'border-[var(--border-hover)] hover:border-[#666] bg-[#2a2d35]'
                               }
                             `}
                           >
-                            <div className="text-sm font-medium text-[#fafafa] capitalize">
+                            <div className="text-sm font-medium text-[var(--text-primary)] capitalize">
                               {size}
                             </div>
-                            <div className={`text-[#969696] mt-1 ${size === 'small' ? 'text-xs' : size === 'medium' ? 'text-sm' : 'text-base'}`}>
+                            <div className={`text-[var(--text-secondary)] mt-1 ${size === 'small' ? 'text-xs' : size === 'medium' ? 'text-sm' : 'text-base'}`}>
                               Sample Text
                             </div>
                           </button>
@@ -729,7 +729,7 @@ export default function ProfilePage() {
                         variant="outline"
                         size="sm"
                         onClick={() => setProfileTheme({})}
-                        className="border-[#353842] text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                        className="border-[var(--border-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                       >
                         Reset to Default
                       </Button>
@@ -741,7 +741,7 @@ export default function ProfilePage() {
                       type="button"
                       variant="outline"
                       onClick={() => router.push('/')}
-                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                     >
                       Cancel
                     </Button>
@@ -757,24 +757,24 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-[#1a1d24] border-[#2a2d35] mt-6">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] mt-6">
               <CardHeader>
-                <CardTitle className="text-[#fafafa]">Account Statistics</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">Account Statistics</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   Your account overview
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-[#2a2d35] rounded-lg">
-                    <p className="text-sm text-[#969696] mb-1">Collections</p>
-                    <p className="text-2xl font-semibold text-[#fafafa]">
+                    <p className="text-sm text-[var(--text-secondary)] mb-1">Collections</p>
+                    <p className="text-2xl font-semibold text-[var(--text-primary)]">
                       {loading ? '...' : stats.collectionsCount}
                     </p>
                   </div>
                   <div className="p-4 bg-[#2a2d35] rounded-lg">
-                    <p className="text-sm text-[#969696] mb-1">Total Items</p>
-                    <p className="text-2xl font-semibold text-[#fafafa]">
+                    <p className="text-sm text-[var(--text-secondary)] mb-1">Total Items</p>
+                    <p className="text-2xl font-semibold text-[var(--text-primary)]">
                       {loading ? '...' : stats.itemsCount}
                     </p>
                   </div>

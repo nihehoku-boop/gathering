@@ -198,33 +198,33 @@ export default function EditItemDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-      <Card className="w-full max-w-md max-h-[90vh] bg-[#1a1d24] border-[#2a2d35] flex flex-col animate-scale-in">
+      <Card className="w-full max-w-md max-h-[90vh] bg-[var(--bg-secondary)] border-[var(--border-color)] flex flex-col animate-scale-in">
         <CardHeader className="flex-shrink-0">
-          <CardTitle className="text-[#fafafa]">Edit Item</CardTitle>
-          <CardDescription className="text-[#969696]">
+          <CardTitle className="text-[var(--text-primary)]">Edit Item</CardTitle>
+          <CardDescription className="text-[var(--text-secondary)]">
             Update item details and image
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
           <CardContent className="space-y-4 overflow-y-auto flex-1">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-[#fafafa]">Item Name *</Label>
+              <Label htmlFor="name" className="text-[var(--text-primary)]">Item Name *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="number" className="text-[#fafafa]">Number</Label>
+              <Label htmlFor="number" className="text-[var(--text-primary)]">Number</Label>
               <Input
                 id="number"
                 type="number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
@@ -236,20 +236,20 @@ export default function EditItemDialog({
                 maxSize={10}
               />
               <div className="mt-2">
-                <Label htmlFor="image-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Label htmlFor="image-url" className="text-sm text-[var(--text-secondary)]">Or enter URL manually</Label>
                 <Input
                   id="image-url"
                   type="text"
                   value={image || ''}
                   onChange={(e) => setImage(e.target.value || '')}
                   placeholder="https://example.com/image.jpg or /ltbcover/image.jpg"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition mt-1"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition mt-1"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-[#fafafa]">Alternative Covers</Label>
-              <p className="text-xs text-[#969696] mb-2">
+              <Label className="text-[var(--text-primary)]">Alternative Covers</Label>
+              <p className="text-xs text-[var(--text-secondary)] mb-2">
                 Add alternative cover images for this item (variant covers, different editions, etc.)
               </p>
               <div className="space-y-2">
@@ -264,7 +264,7 @@ export default function EditItemDialog({
                       }}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-[#969696] truncate">{altImg}</p>
+                      <p className="text-xs text-[var(--text-secondary)] truncate">{altImg}</p>
                     </div>
                     <Button
                       type="button"
@@ -289,7 +289,7 @@ export default function EditItemDialog({
                           setAlternativeImages([...alternativeImages.filter((_, i) => i !== index), image])
                           setImage(altImg)
                         }}
-                        className="text-xs border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] rounded-full"
+                        className="text-xs border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] rounded-full"
                       >
                         Set as Main
                       </Button>
@@ -302,7 +302,7 @@ export default function EditItemDialog({
                     value={newAltImage}
                     onChange={(e) => setNewAltImage(e.target.value)}
                     placeholder="https://example.com/cover.jpg or /ltbcover/image.jpg"
-                    className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && newAltImage.trim()) {
                         e.preventDefault()
@@ -321,7 +321,7 @@ export default function EditItemDialog({
                       }
                     }}
                     disabled={!newAltImage.trim()}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] rounded-full"
+                    className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] rounded-full"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -329,27 +329,27 @@ export default function EditItemDialog({
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="notes" className="text-[#fafafa]">Notes</Label>
+              <Label htmlFor="notes" className="text-[var(--text-primary)]">Notes</Label>
               <Textarea
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="wear" className="text-[#fafafa]">Wear/Condition</Label>
+              <Label htmlFor="wear" className="text-[var(--text-primary)]">Wear/Condition</Label>
               <Input
                 id="wear"
                 value={wear}
                 onChange={(e) => setWear(e.target.value)}
                 placeholder="e.g., New, Like New, Good, Fair, Poor"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="personalRating" className="text-[#fafafa]">Personal Rating (1-10)</Label>
+              <Label htmlFor="personalRating" className="text-[var(--text-primary)]">Personal Rating (1-10)</Label>
               <Input
                 id="personalRating"
                 type="number"
@@ -358,30 +358,30 @@ export default function EditItemDialog({
                 value={personalRating}
                 onChange={(e) => setPersonalRating(e.target.value)}
                 placeholder="1-10"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="logDate" className="text-[#fafafa]">Log Date</Label>
+              <Label htmlFor="logDate" className="text-[var(--text-primary)]">Log Date</Label>
               <Input
                 id="logDate"
                 type="date"
                 value={logDate}
                 onChange={(e) => setLogDate(e.target.value)}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
-              <p className="text-xs text-[#969696]">
+              <p className="text-xs text-[var(--text-secondary)]">
                 Date when item was bought, read, etc.
               </p>
             </div>
             
             {/* Template-specific fields */}
             {templateFields.length > 0 && (
-              <div className="space-y-4 pt-4 border-t border-[#2a2d35]">
-                <div className="text-sm font-medium text-[#fafafa]">Template Fields</div>
+              <div className="space-y-4 pt-4 border-t border-[var(--border-color)]">
+                <div className="text-sm font-medium text-[var(--text-primary)]">Template Fields</div>
                 {templateFields.map((field) => (
                   <div key={field.id} className="space-y-2">
-                    <Label htmlFor={`custom-${field.id}`} className="text-[#fafafa]">
+                    <Label htmlFor={`custom-${field.id}`} className="text-[var(--text-primary)]">
                       {field.label}
                       {field.required && <span className="text-[#FF3B30] ml-1">*</span>}
                     </Label>
@@ -392,7 +392,7 @@ export default function EditItemDialog({
                         onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
                         placeholder={field.placeholder}
                         required={field.required}
-                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                        className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                       />
                     )}
                     {field.type === 'number' && (
@@ -405,7 +405,7 @@ export default function EditItemDialog({
                         onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
                         placeholder={field.placeholder}
                         required={field.required}
-                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                        className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                       />
                     )}
                     {field.type === 'date' && (
@@ -415,7 +415,7 @@ export default function EditItemDialog({
                         value={customFields[field.id] || ''}
                         onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
                         required={field.required}
-                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                        className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                       />
                     )}
                     {field.type === 'select' && field.options && (
@@ -424,7 +424,7 @@ export default function EditItemDialog({
                         value={customFields[field.id] || ''}
                         onChange={(e) => setCustomFields({ ...customFields, [field.id]: e.target.value })}
                         required={field.required}
-                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                        className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                       >
                         <option value="">Select {field.label}</option>
                         {field.options.map((option: string) => (
@@ -442,7 +442,7 @@ export default function EditItemDialog({
                         placeholder={field.placeholder}
                         required={field.required}
                         rows={3}
-                        className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                        className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                       />
                     )}
                   </div>
@@ -450,12 +450,12 @@ export default function EditItemDialog({
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35] pt-4">
+          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[var(--border-color)] pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
             >
               Cancel
             </Button>
