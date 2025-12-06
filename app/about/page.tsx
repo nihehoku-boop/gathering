@@ -205,10 +205,10 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-[#969696]">
                 <p>
-                  Hi! I'm <strong className="text-[#fafafa]">Nico "Henske"</strong>, the creator of Gathering. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
+                  Hi! I'm <strong className="text-[#fafafa]">Nico "Henske"</strong>, the creator of Sammlerei. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
                 </p>
                 <p>
-                  That's why I built Gathering - a modern, intuitive platform designed by a collector, for collectors. Whether you're tracking comics, trading cards, books, films, or any other collectibles, Gathering provides the tools you need to stay organized and see your progress at a glance.
+                  That's why I built Sammlerei - a modern, intuitive platform designed by a collector, for collectors. Whether you're tracking comics, trading cards, books, films, or any other collectibles, Sammlerei provides the tools you need to stay organized and see your progress at a glance.
                 </p>
                 <p className="text-sm italic border-t border-[#2a2d35] pt-4">
                   <strong className="text-[#fafafa]">Development Note:</strong> This platform was developed with the assistance of AI tools for certain coding tasks, including code generation, debugging, and optimization. All design decisions, feature planning, and final implementation were made by the developer.

@@ -38,10 +38,10 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">1. Introduction</h2>
               <p className="text-[#969696] leading-relaxed">
-                Gathering ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our collection management platform.
+                Sammlerei ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our collection management platform.
               </p>
               <p className="text-[#969696] leading-relaxed mt-3">
-                <strong>Data Controller:</strong> The data controller for the purposes of GDPR is Gathering. For questions about data protection, please contact us through the contact information provided in your account settings.
+                <strong>Data Controller:</strong> The data controller for the purposes of GDPR is Sammlerei. For questions about data protection, please contact us through the contact information provided in your account settings.
               </p>
             </section>
 

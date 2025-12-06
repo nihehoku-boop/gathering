@@ -611,7 +611,7 @@ export default function CommunityCollectionsList() {
                     )
                   })()}
                   {collection.description && (
-                    <CardDescription className="mt-2 text-[#969696] line-clamp-3">
+                    <CardDescription className="mt-2 text-[var(--text-secondary)] line-clamp-3">
                       {collection.description}
                     </CardDescription>
                   )}
@@ -619,7 +619,7 @@ export default function CommunityCollectionsList() {
                 <CardContent className="flex-1 flex flex-col justify-end">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-[#969696]">
+                      <p className="text-sm text-[var(--text-secondary)]">
                         {collection.items.length} items included
                       </p>
                       {/* Voting UI - Upvote only */}
@@ -633,7 +633,7 @@ export default function CommunityCollectionsList() {
                           className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg smooth-transition border ${
                             collection.userVote === 'upvote'
                               ? 'bg-[var(--accent-color)] text-white border-[var(--accent-color)]'
-                              : 'bg-[#2a2d35] text-[#969696] border-[#353842] hover:text-[#fafafa] hover:bg-[#353842]'
+                              : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)] border-[var(--border-hover)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]'
                           } disabled:opacity-50 disabled:cursor-not-allowed`}
                           title="Upvote"
                         >
@@ -654,7 +654,7 @@ export default function CommunityCollectionsList() {
                               e.stopPropagation()
                               setEditingCollection(collection)
                             }}
-                            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
