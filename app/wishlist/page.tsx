@@ -200,7 +200,7 @@ export default function WishlistPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
           <div className="text-center">
             <div className="relative w-20 h-20 mx-auto mb-6">
               {/* Outer rotating ring */}
@@ -216,7 +216,7 @@ export default function WishlistPage() {
             </div>
             
             <div className="space-y-2">
-              <p className="text-[#fafafa] text-lg font-medium">Loading wishlist...</p>
+              <p className="text-[var(--text-primary)] text-lg font-medium">Loading wishlist...</p>
               <div className="flex items-center justify-center gap-1">
                 <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></span>
                 <span className="w-2 h-2 bg-[var(--accent-color)] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
@@ -234,8 +234,8 @@ export default function WishlistPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
-          <div className="text-center text-[#969696]">No wishlist found</div>
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
+          <div className="text-center text-[var(--text-secondary)]">No wishlist found</div>
         </div>
       </>
     )
@@ -245,7 +245,7 @@ export default function WishlistPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
           <div className="mb-8 animate-fade-up">
             <div className="flex items-center justify-between mb-4">
@@ -254,7 +254,7 @@ export default function WishlistPage() {
                   <Input
                     value={wishlistName}
                     onChange={(e) => setWishlistName(e.target.value)}
-                    className="bg-[#2a2d35] border-[#353842] text-[#fafafa] focus:border-[var(--accent-color)]"
+                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] focus:border-[var(--accent-color)]"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         updateWishlist()
@@ -277,21 +277,21 @@ export default function WishlistPage() {
                       setEditingName(false)
                       setWishlistName(wishlist.name || 'My Wishlist')
                     }}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
               ) : (
                 <>
-                  <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight flex items-center gap-3">
+                  <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight flex items-center gap-3">
                     <Heart className="h-8 w-8 text-[#FF3B30]" />
                     {wishlist.name || 'My Wishlist'}
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => setEditingName(true)}
-                      className="text-[#969696] hover:text-[#fafafa]"
+                      className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                     >
                       <Edit className="h-5 w-5" />
                     </Button>
@@ -300,14 +300,14 @@ export default function WishlistPage() {
               )}
             </div>
             {wishlist.description && (
-              <p className="text-[#969696] text-lg mb-4">{wishlist.description}</p>
+              <p className="text-[var(--text-secondary)] text-lg mb-4">{wishlist.description}</p>
             )}
             <div className="flex gap-2 flex-wrap">
               <Button
                 variant="outline"
                 onClick={copyShareLink}
                 disabled={!wishlist.isPublic || !wishlist.shareToken}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {copied ? (
                   <>
@@ -324,19 +324,19 @@ export default function WishlistPage() {
               <Button
                 variant="outline"
                 onClick={togglePublic}
-                className={`border-[#353842] smooth-transition rounded-full ${
+                className={`border-[var(--border-hover)] smooth-transition rounded-full ${
                   wishlist.isPublic
                     ? 'bg-[#34C759]/10 border-[#34C759] text-[#34C759]'
-                    : 'text-[#fafafa] hover:bg-[#2a2d35]'
+                    : 'text-[var(--text-primary)] hover:bg-[#2a2d35]'
                 }`}
               >
                 <Share2 className="mr-2 h-4 w-4" />
                 {wishlist.isPublic ? 'Public' : 'Private'}
               </Button>
               {wishlist.isPublic && wishlist.shareToken && (
-                <div className="text-sm text-[#969696] flex items-center gap-2">
+                <div className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
                   <span>Share link:</span>
-                  <code className="bg-[#2a2d35] px-2 py-1 rounded text-xs text-[#fafafa]">
+                  <code className="bg-[#2a2d35] px-2 py-1 rounded text-xs text-[var(--text-primary)]">
                     {window.location.origin}/wishlist/share/{wishlist.shareToken.substring(0, 8)}...
                   </code>
                 </div>
@@ -348,10 +348,10 @@ export default function WishlistPage() {
             <Card className="bg-[#1a1d24] border-[#2a2d35] animate-fade-up">
               <CardContent className="py-16 text-center">
                 <Heart className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   Your wishlist is empty
                 </h3>
-                <p className="text-[#969696] mb-6">
+                <p className="text-[var(--text-secondary)] mb-6">
                   Add items from your collections to your wishlist!
                 </p>
               </CardContent>
@@ -361,7 +361,7 @@ export default function WishlistPage() {
               {wishlist.items.map((item, index) => (
                 <Card
                   key={item.id}
-                  className="relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer bg-[#1a1d24] border-[#2a2d35] hover:border-[#353842]"
+                  className="relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer bg-[#1a1d24] border-[#2a2d35] hover:border-[var(--border-hover)]"
                   style={{ animationDelay: `${index * 30}ms` }}
                 >
                   {item.itemImage ? (
@@ -386,7 +386,7 @@ export default function WishlistPage() {
                     <div className="w-full bg-[#2a2d35] relative" style={{ aspectRatio: '2/3' }}>
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#2a2d35] to-[#1a1d24]">
                         <div className="text-center p-2">
-                          <div className="text-xs font-semibold text-[#969696]">
+                          <div className="text-xs font-semibold text-[var(--text-secondary)]">
                             {item.itemNumber && `#${item.itemNumber}`}
                           </div>
                           <div className="text-xs text-[#666] mt-1 line-clamp-2">
@@ -407,12 +407,12 @@ export default function WishlistPage() {
                     </div>
                   )}
                   <div className="p-2 bg-[#1a1d24]">
-                    <div className="text-xs font-medium truncate text-[#fafafa]">
+                    <div className="text-xs font-medium truncate text-[var(--text-primary)]">
                       {item.itemNumber && `#${item.itemNumber} `}
                       {item.itemName}
                     </div>
                     {item.collectionName && (
-                      <div className="text-xs text-[#969696] truncate mt-1">
+                      <div className="text-xs text-[var(--text-secondary)] truncate mt-1">
                         from {item.collectionName}
                       </div>
                     )}

@@ -54,7 +54,7 @@ export default function LeaderboardPage() {
       case 3:
         return <Medal className="h-6 w-6 text-[#CD7F32]" />
       default:
-        return <span className="text-lg font-semibold text-[#969696] w-6 text-center">{rank}</span>
+        return <span className="text-lg font-semibold text-[var(--text-secondary)] w-6 text-center">{rank}</span>
     }
   }
 
@@ -67,7 +67,7 @@ export default function LeaderboardPage() {
       case 3:
         return 'bg-gradient-to-r from-[#CD7F32]/20 to-[#D4A574]/20 border-[#CD7F32]'
       default:
-        return 'bg-[#1a1d24] border-[#2a2d35]'
+        return 'bg-[var(--bg-secondary)] border-[var(--border-color)]'
     }
   }
 
@@ -79,14 +79,14 @@ export default function LeaderboardPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -94,27 +94,27 @@ export default function LeaderboardPage() {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <Trophy className="h-8 w-8 text-[var(--accent-color)]" />
-              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">Leaderboard</h1>
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Leaderboard</h1>
             </div>
-            <p className="text-[#969696] text-lg mb-10">
+            <p className="text-[var(--text-secondary)] text-lg mb-10">
               Top collectors ranked by total owned items
             </p>
           </div>
 
           {loading ? (
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
-                <div className="text-[#969696]">Loading leaderboard...</div>
+                <div className="text-[var(--text-secondary)]">Loading leaderboard...</div>
               </CardContent>
             </Card>
           ) : leaderboard.length === 0 ? (
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
                 <Trophy className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   No rankings yet
                 </h3>
-                <p className="text-[#969696]">
+                <p className="text-[var(--text-secondary)]">
                   Start collecting items to appear on the leaderboard!
                 </p>
               </CardContent>
@@ -124,7 +124,7 @@ export default function LeaderboardPage() {
               {session && currentUserRank > 0 && (
                 <Card className={`bg-[#1a1d24] border-2 ${getRankColor(currentUserRank)}`}>
                   <CardHeader>
-                    <CardTitle className="text-[#fafafa] flex items-center gap-2">
+                    <CardTitle className="text-[var(--text-primary)] flex items-center gap-2">
                       <Award className="h-5 w-5 text-[var(--accent-color)]" />
                       Your Ranking
                     </CardTitle>
@@ -135,7 +135,7 @@ export default function LeaderboardPage() {
                         {getRankIcon(currentUserRank)}
                       </div>
                       <div className="flex-1">
-                        <div className="font-semibold text-[#fafafa] text-lg flex items-center gap-2">
+                        <div className="font-semibold text-[var(--text-primary)] text-lg flex items-center gap-2">
                           {leaderboard[currentUserRank - 1].name}
                           {leaderboard[currentUserRank - 1].isVerified && (
                             <span title="Verified account">
@@ -143,7 +143,7 @@ export default function LeaderboardPage() {
                             </span>
                           )}
                         </div>
-                        <div className="text-sm text-[#969696]">
+                        <div className="text-sm text-[var(--text-secondary)]">
                           {leaderboard[currentUserRank - 1].ownedItems} / {leaderboard[currentUserRank - 1].totalItems} items owned
                         </div>
                       </div>
@@ -157,10 +157,10 @@ export default function LeaderboardPage() {
                 </Card>
               )}
 
-              <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
                 <CardHeader>
-                  <CardTitle className="text-[#fafafa]">Top Collectors</CardTitle>
-                  <CardDescription className="text-[#969696]">
+                  <CardTitle className="text-[var(--text-primary)]">Top Collectors</CardTitle>
+                  <CardDescription className="text-[var(--text-secondary)]">
                     Ranked by total owned items across all collections
                   </CardDescription>
                 </CardHeader>
@@ -189,11 +189,11 @@ export default function LeaderboardPage() {
                             <img
                               src={entry.image}
                               alt={entry.name}
-                              className="w-10 h-10 rounded-full border-2 border-[#353842] flex-shrink-0"
+                              className="w-10 h-10 rounded-full border-2 border-[var(--border-hover)] flex-shrink-0"
                             />
                           ) : (
-                            <div className="w-10 h-10 rounded-full bg-[#2a2d35] border-2 border-[#353842] flex items-center justify-center flex-shrink-0">
-                              <span className="text-sm font-semibold text-[#fafafa]">
+                            <div className="w-10 h-10 rounded-full bg-[#2a2d35] border-2 border-[var(--border-hover)] flex items-center justify-center flex-shrink-0">
+                              <span className="text-sm font-semibold text-[var(--text-primary)]">
                                 {entry.name.charAt(0).toUpperCase()}
                               </span>
                             </div>
@@ -201,7 +201,7 @@ export default function LeaderboardPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
                               <div className={`font-semibold truncate flex items-center gap-1.5 ${
-                                isCurrentUser ? 'text-[var(--accent-color)]' : 'text-[#fafafa]'
+                                isCurrentUser ? 'text-[var(--accent-color)]' : 'text-[var(--text-primary)]'
                               }`}>
                                 {entry.badge && (
                                   <span className="text-base flex-shrink-0">{getBadgeEmoji(entry.badge) || entry.badge}</span>
@@ -218,11 +218,11 @@ export default function LeaderboardPage() {
                                   </span>
                                 )}
                                 {isCurrentUser && (
-                                  <span className="ml-2 text-xs text-[#969696]">(You)</span>
+                                  <span className="ml-2 text-xs text-[var(--text-secondary)]">(You)</span>
                                 )}
                               </div>
                             </div>
-                            <div className="text-sm text-[#969696]">
+                            <div className="text-sm text-[var(--text-secondary)]">
                               {entry.ownedItems} / {entry.totalItems} items owned
                             </div>
                             <div className="mt-1 w-full bg-[#2a2d35] rounded-full h-1.5 overflow-hidden">
@@ -233,10 +233,10 @@ export default function LeaderboardPage() {
                             </div>
                           </div>
                           <div className="text-right flex-shrink-0">
-                            <div className="text-xl font-bold text-[#fafafa]">
+                            <div className="text-xl font-bold text-[var(--text-primary)]">
                               {entry.ownedItems}
                             </div>
-                            <div className="text-xs text-[#969696]">
+                            <div className="text-xs text-[var(--text-secondary)]">
                               items
                             </div>
                           </div>

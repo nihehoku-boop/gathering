@@ -254,7 +254,7 @@ export default function EditItemDialog({
               </p>
               <div className="space-y-2">
                 {alternativeImages.map((altImg, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-[#2a2d35] rounded border border-[#353842]">
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[var(--bg-tertiary)] rounded border border-[var(--border-hover)]">
                     <img
                       src={altImg}
                       alt={`Alternative ${index + 1}`}
@@ -275,7 +275,7 @@ export default function EditItemDialog({
                         newAlts.splice(index, 1)
                         setAlternativeImages(newAlts)
                       }}
-                      className="text-[#FF3B30] hover:text-[#C0392B] hover:bg-[#2a2d35] rounded-full h-8 w-8"
+                      className="text-[#FF3B30] hover:text-[#C0392B] hover:bg-[var(--bg-tertiary)] rounded-full h-8 w-8"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -289,7 +289,7 @@ export default function EditItemDialog({
                           setAlternativeImages([...alternativeImages.filter((_, i) => i !== index), image])
                           setImage(altImg)
                         }}
-                        className="text-xs border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] rounded-full"
+                        className="text-xs border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] rounded-full"
                       >
                         Set as Main
                       </Button>
