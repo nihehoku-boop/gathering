@@ -124,25 +124,25 @@ export default function EditCollectionDialog({
     }
     
     return (
-      <div ref={setNodeRef} style={style} className="p-4 bg-[#2a2d35] rounded-md border border-[#353842] space-y-3">
+      <div ref={setNodeRef} style={style} className="p-4 bg-[var(--bg-tertiary)] rounded-md border border-[var(--border-hover)] space-y-3">
         {editingFieldIndex === index ? (
           <>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label className="text-[#fafafa] text-sm">Field Label *</Label>
+                <Label className="text-[var(--text-primary)] text-sm">Field Label *</Label>
                 <Input
                   value={newField.label || ''}
                   onChange={(e) => setNewField({ ...newField, label: e.target.value })}
                   placeholder="e.g., Publisher, Author"
-                  className="bg-[#1a1d24] border-[#353842] text-[#fafafa] text-sm"
+                  className="bg-[var(--bg-secondary)] border-[var(--border-hover)] text-[var(--text-primary)] text-sm"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-[#fafafa] text-sm">Field Type *</Label>
+                <Label className="text-[var(--text-primary)] text-sm">Field Type *</Label>
                 <select
                   value={newField.type || 'text'}
                   onChange={(e) => setNewField({ ...newField, type: e.target.value as TemplateField['type'] })}
-                  className="w-full px-3 py-2 bg-[#1a1d24] border border-[#353842] rounded-md text-[#fafafa] text-sm"
+                  className="w-full px-3 py-2 bg-[#1a1d24] border border-[#353842] rounded-md text-[var(--text-primary)] text-sm"
                 >
                   <option value="text">Text</option>
                   <option value="number">Number</option>
@@ -155,7 +155,7 @@ export default function EditCollectionDialog({
             
             {newField.type === 'select' && (
               <div className="space-y-2">
-                <Label className="text-[#fafafa] text-sm">Options (comma-separated)</Label>
+                <Label className="text-[var(--text-primary)] text-sm">Options (comma-separated)</Label>
                 <Input
                   value={newField.options?.join(', ') || ''}
                   onChange={(e) => {
@@ -163,19 +163,19 @@ export default function EditCollectionDialog({
                     setNewField({ ...newField, options })
                   }}
                   placeholder="e.g., Option 1, Option 2, Option 3"
-                  className="bg-[#1a1d24] border-[#353842] text-[#fafafa] text-sm"
+                  className="bg-[var(--bg-secondary)] border-[var(--border-hover)] text-[var(--text-primary)] text-sm"
                 />
               </div>
             )}
             
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label className="text-[#fafafa] text-sm">Placeholder</Label>
+                <Label className="text-[var(--text-primary)] text-sm">Placeholder</Label>
                 <Input
                   value={newField.placeholder || ''}
                   onChange={(e) => setNewField({ ...newField, placeholder: e.target.value })}
                   placeholder="Optional placeholder text"
-                  className="bg-[#1a1d24] border-[#353842] text-[#fafafa] text-sm"
+                  className="bg-[var(--bg-secondary)] border-[var(--border-hover)] text-[var(--text-primary)] text-sm"
                 />
               </div>
               <div className="flex items-center gap-2 pt-6">
@@ -186,7 +186,7 @@ export default function EditCollectionDialog({
                   onChange={(e) => setNewField({ ...newField, required: e.target.checked })}
                   className="w-4 h-4"
                 />
-                <Label htmlFor={`required-${index}`} className="text-[#fafafa] text-sm cursor-pointer">
+                <Label htmlFor={`required-${index}`} className="text-[var(--text-primary)] text-sm cursor-pointer">
                   Required
                 </Label>
               </div>
@@ -216,7 +216,7 @@ export default function EditCollectionDialog({
                   }
                 }}
                 disabled={!newField.label || !newField.type}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-sm"
+                className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] text-sm"
               >
                 Save
               </Button>
@@ -228,7 +228,7 @@ export default function EditCollectionDialog({
                   setEditingFieldIndex(null)
                   setNewField({ id: '', label: '', type: 'text' })
                 }}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-sm"
+                className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] text-sm"
               >
                 Cancel
               </Button>
@@ -240,14 +240,14 @@ export default function EditCollectionDialog({
               <button
                 {...attributes}
                 {...listeners}
-                className="cursor-grab active:cursor-grabbing text-[#666] hover:text-[#fafafa] p-1"
+                className="cursor-grab active:cursor-grabbing text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1"
                 title="Drag to reorder"
               >
                 <GripVertical className="h-4 w-4" />
               </button>
               <div className="flex-1">
-                <div className="text-[#fafafa] font-medium">{field.label}</div>
-                <div className="text-xs text-[#666]">
+                <div className="text-[var(--text-primary)] font-medium">{field.label}</div>
+                <div className="text-xs text-[var(--text-muted)]">
                   {field.type}
                   {field.required && ' • Required'}
                   {field.options && ` • ${field.options.length} options`}
@@ -263,7 +263,7 @@ export default function EditCollectionDialog({
                   setEditingFieldIndex(index)
                   setNewField(field)
                 }}
-                className="text-[#666] hover:text-[#fafafa] hover:bg-[#1a1d24]"
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[#1a1d24]"
               >
                 Edit
               </Button>
@@ -404,7 +404,7 @@ export default function EditCollectionDialog({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto animate-fade-in">
       <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] my-8 max-h-[90vh] flex flex-col animate-scale-in">
         <CardHeader className="flex-shrink-0">
-          <CardTitle className="text-[#fafafa]">Edit Collection</CardTitle>
+          <CardTitle className="text-[var(--text-primary)]">Edit Collection</CardTitle>
           <CardDescription className="text-[#969696]">
             Update collection details and tags
           </CardDescription>
@@ -412,34 +412,34 @@ export default function EditCollectionDialog({
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
           <CardContent className="space-y-4 overflow-y-auto flex-1">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-[#fafafa]">Collection Name *</Label>
+              <Label htmlFor="name" className="text-[var(--text-primary)]">Collection Name *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., Marvel Comics, Vintage Toys"
                 required
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="category" className="text-[#fafafa]">Category</Label>
+                <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
                 <Input
                   id="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   placeholder="e.g., Comics, Books, Cards"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                  className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="folder" className="text-[#fafafa]">Folder</Label>
+                <Label htmlFor="folder" className="text-[var(--text-primary)]">Folder</Label>
                 <select
                   id="folder"
                   value={folderId}
                   onChange={(e) => setFolderId(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                 >
                   <option value="">No Folder</option>
                   {folders.map((folder) => (
@@ -451,12 +451,12 @@ export default function EditCollectionDialog({
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="template" className="text-[#fafafa]">Item Template</Label>
+              <Label htmlFor="template" className="text-[var(--text-primary)]">Item Template</Label>
               <select
                 id="template"
                 value={template}
                 onChange={(e) => setTemplate(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
               >
                 {ITEM_TEMPLATES.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -464,7 +464,7 @@ export default function EditCollectionDialog({
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-[#666]">
+              <p className="text-xs text-[var(--text-muted)]">
                 Choose a template to customize the fields available when editing items in this collection.
               </p>
             </div>
@@ -473,7 +473,7 @@ export default function EditCollectionDialog({
             {template === 'custom' && (
               <div className="space-y-4 pt-4 border-t border-[#2a2d35]">
                 <div className="flex items-center justify-between">
-                  <Label className="text-[#fafafa]">Custom Fields</Label>
+                  <Label className="text-[var(--text-primary)]">Custom Fields</Label>
                   <Button
                     type="button"
                     variant="outline"
@@ -491,7 +491,7 @@ export default function EditCollectionDialog({
                       setEditingFieldIndex(customFieldDefinitions.length)
                       setNewField(newFieldDef)
                     }}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                    className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                   >
                     <Plus className="h-4 w-4 mr-1" />
                     Add Field
@@ -499,7 +499,7 @@ export default function EditCollectionDialog({
                 </div>
                 
                 {customFieldDefinitions.length === 0 && (
-                  <p className="text-sm text-[#666] italic">
+                  <p className="text-sm text-[var(--text-muted)] italic">
                     No custom fields defined. Click "Add Field" to create custom fields for items in this collection.
                   </p>
                 )}
@@ -524,14 +524,14 @@ export default function EditCollectionDialog({
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="description" className="text-[#fafafa]">Description</Label>
+              <Label htmlFor="description" className="text-[var(--text-primary)]">Description</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Optional description of your collection"
                 rows={3}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="space-y-2">
@@ -550,27 +550,27 @@ export default function EditCollectionDialog({
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
+                  className="bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition mt-1"
                 />
               </div>
               <div className="mt-2">
-                <Label htmlFor="coverImageFit" className="text-sm text-[#fafafa]">Cover Image Fit</Label>
+                <Label htmlFor="coverImageFit" className="text-sm text-[var(--text-primary)]">Cover Image Fit</Label>
                 <select
                   id="coverImageFit"
                   value={coverImageFit}
                   onChange={(e) => setCoverImageFit(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] mt-1"
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] mt-1"
                 >
                   <option value="cover">Fill (Cover) - Image fills the entire box, may be cropped</option>
                   <option value="contain">Fit (Contain) - Image fits within box, may have empty space</option>
                 </select>
-                <p className="text-xs text-[#666] mt-1">
+                <p className="text-xs text-[var(--text-muted)] mt-1">
                   Choose how the cover image should be displayed in collection cards.
                 </p>
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-[#fafafa]">Item Image Aspect Ratio (Cover View)</Label>
+              <Label className="text-[var(--text-primary)]">Item Image Aspect Ratio (Cover View)</Label>
               <div className="flex flex-wrap gap-2">
                 {aspectRatios.map((ratio) => (
                   <button
@@ -580,7 +580,7 @@ export default function EditCollectionDialog({
                     className={`px-3 py-1.5 rounded-full text-sm smooth-transition border ${
                       coverImageAspectRatio === ratio.value
                         ? 'bg-[var(--accent-color)] text-white border-[var(--accent-color)]'
-                        : 'bg-[#2a2d35] text-[#fafafa] border-[#353842] hover:border-[#666]'
+                        : 'bg-[#2a2d35] text-[var(--text-primary)] border-[#353842] hover:border-[#666]'
                     }`}
                   >
                     {ratio.label}
@@ -603,7 +603,7 @@ export default function EditCollectionDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
             >
               Cancel
             </Button>

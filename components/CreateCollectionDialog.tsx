@@ -101,44 +101,44 @@ export default function CreateCollectionDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-      <Card className="w-full max-w-md max-h-[90vh] bg-[#1a1d24] border-[#2a2d35] animate-scale-in flex flex-col">
+      <Card className="w-full max-w-md max-h-[90vh] bg-[var(--bg-secondary)] border-[var(--border-color)] animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0">
-          <CardTitle className="text-[#fafafa]">Create New Collection</CardTitle>
-          <CardDescription className="text-[#969696]">
+          <CardTitle className="text-[var(--text-primary)]">Create New Collection</CardTitle>
+          <CardDescription className="text-[var(--text-secondary)]">
             Add a new collection to track your items
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
           <CardContent className="space-y-4 overflow-y-auto flex-1 min-h-0">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-[#fafafa]">Collection Name *</Label>
+              <Label htmlFor="name" className="text-[var(--text-primary)]">Collection Name *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g., Marvel Comics, Vintage Toys"
                 required
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="category" className="text-[#fafafa]">Category</Label>
+                <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
                 <Input
                   id="category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   placeholder="e.g., Comics, Books, Cards"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="folder" className="text-[#fafafa]">Folder</Label>
+                <Label htmlFor="folder" className="text-[var(--text-primary)]">Folder</Label>
                 <select
                   id="folder"
                   value={folderId}
                   onChange={(e) => setFolderId(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
                 >
                   <option value="">No Folder</option>
                   {folders.map((folder) => (
@@ -150,12 +150,12 @@ export default function CreateCollectionDialog({
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="template" className="text-[#fafafa]">Item Template</Label>
+              <Label htmlFor="template" className="text-[var(--text-primary)]">Item Template</Label>
               <select
                 id="template"
                 value={template}
                 onChange={(e) => setTemplate(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
               >
                 {ITEM_TEMPLATES.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -163,19 +163,19 @@ export default function CreateCollectionDialog({
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-[#666]">
+              <p className="text-xs text-[var(--text-muted)]">
                 Choose a template to customize the fields available when editing items in this collection.
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description" className="text-[#fafafa]">Description</Label>
+              <Label htmlFor="description" className="text-[var(--text-primary)]">Description</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Optional description of your collection"
                 rows={3}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               />
             </div>
             <div className="space-y-2">
@@ -187,28 +187,28 @@ export default function CreateCollectionDialog({
                 maxSize={10}
               />
               <div className="mt-2">
-                <Label htmlFor="coverImage-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Label htmlFor="coverImage-url" className="text-sm text-[var(--text-secondary)]">Or enter URL manually</Label>
                 <Input
                   id="coverImage-url"
                   type="url"
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition mt-1"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition mt-1"
                 />
               </div>
               <div className="mt-2">
-                <Label htmlFor="coverImageFit" className="text-sm text-[#fafafa]">Image Fit</Label>
+                <Label htmlFor="coverImageFit" className="text-sm text-[var(--text-primary)]">Image Fit</Label>
                 <select
                   id="coverImageFit"
                   value={coverImageFit}
                   onChange={(e) => setCoverImageFit(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] mt-1"
+                  className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] mt-1"
                 >
                   <option value="cover">Fill (Cover) - Image fills the entire box, may be cropped</option>
                   <option value="contain">Fit (Contain) - Image fits within box, may have empty space</option>
                 </select>
-                <p className="text-xs text-[#666] mt-1">
+                <p className="text-xs text-[var(--text-muted)] mt-1">
                   Choose how the cover image should be displayed in collection cards.
                 </p>
               </div>
@@ -220,12 +220,12 @@ export default function CreateCollectionDialog({
               allowCustom={true}
             />
           </CardContent>
-          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35]">
+          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[var(--border-color)]">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
             >
               Cancel
             </Button>

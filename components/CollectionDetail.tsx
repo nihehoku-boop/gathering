@@ -645,13 +645,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
           <div className="container mx-auto px-6 py-8">
             {/* Header Skeleton */}
             <div className="mb-8 space-y-4 animate-pulse">
-              <div className="h-8 bg-[#2a2d35] rounded w-1/3"></div>
-              <div className="h-4 bg-[#2a2d35] rounded w-2/3"></div>
-              <div className="h-2 bg-[#2a2d35] rounded w-full"></div>
+              <div className="h-8 bg-[var(--bg-tertiary)] rounded w-1/3"></div>
+              <div className="h-4 bg-[var(--bg-tertiary)] rounded w-2/3"></div>
+              <div className="h-2 bg-[var(--bg-tertiary)] rounded w-full"></div>
             </div>
             
             {/* Items Grid Skeleton */}
@@ -671,8 +671,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
-          <div className="text-center text-[#969696]">Collection not found</div>
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
+          <div className="text-center text-[var(--text-secondary)]">Collection not found</div>
         </div>
       </>
     )
@@ -687,22 +687,22 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
         <Button
           variant="ghost"
           onClick={() => router.push('/')}
-          className="mb-8 text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+          className="mb-8 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Collections
         </Button>
 
-        <Card className="mb-8 bg-[#1a1d24] border-[#2a2d35] animate-fade-up">
+        <Card className="mb-8 bg-[var(--bg-secondary)] border-[var(--border-color)] animate-fade-up">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
               <div className="flex-1 min-w-0">
-                <CardTitle className="text-3xl sm:text-4xl font-semibold text-[#fafafa] tracking-tight break-words">{collection.name}</CardTitle>
+                <CardTitle className="text-3xl sm:text-4xl font-semibold text-[var(--text-primary)] tracking-tight break-words">{collection.name}</CardTitle>
                 {collection.category && (
                   <span className="text-sm text-muted-foreground bg-secondary px-2 py-1 rounded mt-2 inline-block">
                     {collection.category}
@@ -720,7 +720,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     variant="outline"
                     size="icon"
                     onClick={() => setShowExportMenu(!showExportMenu)}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
                     title="Export Collection"
                   >
                     <Download className="h-4 w-4" />
@@ -731,13 +731,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         className="fixed inset-0 z-10" 
                         onClick={() => setShowExportMenu(false)}
                       />
-                      <div className="absolute right-0 top-full mt-2 w-40 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-20 overflow-hidden">
+                      <div className="absolute right-0 top-full mt-2 w-40 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
                         <button
                           onClick={() => {
                             window.open(`/api/collections/${collection.id}/export?format=json`, '_blank')
                             setShowExportMenu(false)
                           }}
-                          className="w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                          className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
                           <Download className="h-4 w-4" />
                           Export as JSON
@@ -747,7 +747,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                             window.open(`/api/collections/${collection.id}/export?format=csv`, '_blank')
                             setShowExportMenu(false)
                           }}
-                          className="w-full px-4 py-2 text-left text-sm text-[#fafafa] hover:bg-[#2a2d35] smooth-transition flex items-center gap-2 border-t border-[#2a2d35]"
+                          className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
                         >
                           <Download className="h-4 w-4" />
                           Export as CSV
@@ -800,10 +800,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       })
                     }
                   }}
-                  className={`border-[#353842] smooth-transition rounded-full ${
+                  className={`border-[var(--border-hover)] smooth-transition rounded-full ${
                     isPublic
                       ? 'bg-[#34C759]/10 border-[#34C759] text-[#34C759]'
-                      : 'text-[#fafafa] hover:bg-[#2a2d35]'
+                      : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
                   }`}
                   title={isPublic ? 'Make Private' : 'Make Public'}
                 >
@@ -824,7 +824,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         type: 'success',
                       })
                     }}
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
                     title="Copy Share Link"
                   >
                     {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}
@@ -834,7 +834,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   variant="outline"
                   size="icon"
                   onClick={() => setShowEditCollection(true)}
-                  className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
                   title="Edit Collection"
                 >
                   <Edit className="h-4 w-4" />
@@ -856,12 +856,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           </CardContent>
         </Card>
 
-        <Card className="bg-[#1a1d24] border-[#2a2d35] animate-fade-up" style={{ animationDelay: '100ms' }}>
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] animate-fade-up" style={{ animationDelay: '100ms' }}>
           <CardHeader>
             <div className="flex justify-between items-center">
               <div>
-                <CardTitle className="text-[#fafafa]">Items</CardTitle>
-                <CardDescription className="text-[#969696]">
+                <CardTitle className="text-[var(--text-primary)]">Items</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
                   Manage the items in your collection
                 </CardDescription>
               </div>
@@ -875,12 +875,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         setIsSelectionMode(false)
                         clearSelection()
                       }}
-                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                     >
                       <X className="mr-2 h-4 w-4" />
                       Cancel
                     </Button>
-                    <div className="flex items-center gap-2 px-3 text-sm text-[#969696]">
+                    <div className="flex items-center gap-2 px-3 text-sm text-[var(--text-secondary)]">
                       {selectedItems.size} selected
                     </div>
                     {selectedItems.size > 0 && (
@@ -889,7 +889,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           variant="outline"
                           size="sm"
                           onClick={selectAll}
-                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                         >
                           Select All
                         </Button>
@@ -897,7 +897,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           variant="outline"
                           size="sm"
                           onClick={() => handleBulkMarkOwned(true)}
-                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                           title="Mark as owned"
                         >
                           <Check className="mr-2 h-4 w-4" />
@@ -907,7 +907,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           variant="outline"
                           size="sm"
                           onClick={() => handleBulkMarkOwned(false)}
-                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                           title="Mark as not owned"
                         >
                           <X className="mr-2 h-4 w-4" />
@@ -917,7 +917,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           variant="outline"
                           size="sm"
                           onClick={handleBulkAddToWishlist}
-                          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                           title="Add to wishlist"
                         >
                           <Heart className="mr-2 h-4 w-4" />
@@ -942,7 +942,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       variant="outline"
                       size="sm"
                       onClick={() => setIsSelectionMode(true)}
-                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]"
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       title="Select multiple items"
                     >
                       <CheckSquare2 className="mr-2 h-4 w-4" />
