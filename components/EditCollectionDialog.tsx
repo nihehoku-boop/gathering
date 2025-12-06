@@ -142,7 +142,7 @@ export default function EditCollectionDialog({
                 <select
                   value={newField.type || 'text'}
                   onChange={(e) => setNewField({ ...newField, type: e.target.value as TemplateField['type'] })}
-                  className="w-full px-3 py-2 bg-[#1a1d24] border border-[#353842] rounded-md text-[var(--text-primary)] text-sm"
+                  className="w-full px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] text-sm"
                 >
                   <option value="text">Text</option>
                   <option value="number">Number</option>
@@ -216,7 +216,7 @@ export default function EditCollectionDialog({
                   }
                 }}
                 disabled={!newField.label || !newField.type}
-                className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] text-sm"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] text-sm"
               >
                 Save
               </Button>
@@ -228,7 +228,7 @@ export default function EditCollectionDialog({
                   setEditingFieldIndex(null)
                   setNewField({ id: '', label: '', type: 'text' })
                 }}
-                className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] text-sm"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] text-sm"
               >
                 Cancel
               </Button>
@@ -263,7 +263,7 @@ export default function EditCollectionDialog({
                   setEditingFieldIndex(index)
                   setNewField(field)
                 }}
-                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[#1a1d24]"
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
               >
                 Edit
               </Button>
@@ -274,7 +274,7 @@ export default function EditCollectionDialog({
                 onClick={() => {
                   setCustomFieldDefinitions(customFieldDefinitions.filter((_, i) => i !== index))
                 }}
-                className="text-[#FF3B30] hover:text-[#C0392B] hover:bg-[#1a1d24]"
+                className="text-[#FF3B30] hover:text-[#C0392B] hover:bg-[var(--bg-secondary)]"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -456,7 +456,7 @@ export default function EditCollectionDialog({
                 id="template"
                 value={template}
                 onChange={(e) => setTemplate(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
               >
                 {ITEM_TEMPLATES.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -471,7 +471,7 @@ export default function EditCollectionDialog({
             
             {/* Custom Field Builder - only show for "custom" template */}
             {template === 'custom' && (
-              <div className="space-y-4 pt-4 border-t border-[#2a2d35]">
+              <div className="space-y-4 pt-4 border-t border-[var(--border-color)]">
                 <div className="flex items-center justify-between">
                   <Label className="text-[var(--text-primary)]">Custom Fields</Label>
                   <Button
@@ -491,7 +491,7 @@ export default function EditCollectionDialog({
                       setEditingFieldIndex(customFieldDefinitions.length)
                       setNewField(newFieldDef)
                     }}
-                    className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                   >
                     <Plus className="h-4 w-4 mr-1" />
                     Add Field
@@ -543,7 +543,7 @@ export default function EditCollectionDialog({
                 maxSize={10}
               />
               <div className="mt-2">
-                <Label htmlFor="coverImage-url" className="text-sm text-[#969696]">Or enter URL manually</Label>
+                <Label htmlFor="coverImage-url" className="text-sm text-[var(--text-secondary)]">Or enter URL manually</Label>
                 <Input
                   id="coverImage-url"
                   type="url"
