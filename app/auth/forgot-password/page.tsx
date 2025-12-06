@@ -45,14 +45,14 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-        <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+        <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
           <CardContent className="py-16 text-center">
             <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-6" />
-            <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               Check Your Email
             </h3>
-            <p className="text-[#969696] mb-6">
+            <p className="text-[var(--text-secondary)] mb-6">
               If an account with that email exists, we've sent a password reset link. Please check your email and follow the instructions.
             </p>
             <div className="space-y-3">
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
                   setSuccess(false)
                   setEmail('')
                 }}
-                className="w-full border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="w-full border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 Send Another Email
               </Button>
@@ -79,13 +79,13 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-3xl font-semibold text-center text-[#fafafa] tracking-tight">
+          <CardTitle className="text-3xl font-semibold text-center text-[var(--text-primary)] tracking-tight">
             Forgot Password
           </CardTitle>
-          <CardDescription className="text-center text-[#969696]">
+          <CardDescription className="text-center text-[var(--text-secondary)]">
             Enter your email address and we'll send you a link to reset your password
           </CardDescription>
         </CardHeader>
@@ -98,9 +98,9 @@ export default function ForgotPasswordPage() {
           )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[#fafafa]">Email</Label>
+              <Label htmlFor="email" className="text-[var(--text-primary)]">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                 <Input
                   id="email"
                   type="email"
@@ -108,7 +108,7 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="pl-10 bg-[#2a2d35] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function ForgotPasswordPage() {
             <Link href="/auth/signin">
               <Button
                 variant="ghost"
-                className="text-[#969696] hover:text-[#fafafa] smooth-transition"
+                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Sign In

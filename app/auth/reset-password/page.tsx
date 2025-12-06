@@ -76,14 +76,14 @@ function ResetPasswordForm() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-        <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+        <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
           <CardContent className="py-16 text-center">
             <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-6" />
-            <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               Password Reset Successful
             </h3>
-            <p className="text-[#969696] mb-6">
+            <p className="text-[var(--text-secondary)] mb-6">
               Your password has been reset successfully. Redirecting to sign in...
             </p>
             <Link href="/auth/signin">
@@ -98,13 +98,13 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-3xl font-semibold text-center text-[#fafafa] tracking-tight">
+          <CardTitle className="text-3xl font-semibold text-center text-[var(--text-primary)] tracking-tight">
             Reset Password
           </CardTitle>
-          <CardDescription className="text-center text-[#969696]">
+          <CardDescription className="text-center text-[var(--text-secondary)]">
             Enter your new password
           </CardDescription>
         </CardHeader>
@@ -117,9 +117,9 @@ function ResetPasswordForm() {
           )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-[#fafafa]">New Password</Label>
+              <Label htmlFor="password" className="text-[var(--text-primary)]">New Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                 <Input
                   id="password"
                   type="password"
@@ -128,14 +128,14 @@ function ResetPasswordForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-[#fafafa]">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-[var(--text-primary)]">Confirm Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -144,7 +144,7 @@ function ResetPasswordForm() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="pl-10 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
             </div>
@@ -157,7 +157,7 @@ function ResetPasswordForm() {
             </Button>
           </form>
           <div className="mt-6 text-center">
-            <p className="text-sm text-[#969696]">
+            <p className="text-sm text-[var(--text-secondary)]">
               Remember your password?{' '}
               <Link 
                 href="/auth/signin" 
@@ -176,10 +176,10 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-[#0f1114] px-4">
-        <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] shadow-2xl">
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] px-4">
+        <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
           <CardContent className="py-16 text-center">
-            <p className="text-[#969696]">Loading...</p>
+            <p className="text-[var(--text-secondary)]">Loading...</p>
           </CardContent>
         </Card>
       </div>
