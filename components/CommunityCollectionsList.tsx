@@ -453,15 +453,15 @@ export default function CommunityCollectionsList() {
                       <option value="leastItems">Least Items</option>
                       <option value="alphabetical">Alphabetical</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696] pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)] pointer-events-none" />
                   </div>
                 </div>
               </div>
 
               {(selectedCategory || selectedTags.length > 0) && (
-                <div className="flex flex-wrap gap-2 pt-2 border-t border-[#2a2d35]">
+                <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border-color)]">
                   {selectedCategory && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#2a2d35] text-[#fafafa] rounded-full text-xs">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-full text-xs">
                       Category: {selectedCategory}
                       <button
                         onClick={() => setSelectedCategory('')}
@@ -746,21 +746,21 @@ export default function CommunityCollectionsList() {
       />
       {managingCollectionId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-4xl max-h-[90vh] bg-[#1a1d24] border-[#2a2d35]">
+          <Card className="w-full max-w-4xl max-h-[90vh] bg-[var(--bg-secondary)] border-[var(--border-color)]">
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle className="text-[#fafafa]">Manage Items</CardTitle>
+                <CardTitle className="text-[var(--text-primary)]">Manage Items</CardTitle>
                 <Button
                   variant="ghost"
                   onClick={() => setManagingCollectionId(null)}
-                  className="text-[#969696] hover:text-[#fafafa]"
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   Close
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-[#969696]">
+              <p className="text-[var(--text-secondary)]">
                 Item management for community collections will be available soon. 
                 For now, you can edit the collection details or delete and recreate it with items.
               </p>
