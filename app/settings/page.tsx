@@ -127,24 +127,24 @@ export default function SettingsPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-8">
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
             </div>
             <div className="flex items-center gap-3 mb-3">
-              <Settings className="h-8 w-8 text-[#fafafa]" />
-              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">Settings</h1>
+              <Settings className="h-8 w-8 text-[var(--text-primary)]" />
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Settings</h1>
             </div>
-            <p className="text-[#969696] text-lg mb-10">
+            <p className="text-[var(--text-secondary)] text-lg mb-10">
               Customize your experience and preferences
             </p>
           </div>
@@ -152,10 +152,10 @@ export default function SettingsPage() {
           <div className="max-w-4xl">
             <div className="space-y-6">
           {/* Appearance Settings */}
-          <Card className="bg-[#1a1d24] border-[#2a2d35]">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
             <CardHeader>
-              <CardTitle className="text-[#fafafa]">Appearance</CardTitle>
-              <CardDescription className="text-[#969696]">
+              <CardTitle className="text-[var(--text-primary)]">Appearance</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
                 Customize the look and feel of your interface
               </CardDescription>
             </CardHeader>
@@ -164,8 +164,8 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-[#fafafa]">Theme Mode</Label>
-                    <p className="text-sm text-[#969696]">
+                    <Label className="text-[var(--text-primary)]">Theme Mode</Label>
+                    <p className="text-sm text-[var(--text-secondary)]">
                       Switch between dark and light mode
                     </p>
                   </div>
@@ -196,8 +196,8 @@ export default function SettingsPage() {
               
               {/* Accent Color */}
               <div className="space-y-3">
-                <Label className="text-[#fafafa]">Accent Color</Label>
-                <p className="text-sm text-[#969696]">
+                <Label className="text-[var(--text-primary)]">Accent Color</Label>
+                <p className="text-sm text-[var(--text-secondary)]">
                   Choose your preferred accent color for buttons and highlights
                 </p>
                 <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
@@ -208,8 +208,8 @@ export default function SettingsPage() {
                       className={`
                         relative w-12 h-12 rounded-full border-2 transition-all smooth-transition
                         ${accentColor === color.value 
-                          ? 'border-[#fafafa] scale-110 ring-2 ring-[#fafafa] ring-offset-2 ring-offset-[#1a1d24]' 
-                          : 'border-[#353842] hover:border-[#666] hover:scale-105'
+                          ? 'border-[var(--text-primary)] scale-110 ring-2 ring-[var(--text-primary)] ring-offset-2 ring-offset-[var(--bg-secondary)]' 
+                          : 'border-[var(--border-hover)] hover:border-[var(--text-muted)] hover:scale-105'
                         }
                         ${color.class}
                       `}
@@ -220,25 +220,25 @@ export default function SettingsPage() {
                     >
                       {accentColor === color.value && (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-[#1a1d24]"></div>
+                          <div className="w-2 h-2 rounded-full bg-[var(--bg-secondary)]"></div>
                         </div>
                       )}
                     </button>
                   ))}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-[#969696]">
+                <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                   <span>Selected:</span>
-                  <span className="font-medium text-[#fafafa]">{accentColor}</span>
+                  <span className="font-medium text-[var(--text-primary)]">{accentColor}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Sidebar Settings */}
-          <Card className="bg-[#1a1d24] border-[#2a2d35]">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
             <CardHeader>
-              <CardTitle className="text-[#fafafa]">Sidebar</CardTitle>
-              <CardDescription className="text-[#969696]">
+              <CardTitle className="text-[var(--text-primary)]">Sidebar</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
                 Configure sidebar display options
               </CardDescription>
             </CardHeader>
@@ -246,8 +246,8 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-[#fafafa]">Show Overall Progress</Label>
-                    <p className="text-sm text-[#969696]">
+                    <Label className="text-[var(--text-primary)]">Show Overall Progress</Label>
+                    <p className="text-sm text-[var(--text-secondary)]">
                       Display the overall progress counter and bar in the sidebar
                     </p>
                   </div>
@@ -266,16 +266,16 @@ export default function SettingsPage() {
           </Card>
 
           {/* Data Settings */}
-          <Card className="bg-[#1a1d24] border-[#2a2d35]">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
             <CardHeader>
-              <CardTitle className="text-[#fafafa]">Data</CardTitle>
-              <CardDescription className="text-[#969696]">
+              <CardTitle className="text-[var(--text-primary)]">Data</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
                 Manage your data and preferences
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <p className="text-sm text-[#969696]">
+                <p className="text-sm text-[var(--text-secondary)]">
                   Your accent color is synced across all your devices. Sidebar preferences are stored locally in your browser.
                 </p>
                 <button
@@ -299,7 +299,7 @@ export default function SettingsPage() {
                       }
                     }
                   }}
-                  className="px-4 py-2 rounded-full bg-[#2a2d35] hover:bg-[#353842] text-[#fafafa] smooth-transition text-sm"
+                  className="px-4 py-2 rounded-full bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] smooth-transition text-sm"
                 >
                   Reset to Defaults
                 </button>
