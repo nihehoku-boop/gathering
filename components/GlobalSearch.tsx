@@ -125,7 +125,7 @@ export default function GlobalSearch() {
               setShowResults(true)
             }
           }}
-          className="pl-10 pr-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition rounded-full"
+          className="pl-10 pr-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition rounded-full"
         />
         {query && (
           <button
@@ -173,8 +173,8 @@ export default function GlobalSearch() {
                           className="w-10 h-10 object-cover rounded"
                         />
                       ) : (
-                        <div className="w-10 h-10 bg-[#2a2d35] rounded flex items-center justify-center">
-                          <BookOpen className="h-5 w-5 text-[#666]" />
+                        <div className="w-10 h-10 bg-[var(--bg-tertiary)] rounded flex items-center justify-center">
+                          <BookOpen className="h-5 w-5 text-[var(--text-muted)]" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -210,8 +210,8 @@ export default function GlobalSearch() {
                           className="w-10 h-10 object-cover rounded"
                         />
                       ) : (
-                        <div className="w-10 h-10 bg-[#2a2d35] rounded flex items-center justify-center">
-                          <Package className="h-5 w-5 text-[#666]" />
+                        <div className="w-10 h-10 bg-[var(--bg-tertiary)] rounded flex items-center justify-center">
+                          <Package className="h-5 w-5 text-[var(--text-muted)]" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -248,8 +248,8 @@ export default function GlobalSearch() {
                           className="w-10 h-10 object-cover rounded"
                         />
                       ) : (
-                        <div className="w-10 h-10 bg-[#2a2d35] rounded flex items-center justify-center">
-                          <Users className="h-5 w-5 text-[#666]" />
+                        <div className="w-10 h-10 bg-[var(--bg-tertiary)] rounded flex items-center justify-center">
+                          <Users className="h-5 w-5 text-[var(--text-muted)]" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">

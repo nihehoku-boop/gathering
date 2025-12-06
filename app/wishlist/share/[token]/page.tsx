@@ -69,8 +69,8 @@ export default function SharedWishlistPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
-          <div className="text-center text-[#969696]">Loading wishlist...</div>
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
+          <div className="text-center text-[var(--text-secondary)]">Loading wishlist...</div>
         </div>
       </>
     )
@@ -81,13 +81,13 @@ export default function SharedWishlistPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
           <div className="text-center">
             <p className="text-[#FF3B30] mb-4">{error || 'Wishlist not found'}</p>
             <Button
               variant="outline"
               onClick={() => router.push('/')}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Go Home
@@ -102,12 +102,12 @@ export default function SharedWishlistPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
           <Button
             variant="ghost"
             onClick={() => router.push('/')}
-            className="mb-8 text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            className="mb-8 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
@@ -116,18 +116,18 @@ export default function SharedWishlistPage() {
           <div className="mb-8 animate-fade-up">
             <div className="flex items-center gap-3 mb-4">
               <Heart className="h-8 w-8 text-[#FF3B30]" />
-              <h1 className="text-5xl font-semibold text-[#fafafa] tracking-tight">
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">
                 {wishlist.name || 'Wishlist'}
               </h1>
             </div>
             {wishlist.description && (
-              <p className="text-[#969696] text-lg mb-4">{wishlist.description}</p>
+              <p className="text-[var(--text-secondary)] text-lg mb-4">{wishlist.description}</p>
             )}
-            <div className="flex items-center gap-2 text-[#969696]">
+            <div className="flex items-center gap-2 text-[var(--text-secondary)]">
               <User className="h-4 w-4" />
               <span>
                 by{' '}
-                <span className="text-[#fafafa] flex items-center gap-1.5">
+                <span className="text-[var(--text-primary)] flex items-center gap-1.5">
                   {wishlist.user.badge && (
                     <span className="text-base">{getBadgeEmoji(wishlist.user.badge) || wishlist.user.badge}</span>
                   )}
@@ -141,7 +141,7 @@ export default function SharedWishlistPage() {
             <Card className="bg-[#1a1d24] border-[#2a2d35] animate-fade-up">
               <CardContent className="py-16 text-center">
                 <Heart className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   This wishlist is empty
                 </h3>
               </CardContent>
@@ -151,7 +151,7 @@ export default function SharedWishlistPage() {
               {wishlist.items.map((item, index) => (
                 <Card
                   key={item.id}
-                  className="bg-[#1a1d24] border-[#2a2d35] hover:border-[#353842] hover-lift animate-fade-up"
+                  className="bg-[#1a1d24] border-[#2a2d35] hover:border-[var(--border-hover)] hover-lift animate-fade-up"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {item.itemImage && (
@@ -164,19 +164,19 @@ export default function SharedWishlistPage() {
                     </div>
                   )}
                   <CardHeader>
-                    <CardTitle className="text-lg text-[#fafafa]">
+                    <CardTitle className="text-lg text-[var(--text-primary)]">
                       {item.itemNumber && `#${item.itemNumber} `}
                       {item.itemName}
                     </CardTitle>
                     {item.collectionName && (
-                      <CardDescription className="mt-1 text-[#969696]">
+                      <CardDescription className="mt-1 text-[var(--text-secondary)]">
                         from {item.collectionName}
                       </CardDescription>
                     )}
                   </CardHeader>
                   {item.notes && (
                     <CardContent>
-                      <p className="text-sm text-[#969696]">{item.notes}</p>
+                      <p className="text-sm text-[var(--text-secondary)]">{item.notes}</p>
                     </CardContent>
                   )}
                 </Card>

@@ -85,7 +85,7 @@ export default function AlertDialog({
             <Button
               variant="outline"
               onClick={handleCancel}
-              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
             >
               {cancelText}
             </Button>

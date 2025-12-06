@@ -30,13 +30,13 @@ export default function CollectionSyncDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35]">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)]">
         <CardHeader>
-          <CardTitle className="text-[#fafafa] flex items-center gap-2">
+          <CardTitle className="text-[var(--text-primary)] flex items-center gap-2">
             <RefreshCw className="h-5 w-5 text-[#007AFF]" />
             Update Collection
           </CardTitle>
-          <CardDescription className="text-[#969696]">
+          <CardDescription className="text-[var(--text-secondary)]">
             {isCustomized
               ? 'This collection has been customized. Choose how to update it.'
               : 'An update is available for this collection.'}
@@ -51,7 +51,7 @@ export default function CollectionSyncDialog({
                   <p className="text-sm font-medium text-[#FF9500]">
                     Customizations Detected
                   </p>
-                  <p className="text-sm text-[#969696]">
+                  <p className="text-sm text-[var(--text-secondary)]">
                     You've made changes to this collection (name, description, items, etc.). 
                     Updating will overwrite your customizations unless you choose to preserve them.
                   </p>
@@ -60,15 +60,15 @@ export default function CollectionSyncDialog({
             </div>
           )}
           <div className="space-y-2">
-            <p className="text-sm text-[#fafafa]">
+            <p className="text-sm text-[var(--text-primary)]">
               {isCustomized
                 ? 'How would you like to update?'
                 : 'Update this collection with the latest changes from the recommended collection?'}
             </p>
             {isCustomized && (
-              <div className="space-y-2 text-sm text-[#969696]">
-                <p>• <strong className="text-[#fafafa]">Full Update:</strong> Replace everything with the latest version</p>
-                <p>• <strong className="text-[#fafafa]">Preserve Customizations:</strong> Keep your changes and only add new items</p>
+              <div className="space-y-2 text-sm text-[var(--text-secondary)]">
+                <p>• <strong className="text-[var(--text-primary)]">Full Update:</strong> Replace everything with the latest version</p>
+                <p>• <strong className="text-[var(--text-primary)]">Preserve Customizations:</strong> Keep your changes and only add new items</p>
               </div>
             )}
           </div>
@@ -79,7 +79,7 @@ export default function CollectionSyncDialog({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={loading}
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
           >
             Cancel
           </Button>

@@ -72,8 +72,8 @@ export default function SharedCollectionPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
-          <div className="text-center text-[#969696]">Loading shared collection...</div>
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
+          <div className="text-center text-[var(--text-secondary)]">Loading shared collection...</div>
         </div>
       </>
     )
@@ -84,7 +84,7 @@ export default function SharedCollectionPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
           <div className="text-center text-[#FF3B30]">Error: {error}</div>
         </div>
       </>
@@ -96,8 +96,8 @@ export default function SharedCollectionPage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64 flex items-center justify-center">
-          <div className="text-center text-[#969696]">Collection not found or not public.</div>
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64 flex items-center justify-center">
+          <div className="text-center text-[var(--text-secondary)]">Collection not found or not public.</div>
         </div>
       </>
     )
@@ -112,7 +112,7 @@ export default function SharedCollectionPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
           <Card className="mb-8 bg-[#1a1d24] border-[#2a2d35] animate-fade-up">
             <CardHeader>
@@ -122,11 +122,11 @@ export default function SharedCollectionPage() {
                     {collection.name}
                   </CardTitle>
                   {collection.description && (
-                    <CardDescription className="mt-2 text-[#969696]">
+                    <CardDescription className="mt-2 text-[var(--text-secondary)]">
                       {collection.description}
                     </CardDescription>
                   )}
-                  <div className="mt-4 flex items-center gap-2 text-sm text-[#969696]">
+                  <div className="mt-4 flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                     <span>Shared by:</span>
                     <span className="inline-flex items-center gap-1.5 text-[#fafafa]">
                       {collection.user.badge && (
@@ -137,7 +137,7 @@ export default function SharedCollectionPage() {
                   </div>
                   {collection.category && (
                     <div className="mt-2">
-                      <span className="text-xs bg-[#2a2d35] text-[#969696] px-2 py-1 rounded">
+                      <span className="text-xs bg-[#2a2d35] text-[var(--text-secondary)] px-2 py-1 rounded">
                         {collection.category}
                       </span>
                     </div>
@@ -172,11 +172,11 @@ export default function SharedCollectionPage() {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#969696]">Collection Progress</span>
+                  <span className="text-[var(--text-secondary)]">Collection Progress</span>
                   <span className="font-semibold text-lg text-[#fafafa]">{progress}%</span>
                 </div>
                 <Progress value={progress} className="h-3" />
-                <p className="text-sm text-[#969696]">
+                <p className="text-sm text-[var(--text-secondary)]">
                   {ownedItems} of {totalItems} items collected
                 </p>
               </div>
@@ -206,7 +206,7 @@ export default function SharedCollectionPage() {
                   <div className="w-full bg-[#2a2d35] relative" style={{ aspectRatio: '2/3' }}>
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#2a2d35] to-[#1a1d24]">
                       <div className="text-center p-2">
-                        <div className="text-xs font-semibold text-[#969696]">
+                        <div className="text-xs font-semibold text-[var(--text-secondary)]">
                           {item.number && `#${item.number}`}
                         </div>
                         <div className="text-xs text-[#666] mt-1 line-clamp-2">
@@ -232,7 +232,7 @@ export default function SharedCollectionPage() {
           {collection.items.length === 0 && (
             <Card className="bg-[#1a1d24] border-[#2a2d35]">
               <CardContent className="py-16 text-center">
-                <p className="text-[#969696]">This collection has no items yet.</p>
+                <p className="text-[var(--text-secondary)]">This collection has no items yet.</p>
               </CardContent>
             </Card>
           )}

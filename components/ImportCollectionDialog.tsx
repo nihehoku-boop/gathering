@@ -264,7 +264,7 @@ export default function ImportCollectionDialog({
                 variant="ghost"
                 size="icon"
                 onClick={() => onOpenChange(false)}
-                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
               >
                 <X className="h-5 w-5" />
               </Button>
@@ -287,14 +287,14 @@ export default function ImportCollectionDialog({
                   variant="outline"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   Choose File
                 </Button>
                 {file && (
                   <div className="flex items-center gap-2 flex-1">
-                    <div className="flex items-center gap-2 flex-1 bg-[#2a2d35] px-3 py-2 rounded border border-[#353842]">
+                    <div className="flex items-center gap-2 flex-1 bg-[var(--bg-tertiary)] px-3 py-2 rounded border border-[var(--border-hover)]">
                       {file.name.endsWith('.json') ? (
                         <FileJson className="h-4 w-4 text-[var(--accent-color)]" />
                       ) : (
@@ -311,7 +311,7 @@ export default function ImportCollectionDialog({
                       size="icon"
                       onClick={handleRemoveFile}
                       disabled={uploading}
-                      className="text-[#FF3B30] hover:text-[#C0392B] hover:bg-[#2a2d35]"
+                      className="text-[#FF3B30] hover:text-[#C0392B] hover:bg-[var(--bg-tertiary)]"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -328,7 +328,7 @@ export default function ImportCollectionDialog({
                   variant={format === 'auto' ? 'default' : 'outline'}
                   onClick={() => setFormat('auto')}
                   disabled={uploading}
-                  className={format === 'auto' ? 'accent-button' : 'border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35]'}
+                  className={format === 'auto' ? 'accent-button' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                 >
                   Auto-detect
                 </Button>
@@ -337,7 +337,7 @@ export default function ImportCollectionDialog({
                   variant={format === 'json' ? 'default' : 'outline'}
                   onClick={() => setFormat('json')}
                   disabled={uploading}
-                  className={format === 'json' ? 'accent-button' : 'border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35]'}
+                  className={format === 'json' ? 'accent-button' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                 >
                   JSON
                 </Button>
@@ -346,14 +346,14 @@ export default function ImportCollectionDialog({
                   variant={format === 'csv' ? 'default' : 'outline'}
                   onClick={() => setFormat('csv')}
                   disabled={uploading}
-                  className={format === 'csv' ? 'accent-button' : 'border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35]'}
+                  className={format === 'csv' ? 'accent-button' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                 >
                   CSV
                 </Button>
               </div>
             </div>
 
-            <div className="bg-[#2a2d35] border border-[#353842] rounded-lg p-4 space-y-2">
+            <div className="bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-lg p-4 space-y-2">
               <p className="text-sm font-medium text-[var(--text-primary)]">Supported Formats:</p>
               <ul className="text-xs text-[var(--text-secondary)] space-y-1 list-disc list-inside">
                 <li>JSON files exported from Gathering</li>
@@ -367,7 +367,7 @@ export default function ImportCollectionDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={uploading}
-              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
             >
               Cancel
             </Button>
