@@ -962,10 +962,10 @@ export default function CollectionsList() {
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-[#969696]">Progress</span>
-                      <span className="font-semibold text-[#fafafa]">{progress}%</span>
+                      <span className="font-semibold text-[var(--text-primary)]">{progress}%</span>
                     </div>
-                    <Progress value={progress} className="h-1.5 bg-[#2a2d35]" />
-                    <p className="text-xs text-[#666]">
+                    <Progress value={progress} className="h-1.5" />
+                    <p className="text-xs text-[var(--text-muted)]">
                       {collection.items.filter(i => i.isOwned).length} of {collection._count.items} items
                     </p>
                   </div>
