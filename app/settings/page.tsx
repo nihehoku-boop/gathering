@@ -209,7 +209,7 @@ export default function SettingsPage() {
                         relative w-12 h-12 rounded-full border-2 transition-all smooth-transition
                         ${accentColor === color.value 
                           ? 'border-[var(--text-primary)] scale-110 ring-2 ring-[var(--text-primary)] ring-offset-2 ring-offset-[var(--bg-secondary)]' 
-                          : 'border-[var(--border-hover)] hover:border-[var(--text-muted)] hover:scale-105'
+                          : 'border-[var(--border-hover)] hover:border-[var(--text-secondary)] hover:scale-105'
                         }
                         ${color.class}
                       `}
