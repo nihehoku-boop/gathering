@@ -326,29 +326,29 @@ export default function CommunityCollectionsList() {
       <div className="mb-6 space-y-4">
         <div className="flex gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696] z-10" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)] z-10" />
             <Input
               type="text"
               placeholder="Search collections by name, description, category, or creator..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="pl-10 pr-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+              className="pl-10 pr-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
             />
             {searchInput && searchInput !== searchQuery && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <span className="w-4 h-4 border-2 border-[#666] border-t-transparent rounded-full animate-spin"></span>
+                <span className="w-4 h-4 border-2 border-[var(--text-muted)] border-t-transparent rounded-full animate-spin"></span>
               </div>
             )}
             {searchInput && searchInput === searchQuery && loading && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <span className="w-4 h-4 border-2 border-[#666] border-t-transparent rounded-full animate-spin"></span>
+                <span className="w-4 h-4 border-2 border-[var(--text-muted)] border-t-transparent rounded-full animate-spin"></span>
               </div>
             )}
           </div>
           <Button
             variant="outline"
             onClick={() => setShowFilters(!showFilters)}
-            className={`border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition ${
+            className={`border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${
               (selectedCategory || selectedTags.length > 0) ? 'border-[var(--accent-color)]' : ''
             }`}
           >
@@ -373,10 +373,10 @@ export default function CommunityCollectionsList() {
         </div>
 
         {showFilters && (
-          <Card className="bg-[#1a1d24] border-[#2a2d35] p-4">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] p-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-[#fafafa]">Filters</h3>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)]">Filters</h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -384,7 +384,7 @@ export default function CommunityCollectionsList() {
                     setSelectedCategory('')
                     setSelectedTags([])
                   }}
-                  className="text-xs text-[#969696] hover:text-[#fafafa]"
+                  className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 >
                   Clear All
                 </Button>
@@ -393,25 +393,25 @@ export default function CommunityCollectionsList() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Category Filter */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#969696]">Category</label>
+                  <label className="text-xs font-medium text-[var(--text-secondary)]">Category</label>
                   <div className="relative">
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
+                      className="w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
                     >
                       <option value="">All Categories</option>
                       {getUniqueCategories().map(category => (
                         <option key={category} value={category}>{category}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696] pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)] pointer-events-none" />
                   </div>
                 </div>
 
                 {/* Tag Filter */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#969696]">Tags</label>
+                  <label className="text-xs font-medium text-[var(--text-secondary)]">Tags</label>
                   <div className="flex flex-wrap gap-2">
                     {AVAILABLE_TAGS.map((tag) => {
                       const isSelected = selectedTags.includes(tag)
@@ -425,9 +425,9 @@ export default function CommunityCollectionsList() {
                             isSelected ? 'opacity-100' : 'opacity-60 hover:opacity-100'
                           }`}
                           style={{
-                            backgroundColor: isSelected ? colors.bg : '#2a2d35',
-                            color: isSelected ? colors.text : '#fafafa',
-                            borderColor: isSelected ? colors.border : '#353842',
+                            backgroundColor: isSelected ? colors.bg : 'var(--bg-tertiary)',
+                            color: isSelected ? colors.text : 'var(--text-primary)',
+                            borderColor: isSelected ? colors.border : 'var(--border-hover)',
                           }}
                         >
                           {tag}
@@ -439,12 +439,12 @@ export default function CommunityCollectionsList() {
 
                 {/* Sort Filter */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-[#969696]">Sort By</label>
+                  <label className="text-xs font-medium text-[var(--text-secondary)]">Sort By</label>
                   <div className="relative">
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as any)}
-                      className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
+                      className="w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none appearance-none"
                     >
                       <option value="newest">Newest First</option>
                       <option value="oldest">Oldest First</option>
@@ -499,7 +499,7 @@ export default function CommunityCollectionsList() {
           </Card>
         )}
 
-        <p className="text-sm text-[#969696]">
+        <p className="text-sm text-[var(--text-secondary)]">
           {filteredCollections.length} out of {totalCount} community collection{totalCount !== 1 ? 's' : ''}
           {(searchQuery || selectedCategory || selectedTags.length > 0) && ' (filtered)'}
           {hasMore && ` - more available, click "Load More" to see more`}
@@ -513,13 +513,13 @@ export default function CommunityCollectionsList() {
           ))}
         </div>
       ) : collections.length === 0 ? (
-        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-12 text-center">
-            <BookOpen className="mx-auto h-12 w-12 text-[#353842] mb-4" />
-            <h3 className="text-lg font-semibold text-[#fafafa] mb-2">
+            <BookOpen className="mx-auto h-12 w-12 text-[var(--border-hover)] mb-4" />
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
               No community collections available
             </h3>
-            <p className="text-[#969696]">
+            <p className="text-[var(--text-secondary)]">
               {session ? 'Be the first to create a community collection!' : 'Check back later for community collections!'}
             </p>
           </CardContent>
@@ -531,13 +531,13 @@ export default function CommunityCollectionsList() {
           ))}
         </div>
       ) : filteredCollections.length === 0 ? (
-        <Card className="bg-[#1a1d24] border-[#2a2d35]">
+        <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-12 text-center">
-            <Search className="mx-auto h-12 w-12 text-[#353842] mb-4" />
-            <h3 className="text-lg font-semibold text-[#fafafa] mb-2">
+            <Search className="mx-auto h-12 w-12 text-[var(--border-hover)] mb-4" />
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
               No collections found
             </h3>
-            <p className="text-[#969696]">
+            <p className="text-[var(--text-secondary)]">
               Try adjusting your search query
             </p>
           </CardContent>

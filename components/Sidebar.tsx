@@ -502,9 +502,14 @@ export default function Sidebar() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
-              Gathering
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
+                Sammlerei
+              </h2>
+              <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">
+                Beta
+              </span>
+            </div>
             <button
               onClick={() => setIsSidebarOpen(false)}
               className="lg:hidden text-[var(--text-secondary)] hover:text-[var(--text-primary)] smooth-transition"

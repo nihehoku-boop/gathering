@@ -55,7 +55,7 @@ export default function LandingPage() {
         <nav className="relative z-10 container mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookOpen className="h-8 w-8 text-[var(--accent-color)]" />
-            <span className="text-2xl font-bold text-[#fafafa]">Gathering</span>
+            <span className="text-2xl font-bold text-[#fafafa]">Sammlerei</span>
           </div>
           <div className="flex items-center gap-4">
             {!session && (
@@ -168,7 +168,7 @@ export default function LandingPage() {
               Ready to get started?
             </h2>
             <p className="text-xl text-[#969696] mb-8 max-w-2xl mx-auto">
-              Join Gathering today and start organizing your collections
+              Join Sammlerei today and start organizing your collections
             </p>
             <Button
               onClick={handleGetStarted}
@@ -188,7 +188,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <BookOpen className="h-6 w-6 text-[var(--accent-color)]" />
-              <span className="text-xl font-bold text-[#fafafa]">Gathering</span>
+              <span className="text-xl font-bold text-[#fafafa]">Sammlerei</span>
             </div>
             <div className="flex items-center gap-6 text-[#969696] text-sm flex-wrap">
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">

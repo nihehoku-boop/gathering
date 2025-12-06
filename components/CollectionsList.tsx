@@ -410,9 +410,9 @@ export default function CollectionsList() {
         {/* Search and Filter Skeleton */}
         <div className="mb-8 space-y-4">
           <div className="flex gap-3">
-            <div className="flex-1 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
-            <div className="w-24 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
-            <div className="w-32 h-10 bg-[#2a2d35] rounded-md animate-pulse"></div>
+            <div className="flex-1 h-10 bg-[var(--bg-tertiary)] rounded-md animate-pulse"></div>
+            <div className="w-24 h-10 bg-[var(--bg-tertiary)] rounded-md animate-pulse"></div>
+            <div className="w-32 h-10 bg-[var(--bg-tertiary)] rounded-md animate-pulse"></div>
           </div>
         </div>
 
@@ -437,7 +437,7 @@ export default function CollectionsList() {
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-semibold text-[#fafafa]">Your Collections</h2>
+        <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Your Collections</h2>
         <Button 
           onClick={() => setShowCreateDialog(true)}
           className="text-white smooth-transition"
@@ -459,7 +459,7 @@ export default function CollectionsList() {
       {/* Search and Filter */}
       <div className="mb-8 space-y-4">
         <div className="relative" ref={searchRef}>
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#666]" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[var(--text-muted)]" />
           <Input
             type="text"
             placeholder="Search collections, items, tags, and more..."
@@ -475,7 +475,7 @@ export default function CollectionsList() {
                 setShowSearchResults(true)
               }
             }}
-            className="pl-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+            className="pl-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
           />
           {searchQuery && (
             <button
@@ -484,7 +484,7 @@ export default function CollectionsList() {
                 setSearchResults(null)
                 setShowSearchResults(false)
               }}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#666] hover:text-[#fafafa] smooth-transition"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] smooth-transition"
             >
               <X className="h-4 w-4" />
             </button>
@@ -492,14 +492,14 @@ export default function CollectionsList() {
           
           {/* Search Results Dropdown */}
           {showSearchResults && searchQuery.length >= 2 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
               {searchLoading ? (
-                <div className="p-4 text-center text-[#969696]">Searching...</div>
+                <div className="p-4 text-center text-[var(--text-secondary)]">Searching...</div>
               ) : searchResults ? (
                 <>
                   {searchResults.collections.length > 0 && (
                     <div className="p-2">
-                      <div className="text-xs text-[#666] px-3 py-2 font-medium">Collections</div>
+                      <div className="text-xs text-[var(--text-muted)] px-3 py-2 font-medium">Collections</div>
                       {searchResults.collections.map((collection: any) => (
                         <button
                           key={collection.id}
@@ -508,13 +508,13 @@ export default function CollectionsList() {
                             setShowSearchResults(false)
                             setSearchQuery('')
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                          className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
-                          <BookOpen className="h-4 w-4 text-[#666]" />
+                          <BookOpen className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
-                            <div className="text-sm text-[#fafafa]">{collection.name}</div>
+                            <div className="text-sm text-[var(--text-primary)]">{collection.name}</div>
                             {collection.description && (
-                              <div className="text-xs text-[#666] truncate">{collection.description}</div>
+                              <div className="text-xs text-[var(--text-muted)] truncate">{collection.description}</div>
                             )}
                           </div>
                         </button>
@@ -522,8 +522,8 @@ export default function CollectionsList() {
                     </div>
                   )}
                   {searchResults.items.length > 0 && (
-                    <div className="p-2 border-t border-[#2a2d35]">
-                      <div className="text-xs text-[#666] px-3 py-2 font-medium">Items</div>
+                    <div className="p-2 border-t border-[var(--border-color)]">
+                      <div className="text-xs text-[var(--text-muted)] px-3 py-2 font-medium">Items</div>
                       {searchResults.items.map((item: any) => (
                         <button
                           key={item.id}
@@ -532,23 +532,23 @@ export default function CollectionsList() {
                             setShowSearchResults(false)
                             setSearchQuery('')
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                          className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
-                          <Package className="h-4 w-4 text-[#666]" />
+                          <Package className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
-                            <div className="text-sm text-[#fafafa]">
+                            <div className="text-sm text-[var(--text-primary)]">
                               {item.number && `#${item.number} - `}
                               {item.name}
                             </div>
-                            <div className="text-xs text-[#666]">{item.collectionName}</div>
+                            <div className="text-xs text-[var(--text-muted)]">{item.collectionName}</div>
                           </div>
                         </button>
                       ))}
                     </div>
                   )}
                   {searchResults.communityCollections.length > 0 && (
-                    <div className="p-2 border-t border-[#2a2d35]">
-                      <div className="text-xs text-[#666] px-3 py-2 font-medium">Community Collections</div>
+                    <div className="p-2 border-t border-[var(--border-color)]">
+                      <div className="text-xs text-[var(--text-muted)] px-3 py-2 font-medium">Community Collections</div>
                       {searchResults.communityCollections.map((collection: any) => (
                         <button
                           key={collection.id}
@@ -557,9 +557,9 @@ export default function CollectionsList() {
                             setShowSearchResults(false)
                             setSearchQuery('')
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                          className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
-                          <Users className="h-4 w-4 text-[#666]" />
+                          <Users className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
                             <div className="text-sm text-[#fafafa]">{collection.name}</div>
                             {collection.description && (

@@ -53,9 +53,14 @@ export default function Navbar() {
           </button>
 
           {/* Mobile: Logo in center */}
-          <h1 className="lg:hidden text-xl font-semibold text-[var(--text-primary)] tracking-tight flex-1 text-center">
-            Gathering
-          </h1>
+          <div className="lg:hidden flex-1 flex items-center justify-center gap-2">
+            <h1 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
+              Sammlerei
+            </h1>
+            <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">
+              Beta
+            </span>
+          </div>
 
           {/* Desktop: Menu items */}
           <div className="hidden lg:flex items-center gap-6 flex-1">

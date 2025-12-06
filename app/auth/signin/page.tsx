@@ -48,7 +48,7 @@ export default function SignInPage() {
       <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] shadow-2xl">
         <CardHeader className="space-y-2">
           <CardTitle className="text-3xl font-semibold text-center text-[var(--text-primary)] tracking-tight">
-            Welcome to Gathering
+            Welcome to Sammlerei
           </CardTitle>
           <CardDescription className="text-center text-[var(--text-secondary)]">
             Sign in to manage your collections

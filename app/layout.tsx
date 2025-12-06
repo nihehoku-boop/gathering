@@ -28,32 +28,32 @@ const getMetadataBase = (): URL => {
 }
 
 export const metadata: Metadata = {
-  title: 'Gathering - Your Collection Manager',
+  title: 'Sammlerei - Your Collection Manager',
   description: 'Track and manage your collections with ease. Organize comics, cards, books, and more. Discover community collections and track your progress.',
   metadataBase: getMetadataBase(),
   keywords: ['collection', 'collector', 'collections', 'tracking', 'organize', 'comics', 'cards', 'books', 'collectibles'],
-  authors: [{ name: 'Gathering' }],
-  creator: 'Gathering',
-  publisher: 'Gathering',
+  authors: [{ name: 'Sammlerei' }],
+  creator: 'Sammlerei',
+  publisher: 'Sammlerei',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Gathering',
-    title: 'Gathering - Your Collection Manager',
+    siteName: 'Sammlerei',
+    title: 'Sammlerei - Your Collection Manager',
     description: 'Track and manage your collections with ease. Organize comics, cards, books, and more.',
     images: [
       {
         url: '/og-image.png', // You'll need to create this
         width: 1200,
         height: 630,
-        alt: 'Gathering - Collection Manager',
+        alt: 'Sammlerei - Collection Manager',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Gathering - Your Collection Manager',
+    title: 'Sammlerei - Your Collection Manager',
     description: 'Track and manage your collections with ease',
     images: ['/og-image.png'],
   },
