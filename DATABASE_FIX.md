@@ -60,3 +60,4 @@ Your `DATABASE_URL` should NOT:
 - ❌ Point to `db.prisma.io`
 - ❌ Be a Prisma Accelerate URL
 
+
