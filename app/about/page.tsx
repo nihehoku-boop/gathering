@@ -115,7 +115,7 @@ export default function AboutPage() {
               <CardHeader>
                 <CardTitle className="text-[#fafafa]">Features</CardTitle>
                 <CardDescription className="text-[#969696]">
-                  What you can do with Gathering
+                  What you can do with Sammlerei
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -155,7 +155,7 @@ export default function AboutPage() {
                   <CardTitle className="text-[#fafafa]">Frequently Asked Questions</CardTitle>
                 </div>
                 <CardDescription className="text-[#969696]">
-                  Common questions about Gathering
+                  Common questions about Sammlerei
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -200,7 +200,7 @@ export default function AboutPage() {
               <CardHeader>
                 <CardTitle className="text-[#fafafa]">About the Developer</CardTitle>
                 <CardDescription className="text-[#969696]">
-                  The story behind Gathering
+                  The story behind Sammlerei
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-[#969696]">
@@ -225,7 +225,7 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-[#969696]">
                 <p>
-                  Gathering is built using Next.js 14, React, TypeScript, Prisma, and SQLite. The platform features a modern, responsive design with a dark theme optimized for extended use.
+                  Sammlerei is built using Next.js 14, React, TypeScript, Prisma, and SQLite. The platform features a modern, responsive design with a dark theme optimized for extended use.
                 </p>
                 <p>
                   Your data is stored securely and locally, giving you full control over your collections and privacy.

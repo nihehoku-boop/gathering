@@ -6,8 +6,8 @@ import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Gathering',
-  description: 'Privacy Policy for Gathering collection management platform - GDPR compliant',
+  title: 'Privacy Policy - Sammlerei',
+  description: 'Privacy Policy for Sammlerei collection management platform - GDPR compliant',
 }
 
 export default function PrivacyPage() {
@@ -193,7 +193,7 @@ export default function PrivacyPage() {
 
           <div className="mt-12 pt-8 border-t border-[#353842]">
             <p className="text-sm text-[#969696] text-center">
-              By using Gathering, you acknowledge that you have read and understood this Privacy Policy.
+              By using Sammlerei, you acknowledge that you have read and understood this Privacy Policy.
             </p>
           </div>
         </div>

@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
           console.error('Collections array is empty after parsing')
           return NextResponse.json({ 
             error: 'No collections found in file', 
-            details: 'The file was parsed successfully but contains no collections. Please check that the file was exported from Gathering.' 
+            details: 'The file was parsed successfully but contains no collections. Please check that the file was exported from Sammlerei.' 
           }, { status: 400 })
         }
         
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
       console.error('No collections found after parsing. File format may be incorrect.')
       return NextResponse.json({ 
         error: 'No collections found in file', 
-        details: 'The file was parsed but contains no valid collections. Please ensure you are importing a file exported from Gathering.' 
+        details: 'The file was parsed but contains no valid collections. Please ensure you are importing a file exported from Sammlerei.' 
       }, { status: 400 })
     }
     

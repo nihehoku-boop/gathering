@@ -6,8 +6,8 @@ import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'Help & FAQ - Gathering',
-  description: 'Frequently asked questions and help for Gathering collection management platform',
+  title: 'Help & FAQ - Sammlerei',
+  description: 'Frequently asked questions and help for Sammlerei collection management platform',
 }
 
 const faqs = [
@@ -87,7 +87,7 @@ const faqs = [
       },
       {
         q: 'What are achievements and badges?',
-        a: 'Achievements are milestones you unlock as you use Gathering (e.g., creating your first collection, adding 100 items). Badges are visual indicators you can display next to your name.',
+        a: 'Achievements are milestones you unlock as you use Sammlerei (e.g., creating your first collection, adding 100 items). Badges are visual indicators you can display next to your name.',
       },
     ],
   },
@@ -133,7 +133,7 @@ export default function HelpPage() {
               <h1 className="text-4xl font-semibold text-[#fafafa]">Help & FAQ</h1>
             </div>
             <p className="text-[#969696] text-lg">
-              Find answers to common questions and learn how to use Gathering
+              Find answers to common questions and learn how to use Sammlerei
             </p>
           </div>
 

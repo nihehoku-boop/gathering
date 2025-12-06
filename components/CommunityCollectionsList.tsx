@@ -550,13 +550,13 @@ export default function CommunityCollectionsList() {
             return (
               <Card 
                 key={collection.id} 
-                className="bg-[#1a1d24] border-[#2a2d35] hover:border-[#353842] hover-lift cursor-pointer overflow-hidden smooth-transition group relative flex flex-col h-full animate-fade-up"
+                className="bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group relative flex flex-col h-full animate-fade-up"
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
               >
                 {collection.coverImage && (
-                  <div className="w-full h-48 overflow-hidden bg-[#2a2d35] flex-shrink-0">
+                  <div className="w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] flex-shrink-0">
                     <img
                       src={collection.coverImage}
                       alt={collection.name}
@@ -565,8 +565,8 @@ export default function CommunityCollectionsList() {
                   </div>
                 )}
                 <CardHeader className="flex-shrink-0">
-                  <CardTitle className="text-xl text-[#fafafa]">{collection.name}</CardTitle>
-                  <div className="flex items-center gap-2 text-xs text-[#969696] mb-2">
+                  <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
+                  <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] mb-2">
                     <User className="h-3 w-3" />
                     <span className="flex items-center gap-1">
                       {collection.user.badge && (
@@ -582,7 +582,7 @@ export default function CommunityCollectionsList() {
                   </div>
                   {collection.category && (
                     <div className="mt-1">
-                      <span className="text-xs text-[#969696] bg-[#2a2d35] px-2 py-1 rounded-full inline-block" title={collection.category}>
+                      <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-block" title={collection.category}>
                         {collection.category}
                       </span>
                     </div>

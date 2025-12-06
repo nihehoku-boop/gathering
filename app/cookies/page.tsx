@@ -6,8 +6,8 @@ import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy - Gathering',
-  description: 'Cookie Policy for Gathering collection management platform',
+  title: 'Cookie Policy - Sammlerei',
+  description: 'Cookie Policy for Sammlerei collection management platform',
 }
 
 export default function CookiesPage() {
@@ -42,7 +42,7 @@ export default function CookiesPage() {
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">2. How We Use Cookies</h2>
               <p className="text-[#969696] leading-relaxed mb-3">
-                Gathering uses cookies for the following purposes:
+                Sammlerei uses cookies for the following purposes:
               </p>
               
               <h3 className="text-xl font-semibold text-[#fafafa] mb-3 mt-4">2.1. Essential Cookies</h3>
