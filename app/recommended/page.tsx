@@ -16,12 +16,12 @@ export default async function RecommendedPage() {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+      <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-6 py-12">
-          <h1 className="text-5xl font-semibold text-[#fafafa] mb-3 tracking-tight">
+          <h1 className="text-5xl font-semibold text-[var(--text-primary)] mb-3 tracking-tight">
             Recommended Collections
           </h1>
-          <p className="text-[#969696] text-lg mb-10">
+          <p className="text-[var(--text-secondary)] text-lg mb-10">
             Discover and add curated collections to your account
           </p>
           <RecommendedCollectionsList />

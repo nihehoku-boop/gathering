@@ -76,9 +76,9 @@ export default function PublicProfilePage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
           <div className="container mx-auto px-6 py-8">
-            <div className="text-center text-[#969696]">Loading profile...</div>
+            <div className="text-center text-[var(--text-secondary)]">Loading profile...</div>
           </div>
         </div>
       </>
@@ -90,15 +90,15 @@ export default function PublicProfilePage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
           <div className="container mx-auto px-6 py-8">
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
                 <User className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   Profile not found
                 </h3>
-                <p className="text-[#969696]">
+                <p className="text-[var(--text-secondary)]">
                   This profile doesn't exist or is private.
                 </p>
               </CardContent>
@@ -114,27 +114,27 @@ export default function PublicProfilePage() {
       <>
         <Sidebar />
         <Navbar />
-        <div className="min-h-screen bg-[#0f1114] lg:ml-64">
+        <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
           <div className="container mx-auto px-6 py-8">
             <div className="mb-10">
               <div className="flex items-center gap-4 mb-6">
                 <Button
                   variant="ghost"
                   onClick={() => router.push('/')}
-                  className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
                 </Button>
               </div>
             </div>
-            <Card className="bg-[#1a1d24] border-[#2a2d35]">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
                 <Lock className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   Private Profile
                 </h3>
-                <p className="text-[#969696]">
+                <p className="text-[var(--text-secondary)]">
                   This profile is set to private.
                 </p>
               </CardContent>
@@ -147,7 +147,7 @@ export default function PublicProfilePage() {
 
   // Parse profile theme
   let themeStyles: React.CSSProperties = {}
-  let cardClassName = 'bg-[#1a1d24] border-[#2a2d35]'
+  let cardClassName = 'bg-[var(--bg-secondary)] border-[var(--border-color)]'
   let fontSizeClass = ''
   
   try {
@@ -188,7 +188,7 @@ export default function PublicProfilePage() {
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -198,7 +198,7 @@ export default function PublicProfilePage() {
 
           <div className="max-w-4xl">
             {/* Profile Header with Banner */}
-            <Card className="bg-[#1a1d24] border-[#2a2d35] mb-6 overflow-hidden">
+            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] mb-6 overflow-hidden">
               {profile.bannerImage && (
                 <div 
                   className="w-full h-48 bg-cover bg-center"
@@ -211,18 +211,18 @@ export default function PublicProfilePage() {
                     <img
                       src={profile.image}
                       alt={profile.name}
-                      className={`w-24 h-24 rounded-full border-2 border-[#353842] ${profile.bannerImage ? '-mt-12 bg-[#1a1d24] p-1' : ''}`}
+                      className={`w-24 h-24 rounded-full border-2 border-[var(--border-hover)] ${profile.bannerImage ? '-mt-12 bg-[#1a1d24] p-1' : ''}`}
                     />
                   ) : (
-                    <div className={`w-24 h-24 rounded-full bg-[#2a2d35] border-2 border-[#353842] flex items-center justify-center ${profile.bannerImage ? '-mt-12 bg-[#1a1d24]' : ''}`}>
-                      <span className="text-3xl font-semibold text-[#fafafa]">
+                    <div className={`w-24 h-24 rounded-full bg-[#2a2d35] border-2 border-[var(--border-hover)] flex items-center justify-center ${profile.bannerImage ? '-mt-12 bg-[#1a1d24]' : ''}`}>
+                      <span className="text-3xl font-semibold text-[var(--text-primary)]">
                         {profile.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
                   )}
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h1 className="text-3xl font-semibold text-[#fafafa] flex items-center gap-2">
+                      <h1 className="text-3xl font-semibold text-[var(--text-primary)] flex items-center gap-2">
                         {profile.badge && (
                           <span className="text-2xl">{getBadgeEmoji(profile.badge) || profile.badge}</span>
                         )}
@@ -235,26 +235,26 @@ export default function PublicProfilePage() {
                       </h1>
                     </div>
                     {profile.bio && (
-                      <p className="text-[#969696] mb-4 leading-relaxed">
+                      <p className="text-[var(--text-secondary)] mb-4 leading-relaxed">
                         {profile.bio}
                       </p>
                     )}
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       <div>
-                        <div className="text-sm text-[#969696]">Collections</div>
-                        <div className="text-2xl font-semibold text-[#fafafa]">
+                        <div className="text-sm text-[var(--text-secondary)]">Collections</div>
+                        <div className="text-2xl font-semibold text-[var(--text-primary)]">
                           {profile.totalCollections}
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm text-[#969696]">Total Items</div>
-                        <div className="text-2xl font-semibold text-[#fafafa]">
+                        <div className="text-sm text-[var(--text-secondary)]">Total Items</div>
+                        <div className="text-2xl font-semibold text-[var(--text-primary)]">
                           {profile.totalItems}
                         </div>
                       </div>
                       <div>
-                        <div className="text-sm text-[#969696]">Owned</div>
-                        <div className="text-2xl font-semibold text-[#fafafa]">
+                        <div className="text-sm text-[var(--text-secondary)]">Owned</div>
+                        <div className="text-2xl font-semibold text-[var(--text-primary)]">
                           {profile.totalOwnedItems}
                         </div>
                       </div>
@@ -268,11 +268,11 @@ export default function PublicProfilePage() {
             {profile.topCollections.length > 0 ? (
               <Card className={cardClassName}>
                 <CardHeader>
-                  <CardTitle className="text-[#fafafa] flex items-center gap-2">
+                  <CardTitle className="text-[var(--text-primary)] flex items-center gap-2">
                     <Trophy className="h-5 w-5 text-[var(--accent-color)]" />
                     Top Collections
                   </CardTitle>
-                  <CardDescription className="text-[#969696]">
+                  <CardDescription className="text-[var(--text-secondary)]">
                     Showcasing the top 3 collections by owned items
                   </CardDescription>
                 </CardHeader>
@@ -281,7 +281,7 @@ export default function PublicProfilePage() {
                     {profile.topCollections.map((collection) => (
                       <div
                         key={collection.id}
-                        className="bg-[#2a2d35] rounded-lg overflow-hidden hover:border-[var(--accent-color)]/50 border border-[#353842] smooth-transition cursor-pointer"
+                        className="bg-[#2a2d35] rounded-lg overflow-hidden hover:border-[var(--accent-color)]/50 border border-[var(--border-hover)] smooth-transition cursor-pointer"
                         onClick={() => router.push(`/collections/${collection.id}`)}
                       >
                         {collection.coverImage && (
@@ -294,11 +294,11 @@ export default function PublicProfilePage() {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-semibold text-[#fafafa] mb-2">
+                          <h3 className="font-semibold text-[var(--text-primary)] mb-2">
                             {collection.name}
                           </h3>
                           {collection.category && (
-                            <span className="text-xs text-[#969696] bg-[#1a1d24] px-2 py-1 rounded-md mb-2 inline-block">
+                            <span className="text-xs text-[var(--text-secondary)] bg-[#1a1d24] px-2 py-1 rounded-md mb-2 inline-block">
                               {collection.category}
                             </span>
                           )}
@@ -327,13 +327,13 @@ export default function PublicProfilePage() {
                           })()}
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                              <span className="text-[#969696]">Progress</span>
-                              <span className="font-semibold text-[#fafafa]">
+                              <span className="text-[var(--text-secondary)]">Progress</span>
+                              <span className="font-semibold text-[var(--text-primary)]">
                                 {collection.progress}%
                               </span>
                             </div>
                             <Progress value={collection.progress} className="h-2 bg-[#1a1d24]" />
-                            <div className="text-xs text-[#969696] text-center">
+                            <div className="text-xs text-[var(--text-secondary)] text-center">
                               {collection.ownedItems} / {collection.totalItems} items
                             </div>
                           </div>
@@ -344,13 +344,13 @@ export default function PublicProfilePage() {
                 </CardContent>
               </Card>
             ) : (
-              <Card className="bg-[#1a1d24] border-[#2a2d35]">
+              <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
                 <CardContent className="py-16 text-center">
                   <Trophy className="mx-auto h-16 w-16 text-[#353842] mb-6" />
-                  <h3 className="text-xl font-semibold text-[#fafafa] mb-3">
+                  <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                     No collections yet
                   </h3>
-                  <p className="text-[#969696]">
+                  <p className="text-[var(--text-secondary)]">
                     This user hasn't created any collections.
                   </p>
                 </CardContent>
