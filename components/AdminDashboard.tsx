@@ -11,6 +11,7 @@ import RecommendedCollectionItemsManager from './RecommendedCollectionItemsManag
 import BulkImportDialog from './BulkImportDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
 import UserManagement from './UserManagement'
+import ConvertCollectionToRecommendedDialog from './ConvertCollectionToRecommendedDialog'
 import { parseTags, getTagColor } from '@/lib/tags'
 
 interface RecommendedItem {
@@ -44,6 +45,7 @@ export default function AdminDashboard() {
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null)
   const [showBulkImport, setShowBulkImport] = useState(false)
   const [showImportDialog, setShowImportDialog] = useState(false)
+  const [showConvertDialog, setShowConvertDialog] = useState(false)
 
   useEffect(() => {
     fetchCollections()
@@ -145,6 +147,14 @@ export default function AdminDashboard() {
           >
             <Download className="mr-2 h-4 w-4" />
             Import Collection
+          </Button>
+          <Button 
+            onClick={() => setShowConvertDialog(true)}
+            variant="outline"
+            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Convert Collection
           </Button>
           <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
