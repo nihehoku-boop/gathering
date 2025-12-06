@@ -251,12 +251,12 @@ export default function ImportCollectionDialog({
   return (
     <>
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <Card className="w-full max-w-2xl bg-[#1a1d24] border-[#2a2d35] animate-fade-up">
+        <Card className="w-full max-w-2xl bg-[var(--bg-secondary)] border-[var(--border-color)] animate-fade-up">
           <CardHeader>
             <div className="flex justify-between items-start">
               <div>
-                <CardTitle className="text-2xl font-semibold text-[#fafafa]">Import Collections</CardTitle>
-                <CardDescription className="text-[#969696] mt-2">
+                <CardTitle className="text-2xl font-semibold text-[var(--text-primary)]">Import Collections</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)] mt-2">
                   Import collections from a previously exported JSON or CSV file
                 </CardDescription>
               </div>
@@ -264,7 +264,7 @@ export default function ImportCollectionDialog({
                 variant="ghost"
                 size="icon"
                 onClick={() => onOpenChange(false)}
-                className="text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
               >
                 <X className="h-5 w-5" />
               </Button>
@@ -272,7 +272,7 @@ export default function ImportCollectionDialog({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#fafafa]">Select File</label>
+              <label className="text-sm font-medium text-[var(--text-primary)]">Select File</label>
               <div className="flex items-center gap-2">
                 <input
                   ref={fileInputRef}
@@ -287,7 +287,7 @@ export default function ImportCollectionDialog({
                   variant="outline"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+                  className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   Choose File
@@ -300,8 +300,8 @@ export default function ImportCollectionDialog({
                       ) : (
                         <FileText className="h-4 w-4 text-[var(--accent-color)]" />
                       )}
-                      <span className="text-sm text-[#fafafa] truncate">{file.name}</span>
-                      <span className="text-xs text-[#969696]">
+                      <span className="text-sm text-[var(--text-primary)] truncate">{file.name}</span>
+                      <span className="text-xs text-[var(--text-secondary)]">
                         ({(file.size / 1024).toFixed(1)} KB)
                       </span>
                     </div>
@@ -321,14 +321,14 @@ export default function ImportCollectionDialog({
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#fafafa]">File Format</label>
+              <label className="text-sm font-medium text-[var(--text-primary)]">File Format</label>
               <div className="flex gap-2">
                 <Button
                   type="button"
                   variant={format === 'auto' ? 'default' : 'outline'}
                   onClick={() => setFormat('auto')}
                   disabled={uploading}
-                  className={format === 'auto' ? 'accent-button' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                  className={format === 'auto' ? 'accent-button' : 'border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35]'}
                 >
                   Auto-detect
                 </Button>
@@ -337,7 +337,7 @@ export default function ImportCollectionDialog({
                   variant={format === 'json' ? 'default' : 'outline'}
                   onClick={() => setFormat('json')}
                   disabled={uploading}
-                  className={format === 'json' ? 'accent-button' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                  className={format === 'json' ? 'accent-button' : 'border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35]'}
                 >
                   JSON
                 </Button>
@@ -346,7 +346,7 @@ export default function ImportCollectionDialog({
                   variant={format === 'csv' ? 'default' : 'outline'}
                   onClick={() => setFormat('csv')}
                   disabled={uploading}
-                  className={format === 'csv' ? 'accent-button' : 'border-[#353842] text-[#fafafa] hover:bg-[#2a2d35]'}
+                  className={format === 'csv' ? 'accent-button' : 'border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35]'}
                 >
                   CSV
                 </Button>
@@ -354,8 +354,8 @@ export default function ImportCollectionDialog({
             </div>
 
             <div className="bg-[#2a2d35] border border-[#353842] rounded-lg p-4 space-y-2">
-              <p className="text-sm font-medium text-[#fafafa]">Supported Formats:</p>
-              <ul className="text-xs text-[#969696] space-y-1 list-disc list-inside">
+              <p className="text-sm font-medium text-[var(--text-primary)]">Supported Formats:</p>
+              <ul className="text-xs text-[var(--text-secondary)] space-y-1 list-disc list-inside">
                 <li>JSON files exported from Gathering</li>
                 <li>CSV files exported from Gathering</li>
                 <li>Files must match the export format structure</li>
@@ -367,7 +367,7 @@ export default function ImportCollectionDialog({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={uploading}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
             >
               Cancel
             </Button>

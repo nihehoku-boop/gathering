@@ -114,7 +114,7 @@ export default function GlobalSearch() {
   return (
     <div ref={searchRef} className="relative w-full max-w-md">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#969696]" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
         <Input
           type="text"
           placeholder="Search collections, items..."
@@ -125,7 +125,7 @@ export default function GlobalSearch() {
               setShowResults(true)
             }
           }}
-          className="pl-10 pr-10 bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition rounded-full"
+          className="pl-10 pr-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition rounded-full"
         />
         {query && (
           <button
@@ -134,7 +134,7 @@ export default function GlobalSearch() {
               setResults(null)
               setShowResults(false)
             }}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#969696] hover:text-[#fafafa] smooth-transition"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] smooth-transition"
           >
             <X className="h-4 w-4" />
           </button>
@@ -142,21 +142,21 @@ export default function GlobalSearch() {
       </div>
 
       {showResults && (loading || totalResults > 0) && (
-        <div className="absolute top-full mt-2 w-full bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+        <div className="absolute top-full mt-2 w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center text-[#969696]">
+            <div className="p-4 text-center text-[var(--text-secondary)]">
               <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2" />
               <p className="text-sm">Searching...</p>
             </div>
           ) : totalResults === 0 ? (
-            <div className="p-4 text-center text-[#969696]">
+            <div className="p-4 text-center text-[var(--text-secondary)]">
               <p className="text-sm">No results found</p>
             </div>
           ) : (
             <div className="py-2">
               {results?.collections && results.collections.length > 0 && (
                 <div className="px-3 py-2">
-                  <div className="text-xs font-semibold text-[#969696] uppercase mb-2 flex items-center gap-1">
+                  <div className="text-xs font-semibold text-[var(--text-secondary)] uppercase mb-2 flex items-center gap-1">
                     <BookOpen className="h-3 w-3" />
                     Collections ({results.collections.length})
                   </div>
@@ -164,7 +164,7 @@ export default function GlobalSearch() {
                     <button
                       key={collection.id}
                       onClick={() => handleResultClick('collection', collection.id)}
-                      className="w-full text-left px-3 py-2 rounded hover:bg-[#2a2d35] smooth-transition flex items-center gap-3"
+                      className="w-full text-left px-3 py-2 rounded hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-3"
                     >
                       {collection.coverImage ? (
                         <img
@@ -178,10 +178,10 @@ export default function GlobalSearch() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-[#fafafa] truncate">
+                        <div className="text-sm font-medium text-[var(--text-primary)] truncate">
                           {collection.name}
                         </div>
-                        <div className="text-xs text-[#969696] truncate">
+                        <div className="text-xs text-[var(--text-secondary)] truncate">
                           {collection.itemCount} items
                           {collection.group && ` • ${collection.group}`}
                         </div>
@@ -192,8 +192,8 @@ export default function GlobalSearch() {
               )}
 
               {results?.items && results.items.length > 0 && (
-                <div className="px-3 py-2 border-t border-[#2a2d35]">
-                  <div className="text-xs font-semibold text-[#969696] uppercase mb-2 flex items-center gap-1">
+                <div className="px-3 py-2 border-t border-[var(--border-color)]">
+                  <div className="text-xs font-semibold text-[var(--text-secondary)] uppercase mb-2 flex items-center gap-1">
                     <Package className="h-3 w-3" />
                     Items ({results.items.length})
                   </div>
@@ -201,7 +201,7 @@ export default function GlobalSearch() {
                     <button
                       key={item.id}
                       onClick={() => handleResultClick('item', item.id)}
-                      className="w-full text-left px-3 py-2 rounded hover:bg-[#2a2d35] smooth-transition flex items-center gap-3"
+                      className="w-full text-left px-3 py-2 rounded hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-3"
                     >
                       {item.image ? (
                         <img
@@ -215,11 +215,11 @@ export default function GlobalSearch() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-[#fafafa] truncate">
+                        <div className="text-sm font-medium text-[var(--text-primary)] truncate">
                           {item.number && `#${item.number} `}
                           {item.name}
                         </div>
-                        <div className="text-xs text-[#969696] truncate">
+                        <div className="text-xs text-[var(--text-secondary)] truncate">
                           {item.collectionName}
                           {item.isOwned && ' • ✓ Owned'}
                         </div>
@@ -230,8 +230,8 @@ export default function GlobalSearch() {
               )}
 
               {results?.communityCollections && results.communityCollections.length > 0 && (
-                <div className="px-3 py-2 border-t border-[#2a2d35]">
-                  <div className="text-xs font-semibold text-[#969696] uppercase mb-2 flex items-center gap-1">
+                <div className="px-3 py-2 border-t border-[var(--border-color)]">
+                  <div className="text-xs font-semibold text-[var(--text-secondary)] uppercase mb-2 flex items-center gap-1">
                     <Users className="h-3 w-3" />
                     Community ({results.communityCollections.length})
                   </div>
@@ -239,7 +239,7 @@ export default function GlobalSearch() {
                     <button
                       key={collection.id}
                       onClick={() => handleResultClick('community', collection.id)}
-                      className="w-full text-left px-3 py-2 rounded hover:bg-[#2a2d35] smooth-transition flex items-center gap-3"
+                      className="w-full text-left px-3 py-2 rounded hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-3"
                     >
                       {collection.coverImage ? (
                         <img
@@ -253,10 +253,10 @@ export default function GlobalSearch() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-[#fafafa] truncate">
+                        <div className="text-sm font-medium text-[var(--text-primary)] truncate">
                           {collection.name}
                         </div>
-                        <div className="text-xs text-[#969696] truncate">
+                        <div className="text-xs text-[var(--text-secondary)] truncate">
                           {collection.itemCount} items • {collection.upvotes} upvotes
                         </div>
                       </div>

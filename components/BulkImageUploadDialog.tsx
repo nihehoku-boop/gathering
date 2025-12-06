@@ -252,12 +252,12 @@ export default function BulkImageUploadDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="bg-[#1a1d24] border-[#2a2d35] w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+      <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-[#fafafa]">Bulk Image Upload</CardTitle>
-              <CardDescription className="text-[#969696]">
+              <CardTitle className="text-[var(--text-primary)]">Bulk Image Upload</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
                 Upload multiple images and automatically assign them to items based on filename pattern
               </CardDescription>
             </div>
@@ -266,7 +266,7 @@ export default function BulkImageUploadDialog({
               size="icon"
               onClick={handleClose}
               disabled={uploading}
-              className="text-[#969696] hover:text-[#fafafa]"
+              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -274,7 +274,7 @@ export default function BulkImageUploadDialog({
         </CardHeader>
         <CardContent className="flex-1 overflow-y-auto space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="prefix" className="text-[#fafafa]">
+            <Label htmlFor="prefix" className="text-[var(--text-primary)]">
               Image Prefix
             </Label>
             <Input
@@ -299,16 +299,16 @@ export default function BulkImageUploadDialog({
                 }
               }}
               placeholder="e.g., XXX (for files like XXX_001.jpg, XXX_002.png)"
-              className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[#007AFF] smooth-transition"
+              className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
               disabled={uploading}
             />
-            <p className="text-xs text-[#969696]">
+            <p className="text-xs text-[var(--text-secondary)]">
               Enter the prefix used in your image filenames. The system will extract numbers from filenames like PREFIX_001, PREFIX_002, etc.
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="files" className="text-[#fafafa]">
+            <Label htmlFor="files" className="text-[var(--text-primary)]">
               Select Images
             </Label>
             <input
@@ -326,7 +326,7 @@ export default function BulkImageUploadDialog({
               variant="outline"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="w-full border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="w-full border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
             >
               <Upload className="mr-2 h-4 w-4" />
               {selectedFiles.length > 0 ? `Change Files (${selectedFiles.length} selected)` : 'Select Images'}
@@ -335,7 +335,7 @@ export default function BulkImageUploadDialog({
 
           {selectedFiles.length > 0 && (
             <div className="space-y-2">
-              <Label className="text-[#fafafa]">Selected Files & Matches</Label>
+              <Label className="text-[var(--text-primary)]">Selected Files & Matches</Label>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {selectedFiles.map((file, index) => {
                   const progress = uploadProgress[index]
@@ -347,16 +347,16 @@ export default function BulkImageUploadDialog({
                       className={`p-3 rounded-lg border ${
                         matched
                           ? 'bg-[#1e3a1e] border-[#2d5a2d]'
-                          : 'bg-[#2a2d35] border-[#353842]'
+                          : 'bg-[var(--bg-tertiary)] border-[var(--border-hover)]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium text-[#fafafa] truncate">
+                          <div className="text-sm font-medium text-[var(--text-primary)] truncate">
                             {file.name}
                           </div>
                           {progress?.itemNumber !== null ? (
-                            <div className="text-xs text-[#969696] mt-1">
+                            <div className="text-xs text-[var(--text-secondary)] mt-1">
                               → Matches item #{progress.itemNumber}
                               {progress?.itemName && `: ${progress.itemName}`}
                             </div>
@@ -389,7 +389,7 @@ export default function BulkImageUploadDialog({
                             variant="ghost"
                             size="icon"
                             onClick={() => handleRemoveFile(index)}
-                            className="text-[#969696] hover:text-[#FF3B30] flex-shrink-0"
+                            className="text-[var(--text-secondary)] hover:text-[#FF3B30] flex-shrink-0"
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -407,7 +407,7 @@ export default function BulkImageUploadDialog({
             variant="outline"
             onClick={handleClose}
             disabled={uploading}
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
           >
             Cancel
           </Button>

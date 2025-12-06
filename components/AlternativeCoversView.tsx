@@ -47,11 +47,11 @@ export default function AlternativeCoversView({
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in">
-      <div className="relative bg-[#1a1d24] border border-[#2a2d35] rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col animate-scale-in">
-        <div className="flex items-center justify-between p-4 border-b border-[#2a2d35] flex-shrink-0">
+      <div className="relative bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col animate-scale-in">
+        <div className="flex items-center justify-between p-4 border-b border-[var(--border-color)] flex-shrink-0">
           <div className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-[#fafafa]" />
-            <h3 className="text-lg font-semibold text-[#fafafa]">
+            <ImageIcon className="h-5 w-5 text-[var(--text-primary)]" />
+            <h3 className="text-lg font-semibold text-[var(--text-primary)]">
               Alternative Covers ({currentIndex + 1} / {allImages.length})
             </h3>
             {isMainImage && (
@@ -64,20 +64,20 @@ export default function AlternativeCoversView({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="text-[#969696] hover:text-[#fafafa] hover:bg-[#2a2d35] rounded-full"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] rounded-full"
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="relative flex-1 flex items-center justify-center p-8 bg-[#0f1114]">
+        <div className="relative flex-1 flex items-center justify-center p-8 bg-[var(--bg-primary)]">
           {allImages.length > 1 && (
             <>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handlePrevious}
-                className="absolute left-4 bg-[#1a1d24]/80 hover:bg-[#2a2d35] text-[#fafafa] rounded-full z-10"
+                className="absolute left-4 bg-[var(--bg-secondary)]/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-full z-10"
               >
                 <ChevronLeft className="h-6 w-6" />
               </Button>
@@ -85,7 +85,7 @@ export default function AlternativeCoversView({
                 variant="ghost"
                 size="icon"
                 onClick={handleNext}
-                className="absolute right-4 bg-[#1a1d24]/80 hover:bg-[#2a2d35] text-[#fafafa] rounded-full z-10"
+                className="absolute right-4 bg-[var(--bg-secondary)]/80 hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] rounded-full z-10"
               >
                 <ChevronRight className="h-6 w-6" />
               </Button>
@@ -106,7 +106,7 @@ export default function AlternativeCoversView({
 
         {/* Thumbnail strip */}
         {allImages.length > 1 && (
-          <div className="p-4 border-t border-[#2a2d35] overflow-x-auto flex-shrink-0">
+          <div className="p-4 border-t border-[var(--border-color)] overflow-x-auto flex-shrink-0">
             <div className="flex gap-2 justify-center">
               {allImages.map((img, index) => (
                 <button
@@ -115,7 +115,7 @@ export default function AlternativeCoversView({
                   className={`relative flex-shrink-0 w-16 h-20 rounded overflow-hidden border-2 transition-all ${
                     index === currentIndex
                       ? 'border-[var(--accent-color)] ring-2 ring-[var(--accent-color)]/50'
-                      : 'border-[#353842] hover:border-[#666]'
+                      : 'border-[var(--border-hover)] hover:border-[#666]'
                   }`}
                 >
                   <img
@@ -134,11 +134,11 @@ export default function AlternativeCoversView({
           </div>
         )}
 
-        <div className="p-4 border-t border-[#2a2d35] flex justify-end gap-2 flex-shrink-0">
+        <div className="p-4 border-t border-[var(--border-color)] flex justify-end gap-2 flex-shrink-0">
           <Button
             variant="outline"
             onClick={onClose}
-            className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] rounded-full"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] rounded-full"
           >
             Cancel
           </Button>

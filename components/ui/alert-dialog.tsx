@@ -68,24 +68,24 @@ export default function AlertDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-      <Card className="w-full max-w-md bg-[#1a1d24] border-[#2a2d35] animate-scale-in">
+      <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)] animate-scale-in">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-full ${iconColors[type]}`}>
               {icons[type]}
             </div>
-            <CardTitle className="text-[#fafafa]">{title}</CardTitle>
+            <CardTitle className="text-[var(--text-primary)]">{title}</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <p className="text-[#969696]">{message}</p>
+          <p className="text-[var(--text-secondary)]">{message}</p>
         </CardContent>
         <CardFooter className="flex justify-end gap-2">
           {showCancel && (
             <Button
               variant="outline"
               onClick={handleCancel}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
             >
               {cancelText}
             </Button>

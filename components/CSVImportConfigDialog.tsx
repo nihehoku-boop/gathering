@@ -256,12 +256,12 @@ export default function CSVImportConfigDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#1a1d24] border-[#2a2d35]">
+      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--bg-secondary)] border-[var(--border-color)]">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-[#fafafa]">Configure CSV Import</CardTitle>
-              <CardDescription className="text-[#969696]">
+              <CardTitle className="text-[var(--text-primary)]">Configure CSV Import</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
                 Map CSV columns and set collection information
               </CardDescription>
             </div>
@@ -269,7 +269,7 @@ export default function CSVImportConfigDialog({
               variant="ghost"
               size="icon"
               onClick={() => onOpenChange(false)}
-              className="text-[#969696] hover:text-[#fafafa]"
+              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -278,10 +278,10 @@ export default function CSVImportConfigDialog({
         <CardContent className="space-y-6">
           {/* Collection Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#fafafa]">Collection Information</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)]">Collection Information</h3>
             
             <div className="space-y-2">
-              <Label htmlFor="csv-collection-name" className="text-[#fafafa]">
+              <Label htmlFor="csv-collection-name" className="text-[var(--text-primary)]">
                 Collection Name <span className="text-[#FF3B30]">*</span>
               </Label>
               <Input
@@ -289,79 +289,79 @@ export default function CSVImportConfigDialog({
                 value={collectionName}
                 onChange={(e) => setCollectionName(e.target.value)}
                 placeholder="Enter collection name"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="csv-description" className="text-[#fafafa]">Description</Label>
+              <Label htmlFor="csv-description" className="text-[var(--text-primary)]">Description</Label>
               <Input
                 id="csv-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Enter collection description"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="csv-category" className="text-[#fafafa]">Category</Label>
+                <Label htmlFor="csv-category" className="text-[var(--text-primary)]">Category</Label>
                 <Input
                   id="csv-category"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   placeholder="e.g., Comics, Books"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="csv-tags" className="text-[#fafafa]">Tags</Label>
+                <Label htmlFor="csv-tags" className="text-[var(--text-primary)]">Tags</Label>
                 <Input
                   id="csv-tags"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
                   placeholder="tag1, tag2, tag3"
-                  className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="csv-cover-image" className="text-[#fafafa]">Cover Image URL</Label>
+              <Label htmlFor="csv-cover-image" className="text-[var(--text-primary)]">Cover Image URL</Label>
               <Input
                 id="csv-cover-image"
                 value={coverImage}
                 onChange={(e) => setCoverImage(e.target.value)}
                 placeholder="https://example.com/cover.jpg"
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
           </div>
 
           {/* Column Mappings */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-[#fafafa]">Column Mappings</h3>
-            <p className="text-sm text-[#969696]">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)]">Column Mappings</h3>
+            <p className="text-sm text-[var(--text-secondary)]">
               Select which CSV columns correspond to each field. Found {csvData.length} rows with {availableColumns.length} columns.
             </p>
             {availableColumns.length > 0 && (
-              <div className="text-xs text-[#666] bg-[#2a2d35] p-2 rounded border border-[#353842]">
+              <div className="text-xs text-[var(--text-muted)] bg-[#2a2d35] p-2 rounded border border-[#353842]">
                 <strong>Available columns:</strong> {availableColumns.join(', ')}
               </div>
             )}
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name-column" className="text-[#fafafa]">
+                <Label htmlFor="name-column" className="text-[var(--text-primary)]">
                   Item Name Column <span className="text-[#FF3B30]">*</span>
                 </Label>
                 <select
                   id="name-column"
                   value={nameColumn}
                   onChange={(e) => setNameColumn(e.target.value)}
-                  className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
+                  className="w-full bg-[#2a2d35] border border-[#353842] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
                 >
                   <option value="">Select column...</option>
                   {availableColumns.map(col => (
@@ -371,12 +371,12 @@ export default function CSVImportConfigDialog({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="number-column" className="text-[#fafafa]">Number Column</Label>
+                <Label htmlFor="number-column" className="text-[var(--text-primary)]">Number Column</Label>
                 <select
                   id="number-column"
                   value={numberColumn}
                   onChange={(e) => setNumberColumn(e.target.value)}
-                  className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
+                  className="w-full bg-[#2a2d35] border border-[#353842] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
                 >
                   <option value="">None</option>
                   {availableColumns.map(col => (
@@ -386,12 +386,12 @@ export default function CSVImportConfigDialog({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="image-column" className="text-[#fafafa]">Image Column</Label>
+                <Label htmlFor="image-column" className="text-[var(--text-primary)]">Image Column</Label>
                 <select
                   id="image-column"
                   value={imageColumn}
                   onChange={(e) => setImageColumn(e.target.value)}
-                  className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
+                  className="w-full bg-[#2a2d35] border border-[#353842] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
                 >
                   <option value="">None</option>
                   {availableColumns.map(col => (
@@ -401,12 +401,12 @@ export default function CSVImportConfigDialog({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notes-column" className="text-[#fafafa]">Notes Column</Label>
+                <Label htmlFor="notes-column" className="text-[var(--text-primary)]">Notes Column</Label>
                 <select
                   id="notes-column"
                   value={notesColumn}
                   onChange={(e) => setNotesColumn(e.target.value)}
-                  className="w-full bg-[#2a2d35] border border-[#353842] text-[#fafafa] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
+                  className="w-full bg-[#2a2d35] border border-[#353842] text-[var(--text-primary)] rounded-lg px-3 py-2 text-sm focus:border-[var(--accent-color)] focus:outline-none"
                 >
                   <option value="">None</option>
                   {availableColumns.map(col => (
@@ -421,8 +421,8 @@ export default function CSVImportConfigDialog({
           {previewItems.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-[#fafafa]">Preview</h3>
-                <span className="text-sm text-[#969696]">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)]">Preview</h3>
+                <span className="text-sm text-[var(--text-secondary)]">
                   Showing first 10 of {allItems.length} items
                 </span>
               </div>
@@ -434,11 +434,11 @@ export default function CSVImportConfigDialog({
                       className="flex items-center gap-3 p-2 bg-[#1a1d24] rounded border border-[#353842]"
                     >
                       {item.number !== null && (
-                        <span className="text-xs text-[#969696] min-w-[3rem]">#{item.number}</span>
+                        <span className="text-xs text-[var(--text-secondary)] min-w-[3rem]">#{item.number}</span>
                       )}
-                      <span className="text-sm text-[#fafafa] flex-1">{item.name}</span>
+                      <span className="text-sm text-[var(--text-primary)] flex-1">{item.name}</span>
                       {item.image && (
-                        <span className="text-xs text-[#666] truncate max-w-[100px]" title={item.image}>
+                        <span className="text-xs text-[var(--text-muted)] truncate max-w-[100px]" title={item.image}>
                           📷
                         </span>
                       )}
@@ -490,7 +490,7 @@ export default function CSVImportConfigDialog({
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition rounded-full"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
             >
               Cancel
             </Button>
