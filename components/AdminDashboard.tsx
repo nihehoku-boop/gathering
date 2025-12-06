@@ -336,6 +336,12 @@ export default function AdminDashboard() {
       <TabsContent value="users">
         <UserManagement />
       </TabsContent>
+
+      <ConvertCollectionToRecommendedDialog
+        open={showConvertDialog}
+        onOpenChange={setShowConvertDialog}
+        onSuccess={fetchCollections}
+      />
     </Tabs>
   )
 }
