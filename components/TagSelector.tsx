@@ -110,7 +110,7 @@ export default function TagSelector({
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="px-3 py-1.5 bg-[#2a2d35] border border-[#353842] rounded-md text-sm text-[#fafafa] flex items-center gap-2 hover:border-[var(--accent-color)] smooth-transition whitespace-nowrap"
+            className="px-3 py-1.5 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-sm text-[var(--text-primary)] flex items-center gap-2 hover:border-[var(--accent-color)] smooth-transition whitespace-nowrap"
           >
             <span>
               {selectedTags.length > 0 
@@ -125,17 +125,17 @@ export default function TagSelector({
           </button>
 
         {isOpen && (
-          <div className="absolute z-50 left-0 mt-1 w-64 bg-[#1a1d24] border border-[#2a2d35] rounded-md shadow-lg max-h-80 overflow-hidden flex flex-col">
+          <div className="absolute z-50 left-0 mt-1 w-64 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-md shadow-lg max-h-80 overflow-hidden flex flex-col">
             {/* Search Input */}
-            <div className="p-2 border-b border-[#2a2d35]">
+            <div className="p-2 border-b border-[var(--border-color)]">
               <div className="relative">
-                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#666]" />
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
                 <Input
                   type="text"
                   placeholder="Search tags..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 bg-[#2a2d35] border-[#353842] text-[#fafafa] text-sm"
+                  className="pl-8 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] text-sm"
                   autoFocus
                 />
               </div>
@@ -155,7 +155,7 @@ export default function TagSelector({
                           toggleTag(tag)
                           setSearchQuery('')
                         }}
-                        className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                       >
                         <div
                           className="w-3 h-3 rounded-full border"
@@ -164,13 +164,13 @@ export default function TagSelector({
                             borderColor: colors.border,
                           }}
                         />
-                        <span className="text-[#fafafa]">{tag}</span>
+                        <span className="text-[var(--text-primary)]">{tag}</span>
                       </button>
                     )
                   })}
                 </div>
               ) : (
-                <div className="text-center py-4 text-[#666] text-sm">
+                <div className="text-center py-4 text-[var(--text-muted)] text-sm">
                   {searchQuery ? 'No tags found' : 'All tags selected'}
                 </div>
               )}
@@ -178,7 +178,7 @@ export default function TagSelector({
 
             {/* Custom Tag Input */}
             {allowCustom && (
-              <div className="p-2 border-t border-[#2a2d35]">
+              <div className="p-2 border-t border-[var(--border-color)]">
                 <div className="flex gap-2">
                   <Input
                     type="text"
@@ -191,7 +191,7 @@ export default function TagSelector({
                         addCustomTag()
                       }
                     }}
-                    className="flex-1 bg-[#2a2d35] border-[#353842] text-[#fafafa] text-sm"
+                    className="flex-1 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] text-sm"
                   />
                   <button
                     type="button"
@@ -203,7 +203,7 @@ export default function TagSelector({
                     Add
                   </button>
                 </div>
-                <p className="text-xs text-[#666] mt-1">
+                <p className="text-xs text-[var(--text-muted)] mt-1">
                   Press Enter or click Add to create a custom tag
                 </p>
               </div>
@@ -218,7 +218,7 @@ export default function TagSelector({
   // Regular (non-compact) mode
   return (
     <div className="space-y-2">
-      <Label className="text-[#fafafa]">{label}</Label>
+      <Label className="text-[var(--text-primary)]">{label}</Label>
       
       {/* Selected Tags Display */}
       {selectedTags.length > 0 && (
@@ -257,7 +257,7 @@ export default function TagSelector({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] flex items-center justify-between hover:border-[var(--accent-color)] smooth-transition"
+          className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] flex items-center justify-between hover:border-[var(--accent-color)] smooth-transition"
         >
           <span className="text-sm">
             {selectedTags.length > 0 
@@ -272,17 +272,17 @@ export default function TagSelector({
         </button>
 
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-[#1a1d24] border border-[#2a2d35] rounded-md shadow-lg max-h-80 overflow-hidden flex flex-col">
+          <div className="absolute z-50 w-full mt-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-md shadow-lg max-h-80 overflow-hidden flex flex-col">
             {/* Search Input */}
-            <div className="p-2 border-b border-[#2a2d35]">
+            <div className="p-2 border-b border-[var(--border-color)]">
               <div className="relative">
-                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[#666]" />
+                <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
                 <Input
                   type="text"
                   placeholder="Search tags..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 bg-[#2a2d35] border-[#353842] text-[#fafafa] text-sm"
+                  className="pl-8 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] text-sm"
                   autoFocus
                 />
               </div>
@@ -302,7 +302,7 @@ export default function TagSelector({
                           toggleTag(tag)
                           setSearchQuery('')
                         }}
-                        className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[#2a2d35] smooth-transition flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 rounded-md text-sm hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                       >
                         <div
                           className="w-3 h-3 rounded-full border"
@@ -311,13 +311,13 @@ export default function TagSelector({
                             borderColor: colors.border,
                           }}
                         />
-                        <span className="text-[#fafafa]">{tag}</span>
+                        <span className="text-[var(--text-primary)]">{tag}</span>
                       </button>
                     )
                   })}
                 </div>
               ) : (
-                <div className="text-center py-4 text-[#666] text-sm">
+                <div className="text-center py-4 text-[var(--text-muted)] text-sm">
                   {searchQuery ? 'No tags found' : 'All tags selected'}
                 </div>
               )}
@@ -325,7 +325,7 @@ export default function TagSelector({
 
             {/* Custom Tag Input */}
             {allowCustom && (
-              <div className="p-2 border-t border-[#2a2d35]">
+              <div className="p-2 border-t border-[var(--border-color)]">
                 <div className="flex gap-2">
                   <Input
                     type="text"
@@ -338,7 +338,7 @@ export default function TagSelector({
                         addCustomTag()
                       }
                     }}
-                    className="flex-1 bg-[#2a2d35] border-[#353842] text-[#fafafa] text-sm"
+                    className="flex-1 bg-[#2a2d35] border-[#353842] text-[var(--text-primary)] text-sm"
                   />
                   <button
                     type="button"
@@ -350,7 +350,7 @@ export default function TagSelector({
                     Add
                   </button>
                 </div>
-                <p className="text-xs text-[#666] mt-1">
+                <p className="text-xs text-[var(--text-muted)] mt-1">
                   Press Enter or click Add to create a custom tag
                 </p>
               </div>

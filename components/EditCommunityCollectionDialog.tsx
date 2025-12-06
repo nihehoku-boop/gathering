@@ -111,41 +111,41 @@ export default function EditCommunityCollectionDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md max-h-[90vh] bg-[#1a1d24] border-[#2a2d35] flex flex-col">
+      <Card className="w-full max-w-md max-h-[90vh] bg-[var(--bg-secondary)] border-[var(--border-color)] flex flex-col">
         <CardHeader className="flex-shrink-0">
-          <CardTitle className="text-[#fafafa]">Edit Community Collection</CardTitle>
-          <CardDescription className="text-[#969696]">
+          <CardTitle className="text-[var(--text-primary)]">Edit Community Collection</CardTitle>
+          <CardDescription className="text-[var(--text-secondary)]">
             Update your community collection details
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
           <CardContent className="space-y-4 overflow-y-auto flex-1">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-[#fafafa]">Collection Name *</Label>
+              <Label htmlFor="name" className="text-[var(--text-primary)]">Collection Name *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category" className="text-[#fafafa]">Category</Label>
+              <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
               <Input
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="template" className="text-[#fafafa]">Item Template</Label>
+              <Label htmlFor="template" className="text-[var(--text-primary)]">Item Template</Label>
               <select
                 id="template"
                 value={template}
                 onChange={(e) => setTemplate(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
               >
                 {ITEM_TEMPLATES.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -153,18 +153,18 @@ export default function EditCommunityCollectionDialog({
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-[#666]">
+              <p className="text-xs text-[var(--text-muted)]">
                 Choose a template to customize the fields available when editing items in this collection.
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="coverImage" className="text-[#fafafa]">Cover Image URL</Label>
+              <Label htmlFor="coverImage" className="text-[var(--text-primary)]">Cover Image URL</Label>
               <Input
                 id="coverImage"
                 type="url"
                 value={coverImage}
                 onChange={(e) => setCoverImage(e.target.value)}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
               {coverImage && (
                 <div className="mt-2 relative group">
@@ -190,20 +190,20 @@ export default function EditCommunityCollectionDialog({
                       )}
                     </button>
                   </div>
-                  <p className="text-xs text-[#666] mt-1 text-center">
+                  <p className="text-xs text-[var(--text-muted)] mt-1 text-center">
                     {coverImageFit === 'cover' ? 'Fill (Cover) - Image fills box, may crop' : 'Fit (Contain) - Image fits in box, may have empty space'}
                   </p>
                 </div>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description" className="text-[#fafafa]">Description</Label>
+              <Label htmlFor="description" className="text-[var(--text-primary)]">Description</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="bg-[#2a2d35] border-[#353842] text-[#fafafa] placeholder:text-[#666] focus:border-[var(--accent-color)] smooth-transition"
+                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
               />
             </div>
             <TagSelector
@@ -213,12 +213,12 @@ export default function EditCommunityCollectionDialog({
               allowCustom={true}
             />
           </CardContent>
-          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[#2a2d35] pt-4">
+          <CardFooter className="flex justify-end gap-2 flex-shrink-0 border-t border-[var(--border-color)] pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+              className="border-[#353842] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
             >
               Cancel
             </Button>

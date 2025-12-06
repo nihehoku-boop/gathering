@@ -136,7 +136,7 @@ export default function ImageUpload({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <label className="text-sm font-medium text-[#fafafa]">{label}</label>
+      <label className="text-sm font-medium text-[var(--text-primary)]">{label}</label>
       
       <div className="flex items-center gap-2">
         <input
@@ -153,7 +153,7 @@ export default function ImageUpload({
           variant="outline"
           onClick={handleClick}
           disabled={uploading}
-          className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] smooth-transition"
+          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
         >
           {uploading ? (
             <>
@@ -174,7 +174,7 @@ export default function ImageUpload({
             variant="outline"
             onClick={handleRemove}
             disabled={uploading}
-            className="border-[#353842] text-[#FF3B30] hover:bg-[#2a2d35] hover:text-[#C0392B] smooth-transition"
+            className="border-[var(--border-hover)] text-[#FF3B30] hover:bg-[var(--bg-tertiary)] hover:text-[#C0392B] smooth-transition"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -183,7 +183,7 @@ export default function ImageUpload({
 
       {preview && (
         <div
-          className="relative border border-[#2a2d35] rounded-lg overflow-hidden bg-[#2a2d35]"
+          className="relative border border-[#2a2d35] rounded-lg overflow-hidden bg-[var(--bg-tertiary)]"
           style={aspectRatio ? { aspectRatio } : undefined}
         >
           <img
@@ -197,7 +197,7 @@ export default function ImageUpload({
         </div>
       )}
 
-      <p className="text-xs text-[#969696]">
+      <p className="text-xs text-[var(--text-secondary)]">
         {value
           ? 'Image uploaded. You can also paste a URL below.'
           : `Upload an image (max ${maxSize}MB) or enter a URL below.`}
