@@ -117,7 +117,7 @@ export default function UserManagement() {
             <Loader2 className="h-6 w-6 animate-spin text-[var(--accent-color)]" />
           </div>
         ) : users.length === 0 ? (
-          <div className="text-center py-8 text-[#969696]">
+          <div className="text-center py-8 text-[var(--text-secondary)]">
             No users found
           </div>
         ) : (
@@ -125,7 +125,7 @@ export default function UserManagement() {
             {users.map((user) => (
               <div
                 key={user.id}
-                className="flex items-center justify-between p-3 bg-[#0f1114] rounded-lg border border-[#2a2d35] hover:border-[#353842] transition-colors"
+                className="flex items-center justify-between p-3 bg-[var(--bg-primary)] rounded-lg border border-[var(--border-color)] hover:border-[var(--border-hover)] transition-colors"
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   {user.image ? (
@@ -135,13 +135,13 @@ export default function UserManagement() {
                       className="w-10 h-10 rounded-full"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-[#2a2d35] flex items-center justify-center text-[#969696] font-semibold">
+                    <div className="w-10 h-10 rounded-full bg-[var(--bg-tertiary)] flex items-center justify-center text-[var(--text-secondary)] font-semibold">
                       {(user.name || user.email)[0].toUpperCase()}
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-[#fafafa] font-medium truncate">
+                      <span className="text-[var(--text-primary)] font-medium truncate">
                         {user.name || user.email}
                       </span>
                       {user.isAdmin && (
@@ -153,10 +153,10 @@ export default function UserManagement() {
                         <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
                       )}
                     </div>
-                    <div className="text-sm text-[#969696] truncate">
+                    <div className="text-sm text-[var(--text-secondary)] truncate">
                       {user.email}
                     </div>
-                    <div className="text-xs text-[#969696] mt-1">
+                    <div className="text-xs text-[var(--text-secondary)] mt-1">
                       {user._count.collections} collections • {user._count.communityCollections} community collections
                     </div>
                   </div>
@@ -167,7 +167,7 @@ export default function UserManagement() {
                   variant={user.isVerified ? "outline" : "default"}
                   size="sm"
                   className={user.isVerified 
-                    ? "border-[#2a2d35] text-[#969696] hover:bg-[#2a2d35]" 
+                    ? "border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]" 
                     : "bg-[var(--accent-color)] text-black hover:opacity-90"
                   }
                 >

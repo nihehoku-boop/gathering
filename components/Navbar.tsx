@@ -155,7 +155,7 @@ export default function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
                   <div 
-                    className="fixed w-56 max-w-[calc(100vw-2rem)] bg-[#1a1d24] border border-[#2a2d35] rounded-lg shadow-lg z-50 overflow-hidden"
+                    className="fixed w-56 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-50 overflow-hidden"
                     style={{
                       top: menuButtonRef.current ? `${menuButtonRef.current.getBoundingClientRect().bottom + 8}px` : '4rem',
                       right: '1rem',
@@ -173,7 +173,7 @@ export default function Navbar() {
                           className={`w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 ${
                             pathname === item.path
                               ? 'bg-[var(--accent-color)]/20 text-[var(--accent-color)]'
-                              : 'text-[#fafafa] hover:bg-[#2a2d35]'
+                              : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
                           }`}
                         >
                           <Icon className="h-4 w-4" />
@@ -182,13 +182,13 @@ export default function Navbar() {
                       )
                     })}
                     {/* Sign Out button in mobile menu */}
-                    <div className="border-t border-[#2a2d35]">
+                    <div className="border-t border-[var(--border-color)]">
                       <button
                         onClick={() => {
                           signOut({ callbackUrl: '/auth/signin' })
                           setIsMobileMenuOpen(false)
                         }}
-                        className="w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 text-[#fafafa] hover:bg-[#2a2d35]"
+                        className="w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       >
                         <LogOut className="h-4 w-4" />
                         Sign Out
