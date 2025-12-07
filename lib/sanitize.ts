@@ -77,7 +77,7 @@ export function sanitizeFileName(fileName: string): string {
 }
 
 /**
- * Sanitize JSON string to prevent injection
+ * Sanitize JSON string to prevent injection and prototype pollution
  */
 export function sanitizeJson(jsonString: string): string | null {
   if (!jsonString || typeof jsonString !== 'string') {
@@ -87,7 +87,63 @@ export function sanitizeJson(jsonString: string): string | null {
   try {
     // Parse and re-stringify to ensure valid JSON
     const parsed = JSON.parse(jsonString)
-    return JSON.stringify(parsed)
+    
+    // Prevent prototype pollution
+    const sanitized = sanitizeObject(parsed)
+    
+    return JSON.stringify(sanitized)
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Sanitize object to prevent prototype pollution
+ */
+export function sanitizeObject(obj: any): any {
+  if (obj === null || obj === undefined) {
+    return obj
+  }
+
+  // Block prototype pollution keys
+  if (typeof obj === 'object' && !Array.isArray(obj)) {
+    // Remove dangerous keys
+    delete obj.__proto__
+    delete obj.constructor
+    delete obj.prototype
+    
+    // Recursively sanitize nested objects
+    const sanitized: any = {}
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        // Block dangerous keys
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+          continue
+        }
+        sanitized[key] = sanitizeObject(obj[key])
+      }
+    }
+    return sanitized
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => sanitizeObject(item))
+  }
+
+  return obj
+}
+
+/**
+ * Safe JSON parse with prototype pollution protection
+ */
+export function safeParseJson<T = any>(jsonString: string): T | null {
+  if (!jsonString || typeof jsonString !== 'string') {
+    return null
+  }
+
+  try {
+    const parsed = JSON.parse(jsonString)
+    return sanitizeObject(parsed) as T
   } catch {
     return null
   }

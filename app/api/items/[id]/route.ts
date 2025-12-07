@@ -6,6 +6,7 @@ import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { logger } from '@/lib/logger'
+import { safeParseJson, sanitizeObject } from '@/lib/sanitize'
 
 async function updateItemHandler(
   request: NextRequest,
@@ -101,14 +102,18 @@ async function updateItemHandler(
     }
 
     if (customFields !== undefined) {
-      // Ensure customFields is a valid JSON object
-      if (typeof customFields === 'object' && customFields !== null) {
-        updateData.customFields = JSON.stringify(customFields)
+      // Ensure customFields is a valid JSON object with prototype pollution protection
+      if (typeof customFields === 'object' && customFields !== null && !Array.isArray(customFields)) {
+        // Sanitize object to prevent prototype pollution
+        const sanitized = sanitizeObject(customFields)
+        updateData.customFields = JSON.stringify(sanitized)
       } else if (typeof customFields === 'string') {
         try {
-          const parsed = JSON.parse(customFields)
-          if (typeof parsed === 'object' && parsed !== null) {
-            updateData.customFields = customFields
+          const parsed = safeParseJson<Record<string, any>>(customFields)
+          if (parsed && typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+            // Sanitize to prevent prototype pollution
+            const sanitized = sanitizeObject(parsed)
+            updateData.customFields = JSON.stringify(sanitized)
           } else {
             updateData.customFields = '{}'
           }
