@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
           coverImage: collection.coverImage,
           coverImageAspectRatio: collection.coverImageAspectRatio,
           tags: collection.tags ? JSON.parse(collection.tags) : [],
-          items: collection.items.map((item) => {
+          items: collection.items.map((item: { number: number | null; name: string; isOwned: boolean; image: string | null; alternativeImages: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null }) => {
             let altImages: string[] = []
             try {
               const parsed = item.alternativeImages ? JSON.parse(item.alternativeImages) : []

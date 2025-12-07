@@ -42,7 +42,7 @@ export async function GET(
     if (format === 'csv') {
       // Generate CSV
       const headers = ['Number', 'Name', 'Owned', 'Image', 'Alternative Images', 'Notes', 'Wear', 'Rating', 'Log Date']
-      const rows = collection.items.map((item) => {
+      const rows = collection.items.map((item: { number: number | null; name: string; isOwned: boolean; image: string | null; alternativeImages: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null }) => {
         let altImages = ''
         try {
           const parsed = item.alternativeImages ? JSON.parse(item.alternativeImages) : []
@@ -87,7 +87,7 @@ export async function GET(
           tags: collection.tags ? JSON.parse(collection.tags) : [],
           exportedAt: new Date().toISOString(),
         },
-        items: collection.items.map((item) => {
+        items: collection.items.map((item: { number: number | null; name: string; isOwned: boolean; image: string | null; alternativeImages: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null }) => {
           let altImages: string[] = []
           try {
             const parsed = item.alternativeImages ? JSON.parse(item.alternativeImages) : []
