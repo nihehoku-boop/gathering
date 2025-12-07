@@ -80,7 +80,8 @@ export async function GET() {
 
         user.collections.forEach((collection: { id: string; _count: { items: number } }) => {
           totalItems += collection._count.items
-          ownedItems += ownedCountsMap.get(collection.id) || 0
+          const ownedCount = ownedCountsMap.get(collection.id)
+          ownedItems += typeof ownedCount === 'number' ? ownedCount : 0
         })
 
         return {
