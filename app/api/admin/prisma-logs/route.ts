@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { prismaLogger } from '@/lib/prisma-logger'
 import { logger } from '@/lib/logger'
+import { isUserAdmin } from '@/lib/user-cache'
 
 /**
  * GET /api/admin/prisma-logs
@@ -16,13 +17,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true },
-    })
-
-    if (!user?.isAdmin) {
+    // Check if user is admin (using cached lookup)
+    const adminStatus = await isUserAdmin(session.user.id)
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -91,13 +88,9 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true },
-    })
-
-    if (!user?.isAdmin) {
+    // Check if user is admin (using cached lookup)
+    const adminStatus = await isUserAdmin(session.user.id)
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -124,13 +117,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true },
-    })
-
-    if (!user?.isAdmin) {
+    // Check if user is admin (using cached lookup)
+    const adminStatus = await isUserAdmin(session.user.id)
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

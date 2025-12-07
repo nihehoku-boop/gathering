@@ -11,14 +11,11 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url)
     const isAdminDashboard = url.searchParams.get('admin') === 'true'
     
-    // Check if user is admin
+    // Check if user is admin (using cached lookup)
     let isAdmin = false
     if (session?.user?.id) {
-      const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { isAdmin: true },
-      })
-      isAdmin = user?.isAdmin || false
+      const { isUserAdmin } = await import('@/lib/user-cache')
+      isAdmin = await isUserAdmin(session.user.id)
     }
 
     // Only show all collections if explicitly requested from admin dashboard AND user is admin
