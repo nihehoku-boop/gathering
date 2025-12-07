@@ -860,7 +860,7 @@ export default function Sidebar() {
 
           {/* Bottom Action Buttons */}
           {session?.user?.id && (
-            <div className="p-4 border-t border-[#2a2d35] bg-[#1a1d24]">
+            <div className="p-4 border-t border-[var(--border-color)] bg-[var(--bg-secondary)]">
               <div className="flex items-center justify-center gap-2">
                 <button
                   onClick={() => {
