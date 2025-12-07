@@ -43,7 +43,7 @@ async function createItemHandler(request: NextRequest) {
       data: {
         collectionId,
         name,
-        number: number ? parseInt(number) : null,
+        number: number ?? null,
         image: image || null,
       },
     })

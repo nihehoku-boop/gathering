@@ -44,8 +44,8 @@ export const updateItemSchema = z.object({
   alternativeImages: z.array(z.string().url()).optional(),
   wear: z.string().max(50).trim().nullable().optional(),
   personalRating: z.number().int().min(1).max(10).nullable().optional(),
-  logDate: z.string().datetime().nullable().optional(),
-  customFields: z.record(z.any()).optional(),
+  logDate: z.string().nullable().optional(),
+  customFields: z.record(z.string(), z.any()).optional(),
 })
 
 export const bulkItemsSchema = z.object({
@@ -60,7 +60,7 @@ export const createBulkItemsSchema = z.object({
   items: z.array(z.object({
     name: z.string().min(1).max(500).trim(),
     number: z.number().int().positive().nullable().optional(),
-    customFields: z.record(z.any()).optional(),
+    customFields: z.record(z.string(), z.any()).optional(),
   })).min(1).max(1000),
 })
 
@@ -149,7 +149,7 @@ export async function validateRequestBody<T>(
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+        error: error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
         status: 400,
       }
     }
@@ -174,7 +174,7 @@ export function validateQueryParams<T>(
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+        error: error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
         status: 400,
       }
     }
