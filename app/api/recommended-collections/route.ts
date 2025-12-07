@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { safeParseJson, sanitizeObject } from '@/lib/sanitize'
+import { logger } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
-    // Check if this is an admin dashboard request (check referer or query param)
     const url = new URL(request.url)
     const isAdminDashboard = url.searchParams.get('admin') === 'true'
     
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
     return response
   } catch (error) {
-    console.error('Error fetching recommended collections:', error)
+    logger.error('Error fetching recommended collections:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -88,37 +88,52 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate and process tags
+    // Validate and process tags with prototype pollution protection
     let tagsValue = '[]'
     if (tags !== undefined) {
       try {
         if (typeof tags === 'string') {
-          const parsed = JSON.parse(tags)
-          if (Array.isArray(parsed)) {
-            tagsValue = tags
+          const parsed = safeParseJson<string[]>(tags)
+          if (parsed && Array.isArray(parsed)) {
+            // Validate all items are strings and sanitize
+            const validTags = parsed.filter(tag => typeof tag === 'string' && tag.length <= 50)
+            tagsValue = JSON.stringify(validTags)
+          } else {
+            tagsValue = '[]'
           }
         } else if (Array.isArray(tags)) {
-          tagsValue = JSON.stringify(tags)
+          // Sanitize array to prevent prototype pollution
+          const sanitized = sanitizeObject(tags)
+          const validTags = sanitized.filter((tag: any) => typeof tag === 'string' && tag.length <= 50)
+          tagsValue = JSON.stringify(validTags)
         }
       } catch (e) {
-        console.error('Error parsing tags:', e)
+        logger.error('Error parsing tags:', e)
+        tagsValue = '[]'
       }
     }
 
-    // Validate and process customFieldDefinitions
+    // Validate and process customFieldDefinitions with prototype pollution protection
     let customFieldDefinitionsValue = '[]'
     if (customFieldDefinitions !== undefined) {
       try {
         if (typeof customFieldDefinitions === 'string') {
-          const parsed = JSON.parse(customFieldDefinitions)
-          if (Array.isArray(parsed)) {
-            customFieldDefinitionsValue = customFieldDefinitions
+          const parsed = safeParseJson<any[]>(customFieldDefinitions)
+          if (parsed && Array.isArray(parsed)) {
+            // Sanitize to prevent prototype pollution
+            const sanitized = sanitizeObject(parsed)
+            customFieldDefinitionsValue = JSON.stringify(sanitized)
+          } else {
+            customFieldDefinitionsValue = '[]'
           }
         } else if (Array.isArray(customFieldDefinitions)) {
-          customFieldDefinitionsValue = JSON.stringify(customFieldDefinitions)
+          // Sanitize array to prevent prototype pollution
+          const sanitized = sanitizeObject(customFieldDefinitions)
+          customFieldDefinitionsValue = JSON.stringify(sanitized)
         }
       } catch (e) {
-        console.error('Error parsing customFieldDefinitions:', e)
+        logger.error('Error parsing customFieldDefinitions:', e)
+        customFieldDefinitionsValue = '[]'
       }
     }
 
@@ -150,7 +165,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(collection, { status: 201 })
   } catch (error) {
-    console.error('Error creating recommended collection:', error)
+    logger.error('Error creating recommended collection:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

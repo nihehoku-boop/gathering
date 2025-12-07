@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { logger } from '@/lib/logger'
+import { safeParseJson, sanitizeObject } from '@/lib/sanitize'
 
 async function getCollectionHandler(
   request: NextRequest,
@@ -168,12 +169,14 @@ async function updateCollectionHandler(
     }
 
     if (customFieldDefinitions !== undefined) {
-      // Ensure customFieldDefinitions is a valid JSON array
+      // Ensure customFieldDefinitions is a valid JSON array with prototype pollution protection
       if (typeof customFieldDefinitions === 'string') {
         try {
-          const parsed = JSON.parse(customFieldDefinitions)
-          if (Array.isArray(parsed)) {
-            updateData.customFieldDefinitions = customFieldDefinitions
+          const parsed = safeParseJson<any[]>(customFieldDefinitions)
+          if (parsed && Array.isArray(parsed)) {
+            // Sanitize to prevent prototype pollution
+            const sanitized = sanitizeObject(parsed)
+            updateData.customFieldDefinitions = JSON.stringify(sanitized)
           } else {
             updateData.customFieldDefinitions = '[]'
           }
@@ -181,7 +184,9 @@ async function updateCollectionHandler(
           updateData.customFieldDefinitions = '[]'
         }
       } else if (Array.isArray(customFieldDefinitions)) {
-        updateData.customFieldDefinitions = JSON.stringify(customFieldDefinitions)
+        // Sanitize array to prevent prototype pollution
+        const sanitized = sanitizeObject(customFieldDefinitions)
+        updateData.customFieldDefinitions = JSON.stringify(sanitized)
       } else {
         updateData.customFieldDefinitions = '[]'
       }

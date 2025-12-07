@@ -6,6 +6,7 @@ import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { logger } from '@/lib/logger'
+import { safeParseJson } from '@/lib/sanitize'
 
 async function importCollectionsHandler(request: NextRequest) {
   try {
@@ -26,9 +27,16 @@ async function importCollectionsHandler(request: NextRequest) {
     let collections: any[] = []
 
     if (format === 'json' || file.name.endsWith('.json')) {
-      // Parse JSON
+      // Parse JSON with prototype pollution protection
       try {
-        const data = JSON.parse(fileContent)
+        const data = safeParseJson(fileContent)
+        if (!data) {
+          logger.error('Invalid JSON structure in import file')
+          return NextResponse.json({ 
+            error: 'Invalid JSON format', 
+            details: 'The file contains invalid or malicious JSON structure.' 
+          }, { status: 400 })
+        }
         logger.debug('Parsed JSON data structure:', {
           hasCollections: !!data.collections,
           hasCollection: !!data.collection,
