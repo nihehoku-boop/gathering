@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, startTransition } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -1490,17 +1491,17 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </div>
                     )}
                   </div>
-                  {openItemMenu === item.id && menuPosition && (
+                  {typeof window !== 'undefined' && openItemMenu === item.id && menuPosition && createPortal(
                     <>
                       <div 
-                        className="fixed inset-0 z-[100]" 
+                        className="fixed inset-0 z-[9998]" 
                         onClick={() => {
                           setOpenItemMenu(null)
                           setMenuPosition(null)
                         }}
                       />
                       <div 
-                        className="fixed w-44 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-xl z-[101] overflow-hidden"
+                        className="fixed w-44 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-xl z-[9999] overflow-hidden"
                         style={{
                           right: `${window.innerWidth - menuPosition.x}px`,
                           top: `${menuPosition.y + 4}px`,
@@ -1598,7 +1599,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 Delete
                               </button>
                             </div>
-                          </>
+                          </>,
+                          document.body
                         )}
                     {expandedItems.has(item.id) && (
                       <div className="px-3 pb-3 pt-0 border-t border-[#2a2d35] space-y-2 text-sm">
