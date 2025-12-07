@@ -41,6 +41,10 @@ export async function GET(
         createdAt: true,
         updatedAt: true,
         items: {
+          select: {
+            id: true,
+            isOwned: true,
+          },
           orderBy: [
             { number: 'asc' },
             { name: 'asc' },
