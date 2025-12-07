@@ -1470,12 +1470,15 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       )}
                     </div>
                     {!isSelectionMode && (
-                      <div className="relative flex-shrink-0 z-50">
+                      <div className="relative flex-shrink-0">
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={(e) => {
                             e.stopPropagation()
+                            const button = e.currentTarget
+                            const rect = button.getBoundingClientRect()
+                            setMenuPosition({ x: rect.right, y: rect.bottom })
                             setOpenItemMenu(openItemMenu === item.id ? null : item.id)
                           }}
                           className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
@@ -1483,17 +1486,30 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         >
                           <MoreVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         </Button>
-                        {openItemMenu === item.id && (
-                          <>
-                            <div 
-                              className="fixed inset-0 z-40" 
-                              onClick={() => setOpenItemMenu(null)}
-                            />
-                            <div className="absolute right-0 top-full mt-1 w-44 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-xl z-50 overflow-hidden">
+                      </div>
+                    )}
+                  </div>
+                  {openItemMenu === item.id && menuPosition && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-[100]" 
+                        onClick={() => {
+                          setOpenItemMenu(null)
+                          setMenuPosition(null)
+                        }}
+                      />
+                      <div 
+                        className="fixed w-44 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-xl z-[101] overflow-hidden"
+                        style={{
+                          right: `${window.innerWidth - menuPosition.x}px`,
+                          top: `${menuPosition.y + 4}px`,
+                        }}
+                      >
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   setOpenItemMenu(null)
+                                  setMenuPosition(null)
                                   const newExpanded = new Set(expandedItems)
                                   if (newExpanded.has(item.id)) {
                                     newExpanded.delete(item.id)
@@ -1511,6 +1527,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 onClick={async (e) => {
                                   e.stopPropagation()
                                   setOpenItemMenu(null)
+                                  setMenuPosition(null)
                                   if (!collection) return
                                   try {
                                     const res = await fetch('/api/wishlist/items', {
@@ -1559,6 +1576,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   setOpenItemMenu(null)
+                                  setMenuPosition(null)
                                   setEditingItem(item)
                                 }}
                                 className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
@@ -1570,6 +1588,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   setOpenItemMenu(null)
+                                  setMenuPosition(null)
                                   deleteItem(item.id)
                                 }}
                                 className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
