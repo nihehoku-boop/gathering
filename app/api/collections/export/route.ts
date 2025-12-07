@@ -28,14 +28,14 @@ export async function GET(request: NextRequest) {
       // Generate CSV for all collections
       const lines: string[] = []
       
-      collections.forEach((collection) => {
+      collections.forEach((collection: { name: string; description: string | null; category: string | null; items: { number: number | null; name: string; isOwned: boolean; image: string | null; alternativeImages: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null }[] }) => {
         lines.push(`Collection: ${collection.name}`)
         lines.push(`Description: ${collection.description || ''}`)
         lines.push(`Category: ${collection.category || ''}`)
         lines.push('')
         lines.push('Number,Name,Owned,Image,Alternative Images,Notes,Wear,Rating,Log Date')
         
-        collection.items.forEach((item) => {
+        collection.items.forEach((item: { number: number | null; name: string; isOwned: boolean; image: string | null; alternativeImages: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null }) => {
           let altImages = ''
           try {
             const parsed = item.alternativeImages ? JSON.parse(item.alternativeImages) : []
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
       // Generate JSON
       const exportData = {
         exportedAt: new Date().toISOString(),
-        collections: collections.map((collection) => ({
+        collections: collections.map((collection: { name: string; description: string | null; category: string | null; coverImage: string | null; coverImageAspectRatio: string | null; tags: string; items: { number: number | null; name: string; isOwned: boolean; image: string | null; alternativeImages: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null }[] }) => ({
           name: collection.name,
           description: collection.description,
           category: collection.category,

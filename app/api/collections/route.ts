@@ -43,7 +43,7 @@ export async function GET() {
     })
 
     // Calculate owned items count efficiently in a single query
-    const collectionIds = collections.map(c => c.id)
+    const collectionIds = collections.map((c: { id: string }) => c.id)
     const ownedCounts = await prisma.item.groupBy({
       by: ['collectionId'],
       where: {
@@ -55,9 +55,9 @@ export async function GET() {
       },
     })
 
-    const ownedCountMap = new Map(ownedCounts.map(item => [item.collectionId, item._count.id]))
+    const ownedCountMap = new Map(ownedCounts.map((item: { collectionId: string; _count: { id: number } }) => [item.collectionId, item._count.id]))
 
-    const collectionsWithStats = collections.map((collection) => ({
+    const collectionsWithStats = collections.map((collection: { id: string; name: string; description: string | null; category: string | null; template: string | null; customFieldDefinitions: string; folderId: string | null; folder: { id: string; name: string } | null; coverImage: string | null; coverImageAspectRatio: string | null; coverImageFit: string | null; tags: string; recommendedCollectionId: string | null; lastSyncedAt: Date | null; createdAt: Date; updatedAt: Date; _count: { items: number } }) => ({
       ...collection,
       items: [], // Remove items array, we don't need it
       ownedCount: ownedCountMap.get(collection.id) || 0,

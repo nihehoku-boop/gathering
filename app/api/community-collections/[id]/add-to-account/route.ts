@@ -45,7 +45,7 @@ export async function POST(
         userId: session.user.id,
         communityCollectionId: communityCollection.id, // Track that this came from a community collection
         items: {
-          create: communityCollection.items.map(item => ({
+          create: communityCollection.items.map((item: { name: string; number: number | null; notes: string | null; image: string | null; customFields: string }) => ({
             name: item.name,
             number: item.number,
             notes: item.notes,

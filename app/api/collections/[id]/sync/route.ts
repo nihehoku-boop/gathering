@@ -67,8 +67,8 @@ export async function POST(
     const preserveCustomizations = body.preserveCustomizations === true
 
     // Create a map of existing items by their key (number-name)
-    const existingItemsMap = new Map(
-      collection.items.map(item => [`${item.number || ''}-${item.name}`, {
+    const existingItemsMap = new Map<string, { id: string; image: string | null; notes: string | null }>(
+      collection.items.map((item: { number: number | null; name: string; id: string; image: string | null; notes: string | null }) => [`${item.number || ''}-${item.name}`, {
         id: item.id,
         image: item.image,
         notes: item.notes,
@@ -131,17 +131,17 @@ export async function POST(
     // Handle items - add new items and update existing items' images/notes
     // We'll keep existing items and their isOwned status, but add any new items and update images
     const recommendedItemKeys = new Set(
-      recommendedCollection.items.map(item => `${item.number || ''}-${item.name}`)
+      recommendedCollection.items.map((item: { number: number | null; name: string }) => `${item.number || ''}-${item.name}`)
     )
 
     // Find items that need to be added
     const itemsToAdd = recommendedCollection.items.filter(
-      item => !existingItemsMap.has(`${item.number || ''}-${item.name}`)
+      (item: { number: number | null; name: string }) => !existingItemsMap.has(`${item.number || ''}-${item.name}`)
     )
 
     if (itemsToAdd.length > 0) {
       await prisma.item.createMany({
-        data: itemsToAdd.map(item => ({
+        data: itemsToAdd.map((item: { name: string; number: number | null; notes: string | null; image: string | null }) => ({
           collectionId: collectionId,
           name: item.name,
           number: item.number,
@@ -176,7 +176,7 @@ export async function POST(
     // Update items in parallel
     if (itemsToUpdate.length > 0) {
       await Promise.all(
-        itemsToUpdate.map(item =>
+        itemsToUpdate.map((item: { id: string; image: string | null; notes: string | null }) =>
           prisma.item.update({
             where: { id: item.id },
             data: {

@@ -29,7 +29,7 @@ export async function GET() {
 
     // Calculate total owned items for each user
     const leaderboard = users
-      .map((user) => {
+      .map((user: { id: string; name: string | null; email: string; image: string | null; isVerified: boolean; badge: string | null; collections: { items: { isOwned: boolean }[] }[] }) => {
         const totalItems = user.collections.reduce(
           (sum, collection) => sum + collection.items.length,
           0
@@ -51,8 +51,8 @@ export async function GET() {
           ownedItems,
         }
       })
-      .filter((user) => user.totalItems > 0) // Only show users with items
-      .sort((a, b) => b.ownedItems - a.ownedItems) // Sort by owned items descending
+      .filter((user: { totalItems: number }) => user.totalItems > 0) // Only show users with items
+      .sort((a: { ownedItems: number }, b: { ownedItems: number }) => b.ownedItems - a.ownedItems) // Sort by owned items descending
 
     return NextResponse.json(leaderboard)
   } catch (error) {

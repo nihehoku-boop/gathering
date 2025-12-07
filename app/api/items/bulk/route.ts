@@ -33,7 +33,7 @@ export async function DELETE(request: NextRequest) {
     })
 
     const unauthorizedItems = items.filter(
-      (item) => item.collection.userId !== session.user.id
+      (item: { collection: { userId: string } }) => item.collection.userId !== session.user.id
     )
 
     if (unauthorizedItems.length > 0) {
@@ -96,7 +96,7 @@ export async function PATCH(request: NextRequest) {
     })
 
     const unauthorizedItems = items.filter(
-      (item) => item.collection.userId !== session.user.id
+      (item: { collection: { userId: string } }) => item.collection.userId !== session.user.id
     )
 
     if (unauthorizedItems.length > 0) {

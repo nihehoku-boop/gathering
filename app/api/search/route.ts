@@ -177,7 +177,7 @@ export async function GET(request: NextRequest) {
     )
 
     return NextResponse.json({
-      collections: collections.map((c) => ({
+      collections: collections.map((c: { id: string; name: string; description: string | null; category: string | null; folderId: string | null; folder: { id: string; name: string } | null; coverImage: string | null; _count: { items: number } }) => ({
         id: c.id,
         name: c.name,
         description: c.description,
@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
         coverImage: c.coverImage,
         itemCount: c._count.items,
       })),
-      items: allFilteredItems.map((item) => ({
+      items: allFilteredItems.map((item: { id: string; name: string; number: number | null; isOwned: boolean; image: string | null; collectionId: string; collection: { name: string } }) => ({
         id: item.id,
         name: item.name,
         number: item.number,
@@ -196,7 +196,7 @@ export async function GET(request: NextRequest) {
         collectionId: item.collectionId,
         collectionName: item.collection.name,
       })),
-      communityCollections: filteredCommunityCollections.map((cc) => ({
+      communityCollections: filteredCommunityCollections.map((cc: { id: string; name: string; description: string | null; category: string | null; coverImage: string | null; _count: { items: number }; user: { id: string; name: string | null; image: string | null; badge: string | null }; votes: { voteType: string }[] }) => ({
         id: cc.id,
         name: cc.name,
         description: cc.description,

@@ -58,7 +58,7 @@ export async function POST(
         tags: collection.tags,
         userId: session.user.id,
         items: {
-          create: collection.items.map(item => ({
+          create: collection.items.map((item: { name: string; number: number | null; notes: string | null; image: string | null }) => ({
             name: item.name,
             number: item.number,
             notes: item.notes,

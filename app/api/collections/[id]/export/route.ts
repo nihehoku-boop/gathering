@@ -66,7 +66,7 @@ export async function GET(
 
       const csvContent = [
         headers.join(','),
-        ...rows.map((row) => row.join(',')),
+        ...rows.map((row: string[]) => row.join(',')),
       ].join('\n')
 
       return new NextResponse(csvContent, {

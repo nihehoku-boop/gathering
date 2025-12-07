@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Calculate vote counts and scores for each collection (upvotes only)
-    let collectionsWithVotes = collections.map(collection => {
+    let collectionsWithVotes = collections.map((collection: { id: string; name: string; description: string | null; category: string | null; template: string | null; coverImage: string | null; tags: string; votes: { voteType: string; userId: string }[]; user: { id: string; name: string | null; email: string; image: string | null; badge: string | null; isVerified: boolean }; items: { id: string; name: string; number: number | null }[]; _count: { items: number; votes: number }; createdAt: Date; updatedAt: Date }) => {
       const upvotes = collection.votes.filter(v => v.voteType === 'upvote').length
       const score = upvotes
       const userVote = session?.user?.id 
@@ -145,7 +145,7 @@ export async function GET(request: NextRequest) {
 
     // Filter by tags if specified (since tags are stored as JSON string)
     if (tagArray.length > 0) {
-      collectionsWithVotes = collectionsWithVotes.filter(collection => {
+      collectionsWithVotes = collectionsWithVotes.filter((collection: { tags: string }) => {
         try {
           const collectionTags = typeof collection.tags === 'string' 
             ? JSON.parse(collection.tags) 
@@ -161,11 +161,11 @@ export async function GET(request: NextRequest) {
     // Sort collections (especially for popular/score/mostItems/leastItems)
     let sortedCollections = collectionsWithVotes
     if (sortBy === 'popular' || sortBy === 'score') {
-      sortedCollections = collectionsWithVotes.sort((a, b) => b.score - a.score)
+      sortedCollections = collectionsWithVotes.sort((a: { score: number }, b: { score: number }) => b.score - a.score)
     } else if (sortBy === 'mostItems') {
-      sortedCollections = collectionsWithVotes.sort((a, b) => (b._count?.items || 0) - (a._count?.items || 0))
+      sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (b._count?.items || 0) - (a._count?.items || 0))
     } else if (sortBy === 'leastItems') {
-      sortedCollections = collectionsWithVotes.sort((a, b) => (a._count?.items || 0) - (b._count?.items || 0))
+      sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (a._count?.items || 0) - (b._count?.items || 0))
     } else if (sortBy === 'newest') {
       // Already sorted by createdAt desc
     } else if (sortBy === 'oldest') {

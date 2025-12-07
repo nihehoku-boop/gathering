@@ -60,7 +60,7 @@ export async function GET(
     }
 
     // Calculate collection stats and get top 3
-    const collectionsWithStats = user.collections.map((collection) => {
+    const collectionsWithStats = user.collections.map((collection: { id: string; name: string; description: string | null; category: string | null; coverImage: string | null; tags: string; items: { isOwned: boolean }[]; _count: { items: number } }) => {
       const ownedItems = collection.items.filter((item) => item.isOwned).length
       const totalItems = collection._count.items
       const progress = totalItems > 0 ? Math.round((ownedItems / totalItems) * 100) : 0
@@ -80,12 +80,12 @@ export async function GET(
 
     // Sort by owned items and get top 3
     const topCollections = collectionsWithStats
-      .sort((a, b) => b.ownedItems - a.ownedItems)
+      .sort((a: { ownedItems: number }, b: { ownedItems: number }) => b.ownedItems - a.ownedItems)
       .slice(0, 3)
 
     // Calculate total stats
-    const totalItems = collectionsWithStats.reduce((sum, c) => sum + c.totalItems, 0)
-    const totalOwnedItems = collectionsWithStats.reduce((sum, c) => sum + c.ownedItems, 0)
+    const totalItems = collectionsWithStats.reduce((sum: number, c: { totalItems: number }) => sum + c.totalItems, 0)
+    const totalOwnedItems = collectionsWithStats.reduce((sum: number, c: { ownedItems: number }) => sum + c.ownedItems, 0)
 
     return NextResponse.json({
       id: user.id,

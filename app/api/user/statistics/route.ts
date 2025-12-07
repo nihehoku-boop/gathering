@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Items by collection
-    const itemsByCollection = collections.map((col) => ({
+    const itemsByCollection = collections.map((col: { id: string; name: string; items: { isOwned: boolean }[] }) => ({
       id: col.id,
       name: col.name,
       totalItems: col.items.length,
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     const allItems = collections.flatMap((col) => col.items)
     const itemsWithNumbers = allItems.filter((item) => item.number !== null)
     const sortedByNumber = itemsWithNumbers.sort((a, b) => (b.number || 0) - (a.number || 0))
-    const topItems = sortedByNumber.slice(0, 10).map((item) => ({
+    const topItems = sortedByNumber.slice(0, 10).map((item: { name: string; number: number | null; isOwned: boolean }) => ({
       name: item.name,
       number: item.number,
       isOwned: item.isOwned,
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     const collectionsByItemCount = [...collections]
       .sort((a, b) => b.items.length - a.items.length)
       .slice(0, 10)
-      .map((col) => ({
+      .map((col: { id: string; name: string; items: { isOwned: boolean }[] }) => ({
         id: col.id,
         name: col.name,
         itemCount: col.items.length,
