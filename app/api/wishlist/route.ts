@@ -116,3 +116,21 @@ async function updateWishlistHandler(request: NextRequest) {
   }
 }
 
+export const GET = withRateLimit(
+  getWishlistHandler,
+  rateLimitConfigs.read,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const POST = withRateLimit(
+  updateWishlistHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
