@@ -558,7 +558,7 @@ export default function CollectionsList() {
                             setShowSearchResults(false)
                             setSearchQuery('')
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                          className="w-full text-left px-3 py-3 min-h-[44px] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
                           <Users className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
