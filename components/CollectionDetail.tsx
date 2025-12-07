@@ -829,6 +829,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       }
 
       const result = await res.json()
+      // Invalidate cache - item was updated
+      CollectionCache.invalidateCollection(collectionId)
       // Update the item in the local state
       setItems(prev => prev.map(item => item.id === itemId ? result : item))
       return result
