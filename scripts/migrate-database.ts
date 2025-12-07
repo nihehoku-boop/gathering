@@ -4,10 +4,22 @@ import { PrismaClient } from '@prisma/client'
  * Script to migrate data from one database to another
  * 
  * Usage:
- * 1. Set OLD_DATABASE_URL in .env (your current Prisma database)
- * 2. Set NEW_DATABASE_URL in .env (your new Neon database)
- * 3. Run: tsx scripts/migrate-database.ts
+ * 1. Set OLD_DATABASE_URL in .env.local (your current Prisma database)
+ * 2. Set NEW_DATABASE_URL in .env.local (your new Neon database)
+ * 3. Run: npx tsx scripts/migrate-database.ts
+ * 
+ * IMPORTANT: This script preserves ALL data including community collections, votes, and relationships.
  */
+
+if (!process.env.OLD_DATABASE_URL) {
+  console.error('❌ OLD_DATABASE_URL is not set in .env.local')
+  process.exit(1)
+}
+
+if (!process.env.NEW_DATABASE_URL) {
+  console.error('❌ NEW_DATABASE_URL is not set in .env.local')
+  process.exit(1)
+}
 
 const oldPrisma = new PrismaClient({
   datasources: {
@@ -25,17 +37,79 @@ const newPrisma = new PrismaClient({
   },
 })
 
+async function verifyData() {
+  console.log('\n🔍 Verifying migrated data...\n')
+  
+  const oldCounts = {
+    users: await oldPrisma.user.count(),
+    collections: await oldPrisma.collection.count(),
+    items: await oldPrisma.item.count(),
+    communityCollections: await oldPrisma.communityCollection.count(),
+    communityItems: await oldPrisma.communityItem.count(),
+    votes: await oldPrisma.communityCollectionVote.count(),
+    recommendedCollections: await oldPrisma.recommendedCollection.count(),
+    recommendedItems: await oldPrisma.recommendedItem.count(),
+    wishlists: await oldPrisma.wishlist.count(),
+    wishlistItems: await oldPrisma.wishlistItem.count(),
+    folders: await oldPrisma.folder.count(),
+  }
+
+  const newCounts = {
+    users: await newPrisma.user.count(),
+    collections: await newPrisma.collection.count(),
+    items: await newPrisma.item.count(),
+    communityCollections: await newPrisma.communityCollection.count(),
+    communityItems: await newPrisma.communityItem.count(),
+    votes: await newPrisma.communityCollectionVote.count(),
+    recommendedCollections: await newPrisma.recommendedCollection.count(),
+    recommendedItems: await newPrisma.recommendedItem.count(),
+    wishlists: await newPrisma.wishlist.count(),
+    wishlistItems: await newPrisma.wishlistItem.count(),
+    folders: await newPrisma.folder.count(),
+  }
+
+  let allMatch = true
+  for (const [key, oldCount] of Object.entries(oldCounts)) {
+    const newCount = newCounts[key as keyof typeof newCounts]
+    if (oldCount !== newCount) {
+      console.error(`❌ ${key}: OLD=${oldCount}, NEW=${newCount} - MISMATCH!`)
+      allMatch = false
+    } else {
+      console.log(`✅ ${key}: ${oldCount} (matches)`)
+    }
+  }
+
+  if (allMatch) {
+    console.log('\n✅ All data counts match! Migration verified.\n')
+  } else {
+    console.error('\n❌ Data count mismatch detected! Please review the migration.\n')
+    throw new Error('Data verification failed')
+  }
+}
+
 async function migrateData() {
   try {
     console.log('🚀 Starting database migration...\n')
+    console.log('⚠️  IMPORTANT: This will migrate ALL data including community collections\n')
 
     // Test connections
     console.log('📡 Testing connections...')
-    await oldPrisma.$connect()
-    console.log('✅ Connected to OLD database')
+    try {
+      await oldPrisma.$connect()
+      console.log('✅ Connected to OLD database')
+    } catch (error) {
+      console.error('❌ Failed to connect to OLD database. Is it accessible?')
+      console.error('   If the database is suspended, you may need to contact Prisma support to restore access.')
+      throw error
+    }
     
-    await newPrisma.$connect()
-    console.log('✅ Connected to NEW database\n')
+    try {
+      await newPrisma.$connect()
+      console.log('✅ Connected to NEW database\n')
+    } catch (error) {
+      console.error('❌ Failed to connect to NEW database. Check your Neon connection string.')
+      throw error
+    }
 
     // Migrate Users
     console.log('👥 Migrating Users...')
@@ -237,7 +311,42 @@ async function migrateData() {
     }
     console.log(`✅ Migrated ${sessions.length} sessions\n`)
 
+    // Migrate Verification Tokens (for NextAuth)
+    console.log('🔐 Migrating Verification Tokens...')
+    const verificationTokens = await oldPrisma.verificationToken.findMany()
+    console.log(`   Found ${verificationTokens.length} verification tokens`)
+    
+    for (const token of verificationTokens) {
+      await newPrisma.verificationToken.upsert({
+        where: {
+          identifier_token: {
+            identifier: token.identifier,
+            token: token.token,
+          },
+        },
+        update: token,
+        create: token,
+      })
+    }
+    console.log(`✅ Migrated ${verificationTokens.length} verification tokens\n`)
+
+    // Verify all data was migrated correctly
+    await verifyData()
+
     console.log('🎉 Migration completed successfully!')
+    console.log('\n📊 Summary:')
+    console.log(`   - Users: ${await newPrisma.user.count()}`)
+    console.log(`   - Collections: ${await newPrisma.collection.count()}`)
+    console.log(`   - Items: ${await newPrisma.item.count()}`)
+    console.log(`   - Community Collections: ${await newPrisma.communityCollection.count()}`)
+    console.log(`   - Community Items: ${await newPrisma.communityItem.count()}`)
+    console.log(`   - Votes: ${await newPrisma.communityCollectionVote.count()}`)
+    console.log(`   - Recommended Collections: ${await newPrisma.recommendedCollection.count()}`)
+    console.log(`   - Recommended Items: ${await newPrisma.recommendedItem.count()}`)
+    console.log(`   - Wishlists: ${await newPrisma.wishlist.count()}`)
+    console.log(`   - Wishlist Items: ${await newPrisma.wishlistItem.count()}`)
+    console.log(`   - Folders: ${await newPrisma.folder.count()}`)
+    console.log('\n✅ All data has been safely migrated to Neon!\n')
   } catch (error) {
     console.error('❌ Migration failed:', error)
     throw error
