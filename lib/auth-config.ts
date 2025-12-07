@@ -48,8 +48,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       try {
         if (user) {
+          // Only query database when user first logs in
           token.id = user.id
-          // Fetch admin status from database
           try {
             const dbUser = await prisma.user.findUnique({
               where: { id: user.id },
@@ -62,23 +62,14 @@ export const authOptions: NextAuthOptions = {
           } catch (error) {
             console.error('Error fetching admin status in JWT callback:', error)
             token.isAdmin = false
-          }
-        } else if (token.id) {
-          // Refresh admin status on each token check
-          try {
-            const dbUser = await prisma.user.findUnique({
-              where: { id: token.id as string },
-              select: { isAdmin: true, isVerified: true, badge: true, accentColor: true },
-            })
-            token.isAdmin = dbUser?.isAdmin || false
-            token.isVerified = dbUser?.isVerified || false
-            token.badge = dbUser?.badge || null
-            token.accentColor = dbUser?.accentColor || '#FFD60A'
-          } catch (error) {
-            console.error('Error refreshing admin status in JWT callback:', error)
-            // Keep existing admin status if query fails
+            token.isVerified = false
+            token.badge = null
+            token.accentColor = '#FFD60A'
           }
         }
+        // Don't query database on every request - use cached values from token
+        // Admin status changes are rare, so we cache it in the JWT token
+        // If admin status needs to be updated, user should re-login or we can add a refresh endpoint
       } catch (error) {
         console.error('Error in JWT callback:', error)
       }
