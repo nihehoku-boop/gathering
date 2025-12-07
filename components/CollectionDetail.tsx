@@ -2068,6 +2068,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 }),
                               })
                               if (res.ok) {
+                                // Dispatch event to refresh wishlist if open
+                                if (typeof window !== 'undefined') {
+                                  window.dispatchEvent(new CustomEvent('wishlist-updated'))
+                                }
                                 showAlert({
                                   title: 'Success',
                                   message: 'Item added to wishlist!',
