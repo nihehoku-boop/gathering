@@ -16,6 +16,15 @@ async function getCollectionsHandler() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Try to fetch from cache first
+    const cacheKey = cacheKeys.userCollections(session.user.id)
+    const cachedData = serverCache.get(cacheKey)
+    if (cachedData) {
+      const response = NextResponse.json(cachedData)
+      response.headers.set('Cache-Control', 'private, s-maxage=60, stale-while-revalidate=120')
+      return response
+    }
+
     const collections = await prisma.collection.findMany({
       where: { userId: session.user.id },
       select: {
@@ -67,6 +76,9 @@ async function getCollectionsHandler() {
       items: [], // Remove items array, we don't need it
       ownedCount: ownedCountMap.get(collection.id) || 0,
     }))
+
+    // Cache the result (60 seconds TTL)
+    serverCache.set(cacheKey, collectionsWithStats, 60 * 1000)
 
     const response = NextResponse.json(collectionsWithStats)
     // Add caching headers
@@ -166,6 +178,9 @@ async function createCollectionHandler(request: NextRequest) {
         items: true,
       },
     })
+
+    // Invalidate collections cache - new collection added
+    serverCache.delete(cacheKeys.userCollections(session.user.id))
 
     // Check and unlock achievements (only when creating collection - relevant for collection count achievements)
     const newlyUnlocked = await checkAllAchievements(session.user.id)

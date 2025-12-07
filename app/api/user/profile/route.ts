@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { serverCache, cacheKeys } from '@/lib/server-cache'
 
 export async function GET() {
   try {
@@ -10,27 +11,46 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        image: true,
-        isPrivate: true,
-        badge: true,
-        accentColor: true,
-        themeMode: true,
-        bio: true,
-        bannerImage: true,
-        profileTheme: true,
-        _count: {
-          select: {
-            collections: true,
+    // Try cache first
+    const cacheKey = cacheKeys.userProfile(session.user.id)
+    const cached = serverCache.get(cacheKey)
+    if (cached) {
+      const response = NextResponse.json(cached)
+      response.headers.set('Cache-Control', 'private, s-maxage=60, stale-while-revalidate=120')
+      return response
+    }
+
+    // Fetch user and items count in parallel (2 queries → 2 parallel queries)
+    const [user, itemsCount] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          isPrivate: true,
+          badge: true,
+          accentColor: true,
+          themeMode: true,
+          bio: true,
+          bannerImage: true,
+          profileTheme: true,
+          _count: {
+            select: {
+              collections: true,
+            },
           },
         },
-      },
-    })
+      }),
+      prisma.item.count({
+        where: {
+          collection: {
+            userId: session.user.id,
+          },
+        },
+      }),
+    ])
 
     if (!user) {
       return NextResponse.json(
@@ -39,20 +59,18 @@ export async function GET() {
       )
     }
 
-    // Get total items count
-    const itemsCount = await prisma.item.count({
-      where: {
-        collection: {
-          userId: session.user.id,
-        },
-      },
-    })
-
-    return NextResponse.json({
+    const result = {
       ...user,
       collectionsCount: user._count.collections,
       itemsCount,
-    })
+    }
+
+    // Cache for 60 seconds
+    serverCache.set(cacheKey, result, 60 * 1000)
+
+    const response = NextResponse.json(result)
+    response.headers.set('Cache-Control', 'private, s-maxage=60, stale-while-revalidate=120')
+    return response
   } catch (error) {
     console.error('Error fetching profile:', error)
     return NextResponse.json(
@@ -131,6 +149,11 @@ export async function PATCH(request: NextRequest) {
         profileTheme: true,
       },
     })
+
+    // Invalidate user cache and profile cache when user data changes
+    const { invalidateUserCache } = await import('@/lib/user-cache')
+    invalidateUserCache(session.user.id)
+    serverCache.delete(cacheKeys.userProfile(session.user.id))
 
     return NextResponse.json(updatedUser)
   } catch (error) {
