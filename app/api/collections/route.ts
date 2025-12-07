@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { validateRequestBody, createCollectionSchema } from '@/lib/validation-schemas'
 
 async function getCollectionsHandler() {
   try {
@@ -85,15 +86,15 @@ async function createCollectionHandler(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, coverImageFit, tags, items } = body
-
-    if (!name) {
+    // Validate request body
+    const validation = await validateRequestBody(request, createCollectionSchema)
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Name is required' },
-        { status: 400 }
+        { error: validation.error },
+        { status: validation.status }
       )
     }
+    const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, coverImageFit, tags, items } = validation.data
 
     // Validate folderId if provided
     let validatedFolderId: string | null = null

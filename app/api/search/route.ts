@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { validateQueryParams, searchQuerySchema } from '@/lib/validation-schemas'
 
 async function searchHandler(request: NextRequest) {
   try {
@@ -12,17 +13,15 @@ async function searchHandler(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const searchParams = request.nextUrl.searchParams
-    const query = searchParams.get('q') || ''
-    const limit = parseInt(searchParams.get('limit') || '10')
-
-    if (!query || query.trim().length < 2) {
-      return NextResponse.json({
-        collections: [],
-        items: [],
-        communityCollections: [],
-      })
+    // Validate query parameters
+    const validation = validateQueryParams(request.nextUrl.searchParams, searchQuerySchema)
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: validation.error },
+        { status: validation.status }
+      )
     }
+    const { q: query, limit } = validation.data
 
     const searchTerm = query.trim()
     const searchTermLower = searchTerm.toLowerCase()
