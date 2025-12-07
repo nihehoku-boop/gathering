@@ -2140,6 +2140,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         collectionTemplate={collection?.template}
         customFieldDefinitions={collection?.customFieldDefinitions}
         onSuccess={() => {
+          // Invalidate cache - items were added
+          CollectionCache.invalidateCollection(collectionId)
           // Refresh items after bulk import
           fetchItems(1, false)
           fetchCollection()
@@ -2227,6 +2229,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             tags: collection.tags || '[]',
           }}
           onSuccess={() => {
+            // Invalidate cache - collection metadata changed
+            CollectionCache.invalidateCollection(collectionId)
             setShowEditCollection(false)
             fetchCollection()
           }}
