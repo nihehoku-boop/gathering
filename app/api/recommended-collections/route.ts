@@ -66,12 +66,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-    })
-
-    if (!user?.isAdmin) {
+    // Check if user is admin (using cached lookup)
+    const { isUserAdmin } = await import('@/lib/user-cache')
+    const isAdmin = await isUserAdmin(session.user.id)
+    
+    if (!isAdmin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
