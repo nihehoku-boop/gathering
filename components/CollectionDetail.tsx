@@ -2207,6 +2207,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
               })
 
               if (res.ok) {
+                // Invalidate cache - alternative images changed
+                CollectionCache.invalidateCollection(collectionId)
                 // Refresh items after switching cover
                 fetchItems(1, false)
               }
