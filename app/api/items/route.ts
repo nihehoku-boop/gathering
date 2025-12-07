@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { validateRequestBody, createItemSchema } from '@/lib/validation-schemas'
 
 async function createItemHandler(request: NextRequest) {
   try {
@@ -13,15 +14,15 @@ async function createItemHandler(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { collectionId, name, number, image } = body
-
-    if (!collectionId || !name) {
+    // Validate request body
+    const validation = await validateRequestBody(request, createItemSchema)
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Collection ID and name are required' },
-        { status: 400 }
+        { error: validation.error },
+        { status: validation.status }
       )
     }
+    const { collectionId, name, number, image } = validation.data
 
     // Verify collection belongs to user
     const collection = await prisma.collection.findFirst({
