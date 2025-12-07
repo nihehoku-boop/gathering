@@ -417,7 +417,7 @@ export default function CollectionsList() {
         </div>
 
         {/* Collection Cards Skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {[...Array(6)].map((_, i) => (
             <CollectionCardSkeleton key={i} />
           ))}
@@ -436,11 +436,11 @@ export default function CollectionsList() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Your Collections</h2>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
+        <h2 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)]">Your Collections</h2>
         <Button 
           onClick={() => setShowCreateDialog(true)}
-          className="text-white smooth-transition"
+          className="text-white smooth-transition w-full sm:w-auto"
           style={{ 
             backgroundColor: 'var(--accent-color)',
           } as React.CSSProperties}
@@ -452,7 +452,8 @@ export default function CollectionsList() {
           }}
         >
           <Plus className="mr-2 h-4 w-4" />
-          New Collection
+          <span className="hidden sm:inline">New Collection</span>
+          <span className="sm:hidden">New</span>
         </Button>
       </div>
 
@@ -484,7 +485,7 @@ export default function CollectionsList() {
                 setSearchResults(null)
                 setShowSearchResults(false)
               }}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] smooth-transition"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] smooth-transition p-1 min-h-[32px] min-w-[32px] flex items-center justify-center"
             >
               <X className="h-4 w-4" />
             </button>
@@ -508,7 +509,7 @@ export default function CollectionsList() {
                             setShowSearchResults(false)
                             setSearchQuery('')
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                          className="w-full text-left px-3 py-3 min-h-[44px] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
                           <BookOpen className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
@@ -532,7 +533,7 @@ export default function CollectionsList() {
                             setShowSearchResults(false)
                             setSearchQuery('')
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                          className="w-full text-left px-3 py-3 min-h-[44px] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                         >
                           <Package className="h-4 w-4 text-[var(--text-muted)]" />
                           <div className="flex-1">
@@ -598,12 +599,12 @@ export default function CollectionsList() {
               </div>
             )}
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
             <div className="relative">
             <Button
               variant="outline"
               onClick={() => setShowSortMenu(!showSortMenu)}
-              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full w-full sm:w-auto"
             >
               <ArrowUpDown className="mr-2 h-4 w-4" />
               Sort
@@ -674,10 +675,11 @@ export default function CollectionsList() {
             <Button
               variant="outline"
               onClick={() => setShowExportMenu(!showExportMenu)}
-              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full w-full sm:w-auto"
             >
               <Download className="mr-2 h-4 w-4" />
-              Export All
+              <span className="hidden sm:inline">Export All</span>
+              <span className="sm:hidden">Export</span>
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
             {showExportMenu && (
@@ -692,7 +694,7 @@ export default function CollectionsList() {
                       window.open('/api/collections/export?format=json', '_blank')
                       setShowExportMenu(false)
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                    className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
                   >
                     <Download className="h-4 w-4" />
                     Export All as JSON
@@ -774,7 +776,7 @@ export default function CollectionsList() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredCollections.map((collection, index) => {
             const progress = calculateProgress(collection)
             return (

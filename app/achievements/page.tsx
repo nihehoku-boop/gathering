@@ -91,19 +91,19 @@ export default function AchievementsPage() {
         <Sidebar />
         <Navbar />
         <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
-          <div className="container mx-auto px-6 py-8">
-            <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
-              <CardContent className="py-16 text-center">
-                <Lock className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
-                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                  Sign in required
-                </h3>
-                <p className="text-[var(--text-secondary)]">
-                  Please sign in to view your achievements.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
+            <CardContent className="py-12 sm:py-16 text-center">
+              <Lock className="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-[var(--text-muted)] mb-4 sm:mb-6" />
+              <h3 className="text-lg sm:text-xl font-semibold text-[var(--text-primary)] mb-2 sm:mb-3">
+                Sign in required
+              </h3>
+              <p className="text-sm sm:text-base text-[var(--text-secondary)]">
+                Please sign in to view your achievements.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
         </div>
       </>
     )
@@ -114,24 +114,24 @@ export default function AchievementsPage() {
       <Sidebar />
       <Navbar />
       <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
-        <div className="container mx-auto px-6 py-12">
-          <div className="mb-10">
-            <div className="flex items-center gap-4 mb-6">
+        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12">
+          <div className="mb-6 sm:mb-10">
+            <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition min-h-[44px] min-w-[44px]"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
+                <span className="hidden sm:inline">Back</span>
               </Button>
             </div>
-            <div className="flex items-center gap-3 mb-3">
-              <Trophy className="h-8 w-8 text-[var(--accent-color)]" />
-              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Achievements</h1>
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--accent-color)]" />
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Achievements</h1>
             </div>
-            <div className="flex items-center justify-between mb-10">
-              <p className="text-[var(--text-secondary)] text-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6 sm:mb-10">
+              <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)]">
                 Track your collecting milestones and unlock badges
               </p>
               <Button
