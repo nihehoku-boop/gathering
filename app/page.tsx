@@ -21,7 +21,7 @@ export default async function Home() {
       <main className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12">
           <div className="mb-6 sm:mb-10">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] mb-2 sm:mb-3 tracking-tight" style={{ contentVisibility: 'auto' }}>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] mb-2 sm:mb-3 tracking-tight">
               My Collections
             </h1>
             <p className="text-[var(--text-secondary)] text-sm sm:text-base lg:text-lg flex flex-wrap items-center gap-1.5">

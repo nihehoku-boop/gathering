@@ -584,8 +584,9 @@ export default function CollectionsList() {
       </div>
 
       {collections.length > 0 && filteredCollections.length > 0 && (
-        <div className="mb-6 flex gap-2 justify-between items-center flex-wrap">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="mb-6 space-y-3">
+          {/* Filter and Sort on one line */}
+          <div className="flex items-center gap-2 flex-wrap">
             <TagSelector
               selectedTags={selectedTags}
               onChange={setSelectedTags}
@@ -593,22 +594,15 @@ export default function CollectionsList() {
               allowCustom={false}
               compact={true}
             />
-            {(searchQuery || selectedTags.length > 0) && (
-              <div className="text-sm text-[var(--text-muted)] whitespace-nowrap">
-                Showing {filteredCollections.length} of {collections.length} collections
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
             <div className="relative">
-            <Button
-              variant="outline"
-              onClick={() => setShowSortMenu(!showSortMenu)}
-              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full w-full sm:w-auto"
-            >
-              <ArrowUpDown className="mr-2 h-4 w-4" />
-              Sort
-            </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowSortMenu(!showSortMenu)}
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+              >
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+                Sort
+              </Button>
             {showSortMenu && (
               <>
                 <div 
@@ -671,17 +665,25 @@ export default function CollectionsList() {
               </>
             )}
             </div>
+            {(searchQuery || selectedTags.length > 0) && (
+              <div className="text-sm text-[var(--text-muted)] whitespace-nowrap ml-auto">
+                Showing {filteredCollections.length} of {collections.length} collections
+              </div>
+            )}
+          </div>
+          
+          {/* Import and Export buttons - icon only on mobile */}
+          <div className="flex gap-2 items-center">
             <div className="relative">
-            <Button
-              variant="outline"
-              onClick={() => setShowExportMenu(!showExportMenu)}
-              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full w-full sm:w-auto"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Export All</span>
-              <span className="sm:hidden">Export</span>
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowExportMenu(!showExportMenu)}
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline ml-2">Export</span>
+                <ChevronDown className="hidden sm:block ml-2 h-4 w-4" />
+              </Button>
             {showExportMenu && (
               <>
                 <div 
@@ -714,13 +716,13 @@ export default function CollectionsList() {
             )}
             </div>
             <Button
-            variant="outline"
-            onClick={() => setShowImportDialog(true)}
-            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            Import Collections
-          </Button>
+              variant="outline"
+              onClick={() => setShowImportDialog(true)}
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+            >
+              <Upload className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">Import</span>
+            </Button>
           </div>
         </div>
       )}
