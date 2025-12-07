@@ -1024,7 +1024,7 @@ export default function CollectionsList() {
                     </div>
                     <Progress value={progress} className="h-1.5" />
                     <p className="text-xs text-[var(--text-muted)]">
-                      {collection.items.filter(i => i.isOwned).length} of {collection._count.items} items
+                      {collection.ownedCount !== undefined ? collection.ownedCount : (collection.items?.filter(i => i.isOwned).length || 0)} of {collection._count.items} items
                     </p>
                   </div>
                 </CardContent>
