@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, Plus, Check, X, Upload, Grid3x3, List, Edit, ChevronDown, ChevronUp, Info, Image as ImageIcon, Download, Share2, Trash2, Heart, Square, CheckSquare2, Copy, Link as LinkIcon, ArrowUpDown } from 'lucide-react'
+import { ArrowLeft, Plus, Check, X, Upload, Grid3x3, List, Edit, ChevronDown, ChevronUp, Info, Image as ImageIcon, Download, Share2, Trash2, Heart, Square, CheckSquare2, Copy, Link as LinkIcon, ArrowUpDown, MoreVertical } from 'lucide-react'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import BulkImportDialog from './BulkImportDialog'
@@ -115,6 +115,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [shareToken, setShareToken] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
+  const [openItemMenu, setOpenItemMenu] = useState<string | null>(null)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
@@ -1487,78 +1488,102 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
                       )}
                     </button>
-                    <div className="flex-shrink-0 flex gap-0.5 sm:gap-1">
-                      {!isSelectionMode && (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={async () => {
-                              if (!collection) return
-                              try {
-                                const res = await fetch('/api/wishlist/items', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    items: [{
-                                      itemId: item.id,
-                                      collectionId: collection.id,
-                                      itemName: item.name,
-                                      itemNumber: item.number,
-                                      itemImage: item.image,
-                                      collectionName: collection.name,
-                                    }],
-                                  }),
-                                })
-                                if (res.ok) {
-                                  showAlert({
-                                    title: 'Success',
-                                    message: 'Item added to wishlist!',
-                                    type: 'success',
-                                  })
-                                } else {
-                                  const errorData = await res.json()
-                                  showAlert({
-                                    title: 'Error',
-                                    message: errorData.error || 'Failed to add to wishlist',
-                                    type: 'error',
-                                  })
-                                }
-                              } catch (error) {
-                                console.error('Error adding to wishlist:', error)
-                                showAlert({
-                                  title: 'Error',
-                                  message: 'Failed to add to wishlist',
-                                  type: 'error',
-                                })
-                              }
-                            }}
-                            className="text-[#FF6B9D] hover:text-[#FF6B9D] hover:bg-[#FF6B9D]/10 smooth-transition h-8 w-8 sm:h-10 sm:w-10"
-                            title="Add to Wishlist"
-                          >
-                            <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setEditingItem(item)}
-                            className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
-                            title="Edit"
-                          >
-                            <Edit className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => deleteItem(item.id)}
-                            className="text-[#FF3B30] hover:text-[#C0392B] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
-                            title="Delete"
-                          >
-                            <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                    {!isSelectionMode && (
+                      <div className="relative flex-shrink-0">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenItemMenu(openItemMenu === item.id ? null : item.id)
+                          }}
+                          className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
+                          title="More options"
+                        >
+                          <MoreVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        </Button>
+                        {openItemMenu === item.id && (
+                          <>
+                            <div 
+                              className="fixed inset-0 z-10" 
+                              onClick={() => setOpenItemMenu(null)}
+                            />
+                            <div className="absolute right-0 top-full mt-1 w-40 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                              <button
+                                onClick={async (e) => {
+                                  e.stopPropagation()
+                                  setOpenItemMenu(null)
+                                  if (!collection) return
+                                  try {
+                                    const res = await fetch('/api/wishlist/items', {
+                                      method: 'POST',
+                                      headers: { 'Content-Type': 'application/json' },
+                                      body: JSON.stringify({
+                                        items: [{
+                                          itemId: item.id,
+                                          collectionId: collection.id,
+                                          itemName: item.name,
+                                          itemNumber: item.number,
+                                          itemImage: item.image,
+                                          collectionName: collection.name,
+                                        }],
+                                      }),
+                                    })
+                                    if (res.ok) {
+                                      showAlert({
+                                        title: 'Success',
+                                        message: 'Item added to wishlist!',
+                                        type: 'success',
+                                      })
+                                    } else {
+                                      const errorData = await res.json()
+                                      showAlert({
+                                        title: 'Error',
+                                        message: errorData.error || 'Failed to add to wishlist',
+                                        type: 'error',
+                                      })
+                                    }
+                                  } catch (error) {
+                                    console.error('Error adding to wishlist:', error)
+                                    showAlert({
+                                      title: 'Error',
+                                      message: 'Failed to add to wishlist',
+                                      type: 'error',
+                                    })
+                                  }
+                                }}
+                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                              >
+                                <Heart className="h-4 w-4 text-[#FF6B9D]" />
+                                Add to Wishlist
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setOpenItemMenu(null)
+                                  setEditingItem(item)
+                                }}
+                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                              >
+                                <Edit className="h-4 w-4 text-[var(--accent-color)]" />
+                                Edit
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setOpenItemMenu(null)
+                                  deleteItem(item.id)
+                                }}
+                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Delete
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
                     {expandedItems.has(item.id) && (
                       <div className="px-3 pb-3 pt-0 border-t border-[#2a2d35] space-y-2 text-sm">
                         {item.wear && (
