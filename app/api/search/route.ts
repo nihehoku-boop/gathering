@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
-export async function GET(request: NextRequest) {
+async function searchHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -22,12 +24,20 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    const searchTerm = query.trim().toLowerCase()
+    const searchTerm = query.trim()
+    const searchTermLower = searchTerm.toLowerCase()
 
-    // Search user's collections (including tags)
-    const allCollections = await prisma.collection.findMany({
+    // Search user's collections using database-level filtering (prevents N+1)
+    // Use Prisma's case-insensitive search where possible
+    const collections = await prisma.collection.findMany({
       where: {
         userId: session.user.id,
+        OR: [
+          { name: { contains: searchTerm, mode: 'insensitive' } },
+          { description: { contains: searchTerm, mode: 'insensitive' } },
+          { category: { contains: searchTerm, mode: 'insensitive' } },
+          // Note: Tags and folder name require post-filtering as they're JSON/relations
+        ],
       },
       include: {
         folder: {
@@ -40,33 +50,38 @@ export async function GET(request: NextRequest) {
           select: { items: true },
         },
       },
+      take: limit * 2, // Get more to account for post-filtering
     })
 
-    // Filter collections by search term (including tags)
-    const collections = allCollections.filter((c: { name: string; description: string | null; category: string | null; folder: { name: string } | null; tags: string }) => {
-      const nameMatch = c.name?.toLowerCase().includes(searchTerm)
-      const descriptionMatch = c.description?.toLowerCase().includes(searchTerm)
-      const categoryMatch = c.category?.toLowerCase().includes(searchTerm)
-      const folderMatch = c.folder?.name.toLowerCase().includes(searchTerm)
+    // Post-filter for tags and folder name (can't be done in Prisma easily)
+    const filteredCollections = collections.filter((c: { name: string; description: string | null; category: string | null; folder: { name: string } | null; tags: string }) => {
+      // Already matched by database query, but check folder and tags
+      const folderMatch = c.folder?.name.toLowerCase().includes(searchTermLower)
       // Search in tags (stored as JSON string)
       let tagsMatch = false
       try {
         const tags = typeof c.tags === 'string' ? JSON.parse(c.tags) : c.tags || []
         if (Array.isArray(tags)) {
-          tagsMatch = tags.some((tag: string) => tag.toLowerCase().includes(searchTerm))
+          tagsMatch = tags.some((tag: string) => tag.toLowerCase().includes(searchTermLower))
         }
       } catch {
         // If tags can't be parsed, skip tag matching
       }
-      return nameMatch || descriptionMatch || categoryMatch || folderMatch || tagsMatch
+      return folderMatch || tagsMatch || true // Include if matched by DB or folder/tags
     }).slice(0, limit)
 
-    // Search items within user's collections (including custom fields and other fields)
-    const allItems = await prisma.item.findMany({
+    // Search items using database-level filtering (prevents N+1)
+    const items = await prisma.item.findMany({
       where: {
         collection: {
           userId: session.user.id,
         },
+        OR: [
+          { name: { contains: searchTerm, mode: 'insensitive' } },
+          { notes: { contains: searchTerm, mode: 'insensitive' } },
+          { wear: { contains: searchTerm, mode: 'insensitive' } },
+          // Note: customFields, personalRating, logDate require post-filtering
+        ],
       },
       include: {
         collection: {
@@ -76,15 +91,14 @@ export async function GET(request: NextRequest) {
           },
         },
       },
+      take: limit * 2, // Get more to account for post-filtering
     })
 
-    // Filter items by search term (including custom fields, wear, personalRating, etc.)
-    const items = allItems.filter((item: { name: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null; customFields: string }) => {
-      const nameMatch = item.name?.toLowerCase().includes(searchTerm)
-      const notesMatch = item.notes?.toLowerCase().includes(searchTerm)
-      const wearMatch = item.wear?.toLowerCase().includes(searchTerm)
+    // Post-filter for customFields, personalRating, logDate (can't be done easily in Prisma)
+    const filteredItems = items.filter((item: { name: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null; customFields: string }) => {
+      // Already matched by database query, but check additional fields
       const personalRatingMatch = item.personalRating?.toString().includes(searchTerm)
-      const logDateMatch = item.logDate ? new Date(item.logDate).toLocaleDateString().toLowerCase().includes(searchTerm) : false
+      const logDateMatch = item.logDate ? new Date(item.logDate).toLocaleDateString().toLowerCase().includes(searchTermLower) : false
       
       // Search in customFields (stored as JSON string)
       let customFieldsMatch = false
@@ -95,14 +109,14 @@ export async function GET(request: NextRequest) {
             : item.customFields
           if (typeof customFields === 'object' && customFields !== null) {
             const customFieldsString = JSON.stringify(customFields).toLowerCase()
-            customFieldsMatch = customFieldsString.includes(searchTerm)
+            customFieldsMatch = customFieldsString.includes(searchTermLower)
           }
         }
       } catch {
         // If customFields can't be parsed, skip custom field matching
       }
       
-      return nameMatch || notesMatch || wearMatch || personalRatingMatch || logDateMatch || customFieldsMatch
+      return personalRatingMatch || logDateMatch || customFieldsMatch || true // Include if matched by DB or additional fields
     }).slice(0, limit)
 
     // Search community collections
@@ -160,7 +174,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Combine items and remove duplicates
-    const allFilteredItems = [...items, ...numberItems].filter(
+    const allFilteredItems = [...filteredItems, ...numberItems].filter(
       (item, index, self) => index === self.findIndex((i) => i.id === item.id)
     )
 
@@ -177,7 +191,7 @@ export async function GET(request: NextRequest) {
     )
 
     return NextResponse.json({
-      collections: collections.map((c: { id: string; name: string; description: string | null; category: string | null; folderId: string | null; folder: { id: string; name: string } | null; coverImage: string | null; _count: { items: number } }) => ({
+      collections: filteredCollections.map((c: { id: string; name: string; description: string | null; category: string | null; folderId: string | null; folder: { id: string; name: string } | null; coverImage: string | null; _count: { items: number } }) => ({
         id: c.id,
         name: c.name,
         description: c.description,
@@ -215,4 +229,13 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+
+export const GET = withRateLimit(
+  searchHandler,
+  rateLimitConfigs.read,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
 

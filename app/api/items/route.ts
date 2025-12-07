@@ -3,8 +3,10 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
-export async function POST(request: NextRequest) {
+async function createItemHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -60,4 +62,13 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export const POST = withRateLimit(
+  createItemHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
 

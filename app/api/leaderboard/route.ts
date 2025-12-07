@@ -1,5 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
 // Cache leaderboard data for 2 minutes
 // This reduces database load significantly since leaderboard doesn't change frequently
@@ -8,7 +10,7 @@ const CACHE_DURATION = 2 * 60 * 1000 // 2 minutes in milliseconds
 let cachedLeaderboard: any[] | null = null
 let cacheTimestamp: number = 0
 
-export async function GET() {
+async function getLeaderboardHandler() {
   try {
     // Check if we have valid cached data
     const now = Date.now()
@@ -114,4 +116,10 @@ export async function GET() {
     )
   }
 }
+
+export const GET = withRateLimit(
+  getLeaderboardHandler,
+  rateLimitConfigs.read,
+  async () => undefined
+)
 
