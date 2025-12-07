@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Filter collections by search term (including tags)
-    const collections = allCollections.filter(c => {
+    const collections = allCollections.filter((c: { name: string; description: string | null; category: string | null; folder: { name: string } | null; tags: string }) => {
       const nameMatch = c.name?.toLowerCase().includes(searchTerm)
       const descriptionMatch = c.description?.toLowerCase().includes(searchTerm)
       const categoryMatch = c.category?.toLowerCase().includes(searchTerm)
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Filter items by search term (including custom fields, wear, personalRating, etc.)
-    const items = allItems.filter(item => {
+    const items = allItems.filter((item: { name: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null; customFields: string }) => {
       const nameMatch = item.name?.toLowerCase().includes(searchTerm)
       const notesMatch = item.notes?.toLowerCase().includes(searchTerm)
       const wearMatch = item.wear?.toLowerCase().includes(searchTerm)
@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
           },
         },
       })
-      numberItems = numericItems.filter(item => !items.find(i => i.id === item.id))
+      numberItems = numericItems.filter((item: { id: string }) => !items.find((i: { id: string }) => i.id === item.id))
     }
 
     // Combine items and remove duplicates
@@ -170,7 +170,7 @@ export async function GET(request: NextRequest) {
       return text.toLowerCase().includes(term.toLowerCase())
     }
 
-    const filteredCommunityCollections = communityCollections.filter(cc =>
+    const filteredCommunityCollections = communityCollections.filter((cc: { name: string; description: string | null; category: string | null }) =>
       filterCaseInsensitive(cc.name, query.trim()) ||
       filterCaseInsensitive(cc.description, query.trim()) ||
       filterCaseInsensitive(cc.category, query.trim())

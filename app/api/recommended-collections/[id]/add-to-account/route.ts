@@ -47,7 +47,7 @@ export async function POST(
         recommendedCollectionId: recommendedCollection.id,
         lastSyncedAt: new Date(),
         items: {
-          create: recommendedCollection.items.map(item => ({
+          create: recommendedCollection.items.map((item: { name: string; number: number | null; notes: string | null; image: string | null; customFields: string }) => ({
             name: item.name,
             number: item.number,
             notes: item.notes,

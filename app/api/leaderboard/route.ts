@@ -31,11 +31,11 @@ export async function GET() {
     const leaderboard = users
       .map((user: { id: string; name: string | null; email: string; image: string | null; isVerified: boolean; badge: string | null; collections: { items: { isOwned: boolean }[] }[] }) => {
         const totalItems = user.collections.reduce(
-          (sum, collection) => sum + collection.items.length,
+          (sum: number, collection: { items: any[] }) => sum + collection.items.length,
           0
         )
         const ownedItems = user.collections.reduce(
-          (sum, collection) =>
+          (sum: number, collection: { items: { isOwned: boolean }[] }) =>
             sum + collection.items.filter((item) => item.isOwned).length,
           0
         )

@@ -25,16 +25,16 @@ export async function GET(request: NextRequest) {
 
     // Calculate statistics
     const totalCollections = collections.length
-    const totalItems = collections.reduce((sum, col) => sum + col.items.length, 0)
+    const totalItems = collections.reduce((sum: number, col: { items: any[] }) => sum + col.items.length, 0)
     const ownedItems = collections.reduce(
-      (sum, col) => sum + col.items.filter((item) => item.isOwned).length,
+      (sum: number, col: { items: { isOwned: boolean }[] }) => sum + col.items.filter((item) => item.isOwned).length,
       0
     )
     const completionPercentage = totalItems > 0 ? Math.round((ownedItems / totalItems) * 100) : 0
 
     // Collections by category
     const collectionsByCategory: Record<string, number> = {}
-    collections.forEach((col) => {
+    collections.forEach((col: { category: string | null }) => {
       const category = col.category || 'Uncategorized'
       collectionsByCategory[category] = (collectionsByCategory[category] || 0) + 1
     })
@@ -52,9 +52,9 @@ export async function GET(request: NextRequest) {
     }))
 
     // Most collected items (items that appear in multiple collections - not applicable here, but we can show items with highest numbers)
-    const allItems = collections.flatMap((col) => col.items)
-    const itemsWithNumbers = allItems.filter((item) => item.number !== null)
-    const sortedByNumber = itemsWithNumbers.sort((a, b) => (b.number || 0) - (a.number || 0))
+    const allItems = collections.flatMap((col: { items: any[] }) => col.items)
+    const itemsWithNumbers = allItems.filter((item: { number: number | null }) => item.number !== null)
+    const sortedByNumber = itemsWithNumbers.sort((a: { number: number | null }, b: { number: number | null }) => (b.number || 0) - (a.number || 0))
     const topItems = sortedByNumber.slice(0, 10).map((item: { name: string; number: number | null; isOwned: boolean }) => ({
       name: item.name,
       number: item.number,
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 
     // Tags distribution
     const allTags: Record<string, number> = {}
-    collections.forEach((col) => {
+    collections.forEach((col: { tags: string }) => {
       try {
         const tags = col.tags ? JSON.parse(col.tags) : []
         if (Array.isArray(tags)) {
@@ -88,16 +88,16 @@ export async function GET(request: NextRequest) {
     })
 
     // Items with ratings
-    const ratedItems = allItems.filter((item) => item.personalRating !== null)
+    const ratedItems = allItems.filter((item: { personalRating: number | null }) => item.personalRating !== null)
     const averageRating =
       ratedItems.length > 0
-        ? ratedItems.reduce((sum, item) => sum + (item.personalRating || 0), 0) / ratedItems.length
+        ? ratedItems.reduce((sum: number, item: { personalRating: number | null }) => sum + (item.personalRating || 0), 0) / ratedItems.length
         : 0
 
     // Items with wear conditions
-    const itemsWithWear = allItems.filter((item) => item.wear !== null)
+    const itemsWithWear = allItems.filter((item: { wear: string | null }) => item.wear !== null)
     const wearDistribution: Record<string, number> = {}
-    itemsWithWear.forEach((item) => {
+    itemsWithWear.forEach((item: { wear: string | null }) => {
       const wear = item.wear || 'Unknown'
       wearDistribution[wear] = (wearDistribution[wear] || 0) + 1
     })
