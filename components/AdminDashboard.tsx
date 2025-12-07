@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users } from 'lucide-react'
+import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users, Database, BarChart3 } from 'lucide-react'
 import CreateRecommendedCollectionDialog from './CreateRecommendedCollectionDialog'
 import EditRecommendedCollectionDialog from './EditRecommendedCollectionDialog'
 import RecommendedCollectionItemsManager from './RecommendedCollectionItemsManager'
@@ -12,6 +12,7 @@ import BulkImportDialog from './BulkImportDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
 import UserManagement from './UserManagement'
 import ConvertCollectionToRecommendedDialog from './ConvertCollectionToRecommendedDialog'
+import PrismaLogsViewer from './PrismaLogsViewer'
 import { parseTags, getTagColor } from '@/lib/tags'
 
 interface RecommendedItem {
@@ -133,6 +134,13 @@ export default function AdminDashboard() {
         >
           <Users className="mr-2 h-4 w-4" />
           User Management
+        </TabsTrigger>
+        <TabsTrigger 
+          value="prisma-logs" 
+          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[var(--text-secondary)] data-[state=active]:text-black"
+        >
+          <Database className="mr-2 h-4 w-4" />
+          Prisma Logs
         </TabsTrigger>
       </TabsList>
 
@@ -335,6 +343,10 @@ export default function AdminDashboard() {
 
       <TabsContent value="users">
         <UserManagement />
+      </TabsContent>
+
+      <TabsContent value="prisma-logs">
+        <PrismaLogsViewer />
       </TabsContent>
 
       <ConvertCollectionToRecommendedDialog

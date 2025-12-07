@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { withAccelerate } from '@prisma/extension-accelerate'
+import { createPrismaLoggingMiddleware } from './prisma-logger'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined
@@ -29,6 +30,11 @@ const createPrismaClient = () => {
       },
     },
   })
+
+  // Add logging middleware if enabled
+  // Enable with ENABLE_PRISMA_LOGGING=true or automatically in development
+  const loggingMiddleware = createPrismaLoggingMiddleware()
+  baseClient.$use(loggingMiddleware)
 
   // Only use Accelerate extension for prisma:// URLs (not db.prisma.io)
   // db.prisma.io endpoints should work as direct connections without the extension
