@@ -138,7 +138,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       setItems([])
       setItemsPage(1)
       setHasMoreItems(true)
-      prefetchCacheRef.current.clear() // Clear cache when collection or sort changes
+      // Clear ALL cache when collection or sort changes - important for sorting to work
+      prefetchCacheRef.current.clear()
+      // Update sortBy ref immediately
+      sortByRef.current = sortBy
       fetchItems(1, false)
     }
   }, [collection, sortBy])
@@ -199,20 +202,28 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const prefetchCacheRef = useRef<Map<string, any>>(new Map())
   
   // Progressive loading: increase limit based on visit count
-  const getItemLimit = (collectionId: string): number => {
-    if (typeof window === 'undefined') return 20 // Default for SSR
+  // But use larger initial loads to prevent gray spaces
+  const getItemLimit = (collectionId: string, isInitialLoad: boolean = false): number => {
+    if (typeof window === 'undefined') return 30 // Default for SSR
     const visitKey = `collection_visits_${collectionId}`
     const visits = parseInt(localStorage.getItem(visitKey) || '0', 10)
     
-    // Progressive limits: 20 -> 30 -> 50 -> 50 (max)
-    if (visits === 0) return 20
-    if (visits === 1) return 30
-    return 50 // 2+ visits
+    // For initial load, always use at least 30 to prevent gray spaces
+    if (isInitialLoad) {
+      if (visits === 0) return 30 // Increased from 20
+      if (visits === 1) return 40 // Increased from 30
+      return 50
+    }
+    
+    // For subsequent pages, use progressive limits
+    if (visits === 0) return 30
+    if (visits === 1) return 40
+    return 50
   }
   
   const fetchItems = async (page: number = 1, append: boolean = false, useCache: boolean = false) => {
     const currentSortBy = sortByRef.current
-    const limit = getItemLimit(collectionId)
+    const limit = getItemLimit(collectionId, page === 1)
     const cacheKey = `${page}_${currentSortBy}`
     
     // Check cache first if useCache is true (must match current sort order)
@@ -275,7 +286,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     if (itemsLoadingRef.current || !hasMoreItemsRef.current) return
     const nextPage = currentPage + 1
     const currentSortBy = sortByRef.current
-    const limit = getItemLimit(collectionId)
+    const limit = getItemLimit(collectionId, false)
     const cacheKey = `${nextPage}_${currentSortBy}`
     
     // Don't prefetch if already in cache
@@ -285,48 +296,47 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       const res = await fetch(`/api/collections/${collectionId}/items?page=${nextPage}&limit=${limit}&sortBy=${currentSortBy}`)
       if (res.ok) {
         const data = await res.json()
-        prefetchCacheRef.current.set(cacheKey, data)
+        // Only cache if sort hasn't changed during fetch
+        if (sortByRef.current === currentSortBy) {
+          prefetchCacheRef.current.set(cacheKey, data)
+        }
       }
     } catch (error) {
       // Silently fail prefetch
     }
   }
 
-  // Aggressive prefetching: load next pages before user needs them
+  // Aggressive prefetching: load next pages immediately to prevent gray spaces
   useEffect(() => {
     if (!hasMoreItems || items.length === 0) return
     
     const currentSortBy = sortByRef.current
-    const limit = getItemLimit(collectionId)
     
-    // Prefetch next page when we have just a few items loaded (much earlier)
-    // This ensures items are ready before user scrolls to them
-    if (items.length >= 5) {
+    // Prefetch next page immediately when first page loads (no delay)
+    // This ensures items are ready before user scrolls
+    if (items.length >= 3) {
       const nextPage = itemsPage + 1
       const cacheKey = `${nextPage}_${currentSortBy}`
-      if (!prefetchCacheRef.current.has(cacheKey)) {
+      if (!prefetchCacheRef.current.has(cacheKey) && !itemsLoadingRef.current) {
         prefetchNextPage(itemsPage)
       }
     }
     
     // Prefetch page after next when we have more items (prefetch 2 pages ahead)
-    if (items.length >= 15 && hasMoreItems) {
+    if (items.length >= 10 && hasMoreItems) {
       const pageAfterNext = itemsPage + 2
       const cacheKey2 = `${pageAfterNext}_${currentSortBy}`
-      if (!prefetchCacheRef.current.has(cacheKey2)) {
+      if (!prefetchCacheRef.current.has(cacheKey2) && !itemsLoadingRef.current && hasMoreItemsRef.current) {
         // Prefetch second page ahead
-        const currentSortBy2 = sortByRef.current
-        const limit2 = getItemLimit(collectionId)
-        if (!itemsLoadingRef.current && hasMoreItemsRef.current) {
-          fetch(`/api/collections/${collectionId}/items?page=${pageAfterNext}&limit=${limit2}&sortBy=${currentSortBy2}`)
-            .then(res => res.ok ? res.json() : null)
-            .then(data => {
-              if (data) {
-                prefetchCacheRef.current.set(cacheKey2, data)
-              }
-            })
-            .catch(() => {}) // Silently fail
-        }
+        const limit2 = getItemLimit(collectionId, false)
+        fetch(`/api/collections/${collectionId}/items?page=${pageAfterNext}&limit=${limit2}&sortBy=${currentSortBy}`)
+          .then(res => res.ok ? res.json() : null)
+          .then(data => {
+            if (data && sortByRef.current === currentSortBy) { // Only cache if sort hasn't changed
+              prefetchCacheRef.current.set(cacheKey2, data)
+            }
+          })
+          .catch(() => {}) // Silently fail
       }
     }
   }, [items.length, itemsPage, hasMoreItems, collectionId, sortBy])
