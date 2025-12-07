@@ -21,8 +21,20 @@ interface PrismaLogEntry {
 class PrismaLogger {
   private logs: PrismaLogEntry[] = []
   private readonly MAX_LOGS = 1000 // Keep last 1000 operations
-  private enabled: boolean = process.env.ENABLE_PRISMA_LOGGING === 'true' || process.env.NODE_ENV === 'development'
+  // Enable logging in development by default, or if explicitly enabled
+  // In production, must set ENABLE_PRISMA_LOGGING=true
+  private enabled: boolean = 
+    process.env.ENABLE_PRISMA_LOGGING === 'true' || 
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV !== 'production' // Also enable in non-production environments
   private startTimes = new Map<string, number>()
+  
+  constructor() {
+    // Log initialization status
+    if (typeof process !== 'undefined') {
+      console.log(`[Prisma Logger] Initialized - Enabled: ${this.enabled}, NODE_ENV: ${process.env.NODE_ENV}, ENABLE_PRISMA_LOGGING: ${process.env.ENABLE_PRISMA_LOGGING}`)
+    }
+  }
 
   /**
    * Enable or disable logging
@@ -194,12 +206,18 @@ export const prismaLogger = new PrismaLogger()
  */
 export function createPrismaLoggingMiddleware() {
   return async (params: any, next: any) => {
+    // Always check enabled status (in case it changed)
     if (!prismaLogger.isEnabled()) {
       return next(params)
     }
 
     const operationId = `${params.model || 'Unknown'}_${params.action}_${Date.now()}_${Math.random()}`
     prismaLogger.startOperation(operationId)
+    
+    // Debug log in development to verify middleware is being called
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Prisma Logger] Intercepted operation: ${params.action} on ${params.model || 'Unknown'}`)
+    }
 
     try {
       const result = await next(params)
