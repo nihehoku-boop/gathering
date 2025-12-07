@@ -119,6 +119,7 @@ model Collection {
   @@index([userId, folderId])
   @@index([userId, category]) // Index for category filtering
   @@index([recommendedCollectionId]) // Index for recommended collection lookups
+  @@index([name]) // Index for search functionality
 }
 
 model Item {
@@ -140,6 +141,8 @@ model Item {
 
   @@index([collectionId])
   @@index([collectionId, isOwned]) // Composite index for efficient owned items queries
+  @@index([name]) // Index for search functionality
+  @@index([isOwned]) // Index for filtering owned items
 }
 
 model RecommendedCollection {

@@ -38,15 +38,46 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate URL
+    // Validate URL format and prevent SSRF attacks
+    let urlObj: URL
     try {
-      new URL(url)
+      urlObj = new URL(url)
     } catch {
       return NextResponse.json(
         { error: 'Invalid URL format' },
         { status: 400 }
       )
     }
+
+    // Prevent SSRF: Block internal/private IP addresses
+    const hostname = urlObj.hostname.toLowerCase()
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1'
+    const isPrivateIP = /^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)/.test(hostname)
+    const isInternalDomain = hostname.endsWith('.local') || hostname.endsWith('.internal')
+    
+    if (isLocalhost || isPrivateIP || isInternalDomain) {
+      return NextResponse.json(
+        { error: 'Internal URLs are not allowed for security reasons' },
+        { status: 400 }
+      )
+    }
+
+    // Only allow HTTP/HTTPS protocols
+    if (!['http:', 'https:'].includes(urlObj.protocol)) {
+      return NextResponse.json(
+        { error: 'Only HTTP and HTTPS protocols are allowed' },
+        { status: 400 }
+      )
+    }
+
+    // Optional: Whitelist allowed domains (uncomment and configure as needed)
+    // const allowedDomains = ['example.com', 'another-domain.com']
+    // if (!allowedDomains.includes(hostname)) {
+    //   return NextResponse.json(
+    //     { error: 'Domain not allowed' },
+    //     { status: 400 }
+    //   )
+    // }
 
     // Get AI data source
     // Ensure data sources are initialized
