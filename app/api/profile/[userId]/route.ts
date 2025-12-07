@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logger } from '@/lib/logger'
 
 export async function GET(
   request: NextRequest,
@@ -38,6 +39,10 @@ export async function GET(
                 items: true,
               },
             },
+          },
+          take: 10, // Limit to 10 collections for performance
+          orderBy: {
+            updatedAt: 'desc',
           },
         },
       },
@@ -101,9 +106,11 @@ export async function GET(
       totalCollections: user.collections.length,
       totalItems,
       totalOwnedItems,
+      // Note: Only showing top 10 collections for performance. Use pagination endpoint for more.
+      collectionsShown: Math.min(user.collections.length, 10),
     })
   } catch (error) {
-    console.error('Error fetching public profile:', error)
+    logger.error('Error fetching public profile:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

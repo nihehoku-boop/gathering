@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 async function updateItemHandler(
   request: NextRequest,
@@ -149,7 +150,7 @@ async function updateItemHandler(
       newlyUnlockedAchievements: newlyUnlocked,
     })
   } catch (error: any) {
-    console.error('Error updating item:', error)
+    logger.error('Error updating item:', error)
     return NextResponse.json(
       { error: error?.message || 'Internal server error' },
       { status: 500 }
@@ -193,7 +194,7 @@ async function deleteItemHandler(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error deleting item:', error)
+    logger.error('Error deleting item:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

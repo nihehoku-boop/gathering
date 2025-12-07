@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 // DELETE - Delete multiple items
 async function deleteBulkItemsHandler(request: NextRequest) {
@@ -54,7 +55,7 @@ async function deleteBulkItemsHandler(request: NextRequest) {
 
     return NextResponse.json({ success: true, deletedCount: itemIds.length })
   } catch (error) {
-    console.error('Error deleting items:', error)
+    logger.error('Error deleting items:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -118,7 +119,7 @@ async function updateBulkItemsHandler(request: NextRequest) {
 
     return NextResponse.json({ success: true, updatedCount: result.count })
   } catch (error) {
-    console.error('Error updating items:', error)
+    logger.error('Error updating items:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -186,7 +187,7 @@ async function createBulkItemsHandler(request: NextRequest) {
       newlyUnlockedAchievements: newlyUnlocked,
     }, { status: 201 })
   } catch (error) {
-    console.error('Error creating bulk items:', error)
+    logger.error('Error creating bulk items:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

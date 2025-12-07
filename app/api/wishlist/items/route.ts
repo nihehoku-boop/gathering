@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 // POST - Add items to wishlist
 async function addWishlistItemsHandler(request: NextRequest) {
@@ -67,7 +68,7 @@ async function addWishlistItemsHandler(request: NextRequest) {
 
     return NextResponse.json({ success: true, items: wishlistItems, count: createdItems.count })
   } catch (error) {
-    console.error('Error adding items to wishlist:', error)
+    logger.error('Error adding items to wishlist:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -115,7 +116,7 @@ async function deleteWishlistItemsHandler(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error deleting wishlist items:', error)
+    logger.error('Error deleting wishlist items:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

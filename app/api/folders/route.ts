@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 // GET - Get all folders for user
 async function getFoldersHandler(request: NextRequest) {
@@ -25,7 +26,7 @@ async function getFoldersHandler(request: NextRequest) {
 
     return NextResponse.json(folders)
   } catch (error) {
-    console.error('Error fetching folders:', error)
+    logger.error('Error fetching folders:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -66,7 +67,7 @@ async function createFolderHandler(request: NextRequest) {
 
     return NextResponse.json(folder, { status: 201 })
   } catch (error) {
-    console.error('Error creating folder:', error)
+    logger.error('Error creating folder:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

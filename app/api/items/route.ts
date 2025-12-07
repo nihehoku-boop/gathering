@@ -6,6 +6,7 @@ import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { validateRequestBody, createItemSchema } from '@/lib/validation-schemas'
+import { logger } from '@/lib/logger'
 
 async function createItemHandler(request: NextRequest) {
   try {
@@ -56,7 +57,7 @@ async function createItemHandler(request: NextRequest) {
       newlyUnlockedAchievements: newlyUnlocked,
     }, { status: 201 })
   } catch (error) {
-    console.error('Error creating item:', error)
+    logger.error('Error creating item:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { validateQueryParams, searchQuerySchema } from '@/lib/validation-schemas'
+import { logger } from '@/lib/logger'
 
 async function searchHandler(request: NextRequest) {
   try {
@@ -21,36 +22,50 @@ async function searchHandler(request: NextRequest) {
         { status: validation.status }
       )
     }
-    const { q: query, limit } = validation.data
+    const { q: query, limit, page = 1 } = validation.data
+    const skip = (page - 1) * limit
 
     const searchTerm = query.trim()
     const searchTermLower = searchTerm.toLowerCase()
 
     // Search user's collections using database-level filtering (prevents N+1)
     // Use Prisma's case-insensitive search where possible
-    const collections = await prisma.collection.findMany({
-      where: {
-        userId: session.user.id,
-        OR: [
-          { name: { contains: searchTerm, mode: 'insensitive' } },
-          { description: { contains: searchTerm, mode: 'insensitive' } },
-          { category: { contains: searchTerm, mode: 'insensitive' } },
-          // Note: Tags and folder name require post-filtering as they're JSON/relations
-        ],
-      },
-      include: {
-        folder: {
-          select: {
-            id: true,
-            name: true,
+    const [collections, totalCollections] = await Promise.all([
+      prisma.collection.findMany({
+        where: {
+          userId: session.user.id,
+          OR: [
+            { name: { contains: searchTerm, mode: 'insensitive' } },
+            { description: { contains: searchTerm, mode: 'insensitive' } },
+            { category: { contains: searchTerm, mode: 'insensitive' } },
+            // Note: Tags and folder name require post-filtering as they're JSON/relations
+          ],
+        },
+        include: {
+          folder: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: { items: true },
           },
         },
-        _count: {
-          select: { items: true },
+        take: limit * 2, // Get more to account for post-filtering
+        skip,
+      }),
+      prisma.collection.count({
+        where: {
+          userId: session.user.id,
+          OR: [
+            { name: { contains: searchTerm, mode: 'insensitive' } },
+            { description: { contains: searchTerm, mode: 'insensitive' } },
+            { category: { contains: searchTerm, mode: 'insensitive' } },
+          ],
         },
-      },
-      take: limit * 2, // Get more to account for post-filtering
-    })
+      }),
+    ])
 
     // Post-filter for tags and folder name (can't be done in Prisma easily)
     const filteredCollections = collections.filter((c: { name: string; description: string | null; category: string | null; folder: { name: string } | null; tags: string }) => {
@@ -70,28 +85,43 @@ async function searchHandler(request: NextRequest) {
     }).slice(0, limit)
 
     // Search items using database-level filtering (prevents N+1)
-    const items = await prisma.item.findMany({
-      where: {
-        collection: {
-          userId: session.user.id,
+    const [items, totalItems] = await Promise.all([
+      prisma.item.findMany({
+        where: {
+          collection: {
+            userId: session.user.id,
+          },
+          OR: [
+            { name: { contains: searchTerm, mode: 'insensitive' } },
+            { notes: { contains: searchTerm, mode: 'insensitive' } },
+            { wear: { contains: searchTerm, mode: 'insensitive' } },
+            // Note: customFields, personalRating, logDate require post-filtering
+          ],
         },
-        OR: [
-          { name: { contains: searchTerm, mode: 'insensitive' } },
-          { notes: { contains: searchTerm, mode: 'insensitive' } },
-          { wear: { contains: searchTerm, mode: 'insensitive' } },
-          // Note: customFields, personalRating, logDate require post-filtering
-        ],
-      },
-      include: {
-        collection: {
-          select: {
-            id: true,
-            name: true,
+        include: {
+          collection: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
         },
-      },
-      take: limit * 2, // Get more to account for post-filtering
-    })
+        take: limit * 2, // Get more to account for post-filtering
+        skip,
+      }),
+      prisma.item.count({
+        where: {
+          collection: {
+            userId: session.user.id,
+          },
+          OR: [
+            { name: { contains: searchTerm, mode: 'insensitive' } },
+            { notes: { contains: searchTerm, mode: 'insensitive' } },
+            { wear: { contains: searchTerm, mode: 'insensitive' } },
+          ],
+        },
+      }),
+    ])
 
     // Post-filter for customFields, personalRating, logDate (can't be done easily in Prisma)
     const filteredItems = items.filter((item: { name: string; notes: string | null; wear: string | null; personalRating: number | null; logDate: Date | null; customFields: string }) => {
@@ -219,9 +249,23 @@ async function searchHandler(request: NextRequest) {
         user: cc.user,
         upvotes: cc.votes.filter(v => v.voteType === 'upvote').length,
       })),
+      pagination: {
+        page,
+        limit,
+        totalCollections: totalCollections,
+        totalItems: totalItems,
+        totalPages: {
+          collections: Math.ceil(totalCollections / limit),
+          items: Math.ceil(totalItems / limit),
+        },
+        hasMore: {
+          collections: skip + filteredCollections.length < totalCollections,
+          items: skip + filteredItems.length < totalItems,
+        },
+      },
     })
   } catch (error) {
-    console.error('Error searching:', error)
+    logger.error('Error searching:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

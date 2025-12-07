@@ -97,6 +97,7 @@ export const updateFolderSchema = z.object({
 export const searchQuerySchema = z.object({
   q: z.string().min(2).max(200).trim(),
   limit: z.coerce.number().int().min(1).max(100).default(10),
+  page: z.coerce.number().int().min(1).default(1).optional(),
 })
 
 // Auth schemas

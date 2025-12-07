@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 async function importCollectionsHandler(request: NextRequest) {
   try {
@@ -28,7 +29,7 @@ async function importCollectionsHandler(request: NextRequest) {
       // Parse JSON
       try {
         const data = JSON.parse(fileContent)
-        console.log('Parsed JSON data structure:', {
+        logger.debug('Parsed JSON data structure:', {
           hasCollections: !!data.collections,
           hasCollection: !!data.collection,
           hasItems: !!data.items,
@@ -47,7 +48,7 @@ async function importCollectionsHandler(request: NextRequest) {
         if (data.collections && Array.isArray(data.collections)) {
           // Format: All collections export
           collections = data.collections
-          console.log(`Found ${collections.length} collections in data.collections`)
+          logger.debug(`Found ${collections.length} collections in data.collections`)
         } else if (data.collection && data.items) {
           // Format: Single collection export - convert to collections array format
           collections = [{
@@ -59,13 +60,13 @@ async function importCollectionsHandler(request: NextRequest) {
             tags: data.collection.tags || [],
             items: data.items || [],
           }]
-          console.log(`Found single collection export: ${collections[0].name} with ${collections[0].items.length} items`)
+          logger.debug(`Found single collection export: ${collections[0].name} with ${collections[0].items.length} items`)
         } else if (Array.isArray(data)) {
           // Format: Array of collections
           collections = data
-          console.log(`Found ${collections.length} collections in root array`)
+          logger.debug(`Found ${collections.length} collections in root array`)
         } else {
-          console.error('Invalid JSON structure. Data:', JSON.stringify(data, null, 2).substring(0, 500))
+          logger.error('Invalid JSON structure. Data preview:', JSON.stringify(data, null, 2).substring(0, 500))
           return NextResponse.json({ 
             error: 'Invalid JSON format', 
             details: `Expected one of: (1) object with "collections" array, (2) object with "collection" and "items", or (3) array of collections. Found: ${typeof data}. Keys: ${Object.keys(data).join(', ')}` 
@@ -74,7 +75,7 @@ async function importCollectionsHandler(request: NextRequest) {
         
         // Validate collections array
         if (collections.length === 0) {
-          console.error('Collections array is empty after parsing')
+          logger.error('Collections array is empty after parsing')
           return NextResponse.json({ 
             error: 'No collections found in file', 
             details: 'The file was parsed successfully but contains no collections. Please check that the file was exported from Sammlerei.' 
@@ -84,11 +85,11 @@ async function importCollectionsHandler(request: NextRequest) {
         // Validate collection structure
         const invalidCollections = collections.filter((c: any) => !c || typeof c !== 'object' || !c.name)
         if (invalidCollections.length > 0) {
-          console.warn(`Found ${invalidCollections.length} invalid collections in the array`)
+          logger.warn(`Found ${invalidCollections.length} invalid collections in the array`)
         }
       } catch (error) {
-        console.error('JSON parse error:', error)
-        console.error('File content preview:', fileContent.substring(0, 200))
+        logger.error('JSON parse error:', error)
+        logger.debug('File content preview:', fileContent.substring(0, 200))
         return NextResponse.json({ 
           error: 'Invalid JSON file', 
           details: error instanceof Error ? error.message : 'Parse error' 
@@ -174,14 +175,14 @@ async function importCollectionsHandler(request: NextRequest) {
 
     // This check is now done earlier in JSON parsing, but keep it as a safety check
     if (collections.length === 0) {
-      console.error('No collections found after parsing. File format may be incorrect.')
+      logger.error('No collections found after parsing. File format may be incorrect.')
       return NextResponse.json({ 
         error: 'No collections found in file', 
         details: 'The file was parsed but contains no valid collections. Please ensure you are importing a file exported from Sammlerei.' 
       }, { status: 400 })
     }
     
-    console.log(`Processing ${collections.length} collections for import`)
+    logger.debug(`Processing ${collections.length} collections for import`)
 
     // Create collections
     const createdCollections = []
@@ -250,10 +251,10 @@ async function importCollectionsHandler(request: NextRequest) {
           },
         })
         createdCollections.push(newCollection)
-        console.log(`Successfully imported collection: ${newCollection.name} with ${newCollection.items.length} items`)
+        logger.debug(`Successfully imported collection: ${newCollection.name} with ${newCollection.items.length} items`)
       } catch (error) {
         const errorMsg = `Failed to import collection "${collectionData.name}": ${error instanceof Error ? error.message : 'Unknown error'}`
-        console.error('Error creating collection:', collectionData.name, error)
+        logger.error('Error creating collection:', { name: collectionData.name, error })
         errors.push(errorMsg)
         // Continue with other collections even if one fails
       }
@@ -268,7 +269,7 @@ async function importCollectionsHandler(request: NextRequest) {
 
     // If some succeeded but some failed, return success with warnings
     if (errors.length > 0) {
-      console.warn('Some collections failed to import:', errors)
+      logger.warn('Some collections failed to import:', errors)
     }
 
     // Check and unlock achievements
@@ -282,7 +283,7 @@ async function importCollectionsHandler(request: NextRequest) {
       newlyUnlockedAchievements: newlyUnlocked,
     }, { status: 201 })
   } catch (error) {
-    console.error('Error importing collections:', error)
+    logger.error('Error importing collections:', error)
     return NextResponse.json(
       { error: 'Failed to import collections', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 // Cache leaderboard data for 2 minutes
 // This reduces database load significantly since leaderboard doesn't change frequently
@@ -109,7 +110,7 @@ async function getLeaderboardHandler() {
     response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
     return response
   } catch (error) {
-    console.error('Error fetching leaderboard:', error)
+    logger.error('Error fetching leaderboard:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

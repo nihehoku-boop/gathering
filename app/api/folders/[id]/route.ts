@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 // PATCH - Update folder
 async function updateFolderHandler(
@@ -48,7 +49,7 @@ async function updateFolderHandler(
 
     return NextResponse.json(updatedFolder)
   } catch (error) {
-    console.error('Error updating folder:', error)
+    logger.error('Error updating folder:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -102,7 +103,7 @@ async function deleteFolderHandler(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error deleting folder:', error)
+    logger.error('Error deleting folder:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
