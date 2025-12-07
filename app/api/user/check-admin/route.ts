@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { isUserAdmin } from '@/lib/user-cache'
 
 export async function GET() {
   try {
@@ -10,20 +10,17 @@ export async function GET() {
       return NextResponse.json({ isAdmin: false })
     }
 
-    // Check session first (faster), then database as fallback
+    // Check session first (faster), then cached database lookup as fallback
     const isAdmin = session.user.isAdmin ?? false
     
     if (isAdmin) {
       return NextResponse.json({ isAdmin: true })
     }
 
-    // Fallback to database check
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true },
-    })
+    // Fallback to cached database check (5 min TTL)
+    const adminStatus = await isUserAdmin(session.user.id)
 
-    return NextResponse.json({ isAdmin: user?.isAdmin || false })
+    return NextResponse.json({ isAdmin: adminStatus })
   } catch (error) {
     console.error('Error checking admin status:', error)
     return NextResponse.json({ isAdmin: false })
