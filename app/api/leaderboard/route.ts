@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// Cache leaderboard data for 5 minutes
+// Cache leaderboard data for 2 minutes
 // This reduces database load significantly since leaderboard doesn't change frequently
-const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes in milliseconds
+// 2 minutes is a good balance - short enough to feel fresh, long enough to reduce load
+const CACHE_DURATION = 2 * 60 * 1000 // 2 minutes in milliseconds
 let cachedLeaderboard: any[] | null = null
 let cacheTimestamp: number = 0
 
@@ -14,7 +15,7 @@ export async function GET() {
     if (cachedLeaderboard && (now - cacheTimestamp) < CACHE_DURATION) {
       const response = NextResponse.json(cachedLeaderboard)
       // Add cache headers for client-side caching
-      response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+      response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
       return response
     }
 
@@ -48,7 +49,7 @@ export async function GET() {
     
     if (collectionIds.length === 0) {
       const response = NextResponse.json([])
-      response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+      response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
       return response
     }
 
@@ -102,7 +103,7 @@ export async function GET() {
 
     const response = NextResponse.json(leaderboard)
     // Add cache headers
-    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
     return response
   } catch (error) {
     console.error('Error fetching leaderboard:', error)
