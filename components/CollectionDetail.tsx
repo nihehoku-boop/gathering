@@ -147,7 +147,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setIsPublic(data.isPublic || false)
         setShareToken(data.shareToken || null)
         setTotalItemsCount(data._count?.items || 0)
-        setTotalOwnedCount((data as any).ownedCount || 0)
+        // Get ownedCount from API response, or calculate from items array as fallback
+        const apiOwnedCount = (data as any).ownedCount
+        const calculatedOwnedCount = data.items?.filter((item: Item) => item.isOwned).length || 0
+        setTotalOwnedCount(apiOwnedCount !== undefined ? apiOwnedCount : calculatedOwnedCount)
       }
     } catch (error) {
       console.error('Error fetching collection:', error)
