@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
-export async function GET(
+async function getCollectionHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -81,7 +83,7 @@ export async function GET(
   }
 }
 
-export async function PATCH(
+async function updateCollectionHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -270,7 +272,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
+async function deleteCollectionHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -311,4 +313,31 @@ export async function DELETE(
     )
   }
 }
+
+export const GET = withRateLimit(
+  getCollectionHandler,
+  rateLimitConfigs.read,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const PATCH = withRateLimit(
+  updateCollectionHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const DELETE = withRateLimit(
+  deleteCollectionHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
 

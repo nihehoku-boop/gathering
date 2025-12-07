@@ -211,3 +211,12 @@ export async function POST(
   }
 }
 
+export const POST = withRateLimit(
+  syncCollectionHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+

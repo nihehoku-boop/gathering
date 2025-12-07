@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
 // GET - Get all folders for user
-export async function GET(request: NextRequest) {
+async function getFoldersHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -32,7 +34,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST - Create a new folder
-export async function POST(request: NextRequest) {
+async function createFolderHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -71,6 +73,24 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export const GET = withRateLimit(
+  getFoldersHandler,
+  rateLimitConfigs.read,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const POST = withRateLimit(
+  createFolderHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
 
 
 

@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
 // POST - Add items to wishlist
-export async function POST(request: NextRequest) {
+async function addWishlistItemsHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -74,7 +76,7 @@ export async function POST(request: NextRequest) {
 }
 
 // DELETE - Remove items from wishlist
-export async function DELETE(request: NextRequest) {
+async function deleteWishlistItemsHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -120,6 +122,24 @@ export async function DELETE(request: NextRequest) {
     )
   }
 }
+
+export const POST = withRateLimit(
+  addWishlistItemsHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const DELETE = withRateLimit(
+  deleteWishlistItemsHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
 
 
 
