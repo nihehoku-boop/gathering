@@ -129,8 +129,18 @@ export async function PATCH(
       data: updateData,
     })
 
-    // Check and unlock achievements (especially if isOwned changed)
-    const newlyUnlocked = await checkAllAchievements(session.user.id)
+    // Only check achievements if relevant fields changed (isOwned, notes, image, rating, logDate)
+    // This avoids unnecessary database queries on every update
+    const shouldCheckAchievements = 
+      updateData.isOwned !== undefined ||
+      updateData.notes !== undefined ||
+      updateData.image !== undefined ||
+      updateData.personalRating !== undefined ||
+      updateData.logDate !== undefined
+
+    const newlyUnlocked = shouldCheckAchievements 
+      ? await checkAllAchievements(session.user.id)
+      : []
 
     return NextResponse.json({
       ...updatedItem,

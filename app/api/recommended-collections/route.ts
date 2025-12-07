@@ -48,7 +48,11 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' },
     })
 
-    return NextResponse.json(recommendedCollections)
+    const response = NextResponse.json(recommendedCollections)
+    // Cache recommended collections for 10 minutes (they don't change frequently)
+    // This significantly reduces database queries
+    response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
+    return response
   } catch (error) {
     console.error('Error fetching recommended collections:', error)
     return NextResponse.json(
