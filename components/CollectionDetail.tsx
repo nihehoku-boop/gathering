@@ -1651,7 +1651,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         )}
                       </div>
                     )}
-                    </div>
                   </div>
                 ))}
               </div>
