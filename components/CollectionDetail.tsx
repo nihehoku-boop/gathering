@@ -215,6 +215,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             setItems(prev => [...prev, ...data.items])
           } else {
             setItems(data.items)
+            // If we're loading the first page and ownedCount wasn't set from collection API,
+            // calculate it from the loaded items as a fallback
+            if (page === 1 && totalOwnedCount === 0) {
+              const calculatedCount = data.items.filter((item: Item) => item.isOwned).length
+              setTotalOwnedCount(calculatedCount)
+            }
           }
           setHasMoreItems(data.pagination.hasMore)
           hasMoreItemsRef.current = data.pagination.hasMore
