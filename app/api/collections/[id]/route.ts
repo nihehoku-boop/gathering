@@ -6,6 +6,7 @@ import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { logger } from '@/lib/logger'
 import { safeParseJson, sanitizeObject } from '@/lib/sanitize'
+import { serverCache, cacheKeys } from '@/lib/server-cache'
 
 async function getCollectionHandler(
   request: NextRequest,
@@ -21,36 +22,57 @@ async function getCollectionHandler(
     const resolvedParams = await Promise.resolve(params)
     const collectionId = resolvedParams.id
 
-    const collection = await prisma.collection.findFirst({
-      where: {
-        id: collectionId,
-        userId: session.user.id,
-      },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        category: true,
-        template: true,
-        customFieldDefinitions: true,
-        folderId: true,
-        coverImage: true,
-        coverImageAspectRatio: true,
-        coverImageFit: true,
-        tags: true,
-        recommendedCollectionId: true,
-        lastSyncedAt: true,
-        shareToken: true,
-        isPublic: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: {
-          select: {
-            items: true,
-          },
+    // Check cache first
+    const collectionCacheKey = cacheKeys.collection(collectionId)
+    const cached = serverCache.get<any>(collectionCacheKey)
+    if (cached && cached.userId === session.user.id) {
+      const response = NextResponse.json({
+        ...cached.collection,
+        ownedCount: cached.ownedCount,
+      })
+      response.headers.set('Cache-Control', 'private, s-maxage=30, stale-while-revalidate=60')
+      return response
+    }
+
+    // Fetch collection and owned count in parallel (reduces 2 queries to 1 parallel execution)
+    const [collection, ownedCount] = await Promise.all([
+      prisma.collection.findFirst({
+        where: {
+          id: collectionId,
+          userId: session.user.id,
         },
-      },
-    })
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          category: true,
+          template: true,
+          customFieldDefinitions: true,
+          folderId: true,
+          coverImage: true,
+          coverImageAspectRatio: true,
+          coverImageFit: true,
+          tags: true,
+          recommendedCollectionId: true,
+          lastSyncedAt: true,
+          shareToken: true,
+          isPublic: true,
+          createdAt: true,
+          updatedAt: true,
+          _count: {
+            select: {
+              items: true,
+            },
+          }
+        },
+      }),
+      prisma.item.count({
+        where: {
+          collectionId,
+          isOwned: true,
+        },
+      }),
+    ])
 
     if (!collection) {
       return NextResponse.json(
@@ -59,13 +81,12 @@ async function getCollectionHandler(
       )
     }
 
-    // Get total owned count - only calculate if collection exists
-    const ownedCount = await prisma.item.count({
-      where: {
-        collectionId,
-        isOwned: true,
-      },
-    })
+    // Cache the result (30 seconds TTL)
+    serverCache.set(collectionCacheKey, {
+      collection,
+      ownedCount,
+      userId: session.user.id,
+    }, 30 * 1000)
 
     // Include share settings and owned count in the response to avoid a second API call
     const response = NextResponse.json({
@@ -77,7 +98,7 @@ async function getCollectionHandler(
     response.headers.set('Cache-Control', 'private, s-maxage=30, stale-while-revalidate=60')
     return response
   } catch (error) {
-    console.error('Error fetching collection:', error)
+    logger.error('Error fetching collection:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
