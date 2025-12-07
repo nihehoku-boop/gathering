@@ -104,6 +104,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [showBulkImport, setShowBulkImport] = useState(false)
   const [viewMode, setViewMode] = useState<'cover' | 'list'>('cover')
   const [sortBy, setSortBy] = useState<'number-asc' | 'number-desc' | 'name-asc' | 'name-desc' | 'owned' | 'not-owned' | 'rating-high' | 'rating-low' | 'date-new' | 'date-old'>('number-asc')
+  const sortByRef = useRef(sortBy)
   const [showSortMenu, setShowSortMenu] = useState(false)
   const [editingItem, setEditingItem] = useState<Item | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
@@ -126,10 +127,18 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   useEffect(() => {
     if (collection) {
+      // Track visit count for progressive loading
+      if (typeof window !== 'undefined') {
+        const visitKey = `collection_visits_${collection.id}`
+        const currentVisits = parseInt(localStorage.getItem(visitKey) || '0', 10)
+        localStorage.setItem(visitKey, String(currentVisits + 1))
+      }
+      
       // Reset items and load first page when collection or sort changes
       setItems([])
       setItemsPage(1)
       setHasMoreItems(true)
+      prefetchCacheRef.current.clear() // Clear cache when collection or sort changes
       fetchItems(1, false)
     }
   }, [collection, sortBy])
@@ -180,14 +189,36 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     itemsLoadingRef.current = itemsLoading
   }, [itemsLoading])
 
-  // Prefetch cache for next page
-  const prefetchCacheRef = useRef<Map<number, any>>(new Map())
+  useEffect(() => {
+    sortByRef.current = sortBy
+    // Clear prefetch cache when sort changes - cached data is for different sort order
+    prefetchCacheRef.current.clear()
+  }, [sortBy])
+
+  // Prefetch cache for next page (keyed by page and sortBy)
+  const prefetchCacheRef = useRef<Map<string, any>>(new Map())
+  
+  // Progressive loading: increase limit based on visit count
+  const getItemLimit = (collectionId: string): number => {
+    if (typeof window === 'undefined') return 20 // Default for SSR
+    const visitKey = `collection_visits_${collectionId}`
+    const visits = parseInt(localStorage.getItem(visitKey) || '0', 10)
+    
+    // Progressive limits: 20 -> 30 -> 50 -> 50 (max)
+    if (visits === 0) return 20
+    if (visits === 1) return 30
+    return 50 // 2+ visits
+  }
   
   const fetchItems = async (page: number = 1, append: boolean = false, useCache: boolean = false) => {
-    // Check cache first if useCache is true
-    if (useCache && prefetchCacheRef.current.has(page)) {
-      const cachedData = prefetchCacheRef.current.get(page)
-      prefetchCacheRef.current.delete(page) // Remove from cache after use
+    const currentSortBy = sortByRef.current
+    const limit = getItemLimit(collectionId)
+    const cacheKey = `${page}_${currentSortBy}`
+    
+    // Check cache first if useCache is true (must match current sort order)
+    if (useCache && prefetchCacheRef.current.has(cacheKey)) {
+      const cachedData = prefetchCacheRef.current.get(cacheKey)
+      prefetchCacheRef.current.delete(cacheKey) // Remove from cache after use
       
       startTransition(() => {
         if (append) {
@@ -207,7 +238,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     setItemsLoading(true)
     itemsLoadingRef.current = true
     try {
-      const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=50&sortBy=${sortBy}`)
+      const res = await fetch(`/api/collections/${collectionId}/items?page=${page}&limit=${limit}&sortBy=${currentSortBy}`)
       if (res.ok) {
         const data = await res.json()
         
@@ -243,15 +274,18 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const prefetchNextPage = async (currentPage: number) => {
     if (itemsLoadingRef.current || !hasMoreItemsRef.current) return
     const nextPage = currentPage + 1
+    const currentSortBy = sortByRef.current
+    const limit = getItemLimit(collectionId)
+    const cacheKey = `${nextPage}_${currentSortBy}`
     
     // Don't prefetch if already in cache
-    if (prefetchCacheRef.current.has(nextPage)) return
+    if (prefetchCacheRef.current.has(cacheKey)) return
     
     try {
-      const res = await fetch(`/api/collections/${collectionId}/items?page=${nextPage}&limit=50&sortBy=${sortBy}`)
+      const res = await fetch(`/api/collections/${collectionId}/items?page=${nextPage}&limit=${limit}&sortBy=${currentSortBy}`)
       if (res.ok) {
         const data = await res.json()
-        prefetchCacheRef.current.set(nextPage, data)
+        prefetchCacheRef.current.set(cacheKey, data)
       }
     } catch (error) {
       // Silently fail prefetch
@@ -294,10 +328,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting && hasMoreItemsRef.current && !itemsLoadingRef.current) {
-              // Load next page silently using ref value
+              // Load next page silently using ref values
               const nextPage = itemsPageRef.current + 1
-              // Check if we have prefetched data, use it if available
-              if (prefetchCacheRef.current.has(nextPage)) {
+              const currentSortBy = sortByRef.current
+              const cacheKey = `${nextPage}_${currentSortBy}`
+              // Check if we have prefetched data for current sort order, use it if available
+              if (prefetchCacheRef.current.has(cacheKey)) {
                 fetchItems(nextPage, true, true)
               } else {
                 // Fallback to normal fetch if no cache
