@@ -861,15 +861,206 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
         <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] animate-fade-up" style={{ animationDelay: '100ms' }}>
           <CardHeader>
-            <div>
-              <CardTitle className="text-[var(--text-primary)]">Items</CardTitle>
-              <CardDescription className="text-[var(--text-secondary)]">
-                Manage the items in your collection
-              </CardDescription>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+              <div>
+                <CardTitle className="text-[var(--text-primary)]">Items</CardTitle>
+                <CardDescription className="text-[var(--text-secondary)]">
+                  Manage the items in your collection
+                </CardDescription>
+              </div>
+              {/* Desktop: buttons in header */}
+              <div className="hidden sm:flex gap-2">
+              {isSelectionMode ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setIsSelectionMode(false)
+                        clearSelection()
+                      }}
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                    >
+                      <X className="mr-2 h-4 w-4" />
+                      Cancel
+                    </Button>
+                    <div className="flex items-center gap-2 px-3 text-sm text-[var(--text-secondary)]">
+                      {selectedItems.size} selected
+                    </div>
+                    {selectedItems.size > 0 && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={selectAll}
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                        >
+                          Select All
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleBulkMarkOwned(true)}
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                          title="Mark as owned"
+                        >
+                          <Check className="mr-2 h-4 w-4" />
+                          Mark Owned
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleBulkMarkOwned(false)}
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                          title="Mark as not owned"
+                        >
+                          <X className="mr-2 h-4 w-4" />
+                          Mark Not Owned
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleBulkAddToWishlist}
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                          title="Add to wishlist"
+                        >
+                          <Heart className="mr-2 h-4 w-4" />
+                          Add to Wishlist
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleBulkDelete}
+                          className="border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10"
+                          title="Delete selected items"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsSelectionMode(true)}
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                      title="Select multiple items"
+                    >
+                      <CheckSquare2 className="mr-2 h-4 w-4" />
+                      Select
+                    </Button>
+                    <div className="relative">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowSortMenu(!showSortMenu)}
+                        className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                      >
+                        <ArrowUpDown className="mr-2 h-4 w-4" />
+                        Sort
+                      </Button>
+                      {showSortMenu && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-10" 
+                        onClick={() => setShowSortMenu(false)}
+                      />
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                        <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
+                          Sort by
+                        </div>
+                        <button
+                          onClick={() => { setSortBy('number-asc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'number-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Number (Low to High)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('number-desc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'number-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Number (High to Low)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'name-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Name (A-Z)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Name (Z-A)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('owned'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'owned' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Owned First
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('not-owned'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'not-owned' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Not Owned First
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('rating-high'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'rating-high' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Rating (High to Low)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('rating-low'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'rating-low' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Rating (Low to High)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'date-new' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Date Added (Newest)
+                        </button>
+                        <button
+                          onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
+                          className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'date-old' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                        >
+                          Date Added (Oldest)
+                        </button>
+                      </div>
+                    </>
+                  )}
+                    </div>
+                    <Button
+                      variant={viewMode === 'cover' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('cover')}
+                      className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
+                    >
+                      <Grid3x3 className="mr-2 h-4 w-4" />
+                      Cover
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                      className={viewMode === 'list' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
+                    >
+                      <List className="mr-2 h-4 w-4" />
+                      List
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </CardHeader>
-          {/* Action buttons row */}
-          <div className="px-6 pb-4 border-b border-[var(--border-color)]">
+          {/* Mobile: Action buttons row below header */}
+          <div className="sm:hidden px-6 pb-4 border-b border-[var(--border-color)]">
             <div className="flex flex-wrap gap-2">
               {isSelectionMode ? (
                   <>
@@ -950,8 +1141,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       title="Select multiple items"
                     >
-                      <CheckSquare2 className="sm:mr-2 h-4 w-4" />
-                      <span className="hidden sm:inline">Select</span>
+                      <CheckSquare2 className="h-4 w-4" />
                     </Button>
                     <div className="relative">
                       <Button
@@ -960,8 +1150,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         onClick={() => setShowSortMenu(!showSortMenu)}
                         className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       >
-                        <ArrowUpDown className="sm:mr-2 h-4 w-4" />
-                        <span className="hidden sm:inline">Sort</span>
+                        <ArrowUpDown className="h-4 w-4" />
                       </Button>
                       {showSortMenu && (
                     <>
@@ -1044,8 +1233,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                       title="Cover view"
                     >
-                      <Grid3x3 className="sm:mr-2 h-4 w-4" />
-                      <span className="hidden sm:inline">Cover</span>
+                      <Grid3x3 className="h-4 w-4" />
                     </Button>
                     <Button
                       variant={viewMode === 'list' ? 'default' : 'outline'}
@@ -1054,8 +1242,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       className={viewMode === 'list' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
                       title="List view"
                     >
-                      <List className="sm:mr-2 h-4 w-4" />
-                      <span className="hidden sm:inline">List</span>
+                      <List className="h-4 w-4" />
                     </Button>
                   </>
                 )}
@@ -1472,23 +1659,113 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       )}
                     </div>
                     {!isSelectionMode && (
-                      <div className="relative flex-shrink-0">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            const button = e.currentTarget
-                            const rect = button.getBoundingClientRect()
-                            setMenuPosition({ x: rect.right, y: rect.bottom })
-                            setOpenItemMenu(openItemMenu === item.id ? null : item.id)
-                          }}
-                          className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
-                          title="More options"
-                        >
-                          <MoreVertical className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                        </Button>
-                      </div>
+                      <>
+                        {/* Desktop: separate action buttons */}
+                        <div className="hidden sm:flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={async () => {
+                              if (!collection) return
+                              try {
+                                const res = await fetch('/api/wishlist/items', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    items: [{
+                                      itemId: item.id,
+                                      collectionId: collection.id,
+                                      itemName: item.name,
+                                      itemNumber: item.number,
+                                      itemImage: item.image,
+                                      collectionName: collection.name,
+                                    }],
+                                  }),
+                                })
+                                if (res.ok) {
+                                  showAlert({
+                                    title: 'Success',
+                                    message: 'Item added to wishlist!',
+                                    type: 'success',
+                                  })
+                                } else {
+                                  const errorData = await res.json()
+                                  showAlert({
+                                    title: 'Error',
+                                    message: errorData.error || 'Failed to add to wishlist',
+                                    type: 'error',
+                                  })
+                                }
+                              } catch (error) {
+                                console.error('Error adding to wishlist:', error)
+                                showAlert({
+                                  title: 'Error',
+                                  message: 'Failed to add to wishlist',
+                                  type: 'error',
+                                })
+                              }
+                            }}
+                            className="text-[#FF6B9D] hover:text-[#FF6B9D] hover:bg-[#FF6B9D]/10 smooth-transition"
+                            title="Add to Wishlist"
+                          >
+                            <Heart className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setEditingItem(item)}
+                            className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] smooth-transition"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => deleteItem(item.id)}
+                            className="text-[#FF3B30] hover:text-[#C0392B] smooth-transition"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                          <button
+                            onClick={() => {
+                              const newExpanded = new Set(expandedItems)
+                              if (newExpanded.has(item.id)) {
+                                newExpanded.delete(item.id)
+                              } else {
+                                newExpanded.add(item.id)
+                              }
+                              setExpandedItems(newExpanded)
+                            }}
+                            className="flex items-center gap-1 text-xs text-[var(--text-secondary)] hover:text-[var(--accent-color)] smooth-transition p-1"
+                            title={expandedItems.has(item.id) ? 'Hide Details' : 'View Details'}
+                          >
+                            <Info className="h-4 w-4" />
+                            {expandedItems.has(item.id) ? (
+                              <ChevronUp className="h-4 w-4" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4" />
+                            )}
+                          </button>
+                        </div>
+                        {/* Mobile: three-dot menu */}
+                        <div className="relative flex-shrink-0 sm:hidden">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              const button = e.currentTarget
+                              const rect = button.getBoundingClientRect()
+                              setMenuPosition({ x: rect.right, y: rect.bottom })
+                              setOpenItemMenu(openItemMenu === item.id ? null : item.id)
+                            }}
+                            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition h-8 w-8"
+                            title="More options"
+                          >
+                            <MoreVertical className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </>
                     )}
                   </div>
                   {typeof window !== 'undefined' && openItemMenu === item.id && menuPosition && createPortal(
