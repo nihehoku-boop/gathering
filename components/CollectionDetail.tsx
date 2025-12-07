@@ -1469,27 +1469,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         </div>
                       )}
                     </div>
-                    <button
-                      onClick={() => {
-                        const newExpanded = new Set(expandedItems)
-                        if (newExpanded.has(item.id)) {
-                          newExpanded.delete(item.id)
-                        } else {
-                          newExpanded.add(item.id)
-                        }
-                        setExpandedItems(newExpanded)
-                      }}
-                      className="flex-shrink-0 flex items-center gap-1 text-xs sm:text-sm text-[var(--text-secondary)] hover:text-[var(--accent-color)] smooth-transition p-1"
-                    >
-                      <Info className="h-3 w-3 sm:h-4 sm:w-4" />
-                      {expandedItems.has(item.id) ? (
-                        <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4" />
-                      ) : (
-                        <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
-                      )}
-                    </button>
                     {!isSelectionMode && (
-                      <div className="relative flex-shrink-0">
+                      <div className="relative flex-shrink-0 z-50">
                         <Button
                           variant="ghost"
                           size="icon"
@@ -1505,10 +1486,27 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         {openItemMenu === item.id && (
                           <>
                             <div 
-                              className="fixed inset-0 z-10" 
+                              className="fixed inset-0 z-40" 
                               onClick={() => setOpenItemMenu(null)}
                             />
-                            <div className="absolute right-0 top-full mt-1 w-40 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                            <div className="absolute right-0 top-full mt-1 w-44 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-xl z-50 overflow-hidden">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setOpenItemMenu(null)
+                                  const newExpanded = new Set(expandedItems)
+                                  if (newExpanded.has(item.id)) {
+                                    newExpanded.delete(item.id)
+                                  } else {
+                                    newExpanded.add(item.id)
+                                  }
+                                  setExpandedItems(newExpanded)
+                                }}
+                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                              >
+                                <Info className="h-4 w-4 text-[var(--accent-color)]" />
+                                {expandedItems.has(item.id) ? 'Hide Details' : 'View Details'}
+                              </button>
                               <button
                                 onClick={async (e) => {
                                   e.stopPropagation()
@@ -1552,7 +1550,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                     })
                                   }
                                 }}
-                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
                               >
                                 <Heart className="h-4 w-4 text-[#FF6B9D]" />
                                 Add to Wishlist
