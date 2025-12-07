@@ -48,20 +48,20 @@ export async function GET(
       },
     })
 
-    // Get total owned count
-    const ownedCount = await prisma.item.count({
-      where: {
-        collectionId,
-        isOwned: true,
-      },
-    })
-
     if (!collection) {
       return NextResponse.json(
         { error: 'Collection not found' },
         { status: 404 }
       )
     }
+
+    // Get total owned count - only calculate if collection exists
+    const ownedCount = await prisma.item.count({
+      where: {
+        collectionId,
+        isOwned: true,
+      },
+    })
 
     // Include share settings and owned count in the response to avoid a second API call
     const response = NextResponse.json({
