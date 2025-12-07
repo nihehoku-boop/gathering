@@ -88,7 +88,7 @@ export async function checkCollectionAchievements(userId: string): Promise<strin
     }
 
     // Cover image achievements
-    const collectionsWithCovers = collections.filter(c => c.coverImage).length
+    const collectionsWithCovers = collections.filter((c: { coverImage: string | null }) => c.coverImage).length
     if (collectionsWithCovers >= 5 && await unlockAchievement(userId, 'cover_images')) {
       newlyUnlocked.push('cover_images')
     }
@@ -97,7 +97,7 @@ export async function checkCollectionAchievements(userId: string): Promise<strin
     }
 
     // Category variety achievements
-    const uniqueCategories = new Set(collections.map(c => c.category).filter(Boolean))
+    const uniqueCategories = new Set(collections.map((c: { category: string | null }) => c.category).filter(Boolean))
     if (uniqueCategories.size >= 3 && await unlockAchievement(userId, 'three_categories')) {
       newlyUnlocked.push('three_categories')
     }
@@ -109,7 +109,7 @@ export async function checkCollectionAchievements(userId: string): Promise<strin
     }
 
     // Completion achievements
-    const completedCollections = collections.filter(c => {
+    const completedCollections = collections.filter((c: { items: { isOwned: boolean }[] }) => {
       const totalItems = c.items.length
       const ownedItems = c.items.filter(i => i.isOwned).length
       return totalItems > 0 && ownedItems === totalItems
@@ -129,8 +129,8 @@ export async function checkCollectionAchievements(userId: string): Promise<strin
     }
 
     // Overall progress achievements
-    const totalItems = collections.reduce((sum, c) => sum + c.items.length, 0)
-    const totalOwned = collections.reduce((sum, c) => sum + c.items.filter(i => i.isOwned).length, 0)
+    const totalItems = collections.reduce((sum: number, c: { items: any[] }) => sum + c.items.length, 0)
+    const totalOwned = collections.reduce((sum: number, c: { items: { isOwned: boolean }[] }) => sum + c.items.filter((i: { isOwned: boolean }) => i.isOwned).length, 0)
     const overallProgress = totalItems > 0 ? (totalOwned / totalItems) * 100 : 0
 
     if (overallProgress >= 50 && await unlockAchievement(userId, 'overall_fifty')) {
@@ -173,13 +173,13 @@ export async function checkItemAchievements(userId: string): Promise<string[]> {
       },
     })
 
-    const allItems = collections.flatMap(c => c.items)
+    const allItems = collections.flatMap((c: { items: any[] }) => c.items)
     const totalItems = allItems.length
-    const ownedItems = allItems.filter(i => i.isOwned).length
-    const itemsWithNotes = allItems.filter(i => i.notes).length
-    const itemsWithImages = allItems.filter(i => i.image).length
-    const itemsWithRatings = allItems.filter(i => i.personalRating !== null).length
-    const itemsWithLogDates = allItems.filter(i => i.logDate !== null).length
+    const ownedItems = allItems.filter((i: { isOwned: boolean }) => i.isOwned).length
+    const itemsWithNotes = allItems.filter((i: { notes: string | null }) => i.notes).length
+    const itemsWithImages = allItems.filter((i: { image: string | null }) => i.image).length
+    const itemsWithRatings = allItems.filter((i: { personalRating: number | null }) => i.personalRating !== null).length
+    const itemsWithLogDates = allItems.filter((i: { logDate: Date | null }) => i.logDate !== null).length
 
     // Total items achievements
     if (totalItems >= 10 && await unlockAchievement(userId, 'ten_items')) {
