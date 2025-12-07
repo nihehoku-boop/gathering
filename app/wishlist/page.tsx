@@ -246,15 +246,15 @@ export default function WishlistPage() {
       <Sidebar />
       <Navbar />
       <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
-        <div className="container mx-auto px-6 py-12">
-          <div className="mb-8 animate-fade-up">
+        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12">
+          <div className="mb-6 sm:mb-8 animate-fade-up">
             <div className="flex items-center justify-between mb-4">
               {editingName ? (
                 <div className="flex items-center gap-2 flex-1">
                   <Input
                     value={wishlistName}
                     onChange={(e) => setWishlistName(e.target.value)}
-                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] focus:border-[var(--accent-color)]"
+                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] focus:border-[var(--accent-color)] min-h-[44px]"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         updateWishlist()
@@ -267,7 +267,7 @@ export default function WishlistPage() {
                   />
                   <Button
                     onClick={updateWishlist}
-                    className="accent-button text-white smooth-transition rounded-full"
+                    className="accent-button text-white smooth-transition rounded-full min-h-[44px] min-w-[44px]"
                   >
                     <Check className="h-4 w-4" />
                   </Button>
@@ -277,14 +277,14 @@ export default function WishlistPage() {
                       setEditingName(false)
                       setWishlistName(wishlist.name || 'My Wishlist')
                     }}
-                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full min-h-[44px] min-w-[44px]"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
               ) : (
                 <>
-                  <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight flex items-center gap-3">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight flex items-center gap-2 sm:gap-3">
                     <Heart className="h-8 w-8 text-[#FF3B30]" />
                     {wishlist.name || 'My Wishlist'}
                     <Button

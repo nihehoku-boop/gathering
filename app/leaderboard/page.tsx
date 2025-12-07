@@ -80,23 +80,23 @@ export default function LeaderboardPage() {
       <Sidebar />
       <Navbar />
       <div className="min-h-screen bg-[var(--bg-primary)] lg:ml-64">
-        <div className="container mx-auto px-6 py-8">
-          <div className="mb-10">
-            <div className="flex items-center gap-4 mb-6">
+        <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="mb-6 sm:mb-10">
+            <div className="flex items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
               <Button
                 variant="ghost"
                 onClick={() => router.push('/')}
-                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition min-h-[44px] min-w-[44px]"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
+                <span className="hidden sm:inline">Back</span>
               </Button>
             </div>
-            <div className="flex items-center gap-3 mb-3">
-              <Trophy className="h-8 w-8 text-[var(--accent-color)]" />
-              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Leaderboard</h1>
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--accent-color)]" />
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Leaderboard</h1>
             </div>
-            <p className="text-[var(--text-secondary)] text-lg mb-10">
+            <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] mb-6 sm:mb-10">
               Top collectors ranked by total owned items
             </p>
           </div>
