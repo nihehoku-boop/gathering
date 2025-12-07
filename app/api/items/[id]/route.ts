@@ -3,8 +3,10 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
-export async function PATCH(
+async function updateItemHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -155,7 +157,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
+async function deleteItemHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -198,3 +200,21 @@ export async function DELETE(
     )
   }
 }
+
+export const PATCH = withRateLimit(
+  updateItemHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const DELETE = withRateLimit(
+  deleteItemHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)

@@ -3,9 +3,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { randomBytes } from 'crypto'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
 // GET - Get user's wishlist
-export async function GET(request: NextRequest) {
+async function getWishlistHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -47,7 +49,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST - Create or update wishlist
-export async function POST(request: NextRequest) {
+async function updateWishlistHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {

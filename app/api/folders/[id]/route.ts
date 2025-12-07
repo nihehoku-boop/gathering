@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
 // PATCH - Update folder
-export async function PATCH(
+async function updateFolderHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -55,7 +57,7 @@ export async function PATCH(
 }
 
 // DELETE - Delete folder
-export async function DELETE(
+async function deleteFolderHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
@@ -107,6 +109,24 @@ export async function DELETE(
     )
   }
 }
+
+export const PATCH = withRateLimit(
+  updateFolderHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const DELETE = withRateLimit(
+  deleteFolderHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
 
 
 

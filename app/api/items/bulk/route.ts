@@ -3,9 +3,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
+import { withRateLimit } from '@/lib/rate-limit-middleware'
+import { rateLimitConfigs } from '@/lib/rate-limit'
 
 // DELETE - Delete multiple items
-export async function DELETE(request: NextRequest) {
+async function deleteBulkItemsHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -61,7 +63,7 @@ export async function DELETE(request: NextRequest) {
 }
 
 // PATCH - Update multiple items (e.g., mark as owned)
-export async function PATCH(request: NextRequest) {
+async function updateBulkItemsHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -125,7 +127,7 @@ export async function PATCH(request: NextRequest) {
 }
 
 // POST - Create multiple items (bulk import)
-export async function POST(request: NextRequest) {
+async function createBulkItemsHandler(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -191,3 +193,30 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export const DELETE = withRateLimit(
+  deleteBulkItemsHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const PATCH = withRateLimit(
+  updateBulkItemsHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
+
+export const POST = withRateLimit(
+  createBulkItemsHandler,
+  rateLimitConfigs.write,
+  async (request) => {
+    const session = await getServerSession(authOptions)
+    return session?.user?.id
+  }
+)
