@@ -63,6 +63,8 @@ model User {
   wishlists     Wishlist[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@index([isPrivate]) // Index for efficient public user queries (leaderboard, profiles)
 }
 
 model VerificationToken {
@@ -115,6 +117,8 @@ model Collection {
 
   @@index([shareToken])
   @@index([userId, folderId])
+  @@index([userId, category]) // Index for category filtering
+  @@index([recommendedCollectionId]) // Index for recommended collection lookups
 }
 
 model Item {
@@ -135,6 +139,7 @@ model Item {
   updatedAt         DateTime   @updatedAt
 
   @@index([collectionId])
+  @@index([collectionId, isOwned]) // Composite index for efficient owned items queries
 }
 
 model RecommendedCollection {

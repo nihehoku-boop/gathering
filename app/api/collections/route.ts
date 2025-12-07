@@ -162,7 +162,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Check and unlock achievements
+    // Check and unlock achievements (only when creating collection - relevant for collection count achievements)
     const newlyUnlocked = await checkAllAchievements(session.user.id)
 
     return NextResponse.json({
