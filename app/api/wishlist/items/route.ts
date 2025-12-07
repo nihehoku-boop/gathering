@@ -37,25 +37,33 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Add items to wishlist
-    const createdItems = await Promise.all(
-      items.map((item: any) =>
-        prisma.wishlistItem.create({
-          data: {
-            wishlistId: wishlist.id,
-            itemId: item.itemId || null,
-            collectionId: item.collectionId || null,
-            itemName: item.itemName,
-            itemNumber: item.itemNumber || null,
-            itemImage: item.itemImage || null,
-            collectionName: item.collectionName || null,
-            notes: item.notes || null,
-          },
-        })
-      )
-    )
+    // Add items to wishlist using createMany for efficiency
+    // This reduces 75 individual operations to just 1 bulk operation
+    const createdItems = await prisma.wishlistItem.createMany({
+      data: items.map((item: any) => ({
+        wishlistId: wishlist.id,
+        itemId: item.itemId || null,
+        collectionId: item.collectionId || null,
+        itemName: item.itemName,
+        itemNumber: item.itemNumber || null,
+        itemImage: item.itemImage || null,
+        collectionName: item.collectionName || null,
+        notes: item.notes || null,
+      })),
+      skipDuplicates: true, // Skip if item already in wishlist
+    })
 
-    return NextResponse.json({ success: true, items: createdItems })
+    // Fetch the created items to return them (createMany doesn't return created records)
+    const wishlistItems = await prisma.wishlistItem.findMany({
+      where: {
+        wishlistId: wishlist.id,
+        itemId: { in: items.map((item: any) => item.itemId).filter(Boolean) },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: items.length, // Limit to the items we just added
+    })
+
+    return NextResponse.json({ success: true, items: wishlistItems, count: createdItems.count })
   } catch (error) {
     console.error('Error adding items to wishlist:', error)
     return NextResponse.json(
