@@ -858,15 +858,17 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
         <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] animate-fade-up" style={{ animationDelay: '100ms' }}>
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="text-[var(--text-primary)]">Items</CardTitle>
-                <CardDescription className="text-[var(--text-secondary)]">
-                  Manage the items in your collection
-                </CardDescription>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {isSelectionMode ? (
+            <div>
+              <CardTitle className="text-[var(--text-primary)]">Items</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
+                Manage the items in your collection
+              </CardDescription>
+            </div>
+          </CardHeader>
+          {/* Action buttons row */}
+          <div className="px-6 pb-4 border-b border-[var(--border-color)]">
+            <div className="flex flex-wrap gap-2">
+              {isSelectionMode ? (
                   <>
                     <Button
                       variant="outline"
@@ -1054,9 +1056,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     </Button>
                   </>
                 )}
-              </div>
             </div>
-          </CardHeader>
+          </div>
           <CardContent>
             <div className="flex flex-col gap-2 mb-4">
               {!showAddForm ? (
@@ -1532,26 +1533,28 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                                 })
                               }
                             }}
-                            className="text-[#FF6B9D] hover:text-[#FF6B9D] hover:bg-[#FF6B9D]/10 smooth-transition"
+                            className="text-[#FF6B9D] hover:text-[#FF6B9D] hover:bg-[#FF6B9D]/10 smooth-transition h-8 w-8 sm:h-10 sm:w-10"
                             title="Add to Wishlist"
                           >
-                            <Heart className="h-4 w-4" />
+                            <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setEditingItem(item)}
-                            className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] smooth-transition"
+                            className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
+                            title="Edit"
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => deleteItem(item.id)}
-                            className="text-[#FF3B30] hover:text-[#C0392B] smooth-transition"
+                            className="text-[#FF3B30] hover:text-[#C0392B] smooth-transition h-8 w-8 sm:h-10 sm:w-10"
+                            title="Delete"
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                           </Button>
                         </>
                       )}
