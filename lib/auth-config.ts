@@ -48,7 +48,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       try {
         if (user) {
-          // Only query database when user first logs in
+          // Only query database when user first logs in (user object is only present on initial login)
+          // This prevents querying the database on every request
           token.id = user.id
           try {
             const dbUser = await prisma.user.findUnique({
@@ -59,12 +60,24 @@ export const authOptions: NextAuthOptions = {
             token.isVerified = dbUser?.isVerified || false
             token.badge = dbUser?.badge || null
             token.accentColor = dbUser?.accentColor || '#FFD60A'
+            
+            // Log only in development to verify it's working
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[JWT] Database query on login - this is expected')
+            }
           } catch (error) {
             console.error('Error fetching admin status in JWT callback:', error)
             token.isAdmin = false
             token.isVerified = false
             token.badge = null
             token.accentColor = '#FFD60A'
+          }
+        } else {
+          // User object is NOT present - this means it's a subsequent request
+          // We use cached values from the token, NO database query
+          // This is the optimization that prevents unnecessary queries
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[JWT] Using cached token values - NO database query (this is correct)')
           }
         }
         // Don't query database on every request - use cached values from token
