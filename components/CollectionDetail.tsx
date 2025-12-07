@@ -292,16 +292,42 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     }
   }
 
-  // Prefetch next page proactively when we're viewing items
+  // Aggressive prefetching: load next pages before user needs them
   useEffect(() => {
     if (!hasMoreItems || items.length === 0) return
     
-    // Prefetch next page when we have at least 30 items loaded
-    // This gives us time to fetch before user reaches the end
-    const nextPage = itemsPage + 1
+    const currentSortBy = sortByRef.current
+    const limit = getItemLimit(collectionId)
     
-    if (items.length >= 30 && !prefetchCacheRef.current.has(nextPage)) {
-      prefetchNextPage(itemsPage)
+    // Prefetch next page when we have just a few items loaded (much earlier)
+    // This ensures items are ready before user scrolls to them
+    if (items.length >= 5) {
+      const nextPage = itemsPage + 1
+      const cacheKey = `${nextPage}_${currentSortBy}`
+      if (!prefetchCacheRef.current.has(cacheKey)) {
+        prefetchNextPage(itemsPage)
+      }
+    }
+    
+    // Prefetch page after next when we have more items (prefetch 2 pages ahead)
+    if (items.length >= 15 && hasMoreItems) {
+      const pageAfterNext = itemsPage + 2
+      const cacheKey2 = `${pageAfterNext}_${currentSortBy}`
+      if (!prefetchCacheRef.current.has(cacheKey2)) {
+        // Prefetch second page ahead
+        const currentSortBy2 = sortByRef.current
+        const limit2 = getItemLimit(collectionId)
+        if (!itemsLoadingRef.current && hasMoreItemsRef.current) {
+          fetch(`/api/collections/${collectionId}/items?page=${pageAfterNext}&limit=${limit2}&sortBy=${currentSortBy2}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+              if (data) {
+                prefetchCacheRef.current.set(cacheKey2, data)
+              }
+            })
+            .catch(() => {}) // Silently fail
+        }
+      }
     }
   }, [items.length, itemsPage, hasMoreItems, collectionId, sortBy])
 
@@ -343,10 +369,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           })
         },
         {
-          // Increased rootMargin to start loading much earlier
-          // 1000px = start loading when user is still 1000px away from bottom
-          // This gives plenty of time for the API call to complete
-          rootMargin: '1000px',
+          // Very aggressive rootMargin to start loading way before user reaches bottom
+          // 2000px = start loading when user is still 2000px (2 screen heights) away from bottom
+          // Combined with prefetching, items should already be loaded when user scrolls
+          rootMargin: '2000px',
           // Use threshold to trigger earlier
           threshold: 0.01,
         }
