@@ -397,8 +397,9 @@ export default function CollectionsList() {
 
   const calculateProgress = (collection: Collection) => {
     if (collection._count.items === 0) return 0
-    // Use ownedCount if available (from optimized API), otherwise calculate from items
-    const owned = collection.ownedCount !== undefined 
+    // Use ownedCount from API (calculated efficiently via groupBy query)
+    // Fallback to items array only if ownedCount is not provided (shouldn't happen)
+    const owned = collection.ownedCount !== undefined && collection.ownedCount !== null
       ? collection.ownedCount 
       : (collection.items?.filter(item => item.isOwned).length || 0)
     return Math.round((owned / collection._count.items) * 100)
