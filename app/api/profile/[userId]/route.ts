@@ -29,11 +29,7 @@ export async function GET(
             category: true,
             coverImage: true,
             tags: true,
-            items: {
-              select: {
-                isOwned: true,
-              },
-            },
+            // Removed items array - we'll count owned items efficiently
             _count: {
               select: {
                 items: true,
@@ -64,9 +60,33 @@ export async function GET(
       })
     }
 
-    // Calculate collection stats and get top 3
-    const collectionsWithStats = user.collections.map((collection: { id: string; name: string; description: string | null; category: string | null; coverImage: string | null; tags: string; items: { isOwned: boolean }[]; _count: { items: number } }) => {
-      const ownedItems = collection.items.filter((item) => item.isOwned).length
+    // Optimize: Use groupBy to count owned items efficiently instead of loading all items
+    const collectionIds = user.collections.map((c: { id: string }) => c.id)
+    let ownedCountsMap = new Map<string, number>()
+    
+    if (collectionIds.length > 0) {
+      const ownedCounts = await prisma.item.groupBy({
+        by: ['collectionId'],
+        where: {
+          collectionId: { in: collectionIds },
+          isOwned: true,
+        },
+        _count: {
+          id: true,
+        },
+      })
+      
+      ownedCountsMap = new Map(
+        ownedCounts.map((item: { collectionId: string; _count: { id: number } }) => [
+          item.collectionId,
+          item._count.id
+        ])
+      )
+    }
+
+    // Calculate collection stats efficiently
+    const collectionsWithStats = user.collections.map((collection: { id: string; name: string; description: string | null; category: string | null; coverImage: string | null; tags: string; _count: { items: number } }) => {
+      const ownedItems = ownedCountsMap.get(collection.id) || 0
       const totalItems = collection._count.items
       const progress = totalItems > 0 ? Math.round((ownedItems / totalItems) * 100) : 0
 

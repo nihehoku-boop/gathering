@@ -132,5 +132,6 @@ export const cacheKeys = {
     `collection:${collectionId}:owner:${userId}`,
   userCollections: (userId: string) => `user:${userId}:collections`,
   user: (userId: string) => `user:${userId}`,
+  userProfile: (userId: string) => `user:${userId}:profile`,
 }
 
