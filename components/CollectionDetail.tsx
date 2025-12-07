@@ -135,15 +135,62 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         localStorage.setItem(visitKey, String(currentVisits + 1))
       }
       
-      // Reset items and load first page when collection or sort changes
-      setItems([])
-      setItemsPage(1)
-      setHasMoreItems(true)
-      // Clear ALL cache when collection or sort changes - important for sorting to work
+      // Clear in-memory prefetch cache when collection or sort changes
       prefetchCacheRef.current.clear()
       // Update sortBy ref immediately
       sortByRef.current = sortBy
-      fetchItems(1, false)
+      
+      // Check if we have cached pages for this collection/sort
+      const cachedPages = CollectionCache.getAllCachedPages(collection.id, sortBy)
+      
+      if (cachedPages.length > 0) {
+        // Load all cached pages to restore previous view
+        console.log(`[CollectionDetail] Found ${cachedPages.length} cached pages, restoring...`)
+        
+        // Combine all cached items
+        const allCachedItems: Item[] = []
+        let lastPagination: any = null
+        
+        cachedPages.forEach(({ page, items, pagination }) => {
+          allCachedItems.push(...items)
+          lastPagination = pagination
+        })
+        
+        // Set all items at once
+        startTransition(() => {
+          setItems(allCachedItems)
+          setItemsPage(cachedPages.length)
+          itemsPageRef.current = cachedPages.length
+          setHasMoreItems(lastPagination?.hasMore ?? true)
+          hasMoreItemsRef.current = lastPagination?.hasMore ?? true
+        })
+        
+        // Fetch fresh data for first page in background to update cache
+        const limit = getItemLimit(collection.id, true)
+        fetch(`/api/collections/${collection.id}/items?page=1&limit=${limit}&sortBy=${sortBy}`)
+          .then(res => res.ok ? res.json() : null)
+          .then(data => {
+            if (data) {
+              CollectionCache.setItemsPage(collection.id, 1, sortBy, data.items, data.pagination)
+              // Update first page if data changed
+              if (JSON.stringify(data.items) !== JSON.stringify(cachedPages[0]?.items)) {
+                startTransition(() => {
+                  setItems(prev => {
+                    const withoutFirstPage = prev.slice(cachedPages[0]?.items.length || 0)
+                    return [...data.items, ...withoutFirstPage]
+                  })
+                })
+              }
+            }
+          })
+          .catch(() => {}) // Silently fail background update
+      } else {
+        // No cache, start fresh
+        setItems([])
+        setItemsPage(1)
+        setHasMoreItems(true)
+        fetchItems(1, false)
+      }
     }
   }, [collection, sortBy])
 
