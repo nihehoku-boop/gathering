@@ -116,6 +116,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [copied, setCopied] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [openItemMenu, setOpenItemMenu] = useState<string | null>(null)
+  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number } | null>(null)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
