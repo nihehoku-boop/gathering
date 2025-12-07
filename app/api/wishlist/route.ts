@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { randomBytes } from 'crypto'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 // GET - Get user's wishlist
 async function getWishlistHandler(request: NextRequest) {
@@ -40,7 +41,7 @@ async function getWishlistHandler(request: NextRequest) {
 
     return NextResponse.json(wishlist)
   } catch (error) {
-    console.error('Error fetching wishlist:', error)
+    logger.error('Error fetching wishlist:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -107,7 +108,7 @@ async function updateWishlistHandler(request: NextRequest) {
 
     return NextResponse.json(wishlist)
   } catch (error) {
-    console.error('Error creating/updating wishlist:', error)
+    logger.error('Error creating/updating wishlist:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

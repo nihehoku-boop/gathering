@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { getDataSource, listDataSources } from '@/lib/data-fetchers'
 import '@/lib/data-fetchers/init' // Initialize data sources
+import { logger } from '@/lib/logger'
 
 /**
  * Admin API endpoint for extracting collection data from a URL using AI
@@ -84,21 +85,20 @@ export async function POST(request: NextRequest) {
     try {
       await import('@/lib/data-fetchers/init')
     } catch (initError) {
-      console.error('[Extract URL] Failed to initialize data sources:', initError)
+      logger.error('[Extract URL] Failed to initialize data sources:', initError)
     }
     
     const aiSource = getDataSource('ai')
     if (!aiSource) {
-      console.error('[Extract URL] AI data source not found. Available sources:', listDataSources())
+      logger.error('[Extract URL] AI data source not found. Available sources:', listDataSources())
       return NextResponse.json(
         { error: 'AI data source not available. Make sure data sources are initialized.' },
         { status: 500 }
       )
     }
     
-    console.log('[Extract URL] Using AI source:', aiSource.name)
-
-    console.log('[Extract URL] Extracting from:', url)
+    logger.debug('[Extract URL] Using AI source:', aiSource.name)
+    logger.debug('[Extract URL] Extracting from:', url)
 
     // Fetch items from URL using AI
     let items: any[] = []
@@ -112,9 +112,9 @@ export async function POST(request: NextRequest) {
 
     try {
       items = await aiSource.fetchItems(url)
-      console.log('[Extract URL] Fetched', items.length, 'items from URL')
+      logger.debug('[Extract URL] Fetched', items.length, 'items from URL')
     } catch (error) {
-      console.error('[Extract URL] Error fetching items:', error)
+      logger.error('[Extract URL] Error fetching items:', error)
       // Continue with empty items - metadata extraction might still work
     }
 
@@ -126,14 +126,14 @@ export async function POST(request: NextRequest) {
       const searchResults = await aiSource.search(url)
       if (searchResults && searchResults.length > 0) {
         metadata = searchResults[0]
-        console.log('[Extract URL] Got metadata from search:', metadata.name)
+        logger.debug('[Extract URL] Got metadata from search:', metadata.name)
       }
     } catch (error) {
-      console.error('[Extract URL] Error getting metadata:', error)
+      logger.error('[Extract URL] Error getting metadata:', error)
       // Use default metadata
     }
 
-    console.log('[Extract URL] Final result:', items.length, 'items, metadata:', metadata.name)
+    logger.debug('[Extract URL] Final result:', { itemsCount: items.length, metadataName: metadata.name })
 
     return NextResponse.json({
       metadata,
@@ -141,15 +141,14 @@ export async function POST(request: NextRequest) {
       itemsCount: items.length,
     })
   } catch (error) {
-    console.error('[Extract URL] Error:', error)
     const errorMessage = error instanceof Error ? error.message : String(error)
     const errorStack = error instanceof Error ? error.stack : undefined
     const errorUrl = url !== undefined ? url : 'not provided'
     
-    console.error('[Extract URL] Error details:', {
+    logger.error('[Extract URL] Error:', {
       message: errorMessage,
-      stack: errorStack,
       url: errorUrl,
+      ...(process.env.NODE_ENV === 'development' && errorStack ? { stack: errorStack } : {}),
     })
     
     return NextResponse.json(

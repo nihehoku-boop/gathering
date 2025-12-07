@@ -6,6 +6,7 @@ import { checkAllAchievements } from '@/lib/achievement-checker'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { validateRequestBody, createCollectionSchema } from '@/lib/validation-schemas'
+import { logger } from '@/lib/logger'
 
 async function getCollectionsHandler() {
   try {
@@ -71,7 +72,7 @@ async function getCollectionsHandler() {
     response.headers.set('Cache-Control', 'private, s-maxage=60, stale-while-revalidate=120')
     return response
   } catch (error) {
-    console.error('Error fetching collections:', error)
+    logger.error('Error fetching collections:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -173,7 +174,7 @@ async function createCollectionHandler(request: NextRequest) {
       newlyUnlockedAchievements: newlyUnlocked,
     }, { status: 201 })
   } catch (error) {
-    console.error('Error creating collection:', error)
+    logger.error('Error creating collection:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

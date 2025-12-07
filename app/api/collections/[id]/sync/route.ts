@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 async function syncCollectionHandler(
   request: NextRequest,
@@ -205,7 +206,7 @@ async function syncCollectionHandler(
 
     return NextResponse.json(finalCollection)
   } catch (error) {
-    console.error('Error syncing collection:', error)
+    logger.error('Error syncing collection:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

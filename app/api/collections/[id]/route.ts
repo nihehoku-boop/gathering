@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
+import { logger } from '@/lib/logger'
 
 async function getCollectionHandler(
   request: NextRequest,
@@ -87,15 +88,15 @@ async function updateCollectionHandler(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
+  // Resolve params early so it's available in catch block
+  const resolvedParams = await Promise.resolve(params)
+  const collectionId = resolvedParams.id
+  
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    // Resolve params
-    const resolvedParams = await Promise.resolve(params)
-    const collectionId = resolvedParams.id
 
     const collection = await prisma.collection.findFirst({
       where: {
@@ -114,7 +115,7 @@ async function updateCollectionHandler(
     const body = await request.json()
     const { name, description, category, folderId, template, customFieldDefinitions, coverImage, coverImageAspectRatio, coverImageFit, tags } = body
 
-    console.log('PATCH request body:', JSON.stringify({ name, description, category, coverImage, tags }, null, 2))
+    logger.debug('PATCH request body:', { name, description, category, coverImage, tags })
 
     // Build update data object - only include fields that are being updated
     const updateData: any = {}
@@ -220,13 +221,12 @@ async function updateCollectionHandler(
           updateData.tags = '[]'
         }
       } catch (e) {
-        console.error('Error parsing tags:', e)
+        logger.error('Error parsing tags:', e)
         updateData.tags = '[]'
       }
     }
 
-    console.log('Update data before Prisma:', JSON.stringify(updateData, null, 2))
-    console.log('Collection ID:', collectionId)
+    logger.debug('Update data before Prisma:', updateData)
     
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(
@@ -235,23 +235,20 @@ async function updateCollectionHandler(
       )
     }
     
-    console.log('Calling Prisma update with:', JSON.stringify({ where: { id: collectionId }, data: updateData }, null, 2))
-    
     const updatedCollection = await prisma.collection.update({
       where: { id: collectionId },
       data: updateData,
     })
     
-    console.log('Successfully updated collection')
+    logger.debug('Successfully updated collection:', collectionId)
     return NextResponse.json(updatedCollection)
 
   } catch (error: any) {
-    console.error('Error updating collection:', error)
-    console.error('Error details:', {
+    logger.error('Error updating collection:', {
       message: error?.message,
       code: error?.code,
       meta: error?.meta,
-      stack: error?.stack,
+      collectionId,
     })
     
     // Return a more detailed error response
@@ -306,7 +303,7 @@ async function deleteCollectionHandler(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error deleting collection:', error)
+    logger.error('Error deleting collection:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
