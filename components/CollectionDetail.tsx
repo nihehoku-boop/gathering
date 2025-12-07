@@ -1600,8 +1600,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                             </div>
                           </>
                         )}
-                      </div>
-                    )}
                     {expandedItems.has(item.id) && (
                       <div className="px-3 pb-3 pt-0 border-t border-[#2a2d35] space-y-2 text-sm">
                         {item.wear && (
