@@ -230,6 +230,28 @@ export class CollectionCache {
     })
   }
 
+  // Get all cached pages for a collection (for restoring scroll position)
+  static getAllCachedPages(collectionId: string, sortBy: string): Array<{ page: number; items: any[]; pagination: any }> {
+    const cachedPages: Array<{ page: number; items: any[]; pagination: any }> = []
+    
+    try {
+      // Check pages 1-20 (reasonable limit)
+      for (let page = 1; page <= 20; page++) {
+        const cached = this.getItemsPage(collectionId, page, sortBy)
+        if (cached) {
+          cachedPages.push({ page, ...cached })
+        } else {
+          // If we hit a missing page, stop (pages are sequential)
+          break
+        }
+      }
+    } catch {
+      // Silently fail
+    }
+    
+    return cachedPages.sort((a, b) => a.page - b.page)
+  }
+
   // Clear all cache
   static clearAllCache(): void {
     const keysToRemove: string[] = []
