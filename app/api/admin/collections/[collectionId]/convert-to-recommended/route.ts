@@ -72,7 +72,7 @@ export async function POST(
         tags: collection.tags,
         isPublic: false, // Default to hidden
         items: {
-          create: collection.items.map((item) => ({
+          create: collection.items.map((item: { name: string; number: number | null; notes: string | null; image: string | null; customFields: string }) => ({
             name: item.name,
             number: item.number,
             notes: item.notes,
