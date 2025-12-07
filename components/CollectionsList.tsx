@@ -585,144 +585,198 @@ export default function CollectionsList() {
 
       {collections.length > 0 && filteredCollections.length > 0 && (
         <div className="mb-6 space-y-3">
-          {/* Filter and Sort on one line */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <TagSelector
-              selectedTags={selectedTags}
-              onChange={setSelectedTags}
-              label="Filter by tags"
-              allowCustom={false}
-              compact={true}
-            />
-            <div className="relative">
-              <Button
-                variant="outline"
-                onClick={() => setShowSortMenu(!showSortMenu)}
-                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
-              >
-                <ArrowUpDown className="mr-2 h-4 w-4" />
-                Sort
-              </Button>
-            {showSortMenu && (
-              <>
-                <div 
-                  className="fixed inset-0 z-10" 
-                  onClick={() => setShowSortMenu(false)}
-                />
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
-                  <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
-                    Sort by
+          {/* Desktop: All buttons on one line, Filter/Sort on right */}
+          {/* Mobile: Filter/Sort on one line, Import/Export below */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            {/* Left side: Import and Export buttons (desktop) */}
+            <div className="hidden sm:flex gap-2 items-center order-2">
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+                >
+                  <Download className="h-4 w-4" />
+                  <span className="ml-2">Export</span>
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              {showExportMenu && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setShowExportMenu(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                    <button
+                      onClick={() => {
+                        window.open('/api/collections/export?format=json', '_blank')
+                        setShowExportMenu(false)
+                      }}
+                      className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export All as JSON
+                    </button>
+                    <button
+                      onClick={() => {
+                        window.open('/api/collections/export?format=csv', '_blank')
+                        setShowExportMenu(false)
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export All as CSV
+                    </button>
                   </div>
-                  <button
-                    onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Name (A-Z)
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Name (Z-A)
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('items-desc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'items-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Most Items
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('items-asc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'items-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Fewest Items
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('progress-desc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'progress-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Highest Progress
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('progress-asc'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'progress-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Lowest Progress
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'date-new' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Newest First
-                  </button>
-                  <button
-                    onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
-                    className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'date-old' ? 'bg-[var(--bg-tertiary)]' : ''}`}
-                  >
-                    Oldest First
-                  </button>
-                </div>
-              </>
-            )}
-            </div>
-            {(searchQuery || selectedTags.length > 0) && (
-              <div className="text-sm text-[var(--text-muted)] whitespace-nowrap ml-auto">
-                Showing {filteredCollections.length} of {collections.length} collections
+                </>
+              )}
               </div>
-            )}
-          </div>
-          
-          {/* Import and Export buttons - icon only on mobile */}
-          <div className="flex gap-2 items-center">
-            <div className="relative">
               <Button
                 variant="outline"
-                onClick={() => setShowExportMenu(!showExportMenu)}
+                onClick={() => setShowImportDialog(true)}
                 className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
               >
-                <Download className="h-4 w-4" />
-                <span className="hidden sm:inline ml-2">Export</span>
-                <ChevronDown className="hidden sm:block ml-2 h-4 w-4" />
+                <Upload className="h-4 w-4" />
+                <span className="ml-2">Import</span>
               </Button>
-            {showExportMenu && (
-              <>
-                <div 
-                  className="fixed inset-0 z-10" 
-                  onClick={() => setShowExportMenu(false)}
-                />
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
-                  <button
-                    onClick={() => {
-                      window.open('/api/collections/export?format=json', '_blank')
-                      setShowExportMenu(false)
-                    }}
-                    className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
-                  >
-                    <Download className="h-4 w-4" />
-                    Export All as JSON
-                  </button>
-                  <button
-                    onClick={() => {
-                      window.open('/api/collections/export?format=csv', '_blank')
-                      setShowExportMenu(false)
-                    }}
-                    className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
-                  >
-                    <Download className="h-4 w-4" />
-                    Export All as CSV
-                  </button>
-                </div>
-              </>
-            )}
             </div>
-            <Button
-              variant="outline"
-              onClick={() => setShowImportDialog(true)}
-              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
-            >
-              <Upload className="h-4 w-4" />
-              <span className="hidden sm:inline ml-2">Import</span>
-            </Button>
+
+            {/* Right side: Filter and Sort buttons */}
+            <div className="flex items-center gap-2 flex-wrap order-1 sm:order-3">
+              <TagSelector
+                selectedTags={selectedTags}
+                onChange={setSelectedTags}
+                label="Filter by tags"
+                allowCustom={false}
+                compact={true}
+              />
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSortMenu(!showSortMenu)}
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+                >
+                  <ArrowUpDown className="mr-2 h-4 w-4" />
+                  Sort
+                </Button>
+              {showSortMenu && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setShowSortMenu(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                    <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
+                      Sort by
+                    </div>
+                    <button
+                      onClick={() => { setSortBy('name-asc'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Name (A-Z)
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('name-desc'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'name-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Name (Z-A)
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('items-desc'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'items-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Most Items
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('items-asc'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'items-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Fewest Items
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('progress-desc'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'progress-desc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Highest Progress
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('progress-asc'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'progress-asc' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Lowest Progress
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('date-new'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition border-t border-[var(--border-color)] ${sortBy === 'date-new' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Newest First
+                    </button>
+                    <button
+                      onClick={() => { setSortBy('date-old'); setShowSortMenu(false); }}
+                      className={`w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition ${sortBy === 'date-old' ? 'bg-[var(--bg-tertiary)]' : ''}`}
+                    >
+                      Oldest First
+                    </button>
+                  </div>
+                </>
+              )}
+              </div>
+              {(searchQuery || selectedTags.length > 0) && (
+                <div className="text-sm text-[var(--text-muted)] whitespace-nowrap ml-auto sm:ml-0">
+                  Showing {filteredCollections.length} of {collections.length} collections
+                </div>
+              )}
+            </div>
+            
+            {/* Mobile: Import and Export buttons below */}
+            <div className="flex gap-2 items-center sm:hidden order-2">
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+                >
+                  <Download className="h-4 w-4" />
+                </Button>
+              {showExportMenu && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setShowExportMenu(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                    <button
+                      onClick={() => {
+                        window.open('/api/collections/export?format=json', '_blank')
+                        setShowExportMenu(false)
+                      }}
+                      className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export All as JSON
+                    </button>
+                    <button
+                      onClick={() => {
+                        window.open('/api/collections/export?format=csv', '_blank')
+                        setShowExportMenu(false)
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export All as CSV
+                    </button>
+                  </div>
+                </>
+              )}
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setShowImportDialog(true)}
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+              >
+                <Upload className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
