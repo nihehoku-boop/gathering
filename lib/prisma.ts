@@ -6,20 +6,20 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const createPrismaClient = () => {
-  // Prefer direct DATABASE_URL over PRISMA_DATABASE_URL to avoid plan limits
-  // Only use PRISMA_DATABASE_URL if DATABASE_URL is not set or points to db.prisma.io
+  // Use DATABASE_URL (prefer direct connection to avoid Prisma Accelerate plan limits)
   let databaseUrl = process.env.DATABASE_URL
   
-  // If DATABASE_URL points to db.prisma.io (broken Accelerate endpoint), try PRISMA_DATABASE_URL
-  if (!databaseUrl || databaseUrl.includes('db.prisma.io')) {
-    databaseUrl = process.env.PRISMA_DATABASE_URL || process.env.DATABASE_URL
+  // Only use PRISMA_DATABASE_URL if DATABASE_URL is not set
+  if (!databaseUrl) {
+    databaseUrl = process.env.PRISMA_DATABASE_URL
   }
 
   // Log which URL is being used (without exposing credentials)
   if (process.env.NODE_ENV === 'production') {
     const urlPreview = databaseUrl?.substring(0, 50) || 'undefined'
     const isAccelerate = databaseUrl?.startsWith('prisma://') || databaseUrl?.startsWith('prisma+postgres://')
-    console.log(`[Prisma] Using database URL: ${urlPreview}... (${isAccelerate ? 'Accelerate' : 'Direct'})`)
+    const isPrismaIo = databaseUrl?.includes('db.prisma.io')
+    console.log(`[Prisma] Using database URL: ${urlPreview}... (${isAccelerate ? 'Accelerate' : isPrismaIo ? 'Prisma.io Direct' : 'Direct'})`)
   }
 
   const baseClient = new PrismaClient({
@@ -30,12 +30,14 @@ const createPrismaClient = () => {
     },
   })
 
-  // If using Prisma Accelerate URL (prisma://), use the extension
-  // Note: Accelerate has plan limits, so prefer direct connection
+  // Only use Accelerate extension for prisma:// URLs (not db.prisma.io)
+  // db.prisma.io endpoints should work as direct connections without the extension
+  // This avoids Prisma Accelerate plan limits
   if (databaseUrl?.startsWith('prisma://') || databaseUrl?.startsWith('prisma+postgres://')) {
     return baseClient.$extends(withAccelerate())
   }
 
+  // For db.prisma.io or other direct connections, use without Accelerate extension
   return baseClient
 }
 
