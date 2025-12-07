@@ -51,14 +51,28 @@ export default function WishlistPage() {
     }
   }, [status, router])
 
+  // Listen for wishlist update events
+  useEffect(() => {
+    const handleWishlistUpdate = () => {
+      console.log('[WishlistPage] Wishlist updated event received, refreshing...')
+      fetchWishlist()
+    }
+
+    window.addEventListener('wishlist-updated', handleWishlistUpdate)
+    return () => {
+      window.removeEventListener('wishlist-updated', handleWishlistUpdate)
+    }
+  }, [])
+
   const fetchWishlist = async () => {
     setLoading(true)
     try {
       console.log('[WishlistPage] Fetching wishlist...')
       const startTime = performance.now()
+      // Use no-cache to always get fresh data
       const res = await fetch('/api/wishlist', {
-        cache: 'force-cache',
-        headers: { 'Cache-Control': 'public, max-age=60' }
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
       })
       const endTime = performance.now()
       console.log(`[WishlistPage] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
