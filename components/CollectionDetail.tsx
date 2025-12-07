@@ -865,7 +865,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   Manage the items in your collection
                 </CardDescription>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {isSelectionMode ? (
                   <>
                     <Button
@@ -945,8 +945,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       title="Select multiple items"
                     >
-                      <CheckSquare2 className="mr-2 h-4 w-4" />
-                      Select
+                      <CheckSquare2 className="sm:mr-2 h-4 w-4" />
+                      <span className="hidden sm:inline">Select</span>
                     </Button>
                     <div className="relative">
                       <Button
@@ -955,8 +955,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         onClick={() => setShowSortMenu(!showSortMenu)}
                         className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       >
-                        <ArrowUpDown className="mr-2 h-4 w-4" />
-                        Sort
+                        <ArrowUpDown className="sm:mr-2 h-4 w-4" />
+                        <span className="hidden sm:inline">Sort</span>
                       </Button>
                       {showSortMenu && (
                     <>
@@ -1037,18 +1037,20 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       size="sm"
                       onClick={() => setViewMode('cover')}
                       className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
+                      title="Cover view"
                     >
-                      <Grid3x3 className="mr-2 h-4 w-4" />
-                      Cover
+                      <Grid3x3 className="sm:mr-2 h-4 w-4" />
+                      <span className="hidden sm:inline">Cover</span>
                     </Button>
                     <Button
                       variant={viewMode === 'list' ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setViewMode('list')}
                       className={viewMode === 'list' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
+                      title="List view"
                     >
-                      <List className="mr-2 h-4 w-4" />
-                      List
+                      <List className="sm:mr-2 h-4 w-4" />
+                      <span className="hidden sm:inline">List</span>
                     </Button>
                   </>
                 )}
