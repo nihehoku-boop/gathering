@@ -1798,101 +1798,101 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                           top: `${menuPosition.y + 4}px`,
                         }}
                       >
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  setOpenItemMenu(null)
-                                  setMenuPosition(null)
-                                  const newExpanded = new Set(expandedItems)
-                                  if (newExpanded.has(item.id)) {
-                                    newExpanded.delete(item.id)
-                                  } else {
-                                    newExpanded.add(item.id)
-                                  }
-                                  setExpandedItems(newExpanded)
-                                }}
-                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
-                              >
-                                <Info className="h-4 w-4 text-[var(--accent-color)]" />
-                                {expandedItems.has(item.id) ? 'Hide Details' : 'View Details'}
-                              </button>
-                              <button
-                                onClick={async (e) => {
-                                  e.stopPropagation()
-                                  setOpenItemMenu(null)
-                                  setMenuPosition(null)
-                                  if (!collection) return
-                                  try {
-                                    const res = await fetch('/api/wishlist/items', {
-                                      method: 'POST',
-                                      headers: { 'Content-Type': 'application/json' },
-                                      body: JSON.stringify({
-                                        items: [{
-                                          itemId: item.id,
-                                          collectionId: collection.id,
-                                          itemName: item.name,
-                                          itemNumber: item.number,
-                                          itemImage: item.image,
-                                          collectionName: collection.name,
-                                        }],
-                                      }),
-                                    })
-                                    if (res.ok) {
-                                      showAlert({
-                                        title: 'Success',
-                                        message: 'Item added to wishlist!',
-                                        type: 'success',
-                                      })
-                                    } else {
-                                      const errorData = await res.json()
-                                      showAlert({
-                                        title: 'Error',
-                                        message: errorData.error || 'Failed to add to wishlist',
-                                        type: 'error',
-                                      })
-                                    }
-                                  } catch (error) {
-                                    console.error('Error adding to wishlist:', error)
-                                    showAlert({
-                                      title: 'Error',
-                                      message: 'Failed to add to wishlist',
-                                      type: 'error',
-                                    })
-                                  }
-                                }}
-                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
-                              >
-                                <Heart className="h-4 w-4 text-[#FF6B9D]" />
-                                Add to Wishlist
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  setOpenItemMenu(null)
-                                  setMenuPosition(null)
-                                  setEditingItem(item)
-                                }}
-                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
-                              >
-                                <Edit className="h-4 w-4 text-[var(--accent-color)]" />
-                                Edit
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  setOpenItemMenu(null)
-                                  setMenuPosition(null)
-                                  deleteItem(item.id)
-                                }}
-                                className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                Delete
-                              </button>
-                            </div>
-                          </>,
-                          document.body
-                        )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenItemMenu(null)
+                            setMenuPosition(null)
+                            const newExpanded = new Set(expandedItems)
+                            if (newExpanded.has(item.id)) {
+                              newExpanded.delete(item.id)
+                            } else {
+                              newExpanded.add(item.id)
+                            }
+                            setExpandedItems(newExpanded)
+                          }}
+                          className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2"
+                        >
+                          <Info className="h-4 w-4 text-[var(--accent-color)]" />
+                          {expandedItems.has(item.id) ? 'Hide Details' : 'View Details'}
+                        </button>
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation()
+                            setOpenItemMenu(null)
+                            setMenuPosition(null)
+                            if (!collection) return
+                            try {
+                              const res = await fetch('/api/wishlist/items', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  items: [{
+                                    itemId: item.id,
+                                    collectionId: collection.id,
+                                    itemName: item.name,
+                                    itemNumber: item.number,
+                                    itemImage: item.image,
+                                    collectionName: collection.name,
+                                  }],
+                                }),
+                              })
+                              if (res.ok) {
+                                showAlert({
+                                  title: 'Success',
+                                  message: 'Item added to wishlist!',
+                                  type: 'success',
+                                })
+                              } else {
+                                const errorData = await res.json()
+                                showAlert({
+                                  title: 'Error',
+                                  message: errorData.error || 'Failed to add to wishlist',
+                                  type: 'error',
+                                })
+                              }
+                            } catch (error) {
+                              console.error('Error adding to wishlist:', error)
+                              showAlert({
+                                title: 'Error',
+                                message: 'Failed to add to wishlist',
+                                type: 'error',
+                              })
+                            }
+                          }}
+                          className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                        >
+                          <Heart className="h-4 w-4 text-[#FF6B9D]" />
+                          Add to Wishlist
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenItemMenu(null)
+                            setMenuPosition(null)
+                            setEditingItem(item)
+                          }}
+                          className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                        >
+                          <Edit className="h-4 w-4 text-[var(--accent-color)]" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenItemMenu(null)
+                            setMenuPosition(null)
+                            deleteItem(item.id)
+                          }}
+                          className="w-full px-4 py-3 min-h-[44px] text-left text-sm text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition flex items-center gap-2 border-t border-[var(--border-color)]"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </button>
+                      </div>
+                    </>,
+                    document.body
+                  )}
                     {expandedItems.has(item.id) && (
                       <div className="px-3 pb-3 pt-0 border-t border-[#2a2d35] space-y-2 text-sm">
                         {item.wear && (
