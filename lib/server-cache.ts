@@ -113,6 +113,16 @@ if (typeof setInterval !== 'undefined') {
 
 /**
  * Cache key generators
+ * 
+ * SECURITY NOTE: Cache keys don't include userId because:
+ * 1. Collection IDs are globally unique (UUIDs)
+ * 2. User ID is stored in cached data and validated on every cache hit
+ * 3. If userId doesn't match, cache is skipped and fresh query is performed
+ * 
+ * This approach is secure because:
+ * - Authorization is always validated (userId check)
+ * - Cache is an optimization, not a security bypass
+ * - Defense in depth: cache check + database query both validate ownership
  */
 export const cacheKeys = {
   collection: (collectionId: string) => `collection:${collectionId}`,
