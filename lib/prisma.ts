@@ -9,6 +9,12 @@ const createPrismaClient = () => {
   // Use PRISMA_DATABASE_URL if available (Prisma Accelerate), otherwise use DATABASE_URL
   const databaseUrl = process.env.PRISMA_DATABASE_URL || process.env.DATABASE_URL
 
+  // Log which URL is being used (without exposing credentials)
+  if (process.env.NODE_ENV === 'production') {
+    const urlPreview = databaseUrl?.substring(0, 50) || 'undefined'
+    console.log(`[Prisma] Using database URL: ${urlPreview}... (${databaseUrl?.startsWith('prisma://') || databaseUrl?.startsWith('prisma+postgres://') ? 'Accelerate' : 'Direct'})`)
+  }
+
   const baseClient = new PrismaClient({
     datasources: {
       db: {
