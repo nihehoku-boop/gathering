@@ -7,6 +7,7 @@ import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { validateRequestBody, createCollectionSchema } from '@/lib/validation-schemas'
 import { logger } from '@/lib/logger'
+import { serverCache, cacheKeys } from '@/lib/server-cache'
 
 async function getCollectionsHandler() {
   try {

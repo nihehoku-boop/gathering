@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { serverCache, cacheKeys } from '@/lib/server-cache'
 
 export async function GET(
   request: NextRequest,
@@ -24,14 +25,32 @@ export async function GET(
     const skip = (page - 1) * limit
     const sortBy = url.searchParams.get('sortBy') || 'number-asc'
 
-    // Verify collection belongs to user
-    const collection = await prisma.collection.findFirst({
-      where: {
-        id: collectionId,
-        userId: session.user.id,
-      },
-      select: { id: true },
-    })
+    // Check cache first
+    const cacheKey = cacheKeys.collectionItems(collectionId, page, sortBy)
+    const cached = serverCache.get<{ items: any[]; pagination: any; userId: string }>(cacheKey)
+    if (cached && cached.userId === session.user.id) {
+      const response = NextResponse.json({
+        items: cached.items,
+        pagination: cached.pagination,
+      })
+      response.headers.set('Cache-Control', 'private, s-maxage=30, stale-while-revalidate=60')
+      return response
+    }
+
+    // Verify collection belongs to user AND get count in a single query
+    // This reduces 2 queries to 1
+    const [collection, totalCount] = await Promise.all([
+      prisma.collection.findFirst({
+        where: {
+          id: collectionId,
+          userId: session.user.id,
+        },
+        select: { id: true },
+      }),
+      prisma.item.count({
+        where: { collectionId },
+      }),
+    ])
 
     if (!collection) {
       return NextResponse.json(
@@ -39,11 +58,6 @@ export async function GET(
         { status: 404 }
       )
     }
-
-    // Get total count
-    const totalCount = await prisma.item.count({
-      where: { collectionId },
-    })
 
     // Build orderBy based on sortBy parameter
     // Prisma handles nulls by placing them last for desc and first for asc
@@ -104,22 +118,32 @@ export async function GET(
       },
     })
 
+    const pagination = {
+      page,
+      limit,
+      total: totalCount,
+      totalPages: Math.ceil(totalCount / limit),
+      hasMore: skip + items.length < totalCount,
+    }
+
+    // Cache the result (30 seconds TTL)
+    serverCache.set(cacheKey, {
+      items,
+      pagination,
+      userId: session.user.id,
+    }, 30 * 1000)
+
     const response = NextResponse.json({
       items,
-      pagination: {
-        page,
-        limit,
-        total: totalCount,
-        totalPages: Math.ceil(totalCount / limit),
-        hasMore: skip + items.length < totalCount,
-      },
+      pagination,
     })
 
     // Cache for 30 seconds
     response.headers.set('Cache-Control', 'private, s-maxage=30, stale-while-revalidate=60')
     return response
   } catch (error) {
-    console.error('Error fetching items:', error)
+    const { logger } = await import('@/lib/logger')
+    logger.error('Error fetching items:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

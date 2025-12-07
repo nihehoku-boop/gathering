@@ -213,22 +213,26 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         }
         setLoading(false)
         
-        // Fetch fresh data in background to update cache
-        fetch(`/api/collections/${collectionId}`)
-          .then(res => res.ok ? res.json() : null)
-          .then(data => {
-            if (data) {
-              CollectionCache.setCollection(collectionId, data)
-              // Update state if data changed significantly
-              if (data._count?.items !== cached._count?.items || data.ownedCount !== cached.ownedCount) {
-                setTotalItemsCount(data._count?.items || 0)
-                if (data.ownedCount !== undefined && data.ownedCount !== null) {
-                  setTotalOwnedCount(data.ownedCount)
+        // Background fetch disabled to reduce API calls
+        // Server-side cache handles freshness (30s TTL)
+        // Only fetch if user explicitly refreshes
+        if (false) { // Disabled: server cache handles freshness
+          fetch(`/api/collections/${collectionId}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+              if (data) {
+                CollectionCache.setCollection(collectionId, data)
+                // Update state if data changed significantly
+                if (data._count?.items !== cached._count?.items || data.ownedCount !== cached.ownedCount) {
+                  setTotalItemsCount(data._count?.items || 0)
+                  if (data.ownedCount !== undefined && data.ownedCount !== null) {
+                    setTotalOwnedCount(data.ownedCount)
+                  }
                 }
               }
-            }
-          })
-          .catch(() => {}) // Silently fail background update
+            })
+            .catch(() => {}) // Silently fail background update
+        }
         return
       }
 
@@ -353,30 +357,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         itemsPageRef.current = page
       })
       
-      // Fetch fresh data in background to update cache
-      fetch(`/api/collections/${collectionId}/items?page=${page}&limit=${limit}&sortBy=${currentSortBy}`)
-        .then(res => res.ok ? res.json() : null)
-        .then(data => {
-          if (data) {
-            CollectionCache.setItemsPage(collectionId, page, currentSortBy, data.items, data.pagination)
-            // Update if data changed significantly
-            if (JSON.stringify(data.items) !== JSON.stringify(cachedPage.items)) {
-              startTransition(() => {
-                if (append) {
-                  setItems(prev => {
-                    const withoutPage = prev.slice(0, (page - 1) * limit)
-                    return [...withoutPage, ...data.items]
-                  })
-                } else {
-                  setItems(data.items)
-                }
-                setHasMoreItems(data.pagination.hasMore)
-                hasMoreItemsRef.current = data.pagination.hasMore
-              })
-            }
-          }
-        })
-        .catch(() => {}) // Silently fail background update
+      // Background fetch disabled to reduce API calls
+      // Server-side cache handles freshness (30s TTL)
       return
     }
     

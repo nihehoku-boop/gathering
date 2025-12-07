@@ -7,6 +7,7 @@ import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { logger } from '@/lib/logger'
 import { safeParseJson, sanitizeObject } from '@/lib/sanitize'
+import { serverCache, cacheKeys } from '@/lib/server-cache'
 
 async function updateItemHandler(
   request: NextRequest,
@@ -136,6 +137,10 @@ async function updateItemHandler(
       where: { id: itemId },
       data: updateData,
     })
+
+    // Invalidate cache for this collection's items
+    serverCache.deletePattern(`collection:${item.collectionId}:items:`)
+    serverCache.delete(cacheKeys.collection(item.collectionId))
 
     // Only check achievements if relevant fields changed (isOwned, notes, image, rating, logDate)
     // This avoids unnecessary database queries on every update
