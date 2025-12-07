@@ -149,12 +149,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setTotalItemsCount(data._count?.items || 0)
         // ownedCount is calculated efficiently by the API using a count query
         const ownedCount = (data as any).ownedCount
+        console.log('[CollectionDetail] API returned ownedCount:', ownedCount, 'totalItems:', data._count?.items)
         if (ownedCount !== undefined && ownedCount !== null) {
           setTotalOwnedCount(ownedCount)
         } else {
-          // Fallback: if ownedCount is not in response, calculate from loaded items
-          const calculatedCount = items.filter(item => item.isOwned).length
-          setTotalOwnedCount(calculatedCount)
+          console.warn('[CollectionDetail] ownedCount not in API response, will calculate from items when loaded')
+          // Don't set to 0 here - wait for items to load and calculate from them
+          // The fallback in fetchItems will handle this
         }
       }
     } catch (error) {
@@ -215,10 +216,12 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             setItems(prev => [...prev, ...data.items])
           } else {
             setItems(data.items)
-            // If we're loading the first page and ownedCount wasn't set from collection API,
-            // calculate it from the loaded items as a fallback
+            // If we're loading the first page and ownedCount is still 0 (wasn't set from collection API),
+            // calculate it from ALL loaded items as a fallback
+            // Note: This only counts items on the first page, but it's better than showing 0
             if (page === 1 && totalOwnedCount === 0) {
               const calculatedCount = data.items.filter((item: Item) => item.isOwned).length
+              console.log('[CollectionDetail] Calculated ownedCount from first page:', calculatedCount, 'out of', data.items.length, 'items')
               setTotalOwnedCount(calculatedCount)
             }
           }
