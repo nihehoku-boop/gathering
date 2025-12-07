@@ -1430,40 +1430,40 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       }
                     }}
                   >
-                    <div className="flex items-center gap-3 p-3">
+                    <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3">
                     {isSelectionMode ? (
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
                           toggleSelection(item.id)
                         }}
-                        className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                        className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
                           selectedItems.has(item.id)
                             ? 'bg-[var(--accent-color)] border-[var(--accent-color)]'
                             : 'border-[#353842] hover:border-[var(--accent-color)]'
                         }`}
                       >
-                        {selectedItems.has(item.id) && <Check className="h-4 w-4 text-white" />}
+                        {selectedItems.has(item.id) && <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />}
                       </button>
                     ) : (
                       <button
                         onClick={() => toggleItemOwned(item.id, item.isOwned)}
-                        className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                        className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
                           item.isOwned
                             ? 'bg-[#34C759] border-[#34C759] text-white'
                             : 'border-[#353842] hover:border-[#34C759]'
                         }`}
                       >
-                        {item.isOwned && <Check className="h-4 w-4" />}
+                        {item.isOwned && <Check className="h-3 w-3 sm:h-4 sm:w-4" />}
                       </button>
                     )}
-                    <div className="flex-1">
-                      <div className="font-medium text-[var(--text-primary)]">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm sm:text-base text-[var(--text-primary)] truncate">
                         {item.number && `#${item.number} - `}
                         {item.name}
                       </div>
                       {item.notes && !expandedItems.has(item.id) && (
-                        <div className="text-sm text-[var(--text-secondary)] line-clamp-1">
+                        <div className="text-xs sm:text-sm text-[var(--text-secondary)] line-clamp-1 truncate">
                           {item.notes}
                         </div>
                       )}
@@ -1478,16 +1478,16 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         }
                         setExpandedItems(newExpanded)
                       }}
-                      className="flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--accent-color)] smooth-transition"
+                      className="flex-shrink-0 flex items-center gap-1 text-xs sm:text-sm text-[var(--text-secondary)] hover:text-[var(--accent-color)] smooth-transition p-1"
                     >
-                      <Info className="h-4 w-4" />
+                      <Info className="h-3 w-3 sm:h-4 sm:w-4" />
                       {expandedItems.has(item.id) ? (
-                        <ChevronUp className="h-4 w-4" />
+                        <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4" />
                       ) : (
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
                       )}
                     </button>
-                    <div className="flex gap-1">
+                    <div className="flex-shrink-0 flex gap-0.5 sm:gap-1">
                       {!isSelectionMode && (
                         <>
                           <Button
