@@ -40,16 +40,6 @@ export async function GET(
         isPublic: true,
         createdAt: true,
         updatedAt: true,
-        items: {
-          select: {
-            id: true,
-            isOwned: true,
-          },
-          orderBy: [
-            { number: 'asc' },
-            { name: 'asc' },
-          ],
-        },
         _count: {
           select: {
             items: true,
