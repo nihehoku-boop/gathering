@@ -1,4 +1,11 @@
 import { z } from 'zod'
+import { sanitizeText, sanitizeEmail, sanitizeUrl, sanitizeHtml } from './sanitize'
+
+// Helper functions for Zod transforms
+const sanitizeTextTransform = (val: string) => sanitizeText(val)
+const sanitizeTextMax = (maxLength: number) => (val: string) => sanitizeText(val, maxLength)
+const sanitizeUrlTransform = (val: string | null | undefined) => sanitizeUrl(val)
+const sanitizeUrlArrayTransform = (val: string) => sanitizeUrl(val) || ''
 
 // Collection schemas
 export const createCollectionSchema = z.object({
@@ -31,22 +38,25 @@ export const updateCollectionSchema = z.object({
 // Item schemas
 export const createItemSchema = z.object({
   collectionId: z.string().uuid(),
-  name: z.string().min(1).max(500).trim(),
+  name: z.string().min(1).max(500).trim().transform(sanitizeTextTransform),
   number: z.number().int().positive().nullable().optional(),
-  image: z.string().url().nullable().optional(),
+  image: z.string().url().nullable().optional().transform(sanitizeUrlTransform),
 })
 
 export const updateItemSchema = z.object({
   isOwned: z.boolean().optional(),
-  name: z.string().min(1).max(500).trim().optional(),
-  notes: z.string().max(5000).trim().nullable().optional(),
-  image: z.string().url().nullable().optional(),
-  alternativeImages: z.array(z.string().url()).optional(),
-  wear: z.string().max(50).trim().nullable().optional(),
+  name: z.string().min(1).max(500).trim().optional().transform((val) => val ? sanitizeTextTransform(val) : val),
+  notes: z.string().max(5000).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(5000)(val) : val),
+  image: z.string().url().nullable().optional().transform(sanitizeUrlTransform),
+  alternativeImages: z.array(z.string().url().transform(sanitizeUrlArrayTransform)).optional(),
+  wear: z.string().max(50).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(50)(val) : val),
   personalRating: z.number().int().min(1).max(10).nullable().optional(),
   logDate: z.string().nullable().optional(),
   customFields: z.record(z.string(), z.any()).optional(),
 })
+
+// Alias for backward compatibility
+export const itemPatchSchema = updateItemSchema
 
 export const bulkItemsSchema = z.object({
   itemIds: z.array(z.string().uuid()).min(1).max(1000),
@@ -58,7 +68,7 @@ export const bulkItemsSchema = z.object({
 export const createBulkItemsSchema = z.object({
   collectionId: z.string().uuid(),
   items: z.array(z.object({
-    name: z.string().min(1).max(500).trim(),
+    name: z.string().min(1).max(500).trim().transform(sanitizeTextTransform),
     number: z.number().int().positive().nullable().optional(),
     customFields: z.record(z.string(), z.any()).optional(),
   })).min(1).max(1000),
@@ -95,7 +105,7 @@ export const updateFolderSchema = z.object({
 
 // Search schema
 export const searchQuerySchema = z.object({
-  q: z.string().min(2).max(200).trim(),
+  q: z.string().min(2).max(200).trim().transform(sanitizeTextTransform),
   limit: z.coerce.number().int().min(1).max(100).default(10),
   page: z.coerce.number().int().min(1).default(1).optional(),
 })
