@@ -39,7 +39,16 @@ export async function GET(request: NextRequest) {
     if (format === 'stats') {
       // Return statistics
       const stats = prismaLogger.getStatistics()
-      return NextResponse.json(stats)
+      // Include debug info in development
+      const debugInfo = process.env.NODE_ENV === 'development' ? {
+        enabled: prismaLogger.isEnabled(),
+        totalLogs: prismaLogger.getLogs().length,
+        env: {
+          NODE_ENV: process.env.NODE_ENV,
+          ENABLE_PRISMA_LOGGING: process.env.ENABLE_PRISMA_LOGGING,
+        },
+      } : undefined
+      return NextResponse.json({ ...stats, _debug: debugInfo })
     }
 
     // Get filtered logs

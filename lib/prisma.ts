@@ -36,11 +36,19 @@ const createPrismaClient = () => {
   const loggingMiddleware = createPrismaLoggingMiddleware()
   baseClient.$use(loggingMiddleware)
 
+  // Log that middleware is enabled (for debugging)
+  if (process.env.NODE_ENV === 'development' || process.env.ENABLE_PRISMA_LOGGING === 'true') {
+    console.log('[Prisma Logger] Middleware enabled and attached to Prisma client')
+  }
+
   // Only use Accelerate extension for prisma:// URLs (not db.prisma.io)
   // db.prisma.io endpoints should work as direct connections without the extension
   // This avoids Prisma Accelerate plan limits
   if (databaseUrl?.startsWith('prisma://') || databaseUrl?.startsWith('prisma+postgres://')) {
-    return baseClient.$extends(withAccelerate())
+    // When using extensions, middleware should still work, but we need to ensure it's applied first
+    const extendedClient = baseClient.$extends(withAccelerate())
+    // Middleware is already applied to baseClient, so it should work with extensions
+    return extendedClient
   }
 
   // For db.prisma.io or other direct connections, use without Accelerate extension
