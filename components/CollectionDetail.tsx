@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, startTransition } from 'react'
 import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { CollectionCache } from '@/lib/collection-cache'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -151,6 +152,40 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   const fetchCollection = async () => {
     try {
+      // Try cache first
+      const cached = CollectionCache.getCollection(collectionId)
+      if (cached) {
+        console.log('[CollectionDetail] Using cached collection data')
+        setCollection(cached)
+        setIsPublic(cached.isPublic || false)
+        setShareToken(cached.shareToken || null)
+        setTotalItemsCount(cached._count?.items || 0)
+        const ownedCount = cached.ownedCount
+        if (ownedCount !== undefined && ownedCount !== null) {
+          setTotalOwnedCount(ownedCount)
+        }
+        setLoading(false)
+        
+        // Fetch fresh data in background to update cache
+        fetch(`/api/collections/${collectionId}`)
+          .then(res => res.ok ? res.json() : null)
+          .then(data => {
+            if (data) {
+              CollectionCache.setCollection(collectionId, data)
+              // Update state if data changed significantly
+              if (data._count?.items !== cached._count?.items || data.ownedCount !== cached.ownedCount) {
+                setTotalItemsCount(data._count?.items || 0)
+                if (data.ownedCount !== undefined && data.ownedCount !== null) {
+                  setTotalOwnedCount(data.ownedCount)
+                }
+              }
+            }
+          })
+          .catch(() => {}) // Silently fail background update
+        return
+      }
+
+      // No cache, fetch from API
       const res = await fetch(`/api/collections/${collectionId}`)
       if (res.ok) {
         const data = await res.json()
@@ -169,6 +204,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           // Don't set to 0 here - wait for items to load and calculate from them
           // The fallback in fetchItems will handle this
         }
+        // Cache the result
+        CollectionCache.setCollection(collectionId, data)
       }
     } catch (error) {
       console.error('Error fetching collection:', error)
@@ -226,7 +263,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     const limit = getItemLimit(collectionId, page === 1)
     const cacheKey = `${page}_${currentSortBy}`
     
-    // Check cache first if useCache is true (must match current sort order)
+    // Check in-memory prefetch cache first (fastest)
     if (useCache && prefetchCacheRef.current.has(cacheKey)) {
       const cachedData = prefetchCacheRef.current.get(cacheKey)
       prefetchCacheRef.current.delete(cacheKey) // Remove from cache after use
@@ -236,6 +273,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           setItems(prev => [...prev, ...cachedData.items])
         } else {
           setItems(cachedData.items)
+          if (page === 1 && totalOwnedCount === 0) {
+            const calculatedCount = cachedData.items.filter((item: Item) => item.isOwned).length
+            setTotalOwnedCount(calculatedCount)
+          }
         }
         setHasMoreItems(cachedData.pagination.hasMore)
         hasMoreItemsRef.current = cachedData.pagination.hasMore
@@ -244,7 +285,55 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
       return
     }
+
+    // Check localStorage cache (no API call needed)
+    const cachedPage = CollectionCache.getItemsPage(collectionId, page, currentSortBy)
+    if (cachedPage) {
+      console.log(`[CollectionDetail] Using cached items page ${page}`)
+      startTransition(() => {
+        if (append) {
+          setItems(prev => [...prev, ...cachedPage.items])
+        } else {
+          setItems(cachedPage.items)
+          if (page === 1 && totalOwnedCount === 0) {
+            const calculatedCount = cachedPage.items.filter((item: Item) => item.isOwned).length
+            setTotalOwnedCount(calculatedCount)
+          }
+        }
+        setHasMoreItems(cachedPage.pagination.hasMore)
+        hasMoreItemsRef.current = cachedPage.pagination.hasMore
+        setItemsPage(page)
+        itemsPageRef.current = page
+      })
+      
+      // Fetch fresh data in background to update cache
+      fetch(`/api/collections/${collectionId}/items?page=${page}&limit=${limit}&sortBy=${currentSortBy}`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data) {
+            CollectionCache.setItemsPage(collectionId, page, currentSortBy, data.items, data.pagination)
+            // Update if data changed significantly
+            if (JSON.stringify(data.items) !== JSON.stringify(cachedPage.items)) {
+              startTransition(() => {
+                if (append) {
+                  setItems(prev => {
+                    const withoutPage = prev.slice(0, (page - 1) * limit)
+                    return [...withoutPage, ...data.items]
+                  })
+                } else {
+                  setItems(data.items)
+                }
+                setHasMoreItems(data.pagination.hasMore)
+                hasMoreItemsRef.current = data.pagination.hasMore
+              })
+            }
+          }
+        })
+        .catch(() => {}) // Silently fail background update
+      return
+    }
     
+    // No cache, fetch from API
     if (itemsLoadingRef.current && !useCache) return // Prevent concurrent requests (unless using cache)
     setItemsLoading(true)
     itemsLoadingRef.current = true
@@ -253,14 +342,14 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       if (res.ok) {
         const data = await res.json()
         
+        // Cache the result
+        CollectionCache.setItemsPage(collectionId, page, currentSortBy, data.items, data.pagination)
+        
         startTransition(() => {
           if (append) {
             setItems(prev => [...prev, ...data.items])
           } else {
             setItems(data.items)
-            // If we're loading the first page and ownedCount is still 0 (wasn't set from collection API),
-            // calculate it from ALL loaded items as a fallback
-            // Note: This only counts items on the first page, but it's better than showing 0
             if (page === 1 && totalOwnedCount === 0) {
               const calculatedCount = data.items.filter((item: Item) => item.isOwned).length
               console.log('[CollectionDetail] Calculated ownedCount from first page:', calculatedCount, 'out of', data.items.length, 'items')
@@ -415,8 +504,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       setItems(prev => prev.map(item => 
         item.id === itemId ? { ...item, isOwned: newStatus } : item
       ))
-      // Update total owned count
-      setTotalOwnedCount(prev => currentStatus ? prev - 1 : prev + 1)
+        // Update total owned count
+        setTotalOwnedCount(prev => currentStatus ? prev - 1 : prev + 1)
+        // Invalidate cache for this page - item status changed
+        CollectionCache.invalidateCollection(collectionId)
     
     try {
       const res = await fetch(`/api/items/${itemId}`, {
@@ -443,6 +534,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           item.id === itemId ? { ...item, isOwned: currentStatus } : item
         ))
         setTotalOwnedCount(prev => currentStatus ? prev + 1 : prev - 1)
+        // Invalidate cache on error too
+        CollectionCache.invalidateCollection(collectionId)
         const error = await res.json()
         console.error('Error updating item:', error)
       }
@@ -476,6 +569,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setNewItemName('')
         setNewItemNumber('')
         setShowAddForm(false)
+        // Invalidate cache - items have changed
+        CollectionCache.invalidateCollection(collectionId)
         // Add the new item to the list
         setItems(prev => [newItem, ...prev])
         setTotalItemsCount(prev => prev + 1)
@@ -505,6 +600,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
+        // Invalidate cache - items have changed
+        CollectionCache.invalidateCollection(collectionId)
         // Remove item from the list
         setItems(prev => prev.filter(item => item.id !== itemId))
         setTotalItemsCount(prev => Math.max(0, prev - 1))
@@ -573,6 +670,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
+        // Invalidate cache - items have changed
+        CollectionCache.invalidateCollection(collectionId)
         fetchCollection()
         clearSelection()
         setIsSelectionMode(false)
@@ -627,6 +726,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
       })
 
       if (res.ok) {
+        // Invalidate cache - items have changed
+        CollectionCache.invalidateCollection(collectionId)
         clearSelection()
         showAlert({
           title: 'Success',
@@ -638,6 +739,8 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setItems(previousItems)
         // Revert the owned count change
         setTotalOwnedCount(prev => prev - changeCount)
+        // Invalidate cache on error
+        CollectionCache.invalidateCollection(collectionId)
         const errorData = await res.json()
         showAlert({
           title: 'Error',
@@ -648,6 +751,9 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     } catch (error) {
       // Revert on error
       setItems(previousItems)
+      setTotalOwnedCount(prev => prev - changeCount)
+      // Invalidate cache on error
+      CollectionCache.invalidateCollection(collectionId)
       console.error('Error updating items:', error)
       showAlert({
         title: 'Error',
