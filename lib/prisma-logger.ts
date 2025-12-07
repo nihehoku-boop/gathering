@@ -21,18 +21,15 @@ interface PrismaLogEntry {
 class PrismaLogger {
   private logs: PrismaLogEntry[] = []
   private readonly MAX_LOGS = 1000 // Keep last 1000 operations
-  // Enable logging in development by default, or if explicitly enabled
-  // In production, must set ENABLE_PRISMA_LOGGING=true
-  private enabled: boolean = 
-    process.env.ENABLE_PRISMA_LOGGING === 'true' || 
-    process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV !== 'production' // Also enable in non-production environments
+  // Enable logging by default in all environments
+  // Can be disabled by setting ENABLE_PRISMA_LOGGING=false
+  private enabled: boolean = process.env.ENABLE_PRISMA_LOGGING !== 'false'
   private startTimes = new Map<string, number>()
   
   constructor() {
     // Log initialization status
     if (typeof process !== 'undefined') {
-      console.log(`[Prisma Logger] Initialized - Enabled: ${this.enabled}, NODE_ENV: ${process.env.NODE_ENV}, ENABLE_PRISMA_LOGGING: ${process.env.ENABLE_PRISMA_LOGGING}`)
+      console.log(`[Prisma Logger] Initialized - Enabled: ${this.enabled}, NODE_ENV: ${process.env.NODE_ENV}, ENABLE_PRISMA_LOGGING: ${process.env.ENABLE_PRISMA_LOGGING || 'not set (default: enabled)'}`)
     }
   }
 
