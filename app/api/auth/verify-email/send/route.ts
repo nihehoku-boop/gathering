@@ -73,12 +73,24 @@ async function sendVerificationEmailHandler(request: NextRequest) {
     )
 
     if (!emailResult.success) {
-      logger.error('Failed to send verification email:', emailResult.error)
-      // In development, log the link as fallback
+      logger.error('Failed to send verification email:', {
+        error: emailResult.error,
+        userId: user.id,
+        userEmail: user.email,
+        hasApiKey: !!process.env.RESEND_API_KEY,
+        fromEmail: process.env.RESEND_FROM_EMAIL || 'Gathering <onboarding@resend.dev>',
+      })
+      // In development, log the link as fallback and return error details
       if (process.env.NODE_ENV === 'development') {
         console.log('Verification link (DEV fallback):', verificationLink)
+        return NextResponse.json({
+          message: 'Verification email could not be sent',
+          error: emailResult.error,
+          fallbackLink: verificationLink,
+        }, { status: 500 })
       }
-      // Still return success to user (don't reveal email service issues)
+      // In production, still return success to user (don't reveal email service issues)
+      // But log the error for debugging
     }
 
     return NextResponse.json({

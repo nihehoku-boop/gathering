@@ -4,11 +4,18 @@ import { Resend } from 'resend'
 let resend: Resend | null = null
 
 function getResendClient(): Resend | null {
-  if (!process.env.RESEND_API_KEY) {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    console.error('[Email] RESEND_API_KEY not configured')
     return null
   }
   if (!resend) {
-    resend = new Resend(process.env.RESEND_API_KEY)
+    resend = new Resend(apiKey)
+    console.log('[Email] Resend client initialized', {
+      hasApiKey: !!apiKey,
+      apiKeyLength: apiKey.length,
+      apiKeyPrefix: apiKey.substring(0, 3),
+    })
   }
   return resend
 }
@@ -229,6 +236,12 @@ export async function sendVerificationEmail(email: string, verificationLink: str
 
     const fromEmail = process.env.RESEND_FROM_EMAIL || 'Gathering <onboarding@resend.dev>'
     
+    console.log('[Email] Sending verification email', {
+      to: email,
+      from: fromEmail,
+      hasClient: !!client,
+    })
+
     const { data, error } = await client.emails.send({
       from: fromEmail,
       to: email,
@@ -307,9 +320,20 @@ This link will expire in 24 hours. If you didn't create an account, you can safe
     })
 
     if (error) {
-      console.error('Error sending verification email:', error)
-      return { success: false, error: error.message }
+      console.error('[Email] Error sending verification email:', {
+        error,
+        errorMessage: error.message,
+        errorName: error.name,
+        to: email,
+        from: fromEmail,
+      })
+      return { success: false, error: error.message || 'Unknown error' }
     }
+
+    console.log('[Email] Verification email sent successfully', {
+      emailId: data?.id,
+      to: email,
+    })
 
     return { success: true, data }
   } catch (error) {
