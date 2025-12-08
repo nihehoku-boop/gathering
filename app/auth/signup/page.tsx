@@ -82,7 +82,10 @@ export default function SignUpPage() {
               <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
                 Account Created!
               </h3>
-              <p className="text-[var(--text-secondary)]">
+              <p className="text-[var(--text-secondary)] mb-4">
+                We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.
+              </p>
+              <p className="text-sm text-[var(--text-secondary)]">
                 Redirecting to sign in...
               </p>
             </div>
