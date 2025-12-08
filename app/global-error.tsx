@@ -1,5 +1,8 @@
 'use client'
 
+import * as Sentry from '@sentry/nextjs'
+import { useEffect } from 'react'
+
 export default function GlobalError({
   error,
   reset,
@@ -7,6 +10,13 @@ export default function GlobalError({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  useEffect(() => {
+    // Capture error to Sentry
+    if (process.env.NODE_ENV === 'production') {
+      Sentry.captureException(error)
+    }
+    console.error('Global error:', error)
+  }, [error])
   return (
     <html lang="en" className="dark">
       <body className="bg-[var(--bg-primary)]">
