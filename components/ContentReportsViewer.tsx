@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { AlertTriangle, CheckCircle2, XCircle, Eye, EyeOff, Clock } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, XCircle, Eye, EyeOff, Clock, Package } from 'lucide-react'
 import { useAlert } from '@/hooks/useAlert'
 import AlertDialog from './ui/alert-dialog'
 
@@ -30,6 +30,14 @@ interface ContentReport {
       email: string
       image: string | null
     }
+    items: Array<{
+      id: string
+      name: string
+      number: number | null
+      notes: string | null
+      image: string | null
+      customFields: string
+    }>
   }
   reporter: {
     id: string
@@ -320,6 +328,62 @@ export default function ContentReportsViewer() {
                       {selectedReport.reporter.name || selectedReport.reporter.email}
                     </p>
                   </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Collection Items</h4>
+                <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
+                  {selectedReport.communityCollection.items && selectedReport.communityCollection.items.length > 0 ? (
+                    <div className="space-y-2">
+                      <p className="text-xs text-[var(--text-secondary)] mb-2">
+                        {selectedReport.communityCollection.items.length} item{selectedReport.communityCollection.items.length !== 1 ? 's' : ''} in this collection:
+                      </p>
+                      <div className="max-h-64 overflow-y-auto space-y-2">
+                        {selectedReport.communityCollection.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-start gap-3 p-2 bg-[var(--bg-secondary)] rounded border border-[var(--border-color)]"
+                          >
+                            {item.image && (
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-16 h-16 object-cover rounded flex-shrink-0"
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                {item.number !== null && (
+                                  <span className="text-xs font-medium text-[var(--text-secondary)]">
+                                    #{item.number}
+                                  </span>
+                                )}
+                                <p className="text-sm font-medium text-[var(--text-primary)] truncate">
+                                  {item.name}
+                                </p>
+                              </div>
+                              {item.notes && (
+                                <p className="text-xs text-[var(--text-secondary)] mt-1 line-clamp-2">
+                                  {item.notes}
+                                </p>
+                              )}
+                              {item.customFields && item.customFields !== '{}' && (
+                                <p className="text-xs text-[var(--text-secondary)] mt-1 opacity-75">
+                                  Has custom fields
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-[var(--text-secondary)] text-center py-4">
+                      <Package className="h-5 w-5 mx-auto mb-2 opacity-50" />
+                      No items in this collection
+                    </p>
+                  )}
                 </div>
               </div>
 

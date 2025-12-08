@@ -59,6 +59,20 @@ async function getReportsHandler(request: NextRequest) {
                   image: true,
                 },
               },
+              items: {
+                select: {
+                  id: true,
+                  name: true,
+                  number: true,
+                  notes: true,
+                  image: true,
+                  customFields: true,
+                },
+                orderBy: [
+                  { number: 'asc' },
+                  { name: 'asc' },
+                ],
+              },
             },
           },
           reporter: {
