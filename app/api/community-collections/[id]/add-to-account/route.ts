@@ -40,7 +40,7 @@ export async function POST(
         category: communityCollection.category,
         template: communityCollection.template || null, // Preserve template from community collection
         coverImage: communityCollection.coverImage,
-        coverImageFit: (communityCollection as any).coverImageFit || 'cover',
+        coverImageFit: (communityCollection as any).coverImageFit || 'contain',
         tags: communityCollection.tags || '[]',
         userId: session.user.id,
         communityCollectionId: communityCollection.id, // Track that this came from a community collection

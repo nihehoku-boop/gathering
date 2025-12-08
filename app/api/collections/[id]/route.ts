@@ -222,7 +222,7 @@ async function updateCollectionHandler(
     }
 
     if (coverImageFit !== undefined) {
-      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'cover'
+      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'contain'
     }
 
     // Tags is always sent from the client, so always process it
