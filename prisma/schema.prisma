@@ -103,7 +103,7 @@ model Collection {
   folder                  Folder?   @relation(fields: [folderId], references: [id], onDelete: SetNull)
   coverImage              String? // URL or path to cover image
   coverImageAspectRatio   String? // Aspect ratio for cover image (e.g., "1:1", "3:4", "9:16", "2:3")
-  coverImageFit           String?   @default("cover") // Image fit mode: "cover" (fill) or "contain" (crop to fit)
+  coverImageFit           String?   @default("contain") // Image fit mode: "cover" (fill) or "contain" (crop to fit)
   tags                    String    @default("[]") // JSON array of tags
   userId                  String
   user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)

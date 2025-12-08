@@ -157,7 +157,7 @@ async function createCollectionHandler(request: NextRequest) {
           : '[]',
         coverImage: coverImage || null,
         coverImageAspectRatio: coverImageAspectRatio || null,
-        coverImageFit: coverImageFit || 'cover',
+        coverImageFit: coverImageFit || 'contain',
         tags: tagsString,
         userId: session.user.id,
         items: items && Array.isArray(items) ? {

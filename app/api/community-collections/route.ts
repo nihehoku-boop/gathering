@@ -230,7 +230,7 @@ export async function POST(request: NextRequest) {
         category: category?.trim() || null,
         template: template || null,
         coverImage: coverImage?.trim() || null,
-        coverImageFit: coverImageFit || 'cover',
+        coverImageFit: coverImageFit || 'contain',
         tags: tags || '[]',
         userId: session.user.id,
       },

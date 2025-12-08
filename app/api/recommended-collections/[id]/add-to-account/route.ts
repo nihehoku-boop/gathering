@@ -41,7 +41,7 @@ export async function POST(
         template: recommendedCollection.template || null, // Preserve template from recommended collection
         customFieldDefinitions: recommendedCollection.customFieldDefinitions || '[]', // Preserve custom field definitions
         coverImage: recommendedCollection.coverImage,
-        coverImageFit: recommendedCollection.coverImageFit || 'cover',
+        coverImageFit: recommendedCollection.coverImageFit || 'contain',
         tags: recommendedCollection.tags || '[]',
         userId: session.user.id,
         recommendedCollectionId: recommendedCollection.id,

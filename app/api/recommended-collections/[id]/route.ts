@@ -125,7 +125,7 @@ export async function PATCH(
     }
 
     if (coverImageFit !== undefined) {
-      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'cover'
+      updateData.coverImageFit = coverImageFit && (coverImageFit === 'cover' || coverImageFit === 'contain') ? coverImageFit : 'contain'
     }
 
     if (tags !== undefined) {

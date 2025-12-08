@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
         template: template || 'custom',
         customFieldDefinitions: customFieldDefinitionsValue,
         coverImage: coverImage || null,
-        coverImageFit: coverImageFit || 'cover',
+        coverImageFit: coverImageFit || 'contain',
         tags: tagsValue,
         isPublic: isPublic === true || isPublic === 'true',
         items: items ? {
