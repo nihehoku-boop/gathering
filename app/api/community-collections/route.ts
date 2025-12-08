@@ -16,7 +16,9 @@ export async function GET(request: NextRequest) {
     const tags = url.searchParams.get('tags') || '' // Comma-separated tags
 
     // Build where clause for filtering
-    const where: any = {}
+    const where: any = {
+      isHidden: false, // Filter out hidden/moderated collections
+    }
     
     // Search filter - search in name, description, category, tags, item names, and user name/email
     if (searchQuery.trim()) {
