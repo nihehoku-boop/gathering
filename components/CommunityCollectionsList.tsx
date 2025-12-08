@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, BookOpen, Search, Edit, Trash2, User, List, Filter as FilterIcon, X, ChevronDown, ChevronUp, Heart, CheckCircle2 } from 'lucide-react'
+import { Plus, BookOpen, Search, Edit, Trash2, User, List, Filter as FilterIcon, X, ChevronDown, ChevronUp, Heart, CheckCircle2, Flag } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { parseTags, getTagColor, AVAILABLE_TAGS } from '@/lib/tags'
 import CreateCommunityCollectionDialog from './CreateCommunityCollectionDialog'
 import EditCommunityCollectionDialog from './EditCommunityCollectionDialog'
+import ReportCollectionDialog from './ReportCollectionDialog'
 import { getBadgeEmoji } from '@/lib/badges'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
@@ -67,6 +68,7 @@ export default function CommunityCollectionsList() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [editingCollection, setEditingCollection] = useState<CommunityCollection | null>(null)
   const [managingCollectionId, setManagingCollectionId] = useState<string | null>(null)
+  const [reportingCollection, setReportingCollection] = useState<{ id: string; name: string } | null>(null)
 
   // Debounce search input
   useEffect(() => {
@@ -644,35 +646,49 @@ export default function CommunityCollectionsList() {
                         </button>
                       </div>
                     </div>
-                    <div className="flex justify-end gap-2">
-                      {isOwner && (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setEditingCollection(collection)
-                            }}
-                            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleDelete(collection.id)
-                            }}
-                            className="border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </>
+                    <div className="flex justify-between items-center gap-2">
+                      {!isOwner && session && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setReportingCollection({ id: collection.id, name: collection.name })
+                          }}
+                          className="text-[var(--text-secondary)] hover:text-orange-500 hover:bg-orange-500/10"
+                          title="Report this collection"
+                        >
+                          <Flag className="h-4 w-4" />
+                        </Button>
                       )}
-                      {session && (
-                        <div className="flex-1 flex justify-end">
+                      <div className="flex gap-2 ml-auto">
+                        {isOwner && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setEditingCollection(collection)
+                              }}
+                              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleDelete(collection.id)
+                              }}
+                              className="border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                        {session && (
                           <Button
                             onClick={(e) => {
                               e.stopPropagation()
@@ -691,8 +707,8 @@ export default function CommunityCollectionsList() {
                               </>
                             )}
                           </Button>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -742,6 +758,15 @@ export default function CommunityCollectionsList() {
           setCollections([])
           setHasMore(true)
           fetchCollections(1, false)
+        }}
+      />
+      <ReportCollectionDialog
+        open={reportingCollection !== null}
+        onOpenChange={(open) => !open && setReportingCollection(null)}
+        collectionId={reportingCollection?.id || ''}
+        collectionName={reportingCollection?.name || ''}
+        onReported={() => {
+          // Optionally refresh or show a message
         }}
       />
       {managingCollectionId && (
