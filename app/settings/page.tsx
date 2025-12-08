@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Settings, ArrowLeft, Moon, Sun } from 'lucide-react'
+import { Settings, ArrowLeft, Moon, Sun, Trash2, AlertTriangle } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 import { hexToHsl } from '@/lib/color-utils'
@@ -39,6 +40,11 @@ export default function SettingsPage() {
   const [accentColor, setAccentColor] = useState('#FFD60A')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
   const [loading, setLoading] = useState(true)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deleteEmail, setDeleteEmail] = useState('')
+  const [deletePassword, setDeletePassword] = useState('')
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -121,6 +127,53 @@ export default function SettingsPage() {
   const handleShowProgressChange = (enabled: boolean) => {
     setShowProgressInSidebar(enabled)
     localStorage.setItem('showProgressInSidebar', enabled.toString())
+  }
+
+  const handleDeleteAccount = async () => {
+    if (!session?.user?.email) {
+      setDeleteError('Unable to get user email')
+      return
+    }
+
+    if (deleteEmail.toLowerCase() !== session.user.email.toLowerCase()) {
+      setDeleteError('Email does not match')
+      return
+    }
+
+    if (!deletePassword) {
+      setDeleteError('Password is required')
+      return
+    }
+
+    setDeleteLoading(true)
+    setDeleteError('')
+
+    try {
+      const response = await fetch('/api/user/delete-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          confirmEmail: deleteEmail,
+          password: deletePassword,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Sign out and redirect to home
+        await signOut({ callbackUrl: '/' })
+      } else {
+        setDeleteError(data.error || 'Failed to delete account')
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error)
+      setDeleteError('An error occurred. Please try again.')
+    } finally {
+      setDeleteLoading(false)
+    }
   }
 
   return (
@@ -306,6 +359,123 @@ export default function SettingsPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Account Deletion */}
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)] border-red-500/30">
+            <CardHeader>
+              <CardTitle className="text-red-500 flex items-center gap-2">
+                <Trash2 className="h-5 w-5" />
+                Delete Account
+              </CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
+                Permanently delete your account and all associated data
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                  <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div className="text-sm text-[var(--text-secondary)]">
+                    <p className="font-medium text-red-500 mb-1">Warning: This action cannot be undone</p>
+                    <p>Deleting your account will permanently remove:</p>
+                    <ul className="list-disc list-inside mt-1 space-y-1 ml-2">
+                      <li>All your collections and items</li>
+                      <li>Your profile and settings</li>
+                      <li>Your community collections and votes</li>
+                      <li>Your wishlists</li>
+                      <li>All other associated data</li>
+                    </ul>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => setShowDeleteDialog(true)}
+                  variant="outline"
+                  className="border-red-500/50 text-red-500 hover:bg-red-500/10 hover:border-red-500"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete My Account
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Delete Account Dialog */}
+          {showDeleteDialog && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+              <Card className="w-full max-w-md bg-[var(--bg-secondary)] border-[var(--border-color)]">
+                <CardHeader>
+                  <CardTitle className="text-red-500 flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    Confirm Account Deletion
+                  </CardTitle>
+                  <CardDescription className="text-[var(--text-secondary)]">
+                    This action cannot be undone. Please confirm your email and password to proceed.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {deleteError && (
+                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-500">
+                      {deleteError}
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <Label htmlFor="delete-email" className="text-[var(--text-primary)]">
+                      Confirm Email
+                    </Label>
+                    <Input
+                      id="delete-email"
+                      type="email"
+                      placeholder={session?.user?.email || 'your@email.com'}
+                      value={deleteEmail}
+                      onChange={(e) => setDeleteEmail(e.target.value)}
+                      className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)]"
+                    />
+                    <p className="text-xs text-[var(--text-secondary)]">
+                      Enter your email address to confirm
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="delete-password" className="text-[var(--text-primary)]">
+                      Password
+                    </Label>
+                    <Input
+                      id="delete-password"
+                      type="password"
+                      placeholder="Enter your password"
+                      value={deletePassword}
+                      onChange={(e) => setDeletePassword(e.target.value)}
+                      className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)]"
+                    />
+                    <p className="text-xs text-[var(--text-secondary)]">
+                      Enter your password to confirm deletion
+                    </p>
+                  </div>
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      onClick={handleDeleteAccount}
+                      disabled={deleteLoading || !deleteEmail || !deletePassword}
+                      className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                    >
+                      {deleteLoading ? 'Deleting...' : 'Delete Account'}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowDeleteDialog(false)
+                        setDeleteEmail('')
+                        setDeletePassword('')
+                        setDeleteError('')
+                      }}
+                      variant="outline"
+                      disabled={deleteLoading}
+                      className="flex-1 border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
             </div>
           </div>
         </div>

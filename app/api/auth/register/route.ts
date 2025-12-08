@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
 import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
-import { sendWelcomeEmail } from '@/lib/email'
+import { sendWelcomeEmail, sendVerificationEmail } from '@/lib/email'
+import { logger } from '@/lib/logger'
 
 async function registerHandler(request: NextRequest) {
   try {
@@ -63,21 +65,46 @@ async function registerHandler(request: NextRequest) {
       },
     })
 
-    // Send welcome email (non-blocking)
+    // Generate verification token
+    const verificationToken = crypto.randomBytes(32).toString('hex')
+    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+
+    // Store verification token in database
+    await prisma.verificationToken.create({
+      data: {
+        identifier: `email-verification:${user.id}`,
+        token: verificationToken,
+        expires: tokenExpiry,
+      },
+    })
+
+    // Generate verification link
+    const verificationLink = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/auth/verify-email?token=${verificationToken}&email=${encodeURIComponent(user.email)}`
+
+    // Send verification email (non-blocking)
+    sendVerificationEmail(user.email, verificationLink, user.name || undefined).catch((error) => {
+      logger.error('Failed to send verification email:', error)
+      // In development, log the link as fallback
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Verification link (DEV fallback):', verificationLink)
+      }
+    })
+
+    // Send welcome email (non-blocking, after verification email)
     sendWelcomeEmail(user.email, user.name || undefined).catch((error) => {
-      console.error('Failed to send welcome email:', error)
+      logger.error('Failed to send welcome email:', error)
       // Don't fail registration if email fails
     })
 
     return NextResponse.json(
       { 
-        message: 'User created successfully',
+        message: 'User created successfully. Please check your email to verify your account.',
         user 
       },
       { status: 201 }
     )
   } catch (error) {
-    console.error('Error registering user:', error)
+    logger.error('Error registering user:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
