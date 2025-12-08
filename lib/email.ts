@@ -20,6 +20,51 @@ function getResendClient(): Resend | null {
   return resend
 }
 
+/**
+ * Validates and normalizes the from email address
+ * Resend requires format: "email@example.com" or "Name <email@example.com>"
+ */
+function normalizeFromEmail(fromEmail: string | undefined): string {
+  if (!fromEmail) {
+    return 'Gathering <onboarding@resend.dev>'
+  }
+
+  // Remove any extra whitespace
+  const trimmed = fromEmail.trim()
+
+  // Check if it's already in the correct format
+  // Format: "Name <email@example.com>" or "email@example.com"
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const nameEmailRegex = /^[^<]+<[^\s@]+@[^\s@]+\.[^\s@]+>$/
+
+  if (emailRegex.test(trimmed)) {
+    // It's just an email, return as is
+    return trimmed
+  }
+
+  if (nameEmailRegex.test(trimmed)) {
+    // It's in "Name <email>" format, return as is
+    return trimmed
+  }
+
+  // Try to parse if it has a name but wrong format
+  // If it contains an email, extract it and format correctly
+  const emailMatch = trimmed.match(/[^\s@]+@[^\s@]+\.[^\s@]+/)
+  if (emailMatch) {
+    const email = emailMatch[0]
+    // If there's text before the email, use it as name
+    const nameMatch = trimmed.substring(0, trimmed.indexOf(email)).trim()
+    if (nameMatch) {
+      return `${nameMatch} <${email}>`
+    }
+    return email
+  }
+
+  // If we can't parse it, use default
+  console.warn('[Email] Invalid from email format, using default:', trimmed)
+  return 'Gathering <onboarding@resend.dev>'
+}
+
 // Email templates
 export async function sendPasswordResetEmail(email: string, resetLink: string, userName?: string) {
   try {
@@ -30,7 +75,9 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
       return { success: false, error: 'Email service not configured' }
     }
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Gathering <onboarding@resend.dev>'
+    const fromEmail = normalizeFromEmail(process.env.RESEND_FROM_EMAIL)
+    
+    console.log('[Email] Using from email:', fromEmail)
     
     const { data, error } = await client.emails.send({
       from: fromEmail,
@@ -132,8 +179,10 @@ export async function sendWelcomeEmail(email: string, userName?: string) {
       return { success: false, error: 'Email service not configured' }
     }
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Gathering <onboarding@resend.dev>'
+    const fromEmail = normalizeFromEmail(process.env.RESEND_FROM_EMAIL)
     const appUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+    
+    console.log('[Email] Using from email:', fromEmail)
     
     const { data, error } = await client.emails.send({
       from: fromEmail,
