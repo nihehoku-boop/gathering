@@ -66,6 +66,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@sentry/nextjs": "^10.29.0",
     "@tcgdex/sdk": "^2.7.1",
     "@types/cheerio": "^0.22.35",
     "@vercel/analytics": "^1.6.1",

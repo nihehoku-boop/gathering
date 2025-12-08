@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
+import SentryInit from '@/components/SentryInit'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
 
@@ -123,6 +124,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${bricolageGrotesque.variable} ${bricolageGrotesque.className} antialiased`}>
+        <SentryInit />
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />
         <SpeedInsights />
