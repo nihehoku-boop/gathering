@@ -2,6 +2,7 @@
 
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, PanelLeft, CheckCircle2 } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
@@ -41,7 +42,7 @@ export default function Navbar() {
 
   return (
     <nav className="border-b border-[var(--border-color)] glass sticky top-0 z-50 lg:ml-64 bg-[var(--bg-secondary)] animate-slide-in-right will-change-transform">
-      <div className="container mx-auto px-4 sm:px-6 py-5">
+      <div className="container mx-auto px-4 sm:px-6 py-6">
         <div className="flex justify-between items-center gap-4">
           {/* Mobile: Sidebar toggle button */}
           <button
@@ -53,14 +54,14 @@ export default function Navbar() {
           </button>
 
           {/* Mobile: Logo in center */}
-          <div className="lg:hidden flex-1 flex items-center justify-center gap-2">
+          <Link href="/" className="lg:hidden flex-1 flex items-center justify-center gap-2 hover:opacity-80 smooth-transition">
             <h1 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
               Sammlerei
             </h1>
             <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">
               Beta
             </span>
-          </div>
+          </Link>
 
           {/* Desktop: Menu items */}
           <div className="hidden lg:flex items-center gap-6 flex-1">
