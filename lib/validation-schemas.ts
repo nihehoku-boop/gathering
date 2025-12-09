@@ -160,8 +160,9 @@ export async function validateRequestBody<T>(
   request: Request,
   schema: z.ZodSchema<T>
 ): Promise<{ success: true; data: T } | { success: false; error: string; status: number }> {
+  let body: any = null
   try {
-    const body = await request.json()
+    body = await request.json()
     const data = schema.parse(body)
     return { success: true, data }
   } catch (error) {
@@ -171,7 +172,7 @@ export async function validateRequestBody<T>(
       if (process.env.NODE_ENV === 'development') {
         console.error('[Validation Error]', {
           issues: error.issues,
-          receivedBody: JSON.stringify(body, null, 2),
+          receivedBody: body ? JSON.stringify(body, null, 2) : 'Failed to parse request body',
         })
       }
       return {
