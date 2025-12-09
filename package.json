@@ -79,7 +79,7 @@
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.8.0",
     "clsx": "^2.0.0",
-    "lucide-react": "^0.303.0",
+    "lucide-react": "^0.556.0",
     "next": "^16.0.7",
     "next-auth": "^4.24.5",
     "next-cloudinary": "^6.17.5",
@@ -99,11 +99,11 @@
     "autoprefixer": "^10.0.1",
     "better-sqlite3": "^12.5.0",
     "eslint": "^8",
-    "eslint-config-next": "14.0.4",
+    "eslint-config-next": "14.2.33",
     "postcss": "^8",
     "prisma": "^5.7.1",
     "tailwindcss": "^3.3.0",
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
