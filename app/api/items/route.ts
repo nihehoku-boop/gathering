@@ -18,6 +18,10 @@ async function createItemHandler(request: NextRequest) {
     // Validate request body
     const validation = await validateRequestBody(request, createItemSchema)
     if (!validation.success) {
+      logger.error('Item creation validation failed:', {
+        error: validation.error,
+        status: validation.status,
+      })
       return NextResponse.json(
         { error: validation.error },
         { status: validation.status }
