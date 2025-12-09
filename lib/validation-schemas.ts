@@ -39,8 +39,16 @@ export const updateCollectionSchema = z.object({
 export const createItemSchema = z.object({
   collectionId: z.string().uuid(),
   name: z.string().min(1).max(500).trim().transform(sanitizeTextTransform),
-  number: z.number().int().positive().nullable().optional(),
-  image: z.string().url().nullable().optional().transform(sanitizeUrlTransform),
+  number: z.union([
+    z.number().int().positive(),
+    z.null(),
+    z.undefined(),
+  ]).optional().transform((val) => val ?? null),
+  image: z.union([
+    z.string().url(),
+    z.null(),
+    z.undefined(),
+  ]).optional().transform((val) => val ? sanitizeUrlTransform(val) : null),
 })
 
 export const updateItemSchema = z.object({
@@ -158,9 +166,17 @@ export async function validateRequestBody<T>(
     return { success: true, data }
   } catch (error) {
     if (error instanceof z.ZodError) {
+      const errorMessage = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
+      // Log validation errors in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[Validation Error]', {
+          issues: error.issues,
+          receivedBody: JSON.stringify(body, null, 2),
+        })
+      }
       return {
         success: false,
-        error: error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+        error: errorMessage,
         status: 400,
       }
     }
