@@ -7,6 +7,19 @@ const sanitizeTextMax = (maxLength: number) => (val: string) => sanitizeText(val
 const sanitizeUrlTransform = (val: string | null | undefined) => sanitizeUrl(val)
 const sanitizeUrlArrayTransform = (val: string) => sanitizeUrl(val) || ''
 
+// Helper to validate CUID or UUID (Prisma uses CUIDs by default)
+const cuidOrUuid = z.string().refine(
+  (val) => {
+    if (!val || typeof val !== 'string') return false
+    // UUID format: 8-4-4-4-12 hex digits with dashes
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89abAB][0-9a-f]{3}-[0-9a-f]{12}$/i
+    // CUID format: starts with 'c', followed by 24 alphanumeric characters (lowercase), total 25 characters
+    const cuidRegex = /^c[0-9a-z]{24}$/
+    return uuidRegex.test(val) || cuidRegex.test(val)
+  },
+  { message: 'Must be a valid UUID or CUID' }
+)
+
 // Collection schemas
 export const createCollectionSchema = z.object({
   name: z.string().min(1).max(200).trim(),
@@ -35,9 +48,21 @@ export const updateCollectionSchema = z.object({
   tags: z.union([z.string(), z.array(z.string())]).optional(),
 })
 
+// Helper to validate CUID or UUID
+const cuidOrUuid = z.string().refine(
+  (val) => {
+    // UUID format: 8-4-4-4-12 hex digits with dashes
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89abAB][0-9a-f]{3}-[0-9a-f]{12}$/i
+    // CUID format: starts with 'c', 25 characters total
+    const cuidRegex = /^c[0-9a-z]{24}$/i
+    return uuidRegex.test(val) || cuidRegex.test(val)
+  },
+  { message: 'Must be a valid UUID or CUID' }
+)
+
 // Item schemas
 export const createItemSchema = z.object({
-  collectionId: z.string().uuid(),
+  collectionId: cuidOrUuid,
   name: z.string().min(1).max(500).trim().transform(sanitizeTextTransform),
   number: z.union([
     z.number().int().positive(),

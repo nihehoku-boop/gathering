@@ -18,26 +18,10 @@ async function createItemHandler(request: NextRequest) {
     // Validate request body
     const validation = await validateRequestBody(request, createItemSchema)
     if (!validation.success) {
-      // Log the actual request body for debugging
-      try {
-        const body = await request.clone().json()
-        logger.error('Item creation validation failed:', {
-          error: validation.error,
-          status: validation.status,
-          receivedBody: {
-            collectionId: body.collectionId,
-            collectionIdType: typeof body.collectionId,
-            collectionIdLength: body.collectionId?.length,
-            name: body.name,
-            number: body.number,
-          },
-        })
-      } catch (e) {
-        logger.error('Item creation validation failed (could not parse body):', {
-          error: validation.error,
-          status: validation.status,
-        })
-      }
+      logger.error('Item creation validation failed:', {
+        error: validation.error,
+        status: validation.status,
+      })
       return NextResponse.json(
         { error: validation.error },
         { status: validation.status }
