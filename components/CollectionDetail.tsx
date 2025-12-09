@@ -592,11 +592,35 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         }
       }
 
+      // Validate collectionId before sending
+      if (!collectionId || typeof collectionId !== 'string') {
+        console.error('[Add Item] Invalid collectionId:', collectionId)
+        showAlert({
+          title: 'Error',
+          message: 'Invalid collection ID. Please refresh the page and try again.',
+          type: 'error',
+        })
+        setAddingItem(false)
+        return
+      }
+
+      const trimmedCollectionId = collectionId.trim()
+      
+      // Log in development to debug UUID issues
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Add Item] Sending request with:', {
+          collectionId: trimmedCollectionId,
+          collectionIdLength: trimmedCollectionId.length,
+          name: newItemName.trim(),
+          number: parsedNumber,
+        })
+      }
+
       const res = await fetch('/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          collectionId,
+          collectionId: trimmedCollectionId,
           name: newItemName.trim(),
           number: parsedNumber,
         }),

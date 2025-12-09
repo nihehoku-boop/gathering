@@ -168,11 +168,19 @@ export async function validateRequestBody<T>(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errorMessage = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
-      // Log validation errors in development
-      if (process.env.NODE_ENV === 'development') {
+      // Log validation errors with detailed info
+      if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production') {
         console.error('[Validation Error]', {
           issues: error.issues,
-          receivedBody: body ? JSON.stringify(body, null, 2) : 'Failed to parse request body',
+          receivedBody: body ? {
+            ...body,
+            collectionId: body.collectionId ? {
+              value: body.collectionId,
+              type: typeof body.collectionId,
+              length: body.collectionId.length,
+              isValidUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(body.collectionId || ''),
+            } : 'missing',
+          } : 'Failed to parse request body',
         })
       }
       return {
