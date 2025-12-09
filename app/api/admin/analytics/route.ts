@@ -69,15 +69,20 @@ async function getAnalyticsHandler(request: NextRequest) {
       // Total users
       prisma.user.count(),
 
-      // Active users (logged in within period)
-      prisma.session.count({
-        where: {
-          expires: {
-            gte: startDate,
+      // Active users (logged in within period) - count distinct user IDs
+      prisma.session
+        .findMany({
+          where: {
+            expires: {
+              gte: startDate,
+            },
           },
-        },
-        distinct: ['userId'],
-      }),
+          select: {
+            userId: true,
+          },
+          distinct: ['userId'],
+        })
+        .then((sessions: Array<{ userId: string }>) => sessions.length),
 
       // New users in period
       prisma.user.count({
