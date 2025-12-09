@@ -502,7 +502,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
+          <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)] min-h-[73px]">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 smooth-transition">
               <h2 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
                 Sammlerei
