@@ -48,18 +48,6 @@ export const updateCollectionSchema = z.object({
   tags: z.union([z.string(), z.array(z.string())]).optional(),
 })
 
-// Helper to validate CUID or UUID
-const cuidOrUuid = z.string().refine(
-  (val) => {
-    // UUID format: 8-4-4-4-12 hex digits with dashes
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89abAB][0-9a-f]{3}-[0-9a-f]{12}$/i
-    // CUID format: starts with 'c', 25 characters total
-    const cuidRegex = /^c[0-9a-z]{24}$/i
-    return uuidRegex.test(val) || cuidRegex.test(val)
-  },
-  { message: 'Must be a valid UUID or CUID' }
-)
-
 // Item schemas
 export const createItemSchema = z.object({
   collectionId: cuidOrUuid,
