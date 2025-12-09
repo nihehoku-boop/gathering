@@ -583,13 +583,22 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
     setAddingItem(true)
     try {
+      // Parse number properly - handle empty strings and invalid numbers
+      let parsedNumber: number | null = null
+      if (newItemNumber && newItemNumber.trim()) {
+        const num = parseInt(newItemNumber.trim(), 10)
+        if (!isNaN(num) && num > 0) {
+          parsedNumber = num
+        }
+      }
+
       const res = await fetch('/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           collectionId,
-          name: newItemName,
-          number: newItemNumber ? parseInt(newItemNumber) : null,
+          name: newItemName.trim(),
+          number: parsedNumber,
         }),
       })
 
@@ -604,9 +613,22 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setItems(prev => [newItem, ...prev])
         setTotalItemsCount(prev => prev + 1)
         fetchCollection()
+      } else {
+        // Handle error response
+        const errorData = await res.json().catch(() => ({ error: 'Failed to add item' }))
+        showAlert({
+          title: 'Error',
+          message: errorData.error || 'Failed to add item',
+          type: 'error',
+        })
       }
     } catch (error) {
       console.error('Error adding item:', error)
+      showAlert({
+        title: 'Error',
+        message: 'An error occurred while adding the item. Please try again.',
+        type: 'error',
+      })
     } finally {
       setAddingItem(false)
     }
