@@ -150,7 +150,7 @@ module.exports = withSentryConfig(
     widenClientFileUpload: true,
     transpileClientSDK: true,
     tunnelRoute: '/monitoring',
-    hideSourceMaps: true,
+    hideSourceMaps: process.env.NODE_ENV === 'production',
     disableLogger: true,
   }
 )

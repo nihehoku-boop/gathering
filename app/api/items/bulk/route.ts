@@ -160,30 +160,44 @@ async function createBulkItemsHandler(request: NextRequest) {
       )
     }
 
-    // Create all items in a transaction
-    const createdItems = await prisma.$transaction(
-      items.map((item: { 
+    // Use createMany for bulk inserts (much more efficient than transaction with individual creates)
+    // For 100 items: 100 operations → 1 operation
+    const createdItemsResult = await prisma.item.createMany({
+      data: items.map((item: { 
         name: string
         number?: number | null
         customFields?: Record<string, any>
-      }) =>
-        prisma.item.create({
-          data: {
-            collectionId,
-            name: item.name,
-            number: item.number ? parseInt(String(item.number)) : null,
-            customFields: item.customFields ? JSON.stringify(item.customFields) : '{}',
-          },
-        })
-      )
-    )
+        notes?: string | null
+        image?: string | null
+      }) => ({
+        collectionId,
+        name: item.name,
+        number: item.number ? parseInt(String(item.number)) : null,
+        customFields: item.customFields ? JSON.stringify(item.customFields) : '{}',
+        notes: item.notes || null,
+        image: item.image || null,
+        isOwned: false,
+      })),
+      skipDuplicates: true, // Skip if item already exists
+    })
+
+    // Fetch the created items to return them (createMany doesn't return created records)
+    // Only fetch if we need to return the items
+    const createdItems = await prisma.item.findMany({
+      where: {
+        collectionId,
+        name: { in: items.map((item: { name: string }) => item.name) },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: items.length,
+    })
 
     // Check and unlock achievements
     const newlyUnlocked = await checkAllAchievements(session.user.id)
 
     return NextResponse.json({ 
       items: createdItems, 
-      count: createdItems.length,
+      count: createdItemsResult.count,
       newlyUnlockedAchievements: newlyUnlocked,
     }, { status: 201 })
   } catch (error) {
