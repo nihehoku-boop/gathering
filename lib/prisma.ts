@@ -15,12 +15,38 @@ const createPrismaClient = () => {
     databaseUrl = process.env.PRISMA_DATABASE_URL
   }
 
+  // Reject old db.prisma.io endpoints (no longer accessible)
+  if (databaseUrl?.includes('db.prisma.io')) {
+    const errorMessage = `
+[Prisma Configuration Error]
+The database URL contains 'db.prisma.io', which is no longer accessible.
+
+Please update your DATABASE_URL environment variable to use:
+- Vercel Postgres connection string (from Vercel dashboard)
+- Neon PostgreSQL connection string (from Neon dashboard)
+- Or another direct PostgreSQL connection string
+
+Current DATABASE_URL preview: ${databaseUrl?.substring(0, 50)}...
+
+To fix:
+1. Go to your Vercel/Neon dashboard
+2. Copy the PostgreSQL connection string
+3. Update the DATABASE_URL environment variable in Vercel
+4. Redeploy your application
+`
+    console.error(errorMessage)
+    throw new Error('Invalid database URL: db.prisma.io endpoint is no longer accessible. Please update DATABASE_URL to use a direct PostgreSQL connection.')
+  }
+
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL environment variable is not set. Please configure your database connection.')
+  }
+
   // Log which URL is being used (without exposing credentials)
   if (process.env.NODE_ENV === 'production') {
     const urlPreview = databaseUrl?.substring(0, 50) || 'undefined'
     const isAccelerate = databaseUrl?.startsWith('prisma://') || databaseUrl?.startsWith('prisma+postgres://')
-    const isPrismaIo = databaseUrl?.includes('db.prisma.io')
-    console.log(`[Prisma] Using database URL: ${urlPreview}... (${isAccelerate ? 'Accelerate' : isPrismaIo ? 'Prisma.io Direct' : 'Direct'})`)
+    console.log(`[Prisma] Using database URL: ${urlPreview}... (${isAccelerate ? 'Accelerate' : 'Direct'})`)
   }
 
   const baseClient = new PrismaClient({
