@@ -32,23 +32,6 @@ function SignInContent() {
     setLoading(true)
 
     try {
-      // First check if email is verified
-      const checkResponse = await fetch('/api/auth/check-email-verified', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-
-      if (checkResponse.ok) {
-        const checkData = await checkResponse.json()
-        if (!checkData.verified) {
-          setError('')
-          setShowVerificationMessage(true)
-          setLoading(false)
-          return
-        }
-      }
-
       const result = await signIn('credentials', {
         email,
         password,
