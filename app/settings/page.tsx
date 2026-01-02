@@ -42,6 +42,9 @@ export default function SettingsPage() {
   const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
   const [spotlightCollectionId, setSpotlightCollectionId] = useState<string | null>(null) // null = disabled by default
   const [collections, setCollections] = useState<Array<{ id: string; name: string }>>([])
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
   const [loading, setLoading] = useState(true)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [deleteEmail, setDeleteEmail] = useState('')
@@ -144,23 +147,46 @@ export default function SettingsPage() {
 
   const handleGoldenAccentsChange = async (enabled: boolean) => {
     setEnableGoldenAccents(enabled)
+    setSaveError(null)
+    setSaving(true)
     try {
       const res = await fetch('/api/user/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enableGoldenAccents: enabled }),
       })
-      if (!res.ok) {
-        console.error('Failed to save golden accents setting')
+      if (res.ok) {
+        setSaveSuccess(true)
+        setTimeout(() => setSaveSuccess(false), 2000)
+      } else {
+        const error = await res.json()
+        setSaveError('Failed to save setting')
+        // Revert on error
+        const profileRes = await fetch('/api/user/profile')
+        if (profileRes.ok) {
+          const profileData = await profileRes.json()
+          setEnableGoldenAccents(profileData.enableGoldenAccents !== false)
+        }
       }
     } catch (error) {
+      setSaveError('Error saving setting')
       console.error('Error saving golden accents setting:', error)
+      // Revert on error
+      const profileRes = await fetch('/api/user/profile')
+      if (profileRes.ok) {
+        const profileData = await profileRes.json()
+        setEnableGoldenAccents(profileData.enableGoldenAccents !== false)
+      }
+    } finally {
+      setSaving(false)
     }
   }
 
   const handleSpotlightChange = async (collectionId: string | null) => {
     const newValue = collectionId || null
     setSpotlightCollectionId(newValue)
+    setSaveError(null)
+    setSaving(true)
     try {
       const res = await fetch('/api/user/profile', {
         method: 'PATCH',
@@ -168,11 +194,11 @@ export default function SettingsPage() {
         body: JSON.stringify({ spotlightCollectionId: newValue }),
       })
       if (res.ok) {
-        // Success - setting saved
-        console.log('Spotlight collection saved:', newValue)
+        setSaveSuccess(true)
+        setTimeout(() => setSaveSuccess(false), 2000)
       } else {
         const error = await res.json()
-        console.error('Failed to save spotlight collection:', error)
+        setSaveError('Failed to save setting')
         // Revert on error
         const profileRes = await fetch('/api/user/profile')
         if (profileRes.ok) {
@@ -181,6 +207,7 @@ export default function SettingsPage() {
         }
       }
     } catch (error) {
+      setSaveError('Error saving setting')
       console.error('Error saving spotlight collection:', error)
       // Revert on error
       const profileRes = await fetch('/api/user/profile')
@@ -188,6 +215,8 @@ export default function SettingsPage() {
         const profileData = await profileRes.json()
         setSpotlightCollectionId(profileData.spotlightCollectionId || null)
       }
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -388,7 +417,8 @@ export default function SettingsPage() {
                 <select
                   value={spotlightCollectionId || ''}
                   onChange={(e) => handleSpotlightChange(e.target.value || null)}
-                  className="w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] smooth-transition"
+                  disabled={saving}
+                  className={`w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] smooth-transition ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <option value="">None (disabled)</option>
                   {collections.map((collection) => (
