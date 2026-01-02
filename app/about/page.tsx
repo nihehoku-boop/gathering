@@ -205,10 +205,10 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-[var(--text-secondary)]">
                 <p>
-                  Hi! I'm <strong className="text-[var(--text-primary)]">Nico "Henske"</strong>, the creator of Sammlerei. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
+                  Hi! I'm <strong className="text-[var(--text-primary)]">Nico "Henske"</strong>, the creator of Colletro. As a comic book collector myself, I found it challenging to track my collection progress effectively. Existing solutions either lacked the features I needed or had clunky interfaces that made managing large collections a chore.
                 </p>
                 <p>
-                  That's why I built Sammlerei - a modern, intuitive platform designed by a collector, for collectors. Whether you're tracking comics, trading cards, books, films, or any other collectibles, Sammlerei provides the tools you need to stay organized and see your progress at a glance.
+                  That's why I built Colletro - a modern, intuitive platform designed by a collector, for collectors. Whether you're tracking comics, trading cards, books, films, or any other collectibles, Colletro provides the tools you need to stay organized and see your progress at a glance.
                 </p>
                 <p className="text-sm italic border-t border-[var(--border-color)] pt-4">
                   <strong className="text-[var(--text-primary)]">Development Note:</strong> This platform was developed with the assistance of AI tools for certain coding tasks, including code generation, debugging, and optimization. All design decisions, feature planning, and final implementation were made by the developer.
