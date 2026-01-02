@@ -26,9 +26,9 @@
     --ring: 210 100% 50%; /* Will be overridden by accent color in settings */
     --radius: 0.75rem; /* Slightly more rounded, Apple-style */
     
-    /* Custom accent color (default: yellow) */
+    /* Custom accent color (default: green) */
     --accent-color: #34C759;
-    --accent-color-hover: #E6C009;
+    --accent-color-hover: #2BAE4A;
     
     /* Theme-specific colors */
     --bg-primary: #0f1114;
