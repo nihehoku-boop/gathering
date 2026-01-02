@@ -400,7 +400,7 @@ export default function SettingsPage() {
                 <p className="text-xs text-[var(--text-secondary)]">
                   {spotlightCollectionId 
                     ? 'Selected collection will be featured prominently'
-                    : 'Most complete collection will be automatically featured'}
+                    : 'Spotlight is disabled. Select a collection to enable it.'}
                 </p>
               </div>
             </CardContent>
