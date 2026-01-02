@@ -23,10 +23,22 @@ const Progress = React.forwardRef<
       // Gold gradient for completed collections
       return 'linear-gradient(90deg, var(--gold-color-dark) 0%, var(--gold-color) 50%, var(--gold-color-hover) 100%)'
     }
-    // Green to gold gradient as progress increases
+    
+    // Accent color to gold gradient as progress increases
+    // Always start with accent color at 0%
     const goldRatio = Math.min(progressValue / 100, 1)
-    const greenRatio = 1 - goldRatio
-    return `linear-gradient(90deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color) ${greenRatio * 100}%, var(--gold-color) ${goldRatio * 100}%) 100%)`
+    
+    // If progress is very low, use solid accent color
+    if (goldRatio < 0.1) {
+      return 'var(--accent-color)'
+    }
+    
+    // Create a smooth gradient from accent color to gold
+    // Use multiple stops for smoother transition
+    const midPoint = Math.max(0.3, goldRatio * 0.7) // Mid point between 30% and 70% of progress
+    
+    // Build gradient with accent color at start, transitioning to gold
+    return `linear-gradient(90deg, var(--accent-color) 0%, var(--accent-color) ${(1 - goldRatio) * 50}%, color-mix(in srgb, var(--accent-color) ${(1 - goldRatio) * 100}%, var(--gold-color) ${goldRatio * 100}%) ${midPoint * 100}%, var(--gold-color) 100%)`
   }
   
   return (
