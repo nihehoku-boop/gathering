@@ -19,7 +19,6 @@ import EditCollectionDialog from './EditCollectionDialog'
 import AlternativeCoversView from './AlternativeCoversView'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
-import { useToast } from '@/components/Toaster'
 import ItemCardSkeleton from './ItemCardSkeleton'
 import { getTemplateFields, type TemplateField } from '@/lib/item-templates'
 
