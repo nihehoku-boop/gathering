@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { X, ArrowRight, BookOpen, Plus, Star, Users } from 'lucide-react'
+import TreasureChest from './icons/TreasureChest'
 
 interface OnboardingStep {
   id: string
@@ -63,7 +64,7 @@ export default function OnboardingTour() {
       id: 'create-collection',
       title: 'Start Your Trove',
       description: 'Create your first collection to begin building your trove. Track comics, cards, books, movies, or anything you collect!',
-      icon: Plus,
+      icon: TreasureChest,
       action: {
         label: 'Create Collection',
         onClick: () => {
