@@ -39,6 +39,9 @@ export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme()
   const [accentColor, setAccentColor] = useState('#34C759')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
+  const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
+  const [spotlightCollectionId, setSpotlightCollectionId] = useState<string | null>(null)
+  const [collections, setCollections] = useState<Array<{ id: string; name: string }>>([])
   const [loading, setLoading] = useState(true)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [deleteEmail, setDeleteEmail] = useState('')
@@ -127,6 +130,38 @@ export default function SettingsPage() {
   const handleShowProgressChange = (enabled: boolean) => {
     setShowProgressInSidebar(enabled)
     localStorage.setItem('showProgressInSidebar', enabled.toString())
+  }
+
+  const handleGoldenAccentsChange = async (enabled: boolean) => {
+    setEnableGoldenAccents(enabled)
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enableGoldenAccents: enabled }),
+      })
+      if (!res.ok) {
+        console.error('Failed to save golden accents setting')
+      }
+    } catch (error) {
+      console.error('Error saving golden accents setting:', error)
+    }
+  }
+
+  const handleSpotlightChange = async (collectionId: string | null) => {
+    setSpotlightCollectionId(collectionId)
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ spotlightCollectionId: collectionId }),
+      })
+      if (!res.ok) {
+        console.error('Failed to save spotlight collection')
+      }
+    } catch (error) {
+      console.error('Error saving spotlight collection:', error)
+    }
   }
 
   const handleDeleteAccount = async () => {
@@ -283,6 +318,63 @@ export default function SettingsPage() {
                   <span>Selected:</span>
                   <span className="font-medium text-[var(--text-primary)]">{accentColor}</span>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Trove Display Settings */}
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
+            <CardHeader>
+              <CardTitle className="text-[var(--text-primary)]">Trove Display</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
+                Customize how your collections are displayed
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Golden Accents Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-[var(--text-primary)]">Golden Accents</Label>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Enable gold accents for completed collections (100% progress)
+                    </p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={enableGoldenAccents}
+                      onChange={(e) => handleGoldenAccentsChange(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)]"></div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Trove Spotlight */}
+              <div className="space-y-3">
+                <Label className="text-[var(--text-primary)]">Trove Spotlight</Label>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Feature a collection prominently on your home page
+                </p>
+                <select
+                  value={spotlightCollectionId || ''}
+                  onChange={(e) => handleSpotlightChange(e.target.value || null)}
+                  className="w-full bg-[var(--bg-tertiary)] border border-[var(--border-hover)] text-[var(--text-primary)] rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] smooth-transition"
+                >
+                  <option value="">None (auto-select most complete)</option>
+                  {collections.map((collection) => (
+                    <option key={collection.id} value={collection.id}>
+                      {collection.name}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-[var(--text-secondary)]">
+                  {spotlightCollectionId 
+                    ? 'Selected collection will be featured prominently'
+                    : 'Most complete collection will be automatically featured'}
+                </p>
               </div>
             </CardContent>
           </Card>
