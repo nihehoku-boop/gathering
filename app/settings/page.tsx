@@ -102,6 +102,8 @@ export default function SettingsPage() {
 
   const handleAccentColorChange = async (color: string) => {
     setAccentColor(color)
+    setSaveError(null)
+    setSaving(true)
     
     // Apply immediately for better UX
     const accentColorHover = adjustBrightness(color, -20)
@@ -124,6 +126,10 @@ export default function SettingsPage() {
       })
       
       if (res.ok) {
+        setSaveSuccess(true)
+        setTimeout(() => setSaveSuccess(false), 2000)
+        // Dispatch event to notify other components
+        window.dispatchEvent(new CustomEvent('settings-updated', { detail: { accentColor: color } }))
         // Update session to reflect the change
         await update({
           ...session,
@@ -133,10 +139,37 @@ export default function SettingsPage() {
           },
         })
       } else {
-        console.error('Failed to save accent color')
+        const error = await res.json()
+        setSaveError('Failed to save accent color')
+        console.error('Failed to save accent color:', error)
+        // Revert on error
+        const profileRes = await fetch('/api/user/profile')
+        if (profileRes.ok) {
+          const profileData = await profileRes.json()
+          const savedColor = profileData.accentColor || '#34C759'
+          setAccentColor(savedColor)
+          document.documentElement.style.setProperty('--accent-color', savedColor)
+          document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(savedColor, -20))
+          const savedHsl = hexToHsl(savedColor)
+          document.documentElement.style.setProperty('--ring', savedHsl)
+        }
       }
     } catch (error) {
+      setSaveError('Error saving accent color')
       console.error('Error saving accent color:', error)
+      // Revert on error
+      const profileRes = await fetch('/api/user/profile')
+      if (profileRes.ok) {
+        const profileData = await profileRes.json()
+        const savedColor = profileData.accentColor || '#34C759'
+        setAccentColor(savedColor)
+        document.documentElement.style.setProperty('--accent-color', savedColor)
+        document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness(savedColor, -20))
+        const savedHsl = hexToHsl(savedColor)
+        document.documentElement.style.setProperty('--ring', savedHsl)
+      }
+    } finally {
+      setSaving(false)
     }
   }
 
