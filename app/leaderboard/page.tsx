@@ -115,7 +115,7 @@ export default function LeaderboardPage() {
                   No rankings yet
                 </h3>
                 <p className="text-[var(--text-secondary)]">
-                  Start collecting items to appear on the leaderboard!
+                  Start building your trove to appear on the leaderboard!
                 </p>
               </CardContent>
             </Card>

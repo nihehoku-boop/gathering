@@ -61,8 +61,8 @@ export default function OnboardingTour() {
   const steps: OnboardingStep[] = [
     {
       id: 'create-collection',
-      title: 'Create Your First Collection',
-      description: 'Start by creating a collection to track your items. You can organize comics, cards, books, or anything you collect!',
+      title: 'Start Your Trove',
+      description: 'Create your first collection to begin building your trove. Track comics, cards, books, movies, or anything you collect!',
       icon: Plus,
       action: {
         label: 'Create Collection',
@@ -76,7 +76,7 @@ export default function OnboardingTour() {
     {
       id: 'browse-recommended',
       title: 'Discover Recommended Collections',
-      description: 'Browse curated collections recommended by experts. Perfect starting points for new collectors!',
+      description: 'Browse curated collections recommended by experts. Perfect starting points to grow your trove!',
       icon: Star,
       action: {
         label: 'Browse Recommended',
@@ -89,7 +89,7 @@ export default function OnboardingTour() {
     {
       id: 'explore-community',
       title: 'Explore Community Collections',
-      description: 'Discover collections shared by other users. Get inspired and find new things to collect!',
+      description: 'Discover collections shared by other collectors. Get inspired and find new treasures for your trove!',
       icon: Users,
       action: {
         label: 'Explore Community',
