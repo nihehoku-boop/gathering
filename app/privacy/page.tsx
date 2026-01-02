@@ -6,8 +6,8 @@ import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Sammlerei',
-  description: 'Privacy Policy for Sammlerei collection management platform - GDPR compliant',
+  title: 'Privacy Policy - Colletro',
+  description: 'Privacy Policy for Colletro collection management platform - GDPR compliant',
 }
 
 export default function PrivacyPage() {
@@ -38,10 +38,10 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">1. Introduction</h2>
               <p className="text-[#969696] leading-relaxed">
-                Sammlerei ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our collection management platform.
+                Colletro ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our collection management platform.
               </p>
               <p className="text-[#969696] leading-relaxed mt-3">
-                <strong>Data Controller:</strong> The data controller for the purposes of GDPR is Sammlerei. For questions about data protection, please contact us through the contact information provided in your account settings.
+                <strong>Data Controller:</strong> The data controller for the purposes of GDPR is Colletro. For questions about data protection, please contact us through the contact information provided in your account settings.
               </p>
             </section>
 
@@ -193,7 +193,7 @@ export default function PrivacyPage() {
 
           <div className="mt-12 pt-8 border-t border-[#353842]">
             <p className="text-sm text-[#969696] text-center">
-              By using Sammlerei, you acknowledge that you have read and understood this Privacy Policy.
+              By using Colletro, you acknowledge that you have read and understood this Privacy Policy.
             </p>
           </div>
         </div>

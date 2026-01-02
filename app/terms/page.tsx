@@ -6,8 +6,8 @@ import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - Sammlerei',
-  description: 'Terms of Service for Sammlerei collection management platform',
+  title: 'Terms of Service - Colletro',
+  description: 'Terms of Service for Colletro collection management platform',
 }
 
 export default function TermsPage() {
@@ -35,14 +35,14 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">1. Acceptance of Terms</h2>
               <p className="text-[#969696] leading-relaxed">
-                By accessing and using Sammlerei ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing and using Colletro ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">2. Description of Service</h2>
               <p className="text-[#969696] leading-relaxed">
-                Sammlerei is a collection management platform that allows users to organize, track, and manage their personal collections. The Service includes features such as collection creation, item tracking, community sharing, and profile customization.
+                Colletro is a collection management platform that allows users to organize, track, and manage their personal collections. The Service includes features such as collection creation, item tracking, community sharing, and profile customization.
               </p>
             </section>
 
@@ -100,7 +100,7 @@ export default function TermsPage() {
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">7. Intellectual Property</h2>
               <div className="text-[#969696] leading-relaxed space-y-3">
-                <p>7.1. The Service and its original content, features, and functionality are owned by Sammlerei and are protected by international copyright, trademark, and other intellectual property laws.</p>
+                <p>7.1. The Service and its original content, features, and functionality are owned by Colletro and are protected by international copyright, trademark, and other intellectual property laws.</p>
                 <p>7.2. Our trademarks and trade dress may not be used without our prior written consent.</p>
               </div>
             </section>
@@ -153,7 +153,7 @@ export default function TermsPage() {
 
           <div className="mt-12 pt-8 border-t border-[#353842]">
             <p className="text-sm text-[#969696] text-center">
-              By using Sammlerei, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+              By using Colletro, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
             </p>
           </div>
         </div>

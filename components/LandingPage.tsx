@@ -55,7 +55,7 @@ export default function LandingPage() {
         <nav className="relative z-10 container mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookOpen className="h-8 w-8 text-[var(--accent-color)]" />
-            <span className="text-2xl font-bold text-[#fafafa]">Sammlerei</span>
+            <span className="text-2xl font-bold text-[#fafafa]">Colletro</span>
           </div>
           <div className="flex items-center gap-4">
             {!session && (
@@ -89,10 +89,10 @@ export default function LandingPage() {
         <div className="relative z-10 container mx-auto px-6 py-20 md:py-32">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#fafafa] via-[var(--accent-color)] to-[#fafafa] bg-clip-text text-transparent animate-gradient">
-              Your Collection,<br />Organized
+              Your Collection Trove
             </h1>
             <p className="text-xl md:text-2xl text-[#969696] mb-8 max-w-2xl mx-auto leading-relaxed">
-              Track, manage, and discover collections. Whether you collect comics, cards, or anything else, Gathering helps you stay organized.
+              Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
@@ -100,7 +100,7 @@ export default function LandingPage() {
                 size="lg"
                 className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
               >
-                {session ? 'Go to My Collections' : 'Get Started'}
+                {session ? 'Go to My Trove' : 'Get Started'}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
               </Button>
               {!session && (
@@ -175,7 +175,7 @@ export default function LandingPage() {
               size="lg"
               className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
             >
-              {session ? 'Go to My Collections' : 'Get Started for Free'}
+              {session ? 'Go to My Trove' : 'Get Started for Free'}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
             </Button>
           </div>
@@ -188,7 +188,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <BookOpen className="h-6 w-6 text-[var(--accent-color)]" />
-              <span className="text-xl font-bold text-[#fafafa]">Sammlerei</span>
+              <span className="text-xl font-bold text-[#fafafa]">Colletro</span>
             </div>
             <div className="flex items-center gap-6 text-[#969696] text-sm flex-wrap">
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">

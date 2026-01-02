@@ -29,32 +29,32 @@ const getMetadataBase = (): URL => {
 }
 
 export const metadata: Metadata = {
-  title: 'Sammlerei - Your Collection Manager',
-  description: 'Track and manage your collections with ease. Organize comics, cards, books, and more. Discover community collections and track your progress.',
+  title: 'Colletro - Your Collection Trove',
+  description: 'Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.',
   metadataBase: getMetadataBase(),
-  keywords: ['collection', 'collector', 'collections', 'tracking', 'organize', 'comics', 'cards', 'books', 'collectibles'],
-  authors: [{ name: 'Sammlerei' }],
-  creator: 'Sammlerei',
-  publisher: 'Sammlerei',
+  keywords: ['collection', 'collector', 'collections', 'tracking', 'organize', 'comics', 'cards', 'books', 'collectibles', 'trove'],
+  authors: [{ name: 'Colletro' }],
+  creator: 'Colletro',
+  publisher: 'Colletro',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Sammlerei',
-    title: 'Sammlerei - Your Collection Manager',
-    description: 'Track and manage your collections with ease. Organize comics, cards, books, and more.',
+    siteName: 'Colletro',
+    title: 'Colletro - Your Collection Trove',
+    description: 'Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.',
     images: [
       {
         url: '/og-image.png', // You'll need to create this
         width: 1200,
         height: 630,
-        alt: 'Sammlerei - Collection Manager',
+        alt: 'Colletro - Collection Trove',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sammlerei - Your Collection Manager',
+    title: 'Colletro - Your Collection Trove',
     description: 'Track and manage your collections with ease',
     images: ['/og-image.png'],
   },
