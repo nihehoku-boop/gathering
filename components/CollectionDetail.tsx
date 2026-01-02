@@ -88,6 +88,7 @@ const getItemCustomFields = (item: Item): Record<string, any> => {
 }
 
 export default function CollectionDetail({ collectionId }: { collectionId: string }) {
+  const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
   const router = useRouter()
   const toast = useToast()
   const [collection, setCollection] = useState<Collection | null>(null)
