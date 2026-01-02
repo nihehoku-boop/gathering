@@ -1623,9 +1623,36 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
             </div>
 
             {items.length === 0 && !loading && !itemsLoading && (
-              <div className="text-center py-12 text-[var(--text-secondary)]">
-                No items yet. Add your first item above!
-              </div>
+              <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
+                <CardContent className="py-16 text-center">
+                  <Package className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
+                  <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
+                    No items yet
+                  </h3>
+                  <p className="text-[var(--text-secondary)] mb-6 max-w-md mx-auto">
+                    Start building your collection by adding your first item! You can add items one at a time or use bulk import to add many items at once.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    {!showAddForm && (
+                      <Button
+                        onClick={() => setShowAddForm(true)}
+                        className="accent-button text-white smooth-transition"
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add First Item
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowBulkImport(true)}
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Bulk Import Items
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             )}
             {items.length === 0 && (loading || itemsLoading) && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
