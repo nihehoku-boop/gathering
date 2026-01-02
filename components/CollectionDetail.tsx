@@ -1626,10 +1626,10 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                 <CardContent className="py-16 text-center">
                   <Package className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
                   <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                    No items yet
+                    This collection is empty
                   </h3>
                   <p className="text-[var(--text-secondary)] mb-6 max-w-md mx-auto">
-                    Start building your collection by adding your first item! You can add items one at a time or use bulk import to add many items at once.
+                    Start building your trove by adding your first item! You can add items one at a time or use bulk import to add many items at once.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     {!showAddForm && (

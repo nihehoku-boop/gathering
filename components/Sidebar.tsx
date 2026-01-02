@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical, Plus, Settings } from 'lucide-react'
+import TreasureChest from './icons/TreasureChest'
 import { cn } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
 import { useAlert } from '@/hooks/useAlert'
@@ -504,6 +505,7 @@ export default function Sidebar() {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)] min-h-[73px]">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 smooth-transition">
+              <TreasureChest className="h-6 w-6 text-[var(--accent-color)]" />
               <h2 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
                 Colletro
               </h2>
@@ -651,7 +653,7 @@ export default function Sidebar() {
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <BookOpen className="h-5 w-5" />
+                    <TreasureChest className="h-5 w-5" />
                     <span className="font-medium">Your Collections</span>
                   </div>
                   {isCollectionsOpen ? (

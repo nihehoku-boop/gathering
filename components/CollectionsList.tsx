@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
 import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star } from 'lucide-react'
+import TreasureChest from './icons/TreasureChest'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
 import CreateCollectionDialog from './CreateCollectionDialog'
 import EditCollectionDialog from './EditCollectionDialog'
@@ -797,12 +798,12 @@ export default function CollectionsList() {
       {collections.length === 0 ? (
         <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-16 text-center">
-            <BookOpen className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
+            <TreasureChest className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
             <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-              No collections yet
+              Your trove is empty
             </h3>
             <p className="text-[var(--text-secondary)] mb-6 max-w-md mx-auto">
-              Start tracking your collections by creating your first one! You can create a custom collection or browse recommended collections to get started.
+              Start building your trove by creating your first collection! You can create a custom collection or browse recommended collections to get started.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button 
@@ -849,10 +850,13 @@ export default function CollectionsList() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredCollections.map((collection, index) => {
             const progress = calculateProgress(collection)
+            const isComplete = progress === 100
             return (
               <Card
                 key={collection.id}
-                className="bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up"
+                className={`bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up ${
+                  isComplete ? 'border-[var(--gold-color)]/30 hover:border-[var(--gold-color)]/50' : ''
+                }`}
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
@@ -1038,11 +1042,24 @@ export default function CollectionsList() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="flex justify-between text-sm">
+                    <div className="flex justify-between text-sm items-center">
                       <span className="text-[var(--text-secondary)]">Progress</span>
-                      <span className="font-semibold text-[var(--text-primary)]">{progress}%</span>
+                      <div className="flex items-center gap-2">
+                        {isComplete && (
+                          <span className="text-xs text-[var(--gold-color)] font-semibold flex items-center gap-1">
+                            <Star className="h-3 w-3 fill-[var(--gold-color)]" />
+                            Complete Trove
+                          </span>
+                        )}
+                        <span className={`font-semibold ${isComplete ? 'text-[var(--gold-color)]' : 'text-[var(--text-primary)]'}`}>
+                          {progress}%
+                        </span>
+                      </div>
                     </div>
-                    <Progress value={progress} className="h-1.5" />
+                    <Progress 
+                      value={progress} 
+                      className={`h-1.5 ${isComplete ? '[&>div]:bg-[var(--gold-color)]' : ''}`}
+                    />
                     <p className="text-xs text-[var(--text-muted)]">
                       {collection.ownedCount !== undefined ? collection.ownedCount : (collection.items?.filter(i => i.isOwned).length || 0)} of {collection._count.items} items
                     </p>

@@ -30,6 +30,11 @@
     --accent-color: #34C759;
     --accent-color-hover: #2BAE4A;
     
+    /* Premium gold accents for trove features */
+    --gold-color: #FFB800;
+    --gold-color-dark: #D4AF37;
+    --gold-color-hover: #FFC933;
+    
     /* Theme-specific colors */
     --bg-primary: #0f1114;
     --bg-secondary: #1a1d24;
