@@ -859,17 +859,9 @@ export default function CollectionsList() {
         </Card>
       ) : (
         <>
-          {/* Spotlight Collection */}
-          {(() => {
-            const spotlightCollection = spotlightCollectionId 
-              ? filteredCollections.find(c => c.id === spotlightCollectionId)
-              : filteredCollections.length > 0 
-                ? filteredCollections.reduce((prev, curr) => {
-                    const prevProgress = calculateProgress(prev)
-                    const currProgress = calculateProgress(curr)
-                    return currProgress > prevProgress ? curr : prev
-                  })
-                : null
+          {/* Spotlight Collection - Only show if explicitly enabled */}
+          {spotlightCollectionId && (() => {
+            const spotlightCollection = filteredCollections.find(c => c.id === spotlightCollectionId)
             
             if (!spotlightCollection || filteredCollections.length === 0) return null
             
@@ -956,16 +948,12 @@ export default function CollectionsList() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredCollections
               .filter(c => {
+                // Only filter out spotlight collection if spotlight is explicitly enabled
                 if (spotlightCollectionId) {
                   return c.id !== spotlightCollectionId
                 }
-                // If no spotlight selected, filter out the auto-selected one
-                const autoSpotlight = filteredCollections.reduce((prev, curr) => {
-                  const prevProgress = calculateProgress(prev)
-                  const currProgress = calculateProgress(curr)
-                  return currProgress > prevProgress ? curr : prev
-                })
-                return c.id !== autoSpotlight.id
+                // If spotlight is disabled, show all collections
+                return true
               })
               .map((collection, index) => {
             const progress = calculateProgress(collection)
