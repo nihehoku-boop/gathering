@@ -22,7 +22,7 @@ interface BulkImportDialogProps {
   collectionId: string
   collectionTemplate?: string | null
   customFieldDefinitions?: string | null
-  onSuccess: () => void
+  onSuccess: (count?: number) => void
   apiEndpoint?: string // Optional: custom API endpoint (defaults to '/api/items/bulk')
   isRecommendedCollection?: boolean // Optional: if true, items won't have customFields
 }
@@ -310,6 +310,8 @@ export default function BulkImportDialog({
       })
 
       if (res.ok) {
+        const data = await res.json()
+        const count = data.count || itemsToSend.length
         // Reset form
         setSeriesName('')
         setStartNumber('1')
@@ -323,7 +325,7 @@ export default function BulkImportDialog({
         setCsvDetectedColumns([])
         setManualList('')
         onOpenChange(false)
-        onSuccess()
+        onSuccess(count)
       } else {
         const error = await res.json()
         alert(`Error: ${error.error || 'Failed to import items'}`)
