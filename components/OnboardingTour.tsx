@@ -125,10 +125,31 @@ export default function OnboardingTour() {
   const completeOnboarding = () => {
     if (session?.user?.id) {
       localStorage.setItem(`onboarding_completed_${session.user.id}`, 'true')
+      // Also clear all step markers
+      steps.forEach(step => {
+        localStorage.removeItem(`onboarding_step_${step.id}_${session.user.id}`)
+      })
     }
     setCompleted(true)
     setCurrentStep(null)
   }
+
+  // Listen for restart event
+  useEffect(() => {
+    const handleRestart = () => {
+      if (session?.user?.id) {
+        localStorage.removeItem(`onboarding_completed_${session.user.id}`)
+        steps.forEach(step => {
+          localStorage.removeItem(`onboarding_step_${step.id}_${session.user.id}`)
+        })
+        setCompleted(false)
+        setCurrentStep(0)
+      }
+    }
+
+    window.addEventListener('onboarding:restart', handleRestart)
+    return () => window.removeEventListener('onboarding:restart', handleRestart)
+  }, [session?.user?.id])
 
   if (completed || currentStep === null) {
     return null

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Settings, ArrowLeft, Moon, Sun, Trash2, AlertTriangle } from 'lucide-react'
+import { Settings, ArrowLeft, Moon, Sun, Trash2, AlertTriangle, BookOpen } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
 import { hexToHsl } from '@/lib/color-utils'
@@ -284,6 +284,39 @@ export default function SettingsPage() {
                   <span className="font-medium text-[var(--text-primary)]">{accentColor}</span>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Onboarding Settings */}
+          <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
+            <CardHeader>
+              <CardTitle className="text-[var(--text-primary)]">Onboarding</CardTitle>
+              <CardDescription className="text-[var(--text-secondary)]">
+                Restart the introduction tour to learn about features
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                onClick={() => {
+                  if (session?.user?.id) {
+                    // Clear onboarding completion
+                    localStorage.removeItem(`onboarding_completed_${session.user.id}`)
+                    // Clear all step markers
+                    const steps = ['create-collection', 'browse-recommended', 'explore-community']
+                    steps.forEach(step => {
+                      localStorage.removeItem(`onboarding_step_${step}_${session.user.id}`)
+                    })
+                    // Dispatch event to restart onboarding
+                    window.dispatchEvent(new CustomEvent('onboarding:restart'))
+                    alert('Onboarding tour will restart on the next page. Please refresh the page or navigate to the home page.')
+                  }
+                }}
+                variant="outline"
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+              >
+                <BookOpen className="mr-2 h-4 w-4" />
+                Restart Introduction Tour
+              </Button>
             </CardContent>
           </Card>
 
