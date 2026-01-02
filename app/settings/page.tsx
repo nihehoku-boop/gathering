@@ -52,12 +52,14 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        // Load accent color from user profile
+        // Load accent color and other settings from user profile
         const profileRes = await fetch('/api/user/profile')
         if (profileRes.ok) {
           const profileData = await profileRes.json()
           const savedAccentColor = profileData.accentColor || '#34C759'
           setAccentColor(savedAccentColor)
+          setEnableGoldenAccents(profileData.enableGoldenAccents !== false) // Default to true
+          setSpotlightCollectionId(profileData.spotlightCollectionId || null)
           
           // Apply accent color
           document.documentElement.style.setProperty('--accent-color', savedAccentColor)
@@ -71,10 +73,18 @@ export default function SettingsPage() {
         // Load sidebar progress setting from localStorage (still local)
         const savedShowProgress = localStorage.getItem('showProgressInSidebar') !== 'false'
         setShowProgressInSidebar(savedShowProgress)
+        
+        // Fetch collections for spotlight selector
+        const collectionsRes = await fetch('/api/collections')
+        if (collectionsRes.ok) {
+          const collectionsData = await collectionsRes.json()
+          setCollections(collectionsData.map((c: any) => ({ id: c.id, name: c.name })))
+        }
       } catch (error) {
         console.error('Error fetching settings:', error)
         // Fallback to defaults
         setAccentColor('#34C759')
+        setEnableGoldenAccents(true)
         document.documentElement.style.setProperty('--accent-color', '#34C759')
         document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness('#34C759', -20))
         const defaultHsl = hexToHsl('#34C759')
