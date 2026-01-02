@@ -10,6 +10,7 @@ declare module 'next-auth' {
       isVerified?: boolean
       badge?: string | null
       accentColor?: string
+      emailVerified?: Date | null
     }
   }
 }
@@ -21,6 +22,7 @@ declare module 'next-auth/jwt' {
     isVerified?: boolean
     badge?: string | null
     accentColor?: string
+    emailVerified?: Date | null
   }
 }
 

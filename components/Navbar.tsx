@@ -8,6 +8,7 @@ import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, 
 import { useEffect, useState, useRef } from 'react'
 import { getBadgeEmoji } from '@/lib/badges'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
+import EmailVerificationBanner from './EmailVerificationBanner'
 
 export default function Navbar() {
   const { toggleSidebar } = useMobileMenu()
@@ -41,9 +42,11 @@ export default function Navbar() {
   ] : []
 
   return (
-    <nav className="border-b border-[var(--border-color)] glass sticky top-0 z-50 lg:ml-64 bg-[var(--bg-secondary)] animate-slide-in-right will-change-transform">
-      <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[73px]">
-        <div className="flex justify-between items-center gap-4">
+    <>
+      <EmailVerificationBanner />
+      <nav className="border-b border-[var(--border-color)] glass sticky top-0 z-50 lg:ml-64 bg-[var(--bg-secondary)] animate-slide-in-right will-change-transform">
+        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[73px]">
+          <div className="flex justify-between items-center gap-4">
           {/* Mobile: Sidebar toggle button */}
           <button
             onClick={toggleSidebar}
@@ -206,9 +209,10 @@ export default function Navbar() {
               </div>
             </div>
           )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   )
 }
 

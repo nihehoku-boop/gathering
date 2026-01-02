@@ -54,12 +54,13 @@ export const authOptions: NextAuthOptions = {
           try {
             const dbUser = await prisma.user.findUnique({
               where: { id: user.id },
-              select: { isAdmin: true, isVerified: true, badge: true, accentColor: true },
+              select: { isAdmin: true, isVerified: true, badge: true, accentColor: true, emailVerified: true },
             })
             token.isAdmin = dbUser?.isAdmin || false
             token.isVerified = dbUser?.isVerified || false
             token.badge = dbUser?.badge || null
             token.accentColor = dbUser?.accentColor || '#FFD60A'
+            token.emailVerified = dbUser?.emailVerified || null
             
             // Log only in development to verify it's working
             if (process.env.NODE_ENV === 'development') {
@@ -71,6 +72,7 @@ export const authOptions: NextAuthOptions = {
             token.isVerified = false
             token.badge = null
             token.accentColor = '#FFD60A'
+            token.emailVerified = null
           }
         } else {
           // User object is NOT present - this means it's a subsequent request
@@ -95,6 +97,7 @@ export const authOptions: NextAuthOptions = {
         session.user.isVerified = (token.isVerified as boolean) || false
         session.user.badge = (token.badge as string | null) || null
         session.user.accentColor = (token.accentColor as string) || '#FFD60A'
+        session.user.emailVerified = token.emailVerified as Date | null | undefined
       }
       return session
     },
