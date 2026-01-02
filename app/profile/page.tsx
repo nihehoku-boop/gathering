@@ -29,7 +29,7 @@ export default function ProfilePage() {
     backgroundGradient?: string
     cardStyle?: 'default' | 'minimal' | 'bordered'
     fontSize?: 'small' | 'medium' | 'large'
-  }>({})
+  }>({ cardStyle: 'default', fontSize: 'medium' })
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploadingProfileImage, setUploadingProfileImage] = useState(false)
   const [loading, setLoading] = useState(true)
