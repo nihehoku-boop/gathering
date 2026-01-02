@@ -10,19 +10,31 @@ import { logger } from '@/lib/logger'
 
 async function sendVerificationEmailHandler(request: NextRequest) {
   try {
+    const body = await request.json().catch(() => ({}))
+    const { email: emailFromBody } = body
+
+    // Try to get session first (for authenticated users)
     const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
+    let user
+
+    if (session?.user?.id) {
+      // Authenticated user - use session
+      user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { id: true, email: true, name: true, emailVerified: true },
+      })
+    } else if (emailFromBody) {
+      // Unauthenticated user - use email from body (for sign-in page)
+      user = await prisma.user.findUnique({
+        where: { email: emailFromBody },
+        select: { id: true, email: true, name: true, emailVerified: true },
+      })
+    } else {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized or email required' },
         { status: 401 }
       )
     }
-
-    // Get user from database
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { id: true, email: true, name: true, emailVerified: true },
-    })
 
     if (!user) {
       return NextResponse.json(
