@@ -27,7 +27,6 @@ const Progress = React.forwardRef<
     // Accent color to gold gradient as progress increases
     // Always start with accent color at 0%
     const goldRatio = Math.min(progressValue / 100, 1)
-    const accentRatio = 1 - goldRatio
     
     // If progress is very low (< 10%), use solid accent color for better performance
     if (goldRatio < 0.1) {
@@ -35,25 +34,14 @@ const Progress = React.forwardRef<
     }
     
     // Create a smooth gradient from accent color to gold
-    // Use multiple color stops for a smoother transition
-    // Start: 100% accent color
-    // Mid: Mix of accent and gold based on progress
-    // End: More gold as progress increases
+    // Use a simple two-color gradient for better browser compatibility
+    // The gradient always starts with accent color and transitions to gold
+    // We use a mid-point that shifts based on progress for smoother transition
+    const midPoint = 30 + (goldRatio * 40) // Mid point moves from 30% to 70% as progress increases
     
-    // Calculate stop positions for smoother gradient
-    const startStop = 0
-    const midStop = 50 + (goldRatio * 30) // Mid point moves from 50% to 80% as progress increases
-    const endStop = 100
-    
-    // For better browser support, use a simpler gradient with explicit color stops
-    // The gradient transitions from accent color to a mix, then to gold
-    if (goldRatio < 0.5) {
-      // More accent color, less gold
-      return `linear-gradient(90deg, var(--accent-color) ${startStop}%, var(--accent-color) ${midStop}%, color-mix(in srgb, var(--accent-color) ${accentRatio * 100}%, var(--gold-color) ${goldRatio * 100}%) ${endStop}%)`
-    } else {
-      // More gold, less accent color
-      return `linear-gradient(90deg, var(--accent-color) ${startStop}%, color-mix(in srgb, var(--accent-color) ${accentRatio * 100}%, var(--gold-color) ${goldRatio * 100}%) ${midStop}%, var(--gold-color) ${endStop}%)`
-    }
+    // Simple gradient: accent color at start, transitioning to gold at end
+    // This ensures the gradient always starts with the user's accent color
+    return `linear-gradient(90deg, var(--accent-color) 0%, var(--accent-color) ${midPoint}%, var(--gold-color) 100%)`
   }
   
   return (
