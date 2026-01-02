@@ -59,7 +59,7 @@ export default function Navbar() {
           {/* Mobile: Logo in center */}
           <Link href="/" className="lg:hidden flex-1 flex items-center justify-center gap-2 hover:opacity-80 smooth-transition">
             <h1 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
-              Sammlerei
+              Colletro
             </h1>
             <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">
               Beta

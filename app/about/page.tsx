@@ -86,7 +86,7 @@ export default function AboutPage() {
             </div>
             <div className="flex items-center gap-3 mb-3">
               <Info className="h-8 w-8 text-[var(--text-primary)]" />
-              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">About Sammlerei</h1>
+              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">About Colletro</h1>
             </div>
             <p className="text-[var(--text-secondary)] text-lg mb-10">
               Learn more about this collection management platform
@@ -96,17 +96,17 @@ export default function AboutPage() {
           <div className="max-w-4xl space-y-6">
             <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardHeader>
-                <CardTitle className="text-[var(--text-primary)]">What is Sammlerei?</CardTitle>
+                <CardTitle className="text-[var(--text-primary)]">What is Colletro?</CardTitle>
                 <CardDescription className="text-[var(--text-secondary)]">
                   A modern platform for managing your collections
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-[#969696]">
                 <p>
-                  Sammlerei is a comprehensive collection management platform designed to help you track, organize, and manage your various collections. Whether you collect comics, books, movies, games, or any other items, Sammlerei provides the tools you need to stay organized.
+                  Colletro is your collection trove — a home for books, comics, movies, and cards. It's a comprehensive collection management platform designed to help you track, organize, and manage your various collections. Whether you collect comics, books, movies, games, or any other items, Colletro provides the tools you need to stay organized.
                 </p>
                 <p>
-                  With features like progress tracking, tagging, recommended collections, and more, Sammlerei makes it easy to keep track of what you have and what you're still looking for.
+                  With features like progress tracking, tagging, recommended collections, and more, Colletro makes it easy to keep track of what you have and what you're still looking for.
                 </p>
               </CardContent>
             </Card>
@@ -115,7 +115,7 @@ export default function AboutPage() {
               <CardHeader>
                 <CardTitle className="text-[var(--text-primary)]">Features</CardTitle>
                 <CardDescription className="text-[#969696]">
-                  What you can do with Sammlerei
+                  What you can do with Colletro
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -155,7 +155,7 @@ export default function AboutPage() {
                   <CardTitle className="text-[var(--text-primary)]">Frequently Asked Questions</CardTitle>
                 </div>
                 <CardDescription className="text-[#969696]">
-                  Common questions about Sammlerei
+                  Common questions about Colletro
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -200,7 +200,7 @@ export default function AboutPage() {
               <CardHeader>
                 <CardTitle className="text-[var(--text-primary)]">About the Developer</CardTitle>
                 <CardDescription className="text-[var(--text-secondary)]">
-                  The story behind Sammlerei
+                  The story behind Colletro
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-[var(--text-secondary)]">
@@ -225,7 +225,7 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="space-y-4 text-[var(--text-secondary)]">
                 <p>
-                  Sammlerei is built using Next.js 14, React, TypeScript, Prisma, and SQLite. The platform features a modern, responsive design with a dark theme optimized for extended use.
+                  Colletro is built using Next.js 14, React, TypeScript, Prisma, and PostgreSQL. The platform features a modern, responsive design with a dark theme optimized for extended use.
                 </p>
                 <p>
                   Your data is stored securely and locally, giving you full control over your collections and privacy.
