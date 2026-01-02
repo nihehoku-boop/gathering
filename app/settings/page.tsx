@@ -37,7 +37,7 @@ export default function SettingsPage() {
   const router = useRouter()
   const { data: session, update } = useSession()
   const { theme, toggleTheme } = useTheme()
-  const [accentColor, setAccentColor] = useState('#FFD60A')
+  const [accentColor, setAccentColor] = useState('#34C759')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
   const [loading, setLoading] = useState(true)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -53,7 +53,7 @@ export default function SettingsPage() {
         const profileRes = await fetch('/api/user/profile')
         if (profileRes.ok) {
           const profileData = await profileRes.json()
-          const savedAccentColor = profileData.accentColor || '#FFD60A'
+          const savedAccentColor = profileData.accentColor || '#34C759'
           setAccentColor(savedAccentColor)
           
           // Apply accent color
@@ -71,10 +71,10 @@ export default function SettingsPage() {
       } catch (error) {
         console.error('Error fetching settings:', error)
         // Fallback to defaults
-        setAccentColor('#FFD60A')
-        document.documentElement.style.setProperty('--accent-color', '#FFD60A')
-        document.documentElement.style.setProperty('--accent-color-hover', '#E6C009')
-        const defaultHsl = hexToHsl('#FFD60A')
+        setAccentColor('#34C759')
+        document.documentElement.style.setProperty('--accent-color', '#34C759')
+        document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness('#34C759', -20))
+        const defaultHsl = hexToHsl('#34C759')
         document.documentElement.style.setProperty('--ring', defaultHsl)
       } finally {
         setLoading(false)

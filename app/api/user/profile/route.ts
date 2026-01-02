@@ -101,7 +101,7 @@ export async function PATCH(request: NextRequest) {
       updateData.badge = badge || null
     }
     if (accentColor !== undefined) {
-      updateData.accentColor = accentColor || '#FFD60A'
+      updateData.accentColor = accentColor || '#34C759'
     }
     if (themeMode !== undefined) {
       updateData.themeMode = themeMode === 'light' ? 'light' : 'dark'

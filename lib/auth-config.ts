@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
             token.isAdmin = dbUser?.isAdmin || false
             token.isVerified = dbUser?.isVerified || false
             token.badge = dbUser?.badge || null
-            token.accentColor = dbUser?.accentColor || '#FFD60A'
+            token.accentColor = dbUser?.accentColor || '#34C759'
             token.emailVerified = dbUser?.emailVerified || null
             
             // Log only in development to verify it's working
@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
             token.isAdmin = false
             token.isVerified = false
             token.badge = null
-            token.accentColor = '#FFD60A'
+            token.accentColor = '#34C759'
             token.emailVerified = null
           }
         } else {
@@ -96,7 +96,7 @@ export const authOptions: NextAuthOptions = {
         session.user.isAdmin = (token.isAdmin as boolean) || false
         session.user.isVerified = (token.isVerified as boolean) || false
         session.user.badge = (token.badge as string | null) || null
-        session.user.accentColor = (token.accentColor as string) || '#FFD60A'
+        session.user.accentColor = (token.accentColor as string) || '#34C759'
         session.user.emailVerified = token.emailVerified as Date | null | undefined
       }
       return session
