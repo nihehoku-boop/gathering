@@ -161,7 +161,8 @@
     .animate-fade-in,
     .animate-stagger,
     .animate-slide-in-right,
-    .animate-scale-in {
+    .animate-scale-in,
+    .animate-pulse-glow {
       animation: none;
       opacity: 1;
       transform: none;
