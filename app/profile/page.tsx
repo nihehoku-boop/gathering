@@ -666,29 +666,44 @@ export default function ProfilePage() {
                         Card Style
                       </Label>
                       <div className="grid grid-cols-3 gap-3">
-                        {(['default', 'minimal', 'bordered'] as const).map((style) => (
-                          <button
-                            key={style}
-                            type="button"
-                            onClick={() => setProfileTheme({ ...profileTheme, cardStyle: style })}
-                            className={`
-                              p-4 rounded-lg border-2 smooth-transition text-left
-                              ${profileTheme.cardStyle === style
-                                ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
-                                : 'border-[var(--border-hover)] hover:border-[#666] bg-[#2a2d35]'
-                              }
-                            `}
-                          >
-                            <div className="text-sm font-medium text-[var(--text-primary)] mb-1 capitalize">
-                              {style}
-                            </div>
-                            <div className="text-xs text-[var(--text-secondary)]">
-                              {style === 'default' && 'Standard card with shadow'}
-                              {style === 'minimal' && 'Clean, minimal design'}
-                              {style === 'bordered' && 'Emphasized borders'}
-                            </div>
-                          </button>
-                        ))}
+                        {(['default', 'minimal', 'bordered'] as const).map((style) => {
+                          // Determine card className based on style
+                          let cardClassName = 'bg-[var(--bg-secondary)] border-[var(--border-color)]'
+                          if (style === 'minimal') {
+                            cardClassName = 'bg-transparent border-none'
+                          } else if (style === 'bordered') {
+                            cardClassName = 'bg-[#1a1d24] border-2 border-[var(--accent-color)]'
+                          }
+                          
+                          return (
+                            <button
+                              key={style}
+                              type="button"
+                              onClick={() => setProfileTheme({ ...profileTheme, cardStyle: style })}
+                              className={`
+                                p-4 rounded-lg border-2 smooth-transition text-left
+                                ${profileTheme.cardStyle === style
+                                  ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
+                                  : 'border-[var(--border-hover)] hover:border-[#666] bg-[#2a2d35]'
+                                }
+                              `}
+                            >
+                              <div className="text-sm font-medium text-[var(--text-primary)] mb-2 capitalize">
+                                {style}
+                              </div>
+                              {/* Preview Card */}
+                              <div className={`${cardClassName} rounded-lg p-3 mb-2 shadow-sm`}>
+                                <div className="text-xs font-semibold text-[var(--text-primary)] mb-1">Collection Name</div>
+                                <div className="text-xs text-[var(--text-secondary)]">5 items collected</div>
+                              </div>
+                              <div className="text-xs text-[var(--text-secondary)]">
+                                {style === 'default' && 'Standard card with shadow'}
+                                {style === 'minimal' && 'Clean, minimal design'}
+                                {style === 'bordered' && 'Emphasized borders'}
+                              </div>
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
 
