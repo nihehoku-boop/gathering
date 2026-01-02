@@ -119,6 +119,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [isPublic, setIsPublic] = useState(false)
   const [shareToken, setShareToken] = useState<string | null>(null)
+  const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
   const [copied, setCopied] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [openItemMenu, setOpenItemMenu] = useState<string | null>(null)
@@ -1158,7 +1159,11 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                 <span className="text-muted-foreground">Collection Progress</span>
                 <span className="font-semibold text-lg">{progress}%</span>
               </div>
-              <Progress value={progress} className="h-3" />
+              <Progress 
+                value={progress} 
+                className="h-3"
+                enableGradient={enableGoldenAccents}
+              />
               <p className="text-sm text-muted-foreground break-words">
                 {ownedCount} of {totalCount} items collected
               </p>
