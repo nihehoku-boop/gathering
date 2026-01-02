@@ -858,8 +858,115 @@ export default function CollectionsList() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredCollections.map((collection, index) => {
+        <>
+          {/* Spotlight Collection */}
+          {(() => {
+            const spotlightCollection = spotlightCollectionId 
+              ? filteredCollections.find(c => c.id === spotlightCollectionId)
+              : filteredCollections.length > 0 
+                ? filteredCollections.reduce((prev, curr) => {
+                    const prevProgress = calculateProgress(prev)
+                    const currProgress = calculateProgress(curr)
+                    return currProgress > prevProgress ? curr : prev
+                  })
+                : null
+            
+            if (!spotlightCollection || filteredCollections.length === 0) return null
+            
+            const progress = calculateProgress(spotlightCollection)
+            const isComplete = progress === 100 && enableGoldenAccents
+            
+            return (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <Star className="h-5 w-5 text-[var(--gold-color)] fill-[var(--gold-color)]" />
+                  <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Trove Spotlight</h2>
+                </div>
+                <Card
+                  className={`bg-[var(--bg-secondary)] border-2 ${
+                    isComplete 
+                      ? 'border-[var(--gold-color)] hover:border-[var(--gold-color)]/80' 
+                      : 'border-[var(--accent-color)] hover:border-[var(--accent-color-hover)]'
+                  } hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up hover:shadow-xl hover:shadow-[var(--accent-color)]/20`}
+                  onClick={() => router.push(`/collections/${spotlightCollection.id}`)}
+                >
+                  <div className="grid md:grid-cols-2 gap-0">
+                    {spotlightCollection.coverImage && (
+                      <div className={`w-full h-64 md:h-auto overflow-hidden bg-[var(--bg-tertiary)] relative ${
+                        isComplete ? 'ring-2 ring-[var(--gold-color)]/30' : ''
+                      }`}>
+                        <Image
+                          src={spotlightCollection.coverImage}
+                          alt={spotlightCollection.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className={`${spotlightCollection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete ? 'group-hover:brightness-110' : ''}`}
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CardTitle className="text-2xl text-[var(--text-primary)]">{spotlightCollection.name}</CardTitle>
+                        {spotlightCollection.category && (
+                          <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]">
+                            <CategoryIcon category={spotlightCollection.category} className="h-3 w-3" />
+                            <span>{spotlightCollection.category}</span>
+                          </span>
+                        )}
+                      </div>
+                      {spotlightCollection.description && (
+                        <CardDescription className="mb-4 text-[var(--text-secondary)]">
+                          {spotlightCollection.description}
+                        </CardDescription>
+                      )}
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-sm items-center">
+                          <span className="text-[var(--text-secondary)]">Progress</span>
+                          <div className="flex items-center gap-2">
+                            {isComplete && (
+                              <span className="text-xs text-[var(--gold-color)] font-semibold flex items-center gap-1">
+                                <Star className="h-3 w-3 fill-[var(--gold-color)]" />
+                                Complete Trove
+                              </span>
+                            )}
+                            <span className={`font-semibold ${isComplete ? 'text-[var(--gold-color)]' : 'text-[var(--text-primary)]'}`}>
+                              {progress}%
+                            </span>
+                          </div>
+                        </div>
+                        <Progress 
+                          value={progress} 
+                          className="h-2"
+                          gold={isComplete}
+                        />
+                        <p className="text-xs text-[var(--text-muted)]">
+                          {spotlightCollection.ownedCount !== undefined ? spotlightCollection.ownedCount : (spotlightCollection.items?.filter(i => i.isOwned).length || 0)} of {spotlightCollection._count.items} items
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            )
+          })()}
+          
+          {/* Regular Collections Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {filteredCollections
+              .filter(c => {
+                if (spotlightCollectionId) {
+                  return c.id !== spotlightCollectionId
+                }
+                // If no spotlight selected, filter out the auto-selected one
+                const autoSpotlight = filteredCollections.reduce((prev, curr) => {
+                  const prevProgress = calculateProgress(prev)
+                  const currProgress = calculateProgress(curr)
+                  return currProgress > prevProgress ? curr : prev
+                })
+                return c.id !== autoSpotlight.id
+              })
+              .map((collection, index) => {
             const progress = calculateProgress(collection)
             const isComplete = progress === 100
             return (
