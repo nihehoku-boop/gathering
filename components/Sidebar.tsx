@@ -142,12 +142,41 @@ export default function Sidebar() {
       }
     }
     
+    // Also refetch when window gains focus (user might have changed settings in another tab)
+    const handleFocus = () => {
+      fetchSettings()
+    }
+    
     window.addEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    window.addEventListener('focus', handleFocus)
     
     return () => {
       window.removeEventListener('settings-updated', handleSettingsUpdate as EventListener)
+      window.removeEventListener('focus', handleFocus)
     }
   }, [])
+  
+  // Refetch settings when component becomes visible (handles navigation back to page)
+  useEffect(() => {
+    if (!isMounted) return
+    
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        fetch('/api/user/profile')
+          .then(res => res.json())
+          .then(data => {
+            setEnableGoldenAccents(data.enableGoldenAccents !== false)
+          })
+          .catch(err => console.error('Error fetching user settings:', err))
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [isMounted])
   
   useEffect(() => {
     if (!isMounted) return
