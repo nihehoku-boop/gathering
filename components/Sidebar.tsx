@@ -80,6 +80,7 @@ export default function Sidebar() {
   })
   const [isMounted, setIsMounted] = useState(false)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
   const { alertDialog, showAlert, closeAlert } = useAlert()
 
   useEffect(() => {
@@ -911,6 +912,7 @@ export default function Sidebar() {
                 <Progress 
                   value={percentage} 
                   className="h-2"
+                  enableGradient={enableGoldenAccents}
                 />
                 <div className="text-xs text-[var(--text-muted)] text-center">
                   {percentage}% complete
