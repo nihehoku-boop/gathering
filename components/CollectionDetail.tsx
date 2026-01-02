@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { CollectionCache } from '@/lib/collection-cache'
+import { useToast } from '@/components/Toaster'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -18,6 +19,7 @@ import EditCollectionDialog from './EditCollectionDialog'
 import AlternativeCoversView from './AlternativeCoversView'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
+import { useToast } from '@/components/Toaster'
 import ItemCardSkeleton from './ItemCardSkeleton'
 import { getTemplateFields, type TemplateField } from '@/lib/item-templates'
 
@@ -88,6 +90,7 @@ const getItemCustomFields = (item: Item): Record<string, any> => {
 
 export default function CollectionDetail({ collectionId }: { collectionId: string }) {
   const router = useRouter()
+  const toast = useToast()
   const [collection, setCollection] = useState<Collection | null>(null)
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
@@ -552,10 +555,21 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           item.id === itemId ? { ...item, isOwned: data.isOwned } : item
         ))
         
+        // Show progress update
+        const newOwned = data.isOwned ? totalOwnedCount + 1 : totalOwnedCount - 1
+        const total = collection?._count?.items || totalItemsCount
+        const progress = total > 0 ? Math.round((newOwned / total) * 100) : 0
+        toast.success(
+          data.isOwned 
+            ? `Marked as owned! Progress: ${newOwned}/${total} (${progress}%)`
+            : `Removed from owned. Progress: ${newOwned}/${total} (${progress}%)`
+        )
+        
         // Handle achievements if any were unlocked
         if (data.newlyUnlockedAchievements && data.newlyUnlockedAchievements.length > 0) {
-          // You might want to show a notification here
-          console.log('New achievements unlocked:', data.newlyUnlockedAchievements)
+          setTimeout(() => {
+            toast.success(`🎉 Achievement unlocked: ${data.newlyUnlockedAchievements.join(', ')}`, 7000)
+          }, 500)
         }
       } else {
         // Revert on error
@@ -566,6 +580,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         // Invalidate cache on error too
         CollectionCache.invalidateCollection(collectionId)
         const error = await res.json()
+        toast.error('Failed to update item status')
         console.error('Error updating item:', error)
       }
     } catch (error) {
@@ -637,9 +652,23 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         setItems(prev => [newItem, ...prev])
         setTotalItemsCount(prev => prev + 1)
         fetchCollection()
+        
+        // Show success toast with progress
+        const newTotal = totalItemsCount + 1
+        const newOwned = totalOwnedCount
+        const progress = collection?._count?.items ? Math.round((newOwned / newTotal) * 100) : 0
+        toast.success(`Item added! Progress: ${newOwned}/${newTotal} (${progress}%)`)
+        
+        // Show achievement notification if any were unlocked
+        if (newItem.newlyUnlockedAchievements && newItem.newlyUnlockedAchievements.length > 0) {
+          setTimeout(() => {
+            toast.success(`🎉 Achievement unlocked: ${newItem.newlyUnlockedAchievements.join(', ')}`, 7000)
+          }, 500)
+        }
       } else {
         // Handle error response
         const errorData = await res.json().catch(() => ({ error: 'Failed to add item' }))
+        toast.error(errorData.error || 'Failed to add item')
         showAlert({
           title: 'Error',
           message: errorData.error || 'Failed to add item',
@@ -680,6 +709,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         // Remove item from the list
         setItems(prev => prev.filter(item => item.id !== itemId))
         setTotalItemsCount(prev => Math.max(0, prev - 1))
+        toast.success('Item deleted successfully')
         showAlert({
           title: 'Success',
           message: 'Item deleted successfully.',
@@ -687,6 +717,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         })
       } else {
         const errorData = await res.json().catch(() => ({ error: 'Failed to delete item' }))
+        toast.error('Failed to delete item')
         showAlert({
           title: 'Error',
           message: errorData.error || 'Failed to delete item',
@@ -2233,12 +2264,18 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         collectionId={collectionId}
         collectionTemplate={collection?.template}
         customFieldDefinitions={collection?.customFieldDefinitions}
-        onSuccess={() => {
+        onSuccess={(count) => {
           // Invalidate cache - items were added
           CollectionCache.invalidateCollection(collectionId)
           // Refresh items after bulk import
           fetchItems(1, false)
           fetchCollection()
+          // Show success toast
+          if (count && count > 0) {
+            toast.success(`Successfully added ${count} item${count > 1 ? 's' : ''}!`)
+          } else {
+            toast.success('Items imported successfully!')
+          }
         }}
       />
       <EditItemDialog
