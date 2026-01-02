@@ -40,7 +40,7 @@ export default function SettingsPage() {
   const [accentColor, setAccentColor] = useState('#34C759')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
   const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
-  const [spotlightCollectionId, setSpotlightCollectionId] = useState<string | null>(null)
+  const [spotlightCollectionId, setSpotlightCollectionId] = useState<string | null>(null) // null = disabled by default
   const [collections, setCollections] = useState<Array<{ id: string; name: string }>>([])
   const [loading, setLoading] = useState(true)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
