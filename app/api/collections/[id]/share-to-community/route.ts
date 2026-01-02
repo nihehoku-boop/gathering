@@ -45,8 +45,13 @@ export async function POST(
       )
     }
 
-    // Check if collection already shared (optional - you might want to allow multiple shares)
-    // For now, we'll allow sharing multiple times
+    // Check if collection already shared
+    if (collection.sharedToCommunityId) {
+      return NextResponse.json(
+        { error: 'Collection is already shared to the community' },
+        { status: 400 }
+      )
+    }
 
     // Create community collection from personal collection
     const communityCollection = await prisma.communityCollection.create({
@@ -78,6 +83,12 @@ export async function POST(
           },
         },
       },
+    })
+
+    // Update the collection to track that it's shared
+    await prisma.collection.update({
+      where: { id: collectionId },
+      data: { sharedToCommunityId: communityCollection.id },
     })
 
     // Check for achievements

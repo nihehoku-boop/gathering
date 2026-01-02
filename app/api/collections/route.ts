@@ -46,6 +46,7 @@ async function getCollectionsHandler() {
         coverImageFit: true,
         tags: true,
         recommendedCollectionId: true,
+        sharedToCommunityId: true,
         lastSyncedAt: true,
         createdAt: true,
         updatedAt: true,
