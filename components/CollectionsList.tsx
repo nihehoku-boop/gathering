@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
-import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star, CheckCircle2 } from 'lucide-react'
+import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star, CheckCircle2, UserX } from 'lucide-react'
 import TreasureChest from './icons/TreasureChest'
 import CategoryIcon from './icons/CategoryIcon'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
@@ -1099,7 +1099,7 @@ export default function CollectionsList() {
                                 className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[var(--bg-tertiary)] smooth-transition"
                                 title="Remove from Community"
                               >
-                                <X className="h-4 w-4" />
+                                <UserX className="h-4 w-4" />
                               </Button>
                             </>
                           ) : (
@@ -1415,7 +1415,7 @@ export default function CollectionsList() {
                             className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[var(--bg-tertiary)] smooth-transition"
                             title="Remove from Community"
                           >
-                            <X className="h-4 w-4" />
+                            <UserX className="h-4 w-4" />
                           </Button>
                         </>
                       ) : (
