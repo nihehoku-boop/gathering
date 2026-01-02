@@ -863,13 +863,13 @@ export default function CollectionsList() {
                 onClick={() => router.push(`/collections/${collection.id}`)}
               >
                 {collection.coverImage && (
-                  <div className="w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative">
+                  <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${isComplete ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
                     <Image
                       src={collection.coverImage}
                       alt={collection.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition`}
+                      className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete ? 'group-hover:brightness-110' : ''}`}
                       loading="lazy"
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
@@ -1058,7 +1058,8 @@ export default function CollectionsList() {
                     </div>
                     <Progress 
                       value={progress} 
-                      className={`h-1.5 ${isComplete ? '[&>div]:bg-[var(--gold-color)]' : ''}`}
+                      className="h-1.5"
+                      gold={isComplete}
                     />
                     <p className="text-xs text-[var(--text-muted)]">
                       {collection.ownedCount !== undefined ? collection.ownedCount : (collection.items?.filter(i => i.isOwned).length || 0)} of {collection._count.items} items
