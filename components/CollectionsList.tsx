@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
-import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown } from 'lucide-react'
+import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star } from 'lucide-react'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
 import CreateCollectionDialog from './CreateCollectionDialog'
 import EditCollectionDialog from './EditCollectionDialog'
@@ -789,25 +789,26 @@ export default function CollectionsList() {
             <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               No collections yet
             </h3>
-            <p className="text-[var(--text-secondary)] mb-6">
-              Start tracking your collections by creating your first one!
+            <p className="text-[var(--text-secondary)] mb-6 max-w-md mx-auto">
+              Start tracking your collections by creating your first one! You can create a custom collection or browse recommended collections to get started.
             </p>
-            <Button 
-              onClick={() => setShowCreateDialog(true)}
-              className="text-white smooth-transition"
-              style={{ 
-                backgroundColor: 'var(--accent-color)',
-              } as React.CSSProperties}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--accent-color-hover)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--accent-color)'
-              }}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Create Collection
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button 
+                onClick={() => setShowCreateDialog(true)}
+                className="accent-button text-white smooth-transition"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Create Collection
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/recommended')}
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+              >
+                <Star className="mr-2 h-4 w-4" />
+                Browse Recommended
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ) : filteredCollections.length === 0 ? (
@@ -872,6 +873,12 @@ export default function CollectionsList() {
                     <div className="flex-1">
                       <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
                       <div className="flex flex-wrap gap-2 mt-2">
+                        {collection.recommendedCollectionId && collection.lastSyncedAt && (
+                          <span className="text-xs text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full inline-block border border-blue-500/30 flex items-center gap-1" title={`Synced from recommended collection. Last synced: ${new Date(collection.lastSyncedAt).toLocaleDateString()}`}>
+                            <RefreshCw className="h-3 w-3" />
+                            Synced
+                          </span>
+                        )}
                         {collection.folder && (
                           <span className="text-xs text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded-full inline-block border border-[var(--accent-color)]/30" title={`Folder: ${collection.folder.name}`}>
                             📁 {collection.folder.name}
