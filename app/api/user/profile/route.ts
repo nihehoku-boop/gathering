@@ -36,6 +36,8 @@ export async function GET() {
           bio: true,
           bannerImage: true,
           profileTheme: true,
+          spotlightCollectionId: true,
+          enableGoldenAccents: true,
           _count: {
             select: {
               collections: true,
@@ -88,7 +90,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, isPrivate, badge, accentColor, themeMode, bio, bannerImage, profileImage, profileTheme } = body
+    const { name, isPrivate, badge, accentColor, themeMode, bio, bannerImage, profileImage, profileTheme, spotlightCollectionId, enableGoldenAccents } = body
 
     const updateData: any = {}
     if (name !== undefined) {
@@ -131,6 +133,12 @@ export async function PATCH(request: NextRequest) {
         )
       }
     }
+    if (spotlightCollectionId !== undefined) {
+      updateData.spotlightCollectionId = spotlightCollectionId || null
+    }
+    if (enableGoldenAccents !== undefined) {
+      updateData.enableGoldenAccents = Boolean(enableGoldenAccents)
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
@@ -147,6 +155,8 @@ export async function PATCH(request: NextRequest) {
         bio: true,
         bannerImage: true,
         profileTheme: true,
+        spotlightCollectionId: true,
+        enableGoldenAccents: true,
       },
     })
 
