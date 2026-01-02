@@ -1205,7 +1205,8 @@ export default function CollectionsList() {
               </Card>
             )
           })}
-        </div>
+          </div>
+        </>
       )}
 
       <CreateCollectionDialog
