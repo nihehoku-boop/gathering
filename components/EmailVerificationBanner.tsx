@@ -25,6 +25,19 @@ export default function EmailVerificationBanner() {
     }
   }, [session?.user?.id])
 
+  // Calculate banner height for navbar offset
+  useEffect(() => {
+    if (!isEmailVerified && !isDismissed && session?.user) {
+      const banner = document.querySelector('[data-email-banner]')
+      if (banner) {
+        const height = banner.getBoundingClientRect().height
+        document.documentElement.style.setProperty('--banner-height', `${height}px`)
+      }
+    } else {
+      document.documentElement.style.setProperty('--banner-height', '0px')
+    }
+  }, [isEmailVerified, isDismissed, session?.user])
+
   // Don't show if email is verified or banner is dismissed
   if (isEmailVerified || isDismissed || !session?.user) {
     return null
@@ -67,7 +80,10 @@ export default function EmailVerificationBanner() {
   }
 
   return (
-    <div className="bg-amber-500/10 border-b border-amber-500/50 px-4 sm:px-6 py-3">
+    <div 
+      data-email-banner
+      className="bg-amber-500/10 border-b border-amber-500/50 px-4 sm:px-6 py-3 fixed top-0 left-0 right-0 z-[60] lg:left-64"
+    >
       <div className="container mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0" />
