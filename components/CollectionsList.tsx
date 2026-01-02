@@ -950,14 +950,170 @@ export default function CollectionsList() {
                       </div>
                     )}
                     <div className="p-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <CardTitle className="text-2xl text-[var(--text-primary)]">{spotlightCollection.name}</CardTitle>
-                        {spotlightCollection.category && (
-                          <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]">
-                            <CategoryIcon category={spotlightCollection.category} className="h-3 w-3" />
-                            <span>{spotlightCollection.category}</span>
-                          </span>
-                        )}
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <CardTitle className="text-2xl text-[var(--text-primary)]">{spotlightCollection.name}</CardTitle>
+                            {spotlightCollection.category && (
+                              <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]" title={spotlightCollection.category}>
+                                <CategoryIcon category={spotlightCollection.category} className="h-3 w-3" />
+                                <span>{spotlightCollection.category}</span>
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {spotlightCollection.recommendedCollectionId && spotlightCollection.lastSyncedAt && (
+                              <span className="text-xs text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full inline-block border border-blue-500/30 flex items-center gap-1" title={`Synced from recommended collection. Last synced: ${new Date(spotlightCollection.lastSyncedAt).toLocaleDateString()}`}>
+                                <RefreshCw className="h-3 w-3" />
+                                Synced
+                              </span>
+                            )}
+                            {spotlightCollection.folder && (
+                              <span className="text-xs text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded-full inline-block border border-[var(--accent-color)]/30" title={`Folder: ${spotlightCollection.folder.name}`}>
+                                📁 {spotlightCollection.folder.name}
+                              </span>
+                            )}
+                            {(() => {
+                              const allTags = parseTags(spotlightCollection.tags)
+                              const visibleTags = allTags.slice(0, 3)
+                              const remainingCount = allTags.length - 3
+                              
+                              return (
+                                <>
+                                  {visibleTags.map((tag) => {
+                                    const colors = getTagColor(tag)
+                                    return (
+                                      <span
+                                        key={tag}
+                                        className="text-xs px-2 py-1 rounded-md border"
+                                        style={{
+                                          backgroundColor: colors.bg,
+                                          color: colors.text,
+                                          borderColor: colors.border,
+                                        }}
+                                      >
+                                        {tag}
+                                      </span>
+                                    )
+                                  })}
+                                  {remainingCount > 0 && (
+                                    <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-md border border-[var(--border-color)]" title={`${allTags.slice(3).join(', ')}`}>
+                                      +{remainingCount} more
+                                    </span>
+                                  )}
+                                </>
+                              )
+                            })()}
+                          </div>
+                        </div>
+                        <div className="flex gap-1 ml-2">
+                          {(() => {
+                            const updateStatus = updateStatuses.get(spotlightCollection.id)
+                            if (updateStatus?.hasUpdate) {
+                              return (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleSync(spotlightCollection.id)
+                                  }}
+                                  className="text-[#FF9500] hover:text-[#FF9500] hover:bg-[var(--bg-tertiary)] smooth-transition relative"
+                                  title={updateStatus.isCustomized ? 'Update available (customized)' : 'Update available'}
+                                >
+                                  <RefreshCw className="h-4 w-4" />
+                                  {updateStatus.isCustomized && (
+                                    <AlertTriangle className="absolute -top-1 -right-1 h-3 w-3 text-[#FF3B30]" />
+                                  )}
+                                </Button>
+                              )
+                            }
+                            if (spotlightCollection.recommendedCollectionId && updateStatus === undefined) {
+                              return (
+                                <div className="w-8 h-8 flex items-center justify-center" title="Checking for updates...">
+                                  <div className="w-3 h-3 border-2 border-[#666] border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                              )
+                            }
+                            return null
+                          })()}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setAlertDialog({
+                                open: true,
+                                title: 'Share to Community',
+                                message: 'Share this collection to the community? Others will be able to add it to their collections.',
+                                type: 'info',
+                                showCancel: true,
+                                confirmText: 'Share',
+                                cancelText: 'Cancel',
+                                onConfirm: async () => {
+                                  try {
+                                    const res = await fetch(`/api/collections/${spotlightCollection.id}/share-to-community`, {
+                                      method: 'POST',
+                                    })
+                                    if (res.ok) {
+                                      setAlertDialog({
+                                        open: true,
+                                        title: 'Success',
+                                        message: 'Collection shared to community successfully!',
+                                        type: 'success',
+                                        onConfirm: () => {
+                                          router.push('/community')
+                                        },
+                                      })
+                                    } else {
+                                      const error = await res.json()
+                                      setAlertDialog({
+                                        open: true,
+                                        title: 'Error',
+                                        message: error.error || 'Failed to share collection',
+                                        type: 'error',
+                                      })
+                                    }
+                                  } catch (error) {
+                                    console.error('Error sharing collection:', error)
+                                    setAlertDialog({
+                                      open: true,
+                                      title: 'Error',
+                                      message: 'Failed to share collection',
+                                      type: 'error',
+                                    })
+                                  }
+                                },
+                              })
+                            }}
+                            className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                            title="Share to Community"
+                          >
+                            <Users className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setEditingCollection(spotlightCollection)
+                            }}
+                            className="text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDelete(spotlightCollection.id)
+                            }}
+                            className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                       {spotlightCollection.description && (
                         <CardDescription className="mb-4 text-[var(--text-secondary)]">
