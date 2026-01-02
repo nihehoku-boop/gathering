@@ -556,7 +556,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         
         // Show progress update
         const newOwned = data.isOwned ? totalOwnedCount + 1 : totalOwnedCount - 1
-        const total = collection?._count?.items || totalItemsCount
+        const total = totalItemsCount
         const progress = total > 0 ? Math.round((newOwned / total) * 100) : 0
         toast.success(
           data.isOwned 
@@ -655,7 +655,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         // Show success toast with progress
         const newTotal = totalItemsCount + 1
         const newOwned = totalOwnedCount
-        const progress = collection?._count?.items ? Math.round((newOwned / newTotal) * 100) : 0
+        const progress = newTotal > 0 ? Math.round((newOwned / newTotal) * 100) : 0
         toast.success(`Item added! Progress: ${newOwned}/${newTotal} (${progress}%)`)
         
         // Show achievement notification if any were unlocked
