@@ -857,7 +857,7 @@ export default function CollectionsList() {
                 key={collection.id}
                 className={`bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up ${
                   isComplete ? 'border-[var(--gold-color)]/30 hover:border-[var(--gold-color)]/50' : ''
-                }`}
+                } hover:shadow-lg hover:shadow-[var(--accent-color)]/10`}
                 style={{
                   animationDelay: `${index * 50}ms`,
                 }}
@@ -888,8 +888,16 @@ export default function CollectionsList() {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
-                      <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
-                      <div className="flex flex-wrap gap-2 mt-2">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
+                        {collection.category && (
+                          <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]" title={collection.category}>
+                            <CategoryIcon category={collection.category} className="h-3 w-3" />
+                            <span>{collection.category}</span>
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
                         {collection.recommendedCollectionId && collection.lastSyncedAt && (
                           <span className="text-xs text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full inline-block border border-blue-500/30 flex items-center gap-1" title={`Synced from recommended collection. Last synced: ${new Date(collection.lastSyncedAt).toLocaleDateString()}`}>
                             <RefreshCw className="h-3 w-3" />
@@ -901,27 +909,37 @@ export default function CollectionsList() {
                             📁 {collection.folder.name}
                           </span>
                         )}
-                        {collection.category && (
-                          <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-block" title={collection.category}>
-                            {collection.category}
-                          </span>
-                        )}
-                        {parseTags(collection.tags).map((tag) => {
-                          const colors = getTagColor(tag)
+                        {(() => {
+                          const allTags = parseTags(collection.tags)
+                          const visibleTags = allTags.slice(0, 3)
+                          const remainingCount = allTags.length - 3
+                          
                           return (
-                            <span
-                              key={tag}
-                              className="text-xs px-2 py-1 rounded-md border"
-                              style={{
-                                backgroundColor: colors.bg,
-                                color: colors.text,
-                                borderColor: colors.border,
-                              }}
-                            >
-                              {tag}
-                            </span>
+                            <>
+                              {visibleTags.map((tag) => {
+                                const colors = getTagColor(tag)
+                                return (
+                                  <span
+                                    key={tag}
+                                    className="text-xs px-2 py-1 rounded-md border"
+                                    style={{
+                                      backgroundColor: colors.bg,
+                                      color: colors.text,
+                                      borderColor: colors.border,
+                                    }}
+                                  >
+                                    {tag}
+                                  </span>
+                                )
+                              })}
+                              {remainingCount > 0 && (
+                                <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-md border border-[var(--border-color)]" title={`${allTags.slice(3).join(', ')}`}>
+                                  +{remainingCount} more
+                                </span>
+                              )}
+                            </>
                           )
-                        })}
+                        })()}
                       </div>
                     </div>
                     <div className="flex gap-1">
