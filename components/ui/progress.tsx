@@ -12,6 +12,18 @@ const Progress = React.forwardRef<
   const progressValue = value || 0
   const isNearComplete = progressValue >= 90 && progressValue < 100
   
+  // Calculate gradient colors based on progress
+  const getGradient = () => {
+    if (gold) {
+      // Gold gradient for completed collections
+      return 'linear-gradient(90deg, var(--gold-color-dark) 0%, var(--gold-color) 50%, var(--gold-color-hover) 100%)'
+    }
+    // Green to gold gradient as progress increases
+    const goldRatio = Math.min(progressValue / 100, 1)
+    const greenRatio = 1 - goldRatio
+    return `linear-gradient(90deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color) ${greenRatio * 100}%, var(--gold-color) ${goldRatio * 100}%) 100%)`
+  }
+  
   return (
     <ProgressPrimitive.Root
       ref={ref}
@@ -26,7 +38,7 @@ const Progress = React.forwardRef<
         className="h-full w-full flex-1 transition-all duration-500 ease-out"
         style={{ 
           transform: `translateX(-${100 - progressValue}%)`,
-          backgroundColor: gold ? 'var(--gold-color)' : 'var(--accent-color)',
+          background: getGradient(),
         }}
       />
     </ProgressPrimitive.Root>
