@@ -1,5 +1,10 @@
 const { withSentryConfig } = require('@sentry/nextjs')
 
+// Bundle analyzer (only when ANALYZE env var is set)
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Ensure cheerio and other server-only packages are not bundled on client
@@ -139,19 +144,22 @@ const nextConfig = {
   },
 }
 
-module.exports = withSentryConfig(
-  nextConfig,
-  {
-    silent: true,
-    org: process.env.SENTRY_ORG,
-    project: process.env.SENTRY_PROJECT,
-  },
-  {
-    widenClientFileUpload: true,
-    transpileClientSDK: true,
-    tunnelRoute: '/monitoring',
-    hideSourceMaps: process.env.NODE_ENV === 'production',
-    disableLogger: true,
-  }
+// Wrap with bundle analyzer first, then Sentry
+module.exports = withBundleAnalyzer(
+  withSentryConfig(
+    nextConfig,
+    {
+      silent: true,
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+    },
+    {
+      widenClientFileUpload: true,
+      transpileClientSDK: true,
+      tunnelRoute: '/monitoring',
+      hideSourceMaps: process.env.NODE_ENV === 'production',
+      disableLogger: true,
+    }
+  )
 )
 

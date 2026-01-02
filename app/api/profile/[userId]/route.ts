@@ -112,7 +112,7 @@ export async function GET(
     const totalItems = collectionsWithStats.reduce((sum: number, c: { totalItems: number }) => sum + c.totalItems, 0)
     const totalOwnedItems = collectionsWithStats.reduce((sum: number, c: { ownedItems: number }) => sum + c.ownedItems, 0)
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       id: user.id,
       name: user.name || user.email,
       email: user.email,
@@ -129,6 +129,10 @@ export async function GET(
       // Note: Only showing top 10 collections for performance. Use pagination endpoint for more.
       collectionsShown: Math.min(user.collections.length, 10),
     })
+    // Cache public profiles for 5 minutes (profiles don't change frequently)
+    // Private profiles are not cached (returned early above)
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    return response
   } catch (error) {
     logger.error('Error fetching public profile:', error)
     return NextResponse.json(

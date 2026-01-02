@@ -1,0 +1,121 @@
+/**
+ * Script to generate OG image (1200x630px)
+ * Run with: node scripts/generate-og-image.js
+ */
+
+const fs = require('fs')
+const path = require('path')
+
+// Create SVG for OG image
+const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0" y1="0" x2="1200" y2="630">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a2d35;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-gradient" x1="0" y1="0" x2="200" y2="200">
+      <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#28a745;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gold-gradient" x1="0" y1="0" x2="150" y2="150">
+      <stop offset="0%" style="stop-color:#FFB800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+  
+  <!-- Decorative circles/glow effects -->
+  <circle cx="100" cy="100" r="80" fill="#34C759" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="100" fill="#FFB800" opacity="0.1"/>
+  <circle cx="600" cy="315" r="200" fill="#34C759" opacity="0.05"/>
+  
+  <!-- Treasure chest icon (simplified) -->
+  <g transform="translate(600, 280)">
+    <!-- Chest body -->
+    <rect x="-80" y="20" width="160" height="80" rx="8" fill="url(#accent-gradient)" opacity="0.9"/>
+    
+    <!-- Chest lid -->
+    <path d="M -80 20 Q -80 0 -60 -10 L 0 -20 L 60 -10 Q 80 0 80 20" 
+          fill="url(#accent-gradient)" opacity="0.8"/>
+    
+    <!-- Lock/keyhole -->
+    <circle cx="0" cy="35" r="12" fill="none" stroke="#FFB800" stroke-width="3"/>
+    <rect x="-3" y="35" width="6" height="10" fill="#FFB800"/>
+    
+    <!-- Straps -->
+    <rect x="-70" y="45" width="140" height="6" fill="#34C759" opacity="0.4"/>
+    <rect x="-70" y="60" width="140" height="6" fill="#34C759" opacity="0.4"/>
+  </g>
+  
+  <!-- Sparkles -->
+  <circle cx="200" cy="150" r="4" fill="#FFB800" opacity="0.6"/>
+  <circle cx="1000" cy="480" r="5" fill="#FFB800" opacity="0.6"/>
+  <circle cx="150" cy="500" r="3" fill="#34C759" opacity="0.6"/>
+  <circle cx="1050" cy="100" r="4" fill="#34C759" opacity="0.6"/>
+  
+  <!-- Logo text: Colletro -->
+  <text x="600" y="420" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="80" 
+        font-weight="700" 
+        fill="#ffffff" 
+        text-anchor="middle" 
+        letter-spacing="-2px">
+    Colletro
+  </text>
+  
+  <!-- Tagline -->
+  <text x="600" y="480" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="32" 
+        font-weight="400" 
+        fill="#969696" 
+        text-anchor="middle">
+    Your Collection Trove
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="530" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="24" 
+        font-weight="300" 
+        fill="#6a6a6a" 
+        text-anchor="middle">
+    Catalog books, comics, movies, and cards
+  </text>
+</svg>`
+
+// Save SVG file
+const publicDir = path.join(process.cwd(), 'public')
+const svgPath = path.join(publicDir, 'og-image.svg')
+const pngNotePath = path.join(publicDir, 'OG_IMAGE_README.txt')
+
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true })
+}
+
+fs.writeFileSync(svgPath, svg)
+console.log('✅ Created og-image.svg')
+
+// Create a note about PNG conversion
+const note = `OG Image Generation Note:
+
+An SVG file (og-image.svg) has been created as a placeholder.
+For production, you should convert this to PNG format (1200x630px).
+
+Options:
+1. Use an online converter: https://svgtopng.com/
+2. Use ImageMagick: convert -background none -size 1200x630 og-image.svg og-image.png
+3. Use a design tool (Figma, Sketch, etc.) to create a polished version
+
+The current SVG can be used, but PNG is preferred for better compatibility.
+`
+
+fs.writeFileSync(pngNotePath, note)
+console.log('✅ Created OG_IMAGE_README.txt with conversion instructions')
+console.log('\n⚠️  Note: Convert og-image.svg to og-image.png (1200x630px) for best results')
+
