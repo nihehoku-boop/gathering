@@ -159,18 +159,35 @@ export default function SettingsPage() {
   }
 
   const handleSpotlightChange = async (collectionId: string | null) => {
-    setSpotlightCollectionId(collectionId)
+    const newValue = collectionId || null
+    setSpotlightCollectionId(newValue)
     try {
       const res = await fetch('/api/user/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ spotlightCollectionId: collectionId }),
+        body: JSON.stringify({ spotlightCollectionId: newValue }),
       })
-      if (!res.ok) {
-        console.error('Failed to save spotlight collection')
+      if (res.ok) {
+        // Success - setting saved
+        console.log('Spotlight collection saved:', newValue)
+      } else {
+        const error = await res.json()
+        console.error('Failed to save spotlight collection:', error)
+        // Revert on error
+        const profileRes = await fetch('/api/user/profile')
+        if (profileRes.ok) {
+          const profileData = await profileRes.json()
+          setSpotlightCollectionId(profileData.spotlightCollectionId || null)
+        }
       }
     } catch (error) {
       console.error('Error saving spotlight collection:', error)
+      // Revert on error
+      const profileRes = await fetch('/api/user/profile')
+      if (profileRes.ok) {
+        const profileData = await profileRes.json()
+        setSpotlightCollectionId(profileData.spotlightCollectionId || null)
+      }
     }
   }
 
