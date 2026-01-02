@@ -120,12 +120,33 @@ export default function Sidebar() {
   
   // Fetch user settings for golden accents
   useEffect(() => {
-    fetch('/api/user/profile')
-      .then(res => res.json())
-      .then(data => {
-        setEnableGoldenAccents(data.enableGoldenAccents !== false)
-      })
-      .catch(err => console.error('Error fetching user settings:', err))
+    const fetchSettings = () => {
+      fetch('/api/user/profile')
+        .then(res => res.json())
+        .then(data => {
+          setEnableGoldenAccents(data.enableGoldenAccents !== false)
+        })
+        .catch(err => console.error('Error fetching user settings:', err))
+    }
+    
+    // Fetch on mount
+    fetchSettings()
+    
+    // Listen for settings updates
+    const handleSettingsUpdate = (event: CustomEvent) => {
+      if (event.detail?.enableGoldenAccents !== undefined) {
+        setEnableGoldenAccents(event.detail.enableGoldenAccents)
+      } else {
+        // If other settings changed, refetch to get latest
+        fetchSettings()
+      }
+    }
+    
+    window.addEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    
+    return () => {
+      window.removeEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    }
   }, [])
   
   useEffect(() => {

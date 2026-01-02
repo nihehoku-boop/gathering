@@ -126,14 +126,34 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
+    const fetchSettings = () => {
+      fetch('/api/user/profile')
+        .then(res => res.json())
+        .then(data => {
+          setEnableGoldenAccents(data.enableGoldenAccents !== false)
+        })
+        .catch(err => console.error('Error fetching user settings:', err))
+    }
+    
     fetchCollection()
     // Fetch user settings for golden accents
-    fetch('/api/user/profile')
-      .then(res => res.json())
-      .then(data => {
-        setEnableGoldenAccents(data.enableGoldenAccents !== false)
-      })
-      .catch(err => console.error('Error fetching user settings:', err))
+    fetchSettings()
+    
+    // Listen for settings updates
+    const handleSettingsUpdate = (event: CustomEvent) => {
+      if (event.detail?.enableGoldenAccents !== undefined) {
+        setEnableGoldenAccents(event.detail.enableGoldenAccents)
+      } else {
+        // If other settings changed, refetch to get latest
+        fetchSettings()
+      }
+    }
+    
+    window.addEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    
+    return () => {
+      window.removeEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    }
   }, [collectionId])
 
   useEffect(() => {
