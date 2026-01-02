@@ -103,15 +103,39 @@ export default function CollectionsList() {
   const [showSortMenu, setShowSortMenu] = useState(false)
 
   useEffect(() => {
+    const fetchSettings = () => {
+      fetch('/api/user/profile')
+        .then(res => res.json())
+        .then(data => {
+          setEnableGoldenAccents(data.enableGoldenAccents !== false)
+          setSpotlightCollectionId(data.spotlightCollectionId || null)
+        })
+        .catch(err => console.error('Error fetching user settings:', err))
+    }
+    
     fetchCollections()
     // Fetch user settings for golden accents and spotlight
-    fetch('/api/user/profile')
-      .then(res => res.json())
-      .then(data => {
-        setEnableGoldenAccents(data.enableGoldenAccents !== false)
-        setSpotlightCollectionId(data.spotlightCollectionId || null)
-      })
-      .catch(err => console.error('Error fetching user settings:', err))
+    fetchSettings()
+    
+    // Listen for settings updates
+    const handleSettingsUpdate = (event: CustomEvent) => {
+      if (event.detail?.enableGoldenAccents !== undefined) {
+        setEnableGoldenAccents(event.detail.enableGoldenAccents)
+      }
+      if (event.detail?.spotlightCollectionId !== undefined) {
+        setSpotlightCollectionId(event.detail.spotlightCollectionId)
+      }
+      // If other settings changed, refetch to get latest
+      if (event.detail?.enableGoldenAccents === undefined && event.detail?.spotlightCollectionId === undefined) {
+        fetchSettings()
+      }
+    }
+    
+    window.addEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    
+    return () => {
+      window.removeEventListener('settings-updated', handleSettingsUpdate as EventListener)
+    }
   }, [])
 
   // Listen for onboarding events
