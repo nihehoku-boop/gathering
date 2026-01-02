@@ -363,7 +363,7 @@ export default function WishlistPage() {
               <CardContent className="py-16 text-center">
                 <Heart className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
                 <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                  Your wishlist is empty
+                  Your wishlist trove is empty
                 </h3>
                 <p className="text-[var(--text-secondary)] mb-6">
                   Add items from your collections to your wishlist!

@@ -142,7 +142,7 @@ export default function SharedWishlistPage() {
               <CardContent className="py-16 text-center">
                 <Heart className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
                 <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-                  This wishlist is empty
+                  This wishlist trove is empty
                 </h3>
               </CardContent>
             </Card>
