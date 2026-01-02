@@ -938,7 +938,8 @@ export default function CollectionsList() {
                         <Progress 
                           value={progress} 
                           className="h-2"
-                          gold={isComplete}
+                          gold={isComplete && enableGoldenAccents}
+                          enableGradient={enableGoldenAccents}
                         />
                         <p className="text-xs text-[var(--text-muted)]">
                           {spotlightCollection.ownedCount !== undefined ? spotlightCollection.ownedCount : (spotlightCollection.items?.filter(i => i.isOwned).length || 0)} of {spotlightCollection._count.items} items
