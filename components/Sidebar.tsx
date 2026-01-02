@@ -506,7 +506,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)] min-h-[73px]">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 smooth-transition">
               <TreasureChest className="h-6 w-6 text-[var(--accent-color)]" />
-              <h2 className="text-xl font-semibold text-[var(--text-primary)] tracking-tight">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tighter">
                 Colletro
               </h2>
               <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">

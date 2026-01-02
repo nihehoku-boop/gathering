@@ -22,22 +22,22 @@ export default function LandingPage() {
   const features = [
     {
       icon: BookOpen,
-      title: 'Organize Your Collections',
+      title: 'Build Your Trove',
       description: 'Create and manage multiple collections with ease. Track what you have and what you\'re looking for.',
     },
     {
       icon: Users,
       title: 'Community Collections',
-      description: 'Discover collections shared by the community. Find inspiration and add them to your own collection.',
+      description: 'Discover collections shared by the community. Find inspiration and add them to your trove.',
     },
     {
       icon: Star,
       title: 'Recommended Collections',
-      description: 'Get curated collections recommended by experts. Perfect starting points for new collectors.',
+      description: 'Get curated collections recommended by experts. Perfect starting points to grow your trove.',
     },
     {
       icon: BarChart3,
-      title: 'Track Your Progress',
+      title: 'Watch Your Trove Grow',
       description: 'Visual progress bars show your collection completion. See how close you are to completing each collection.',
     },
   ]
@@ -56,7 +56,7 @@ export default function LandingPage() {
         <nav className="relative z-10 container mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <TreasureChest className="h-8 w-8 text-[var(--accent-color)]" />
-            <span className="text-2xl font-bold text-[#fafafa]">Colletro</span>
+            <span className="text-2xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
           </div>
           <div className="flex items-center gap-4">
             {!session && (
@@ -189,7 +189,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <BookOpen className="h-6 w-6 text-[var(--accent-color)]" />
-              <span className="text-xl font-bold text-[#fafafa]">Colletro</span>
+              <span className="text-xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
             </div>
             <div className="flex items-center gap-6 text-[#969696] text-sm flex-wrap">
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">
