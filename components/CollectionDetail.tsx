@@ -128,6 +128,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   useEffect(() => {
     fetchCollection()
+    // Fetch user settings for golden accents
+    fetch('/api/user/profile')
+      .then(res => res.json())
+      .then(data => {
+        setEnableGoldenAccents(data.enableGoldenAccents !== false)
+      })
+      .catch(err => console.error('Error fetching user settings:', err))
   }, [collectionId])
 
   useEffect(() => {
