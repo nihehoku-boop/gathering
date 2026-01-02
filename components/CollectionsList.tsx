@@ -79,6 +79,8 @@ export default function CollectionsList() {
   const [updateStatuses, setUpdateStatuses] = useState<Map<string, UpdateStatus>>(new Map())
   const [syncingCollection, setSyncingCollection] = useState<string | null>(null)
   const [showSyncDialog, setShowSyncDialog] = useState(false)
+  const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
+  const [spotlightCollectionId, setSpotlightCollectionId] = useState<string | null>(null)
   const [alertDialog, setAlertDialog] = useState<{
     open: boolean
     title: string
@@ -102,6 +104,14 @@ export default function CollectionsList() {
 
   useEffect(() => {
     fetchCollections()
+    // Fetch user settings for golden accents and spotlight
+    fetch('/api/user/profile')
+      .then(res => res.json())
+      .then(data => {
+        setEnableGoldenAccents(data.enableGoldenAccents !== false)
+        setSpotlightCollectionId(data.spotlightCollectionId || null)
+      })
+      .catch(err => console.error('Error fetching user settings:', err))
   }, [])
 
   // Listen for onboarding events
@@ -856,7 +866,7 @@ export default function CollectionsList() {
               <Card
                 key={collection.id}
                 className={`bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up ${
-                  isComplete ? 'border-[var(--gold-color)]/30 hover:border-[var(--gold-color)]/50' : ''
+                  isComplete && enableGoldenAccents ? 'border-[var(--gold-color)]/30 hover:border-[var(--gold-color)]/50' : ''
                 } hover:shadow-lg hover:shadow-[var(--accent-color)]/10`}
                 style={{
                   animationDelay: `${index * 50}ms`,
@@ -864,13 +874,13 @@ export default function CollectionsList() {
                 onClick={() => router.push(`/collections/${collection.id}`)}
               >
                 {collection.coverImage && (
-                  <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${isComplete ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
+                  <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${isComplete && enableGoldenAccents ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
                     <Image
                       src={collection.coverImage}
                       alt={collection.name}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete ? 'group-hover:brightness-110' : ''}`}
+                      className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete && enableGoldenAccents ? 'group-hover:brightness-110' : ''}`}
                       loading="lazy"
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
@@ -1064,13 +1074,13 @@ export default function CollectionsList() {
                     <div className="flex justify-between text-sm items-center">
                       <span className="text-[var(--text-secondary)]">Progress</span>
                       <div className="flex items-center gap-2">
-                        {isComplete && (
+                        {isComplete && enableGoldenAccents && (
                           <span className="text-xs text-[var(--gold-color)] font-semibold flex items-center gap-1">
                             <Star className="h-3 w-3 fill-[var(--gold-color)]" />
                             Complete Trove
                           </span>
                         )}
-                        <span className={`font-semibold ${isComplete ? 'text-[var(--gold-color)]' : 'text-[var(--text-primary)]'}`}>
+                        <span className={`font-semibold ${isComplete && enableGoldenAccents ? 'text-[var(--gold-color)]' : 'text-[var(--text-primary)]'}`}>
                           {progress}%
                         </span>
                       </div>
@@ -1078,7 +1088,7 @@ export default function CollectionsList() {
                     <Progress 
                       value={progress} 
                       className="h-1.5"
-                      gold={isComplete}
+                      gold={isComplete && enableGoldenAccents}
                     />
                     <p className="text-xs text-[var(--text-muted)]">
                       {collection.ownedCount !== undefined ? collection.ownedCount : (collection.items?.filter(i => i.isOwned).length || 0)} of {collection._count.items} items
