@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
-import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star } from 'lucide-react'
+import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star, CheckCircle2 } from 'lucide-react'
 import TreasureChest from './icons/TreasureChest'
 import CategoryIcon from './icons/CategoryIcon'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
@@ -36,6 +36,7 @@ interface Collection {
   coverImageFit?: string | null
   tags: string
   recommendedCollectionId: string | null
+  sharedToCommunityId: string | null
   lastSyncedAt: string | null
   _count: {
     items: number
@@ -1037,60 +1038,124 @@ export default function CollectionsList() {
                             }
                             return null
                           })()}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setAlertDialog({
-                                open: true,
-                                title: 'Share to Community',
-                                message: 'Share this collection to the community? Others will be able to add it to their collections.',
-                                type: 'info',
-                                showCancel: true,
-                                confirmText: 'Share',
-                                cancelText: 'Cancel',
-                                onConfirm: async () => {
-                                  try {
-                                    const res = await fetch(`/api/collections/${spotlightCollection.id}/share-to-community`, {
-                                      method: 'POST',
-                                    })
-                                    if (res.ok) {
-                                      setAlertDialog({
-                                        open: true,
-                                        title: 'Success',
-                                        message: 'Collection shared to community successfully!',
-                                        type: 'success',
-                                        onConfirm: () => {
-                                          router.push('/community')
-                                        },
+                          {spotlightCollection.sharedToCommunityId ? (
+                            <>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="text-green-500 hover:text-green-600 hover:bg-[var(--bg-tertiary)] smooth-transition"
+                                title="Shared to Community"
+                                disabled
+                              >
+                                <CheckCircle2 className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setAlertDialog({
+                                    open: true,
+                                    title: 'Remove from Community',
+                                    message: 'Remove this collection from the community? It will no longer be visible to others.',
+                                    type: 'warning',
+                                    showCancel: true,
+                                    confirmText: 'Remove',
+                                    cancelText: 'Cancel',
+                                    onConfirm: async () => {
+                                      try {
+                                        const res = await fetch(`/api/collections/${spotlightCollection.id}/unshare-from-community`, {
+                                          method: 'DELETE',
+                                        })
+                                        if (res.ok) {
+                                          fetchCollections()
+                                          setAlertDialog({
+                                            open: true,
+                                            title: 'Success',
+                                            message: 'Collection removed from community successfully!',
+                                            type: 'success',
+                                          })
+                                        } else {
+                                          const error = await res.json()
+                                          setAlertDialog({
+                                            open: true,
+                                            title: 'Error',
+                                            message: error.error || 'Failed to remove collection',
+                                            type: 'error',
+                                          })
+                                        }
+                                      } catch (error) {
+                                        console.error('Error unsharing collection:', error)
+                                        setAlertDialog({
+                                          open: true,
+                                          title: 'Error',
+                                          message: 'Failed to remove collection',
+                                          type: 'error',
+                                        })
+                                      }
+                                    },
+                                  })
+                                }}
+                                className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                                title="Remove from Community"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setAlertDialog({
+                                  open: true,
+                                  title: 'Share to Community',
+                                  message: 'Share this collection to the community? Others will be able to add it to their collections.',
+                                  type: 'info',
+                                  showCancel: true,
+                                  confirmText: 'Share',
+                                  cancelText: 'Cancel',
+                                  onConfirm: async () => {
+                                    try {
+                                      const res = await fetch(`/api/collections/${spotlightCollection.id}/share-to-community`, {
+                                        method: 'POST',
                                       })
-                                    } else {
-                                      const error = await res.json()
+                                      if (res.ok) {
+                                        fetchCollections()
+                                        setAlertDialog({
+                                          open: true,
+                                          title: 'Success',
+                                          message: 'Collection shared to community successfully!',
+                                          type: 'success',
+                                        })
+                                      } else {
+                                        const error = await res.json()
+                                        setAlertDialog({
+                                          open: true,
+                                          title: 'Error',
+                                          message: error.error || 'Failed to share collection',
+                                          type: 'error',
+                                        })
+                                      }
+                                    } catch (error) {
+                                      console.error('Error sharing collection:', error)
                                       setAlertDialog({
                                         open: true,
                                         title: 'Error',
-                                        message: error.error || 'Failed to share collection',
+                                        message: 'Failed to share collection',
                                         type: 'error',
                                       })
                                     }
-                                  } catch (error) {
-                                    console.error('Error sharing collection:', error)
-                                    setAlertDialog({
-                                      open: true,
-                                      title: 'Error',
-                                      message: 'Failed to share collection',
-                                      type: 'error',
-                                    })
-                                  }
-                                },
-                              })
-                            }}
-                            className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] smooth-transition"
-                            title="Share to Community"
-                          >
-                            <Users className="h-4 w-4" />
-                          </Button>
+                                  },
+                                })
+                              }}
+                              className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                              title="Share to Community"
+                            >
+                              <Users className="h-4 w-4" />
+                            </Button>
+                          )}
                           <Button
                             variant="ghost"
                             size="icon"
@@ -1289,60 +1354,124 @@ export default function CollectionsList() {
                         }
                         return null
                       })()}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setAlertDialog({
-                            open: true,
-                            title: 'Share to Community',
-                            message: 'Share this collection to the community? Others will be able to add it to their collections.',
-                            type: 'info',
-                            showCancel: true,
-                            confirmText: 'Share',
-                            cancelText: 'Cancel',
-                            onConfirm: async () => {
-                              try {
-                                const res = await fetch(`/api/collections/${collection.id}/share-to-community`, {
-                                  method: 'POST',
-                                })
-                                if (res.ok) {
-                                  setAlertDialog({
-                                    open: true,
-                                    title: 'Success',
-                                    message: 'Collection shared to community successfully!',
-                                    type: 'success',
-                                    onConfirm: () => {
-                                      router.push('/community')
-                                    },
+                      {collection.sharedToCommunityId ? (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-green-500 hover:text-green-600 hover:bg-[var(--bg-tertiary)] smooth-transition"
+                            title="Shared to Community"
+                            disabled
+                          >
+                            <CheckCircle2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setAlertDialog({
+                                open: true,
+                                title: 'Remove from Community',
+                                message: 'Remove this collection from the community? It will no longer be visible to others.',
+                                type: 'warning',
+                                showCancel: true,
+                                confirmText: 'Remove',
+                                cancelText: 'Cancel',
+                                onConfirm: async () => {
+                                  try {
+                                    const res = await fetch(`/api/collections/${collection.id}/unshare-from-community`, {
+                                      method: 'DELETE',
+                                    })
+                                    if (res.ok) {
+                                      fetchCollections()
+                                      setAlertDialog({
+                                        open: true,
+                                        title: 'Success',
+                                        message: 'Collection removed from community successfully!',
+                                        type: 'success',
+                                      })
+                                    } else {
+                                      const error = await res.json()
+                                      setAlertDialog({
+                                        open: true,
+                                        title: 'Error',
+                                        message: error.error || 'Failed to remove collection',
+                                        type: 'error',
+                                      })
+                                    }
+                                  } catch (error) {
+                                    console.error('Error unsharing collection:', error)
+                                    setAlertDialog({
+                                      open: true,
+                                      title: 'Error',
+                                      message: 'Failed to remove collection',
+                                      type: 'error',
+                                    })
+                                  }
+                                },
+                              })
+                            }}
+                            className="text-[#FF3B30] hover:text-[#FF3B30] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                            title="Remove from Community"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setAlertDialog({
+                              open: true,
+                              title: 'Share to Community',
+                              message: 'Share this collection to the community? Others will be able to add it to their collections.',
+                              type: 'info',
+                              showCancel: true,
+                              confirmText: 'Share',
+                              cancelText: 'Cancel',
+                              onConfirm: async () => {
+                                try {
+                                  const res = await fetch(`/api/collections/${collection.id}/share-to-community`, {
+                                    method: 'POST',
                                   })
-                                } else {
-                                  const error = await res.json()
+                                  if (res.ok) {
+                                    fetchCollections()
+                                    setAlertDialog({
+                                      open: true,
+                                      title: 'Success',
+                                      message: 'Collection shared to community successfully!',
+                                      type: 'success',
+                                    })
+                                  } else {
+                                    const error = await res.json()
+                                    setAlertDialog({
+                                      open: true,
+                                      title: 'Error',
+                                      message: error.error || 'Failed to share collection',
+                                      type: 'error',
+                                    })
+                                  }
+                                } catch (error) {
+                                  console.error('Error sharing collection:', error)
                                   setAlertDialog({
                                     open: true,
                                     title: 'Error',
-                                    message: error.error || 'Failed to share collection',
+                                    message: 'Failed to share collection',
                                     type: 'error',
                                   })
                                 }
-                              } catch (error) {
-                                console.error('Error sharing collection:', error)
-                                setAlertDialog({
-                                  open: true,
-                                  title: 'Error',
-                                  message: 'Failed to share collection',
-                                  type: 'error',
-                                })
-                              }
-                            },
-                          })
-                        }}
-                        className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] smooth-transition"
-                        title="Share to Community"
-                      >
-                        <Users className="h-4 w-4" />
-                      </Button>
+                              },
+                            })
+                          }}
+                          className="text-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                          title="Share to Community"
+                        >
+                          <Users className="h-4 w-4" />
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="icon"

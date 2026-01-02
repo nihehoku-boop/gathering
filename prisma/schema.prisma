@@ -111,6 +111,8 @@ model Collection {
   user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   recommendedCollectionId String? // ID of the recommended collection this was created from
   communityCollectionId   String? // ID of the community collection this was created from
+  sharedToCommunityId     String? // ID of the community collection this was shared to (if shared)
+  sharedToCommunity       CommunityCollection? @relation("SharedCollections", fields: [sharedToCommunityId], references: [id], onDelete: SetNull)
   lastSyncedAt            DateTime? // When this collection was last synced with the recommended collection
   shareToken              String?   @unique // Unique token for sharing
   isPublic                Boolean   @default(false) // Can be shared via link
@@ -194,6 +196,7 @@ model CommunityCollection {
   items                  CommunityItem[]
   votes                  CommunityCollectionVote[]
   reports                ContentReport[]
+  sharedCollections      Collection[]              @relation("SharedCollections") // Collections that were shared to this community collection
   isHidden               Boolean                   @default(false) // Hidden by admin moderation
   moderationNotes        String? // Admin notes about moderation action
   createdAt              DateTime                  @default(now())
