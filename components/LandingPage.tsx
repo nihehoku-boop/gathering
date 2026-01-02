@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, BookOpen, Users, Star, BarChart3, Sparkles, Check } from 'lucide-react'
+import TreasureChest from './icons/TreasureChest'
 import Link from 'next/link'
 
 export default function LandingPage() {
@@ -54,7 +55,7 @@ export default function LandingPage() {
         {/* Navigation */}
         <nav className="relative z-10 container mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BookOpen className="h-8 w-8 text-[var(--accent-color)]" />
+            <TreasureChest className="h-8 w-8 text-[var(--accent-color)]" />
             <span className="text-2xl font-bold text-[#fafafa]">Colletro</span>
           </div>
           <div className="flex items-center gap-4">

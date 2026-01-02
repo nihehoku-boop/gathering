@@ -35,5 +35,13 @@ export const BRAND = {
     wishlist: 'Wishlist',
     vault: 'Vault', // For favorites/rare items (future)
   },
+  
+  // Colors
+  colors: {
+    primary: '#34C759', // Green
+    gold: '#FFB800', // Gold for premium features
+    goldDark: '#D4AF37', // Darker gold variant
+    goldHover: '#FFC933', // Gold hover state
+  },
 } as const
 
