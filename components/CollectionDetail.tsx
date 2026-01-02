@@ -119,7 +119,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [isPublic, setIsPublic] = useState(false)
   const [shareToken, setShareToken] = useState<string | null>(null)
-  const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
   const [copied, setCopied] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [openItemMenu, setOpenItemMenu] = useState<string | null>(null)
