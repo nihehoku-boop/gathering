@@ -158,6 +158,8 @@ export default function SettingsPage() {
       if (res.ok) {
         setSaveSuccess(true)
         setTimeout(() => setSaveSuccess(false), 2000)
+        // Dispatch event to notify other components
+        window.dispatchEvent(new CustomEvent('settings-updated', { detail: { enableGoldenAccents: enabled } }))
       } else {
         const error = await res.json()
         setSaveError('Failed to save setting')
