@@ -54,7 +54,7 @@ model User {
   bannerImage              String? // Profile banner/header image URL
   profileTheme             String                    @default("{}") // JSON object for theme customization (background, card style, font size)
   achievements             String                    @default("[]") // JSON array of unlocked achievement IDs
-  spotlightCollectionId    String? // ID of collection to feature prominently on home page
+  spotlightCollectionId    String? // ID of collection to feature prominently on home page (null = disabled, off by default)
   enableGoldenAccents      Boolean                   @default(true) // Enable gold accents for completed collections
   accounts                 Account[]
   sessions                 Session[]
