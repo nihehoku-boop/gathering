@@ -212,9 +212,21 @@ export default function ProfilePage() {
                 Back
               </Button>
             </div>
-            <div className="flex items-center gap-3 mb-3">
-              <User className="h-8 w-8 text-[var(--text-primary)]" />
-              <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Edit Profile</h1>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <User className="h-8 w-8 text-[var(--text-primary)]" />
+                <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Edit Profile</h1>
+              </div>
+              {session?.user?.id && (
+                <Button
+                  variant="outline"
+                  onClick={() => router.push(`/profile/${session.user.id}`)}
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition"
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  View Public Profile
+                </Button>
+              )}
             </div>
             <p className="text-[var(--text-secondary)] text-lg mb-10">
               Update your profile information
