@@ -372,7 +372,7 @@ export default function SettingsPage() {
                         await fetch('/api/user/profile', {
                           method: 'PATCH',
                           headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ accentColor: '#FFD60A' }),
+                          body: JSON.stringify({ accentColor: '#34C759' }),
                         })
                         
                         // Reset sidebar progress setting
