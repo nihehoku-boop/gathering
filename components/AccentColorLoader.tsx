@@ -51,13 +51,13 @@ export default function AccentColorLoader() {
           // If API fails and we have cached color, keep using it
           // If no cache, fallback to session or default
           if (!cachedColor) {
-            const fallbackColor = session?.user?.accentColor || '#FFD60A'
+            const fallbackColor = session?.user?.accentColor || '#34C759'
             applyAccentColor(fallbackColor)
           }
         }
       } else if (!cachedColor) {
         // Not logged in and no cache, use default
-        applyAccentColor('#FFD60A')
+        applyAccentColor('#34C759')
       }
     }
 

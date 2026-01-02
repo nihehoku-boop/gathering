@@ -87,7 +87,7 @@ export default async function RootLayout({
 }) {
   // Don't try to get accent color server-side - let client-side component handle it
   // This avoids hydration mismatches and ensures we always get the latest value
-  const defaultAccentColor = '#FFD60A'
+  const defaultAccentColor = '#34C759'
   const defaultAccentColorHover = adjustBrightness(defaultAccentColor, -20)
 
   return (
