@@ -76,9 +76,14 @@ export default function ProfilePage() {
         setProfileImage(data.image || '')
         try {
           const theme = data.profileTheme ? (typeof data.profileTheme === 'string' ? JSON.parse(data.profileTheme) : data.profileTheme) : {}
-          setProfileTheme(theme)
+          // Ensure cardStyle has a default value if not set
+          setProfileTheme({
+            ...theme,
+            cardStyle: theme.cardStyle || 'default',
+            fontSize: theme.fontSize || 'medium',
+          })
         } catch (e) {
-          setProfileTheme({})
+          setProfileTheme({ cardStyle: 'default', fontSize: 'medium' })
         }
         setStats({
           collectionsCount: data.collectionsCount || 0,
