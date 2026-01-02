@@ -118,6 +118,16 @@ export default function Sidebar() {
     }
   }, [session, fetchCollections, fetchFolders])
   
+  // Fetch user settings for golden accents
+  useEffect(() => {
+    fetch('/api/user/profile')
+      .then(res => res.json())
+      .then(data => {
+        setEnableGoldenAccents(data.enableGoldenAccents !== false)
+      })
+      .catch(err => console.error('Error fetching user settings:', err))
+  }, [])
+  
   useEffect(() => {
     if (!isMounted) return
     
