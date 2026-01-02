@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
       : totalCount
     const hasMore = skip + sortedCollections.length < finalTotal
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       collections: sortedCollections,
       pagination: {
         page,
@@ -197,6 +197,10 @@ export async function GET(request: NextRequest) {
         hasMore,
       },
     })
+    // Cache community collections for 2 minutes (moderate change frequency)
+    // Stale-while-revalidate allows serving stale content while revalidating in background
+    response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
+    return response
   } catch (error) {
     console.error('Error fetching community collections:', error)
     return NextResponse.json(
