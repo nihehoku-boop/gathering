@@ -386,6 +386,7 @@ export default function SettingsPage() {
                     <button
                       key={color.value}
                       onClick={() => handleAccentColorChange(color.value)}
+                      disabled={saving}
                       className={`
                         relative w-12 h-12 rounded-full border-2 transition-all smooth-transition
                         ${accentColor === color.value 
@@ -393,6 +394,7 @@ export default function SettingsPage() {
                           : 'border-[var(--border-hover)] hover:border-[var(--text-secondary)] hover:scale-105'
                         }
                         ${color.class}
+                        ${saving ? 'opacity-50 cursor-not-allowed' : ''}
                       `}
                       style={{
                         backgroundColor: color.value,
@@ -411,6 +413,9 @@ export default function SettingsPage() {
                   <span>Selected:</span>
                   <span className="font-medium text-[var(--text-primary)]">{accentColor}</span>
                 </div>
+                {saving && <p className="text-xs text-[var(--text-secondary)]">Saving...</p>}
+                {saveSuccess && <p className="text-xs text-green-500">Saved!</p>}
+                {saveError && <p className="text-xs text-red-500">{saveError}</p>}
               </div>
             </CardContent>
           </Card>
