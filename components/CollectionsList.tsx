@@ -102,6 +102,18 @@ export default function CollectionsList() {
     fetchCollections()
   }, [])
 
+  // Listen for onboarding events
+  useEffect(() => {
+    const handleOnboardingCreate = () => {
+      setShowCreateDialog(true)
+    }
+
+    window.addEventListener('onboarding:create-collection', handleOnboardingCreate)
+    return () => {
+      window.removeEventListener('onboarding:create-collection', handleOnboardingCreate)
+    }
+  }, [])
+
   // Listen for storage changes to sync with sidebar drag-and-drop
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
