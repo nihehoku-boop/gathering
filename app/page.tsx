@@ -4,6 +4,7 @@ import CollectionsList from '@/components/CollectionsList'
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
 import LandingPage from '@/components/LandingPage'
+import OnboardingTour from '@/components/OnboardingTour'
 import { getBadgeEmoji } from '@/lib/badges'
 
 export default async function Home() {
@@ -36,6 +37,7 @@ export default async function Home() {
           <CollectionsList />
         </div>
       </main>
+      <OnboardingTour />
     </>
   )
 }
