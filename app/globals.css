@@ -247,11 +247,10 @@
   .bg-gradient-animated {
     background: linear-gradient(
       135deg,
-      #1a0f14 0%,
-      #2a1a1f 25%,
-      #1a2a1f 50%,
-      #2a1a1f 75%,
-      #0f141a 100%
+      #0f1114 0%,
+      #1a1d24 33%,
+      #2a2d35 66%,
+      #1a1d24 100%
     );
     background-size: 400% 400%;
     animation: gradient-parallax 20s ease infinite;
