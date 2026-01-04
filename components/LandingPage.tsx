@@ -95,36 +95,17 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
-      {/* Innovative Scrolling Gradient Background */}
+      {/* Simple Linear Gradient Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[#0f1114]"></div>
         <div 
-          className="absolute inset-0 opacity-40"
-          style={{
-            background: `linear-gradient(
-              90deg,
-              transparent 0%,
-              rgba(52, 199, 89, 0.15) 25%,
-              rgba(59, 130, 246, 0.15) 50%,
-              rgba(168, 85, 247, 0.15) 75%,
-              transparent 100%
-            )`,
-            backgroundSize: '200% 100%',
-            animation: 'gradient-scroll 15s linear infinite',
-          }}
-        ></div>
-        <div 
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0"
           style={{
             background: `linear-gradient(
               135deg,
-              transparent 0%,
-              rgba(59, 130, 246, 0.12) 33%,
-              rgba(168, 85, 247, 0.12) 66%,
-              transparent 100%
+              rgba(15, 17, 20, 1) 0%,
+              rgba(26, 29, 36, 0.8) 50%,
+              rgba(15, 17, 20, 1) 100%
             )`,
-            backgroundSize: '200% 200%',
-            animation: 'gradient-scroll-diagonal 20s linear infinite',
           }}
         ></div>
       </div>
@@ -260,19 +241,17 @@ export default function LandingPage() {
                   }
                 >
                   <div className="max-w-xl mx-auto lg:mx-0">
-                    {/* Icon - Standing Alone, Bigger */}
-                    <div className="mb-8 inline-block">
+                    {/* Title with Icon Next to It */}
+                    <div className="flex items-center gap-4 mb-4">
                       <img
                         src={feature.icon}
                         alt={feature.iconAlt}
-                        className="w-20 h-20 lg:w-24 lg:h-24 object-contain"
+                        className="w-16 h-16 lg:w-20 lg:h-20 object-contain flex-shrink-0"
                       />
+                      <h2 className="text-4xl lg:text-5xl font-bold text-[#fafafa] leading-tight">
+                        {feature.title}
+                      </h2>
                     </div>
-
-                    {/* Title */}
-                    <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#fafafa] leading-tight">
-                      {feature.title}
-                    </h2>
 
                     {/* Description */}
                     <p className="text-xl text-[#969696] mb-8 leading-relaxed">
