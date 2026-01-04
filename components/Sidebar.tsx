@@ -564,7 +564,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)] min-h-[73px]">
+          <div className="flex items-center justify-between py-5 px-6 border-b border-[var(--border-color)] min-h-[73px]">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 smooth-transition">
               <LogoIcon width={24} height={24} className="h-6 w-6" />
               <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tighter">
