@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react'
 import LogoIcon from './LogoIcon'
 import Link from 'next/link'
 import Image from 'next/image'
