@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
 import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Share2, Download, Upload, Users, ChevronDown, Package, ArrowUpDown, Star, UserX } from 'lucide-react'
-import TreasureChest from './icons/TreasureChest'
+import LogoIcon from './LogoIcon'
 import CategoryIcon from './icons/CategoryIcon'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
 import CreateCollectionDialog from './CreateCollectionDialog'
@@ -862,7 +862,7 @@ export default function CollectionsList() {
       {collections.length === 0 ? (
         <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
           <CardContent className="py-16 text-center">
-            <TreasureChest className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
+            <LogoIcon width={64} height={64} className="mx-auto h-16 w-16 mb-6" />
             <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               Your trove is empty
             </h3>
