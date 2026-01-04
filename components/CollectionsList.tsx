@@ -927,9 +927,9 @@ export default function CollectionsList() {
                   className="bg-[var(--bg-secondary)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up hover:shadow-xl hover:shadow-[var(--accent-color)]/20"
                   onClick={() => router.push(`/collections/${spotlightCollection.id}`)}
                 >
-                  <div className="grid md:grid-cols-2 gap-0">
+                  <div className="grid md:grid-cols-2 gap-0 items-stretch">
                     {spotlightCollection.coverImage && (
-                      <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${
+                      <div className={`w-full h-48 md:h-full md:min-h-full overflow-hidden bg-[var(--bg-tertiary)] relative ${
                         isComplete ? 'ring-2 ring-[var(--gold-color)]/30' : ''
                       }`}>
                         <Image
