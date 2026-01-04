@@ -258,11 +258,11 @@
 
   @keyframes glitter {
     0%, 100% {
-      opacity: 0.4;
+      opacity: 0.1;
       transform: translateY(0) scale(0.5);
     }
     50% {
-      opacity: 1;
+      opacity: 0.3;
       transform: translateY(-20px) scale(1);
     }
   }
