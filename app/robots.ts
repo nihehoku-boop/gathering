@@ -19,6 +19,17 @@ export default function robots(): MetadataRoute.Robots {
           '/settings/',
         ],
       },
+      // Allow AI crawlers (ChatGPT, Claude, etc.) to access more content
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'anthropic-ai', 'Claude-Web', 'Google-Extended'],
+        allow: '/',
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/auth/',
+          '/settings/',
+        ],
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   }

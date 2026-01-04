@@ -6,6 +6,7 @@ import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import SentryInit from '@/components/SentryInit'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/next"
+import StructuredData from '@/components/StructuredData'
 
 const bricolageGrotesque = Bricolage_Grotesque({ 
   subsets: ['latin'],
@@ -99,6 +100,16 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://assets.tcgdex.net" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        
+        {/* Favicons */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon-16x16.svg" />
+        <link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon-32x32.svg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Structured Data for SEO */}
+        <StructuredData />
         
         {/* Inline critical script for accent color and theme - optimized */}
         <script
