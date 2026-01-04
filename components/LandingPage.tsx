@@ -96,8 +96,19 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
       {/* Animated Gradient Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-color)]/5 via-blue-500/5 to-purple-500/5 animate-gradient-move"></div>
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute inset-0 animate-gradient-move opacity-40"
+          style={{
+            background: `linear-gradient(
+              135deg,
+              rgba(52, 199, 89, 0.08) 0%,
+              rgba(59, 130, 246, 0.08) 50%,
+              rgba(168, 85, 247, 0.08) 100%
+            )`,
+            backgroundSize: '300% 300%',
+          }}
+        ></div>
       </div>
 
       {/* Hero Section - Discord Style */}
@@ -174,13 +185,9 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Logo Side - Hero */}
+            {/* Logo Side - Hero (Standing Alone, Bigger) */}
             <div className="relative flex items-center justify-center">
-              <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-2xl p-12 lg:p-16">
-                <div className="flex items-center justify-center">
-                  <LogoIcon width={200} height={200} className="w-48 h-48 lg:w-64 lg:h-64" />
-                </div>
-              </div>
+              <LogoIcon width={300} height={300} className="w-64 h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96" />
               {/* Decorative elements */}
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--accent-color)]/20 rounded-full blur-2xl -z-10"></div>
               <div className="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl -z-10"></div>
@@ -189,14 +196,12 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Feature Sections - Alternating Layout */}
+      {/* Feature Sections - Continuous Flow */}
       <div className="relative">
         {features.map((feature, index) => (
           <section
             key={index}
-            className={`py-20 lg:py-32 ${
-              index % 2 === 0 ? 'bg-[#0f1114]/50' : 'bg-[#1a1d24]/50'
-            } backdrop-blur-sm`}
+            className="py-20 lg:py-32 relative"
           >
             <div className="container mx-auto px-6 lg:px-20">
               <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
@@ -240,12 +245,10 @@ export default function LandingPage() {
                     {/* Icon */}
                     <div className="mb-6 inline-block">
                       <div className="relative w-16 h-16 bg-[var(--accent-color)]/10 rounded-2xl flex items-center justify-center border border-[var(--accent-color)]/20">
-                        <Image
+                        <img
                           src={feature.icon}
                           alt={feature.iconAlt}
-                          width={40}
-                          height={40}
-                          className="object-contain"
+                          className="w-10 h-10 object-contain"
                         />
                       </div>
                     </div>
@@ -278,7 +281,7 @@ export default function LandingPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="relative bg-[#0f1114]/50 backdrop-blur-sm py-20 lg:py-32">
+      <div className="relative py-20 lg:py-32">
         <div className="container mx-auto px-6 lg:px-20">
           <div className="max-w-4xl mx-auto text-center">
             <div className="relative p-12 lg:p-16 bg-gradient-to-br from-[#1a1d24] to-[#0f1114] border border-[#2a2d35] rounded-3xl overflow-hidden">
@@ -310,7 +313,7 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="relative border-t border-[#2a2d35] bg-[#0f1114]/50 backdrop-blur-sm py-12">
+      <footer className="relative border-t border-[#2a2d35] bg-[#0f1114]/50 py-12">
         <div className="container mx-auto px-6 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
