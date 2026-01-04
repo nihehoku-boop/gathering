@@ -94,13 +94,7 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
-      {/* Test Background - Visible Gradient */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute inset-0 bg-gradient-to-br from-[#0f1114] via-[#1a1d24] to-[#0f1114] opacity-100"
-        ></div>
-      </div>
+    <div className="min-h-screen text-white overflow-hidden relative bg-gradient-to-br from-[#0f1114] via-[#1a1d24] to-[#0f1114]">
 
       {/* Hero Section - Discord Style */}
       <div className="relative">
