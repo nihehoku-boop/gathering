@@ -95,20 +95,16 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
-      {/* Animated Gradient Background */}
+      {/* Animated Gradient Background - Discord Style */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute inset-0 animate-gradient-move opacity-40"
-          style={{
-            background: `linear-gradient(
-              135deg,
-              rgba(52, 199, 89, 0.08) 0%,
-              rgba(59, 130, 246, 0.08) 50%,
-              rgba(168, 85, 247, 0.08) 100%
-            )`,
-            backgroundSize: '300% 300%',
-          }}
-        ></div>
+        <div className="absolute inset-0 bg-[#0f1114]"></div>
+        <div className="absolute inset-0 animate-gradient-move">
+          <div className="absolute top-0 left-0 w-full h-full opacity-30">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--accent-color)]/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl"></div>
+          </div>
+        </div>
       </div>
 
       {/* Hero Section - Discord Style */}
