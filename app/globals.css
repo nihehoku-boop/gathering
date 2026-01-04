@@ -229,22 +229,32 @@
     animation: gradient 3s ease infinite;
   }
 
-  @keyframes gradient-scroll {
-    0% {
-      background-position: -200% 0;
+  @keyframes gradient-parallax {
+    0%, 100% {
+      background-position: 0% 0%;
     }
-    100% {
-      background-position: 200% 0;
+    25% {
+      background-position: 100% 50%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    75% {
+      background-position: 50% 100%;
     }
   }
 
-  @keyframes gradient-scroll-diagonal {
-    0% {
-      background-position: -200% -200%;
-    }
-    100% {
-      background-position: 200% 200%;
-    }
+  .bg-gradient-animated {
+    background: linear-gradient(
+      135deg,
+      #1a0f14 0%,
+      #2a1a1f 25%,
+      #1a2a1f 50%,
+      #2a1a1f 75%,
+      #0f141a 100%
+    );
+    background-size: 400% 400%;
+    animation: gradient-parallax 20s ease infinite;
   }
 
   @keyframes pulse-glow {
