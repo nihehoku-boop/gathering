@@ -344,7 +344,7 @@ export default function LandingPage() {
       <div className="relative py-20 lg:py-32 z-10">
         <div className="container mx-auto px-6 lg:px-20">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12 animate-fade-in">
               <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#fafafa]">
                 Questions?
               </h2>
@@ -382,13 +382,17 @@ export default function LandingPage() {
               ].map((faq, index) => (
                 <details
                   key={index}
-                  className="group bg-[#1a1d24] border border-[#2a2d35] rounded-xl overflow-hidden smooth-transition hover:border-[var(--accent-color)]/30"
+                  className="group bg-[#1a1d24] border border-[#2a2d35] rounded-xl overflow-hidden smooth-transition hover:border-[var(--accent-color)]/30 animate-fade-up"
+                  style={{
+                    animationDelay: `${index * 0.1}s`,
+                    animationFillMode: 'both',
+                  }}
                 >
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none text-[#fafafa] font-medium text-lg smooth-transition hover:text-[var(--accent-color)]">
                     <span>{faq.question}</span>
                     <ChevronDown className="h-5 w-5 text-[#969696] group-open:rotate-180 smooth-transition flex-shrink-0 ml-4" />
                   </summary>
-                  <div className="px-6 pb-6 text-[#d1d1d1] leading-relaxed">
+                  <div className="px-6 pb-6 text-[#d1d1d1] leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
                     {faq.answer}
                   </div>
                 </details>
