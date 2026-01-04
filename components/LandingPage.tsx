@@ -95,18 +95,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
-      {/* Simple Linear Gradient Background */}
+      {/* Test Background - Visible Gradient */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div 
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(
-              135deg,
-              rgba(15, 17, 20, 1) 0%,
-              rgba(26, 29, 36, 0.8) 50%,
-              rgba(15, 17, 20, 1) 100%
-            )`,
-          }}
+          className="absolute inset-0 bg-gradient-to-br from-[#0f1114] via-[#1a1d24] to-[#0f1114] opacity-100"
         ></div>
       </div>
 
