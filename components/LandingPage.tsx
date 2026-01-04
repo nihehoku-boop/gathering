@@ -340,6 +340,64 @@ export default function LandingPage() {
         ))}
       </div>
 
+      {/* FAQ Section */}
+      <div className="relative py-20 lg:py-32 z-10">
+        <div className="container mx-auto px-6 lg:px-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#fafafa]">
+                Questions?
+              </h2>
+              <p className="text-xl text-[#969696]">
+                We've got answers
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                {
+                  question: "Is Colletro really free?",
+                  answer: "Yes! Colletro is completely free to use. You can create unlimited collections, add as many items as you want, and enjoy all the core features without paying a cent. We believe everyone should be able to organize their collections without breaking the bank."
+                },
+                {
+                  question: "What kinds of collections can I track?",
+                  answer: "Pretty much anything! Books, comics, trading cards, vinyl records, movies, video games, collectibles, artwork — if you collect it, you can track it. We've got templates for the most popular collection types, plus you can create custom fields for anything unique to your collection."
+                },
+                {
+                  question: "Can I share my collections with others?",
+                  answer: "Absolutely! You can share individual collections via private links, or share them with the community. You control what's public and what stays private. It's a great way to show off your collection or get recommendations from fellow collectors."
+                },
+                {
+                  question: "What if I want to export my data?",
+                  answer: "No worries! You can export your collections as CSV files anytime. Your data belongs to you, and we want to make sure you can take it with you whenever you need it. We're also working on additional export formats."
+                },
+                {
+                  question: "Do you have a mobile app?",
+                  answer: "Not yet, but Colletro works great on mobile browsers! The site is fully responsive, so you can manage your collections from your phone or tablet. A native mobile app might come in the future if there's enough interest."
+                },
+                {
+                  question: "How do you keep my data safe?",
+                  answer: "Security is super important to us. We use industry-standard encryption, secure authentication, and regular backups. Your collections are private by default, and you have full control over what you share. We take your privacy seriously."
+                }
+              ].map((faq, index) => (
+                <details
+                  key={index}
+                  className="group bg-[#1a1d24] border border-[#2a2d35] rounded-xl overflow-hidden smooth-transition hover:border-[var(--accent-color)]/30"
+                >
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none text-[#fafafa] font-medium text-lg smooth-transition hover:text-[var(--accent-color)]">
+                    <span>{faq.question}</span>
+                    <ChevronDown className="h-5 w-5 text-[#969696] group-open:rotate-180 smooth-transition flex-shrink-0 ml-4" />
+                  </summary>
+                  <div className="px-6 pb-6 text-[#d1d1d1] leading-relaxed">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="relative py-20 lg:py-32">
         <div className="container mx-auto px-6 lg:px-20">
