@@ -230,20 +230,19 @@
   }
 
   @keyframes gradient-move {
-    0% {
-      background-position: 0% 50%;
+    0%, 100% {
+      transform: translate(0, 0);
     }
-    50% {
-      background-position: 100% 50%;
+    33% {
+      transform: translate(2%, -2%);
     }
-    100% {
-      background-position: 0% 50%;
+    66% {
+      transform: translate(-2%, 2%);
     }
   }
 
   .animate-gradient-move {
-    background-size: 300% 300%;
-    animation: gradient-move 20s ease infinite;
+    animation: gradient-move 30s ease-in-out infinite;
   }
 
   @keyframes pulse-glow {
