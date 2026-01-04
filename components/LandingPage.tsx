@@ -128,7 +128,7 @@ export default function LandingPage() {
       </div>
 
       {/* Hero Section - Discord Style */}
-      <div className="relative">
+      <div className="relative z-10">
         {/* Navigation */}
         <nav className="relative z-10 container mx-auto px-6 py-6 lg:px-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
