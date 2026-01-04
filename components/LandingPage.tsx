@@ -95,33 +95,29 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen text-white overflow-hidden relative bg-gradient-animated">
-      {/* Background Particle Effect */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }}>
-        {[...Array(30)].map((_, i) => (
+      {/* Background Particle Effect - Same as chest particles */}
+      <div className="fixed inset-0 z-0 overflow-visible pointer-events-none">
+        {[...Array(40)].map((_, i) => (
           <div
-            key={`particle-${i}`}
-            className="absolute w-2 h-2 rounded-full animate-glitter"
+            key={`bg-glitter-accent-${i}`}
+            className="absolute w-2 h-2 bg-[var(--accent-color)] rounded-full animate-glitter"
             style={{
-              left: `${(i * 3.3) % 100}%`,
-              top: `${(i * 7) % 100}%`,
-              backgroundColor: 'var(--accent-color)',
-              opacity: 0.5,
-              animationDelay: `${(i * 0.2) % 3}s`,
-              animationDuration: `${2 + ((i % 4) * 0.5)}s`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.15}s`,
+              animationDuration: `${2 + Math.random() * 1}s`,
             }}
           ></div>
         ))}
-        {[...Array(20)].map((_, i) => (
+        {[...Array(25)].map((_, i) => (
           <div
-            key={`particle-blue-${i}`}
-            className="absolute w-1.5 h-1.5 rounded-full animate-glitter"
+            key={`bg-glitter-blue-${i}`}
+            className="absolute w-1.5 h-1.5 bg-blue-500 rounded-full animate-glitter"
             style={{
-              left: `${(i * 5) % 100}%`,
-              top: `${(i * 11) % 100}%`,
-              backgroundColor: '#3b82f6',
-              opacity: 0.4,
-              animationDelay: `${(i * 0.3 + 0.5) % 3}s`,
-              animationDuration: `${2.5 + ((i % 3) * 0.5)}s`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.2 + 0.05}s`,
+              animationDuration: `${2.5 + Math.random() * 1}s`,
             }}
           ></div>
         ))}
