@@ -32,7 +32,7 @@ export default function LandingPage() {
         'Tags and categories',
         'Progress tracking',
       ],
-      screenshot: '/screenshots/build-trove.png', // Placeholder - add screenshot
+      screenshot: '/screenshots/my trove.png',
       imageSide: 'right' as const,
     },
     {
@@ -46,7 +46,7 @@ export default function LandingPage() {
         'Search and filter easily',
         'Add to your trove instantly',
       ],
-      screenshot: '/screenshots/discover.png', // Placeholder - add screenshot
+      screenshot: '/screenshots/community collections.png',
       imageSide: 'left' as const,
     },
     {
@@ -60,7 +60,7 @@ export default function LandingPage() {
         'Privacy controls',
         'Social features',
       ],
-      screenshot: '/screenshots/share.png', // Placeholder - add screenshot
+      screenshot: '/screenshots/community collections.png',
       imageSide: 'right' as const,
     },
     {
@@ -74,7 +74,7 @@ export default function LandingPage() {
         'Collection statistics',
         'Achievement tracking',
       ],
-      screenshot: '/screenshots/progress.png', // Placeholder - add screenshot
+      screenshot: '/screenshots/statistics.png',
       imageSide: 'left' as const,
     },
     {
@@ -88,7 +88,7 @@ export default function LandingPage() {
         'Smart reminders',
         'Collection goals',
       ],
-      screenshot: '/screenshots/wishlist.png', // Placeholder - add screenshot
+      screenshot: '/screenshots/my wishlist.png',
       imageSide: 'right' as const,
     },
   ]
@@ -198,22 +198,20 @@ export default function LandingPage() {
                       : 'order-2 lg:order-2 lg:col-start-2'
                   }
                 >
-                  <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-xl">
-                    <div className="aspect-video bg-gradient-to-br from-[#1a1d24] to-[#0f1114] flex items-center justify-center">
-                      {/* Placeholder for feature screenshot */}
-                      <div className="text-center p-8">
-                        <p className="text-[#969696] text-sm mb-2">{feature.title} Screenshot</p>
-                        <p className="text-[#666] text-xs">Add screenshot at {feature.screenshot}</p>
+                  <div className="perspective-1000">
+                    <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-2xl transform-gpu transition-transform duration-300 hover:scale-105" style={{
+                      transform: 'perspective(1000px) rotateY(-5deg) rotateX(2deg) translateZ(0)',
+                    }}>
+                      <div className="aspect-video">
+                        <Image
+                          src={feature.screenshot}
+                          alt={feature.title}
+                          width={800}
+                          height={600}
+                          className="w-full h-full object-cover"
+                          unoptimized
+                        />
                       </div>
-                      {/* Uncomment when screenshot is added:
-                      <Image
-                        src={feature.screenshot}
-                        alt={feature.title}
-                        width={800}
-                        height={600}
-                        className="w-full h-full object-cover"
-                      />
-                      */}
                     </div>
                   </div>
                 </div>
