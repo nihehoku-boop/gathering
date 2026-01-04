@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favicon-gradient-180" x1="0" y1="0" x2="180" y2="180">
+      <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#28a745;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="90" cy="90" r="89" fill="url(#favicon-gradient-180)"/>
+  
+  <!-- Letter C -->
+  <text 
+    x="90" 
+    y="117" 
+    font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
+    font-size="108" 
+    font-weight="700" 
+    fill="#ffffff" 
+    text-anchor="middle"
+    letter-spacing="-5.3999999999999995px"
+    dominant-baseline="central">
+    C
+  </text>
+</svg>

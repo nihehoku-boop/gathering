@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favicon-gradient-192" x1="0" y1="0" x2="192" y2="192">
+      <stop offset="0%" style="stop-color:#34C759;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#28a745;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="96" cy="96" r="95" fill="url(#favicon-gradient-192)"/>
+  
+  <!-- Letter C -->
+  <text 
+    x="96" 
+    y="124.8" 
+    font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
+    font-size="115.19999999999999" 
+    font-weight="700" 
+    fill="#ffffff" 
+    text-anchor="middle"
+    letter-spacing="-5.76px"
+    dominant-baseline="central">
+    C
+  </text>
+</svg>
