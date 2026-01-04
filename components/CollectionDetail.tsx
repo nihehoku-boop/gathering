@@ -1916,17 +1916,23 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       )}
                       {!isSelectionMode && (
                         <>
-                          <button
-                            onClick={(e) => toggleWishlist(item.id, e)}
-                            className={`absolute top-2 left-2 w-6 h-6 rounded-full backdrop-blur-sm border flex items-center justify-center shadow-md z-10 transition-colors ${
-                              item.isInWishlist
-                                ? 'bg-[#FF3B30]/90 border-[#FF3B30] hover:bg-[#FF3B30]'
-                                : 'bg-[var(--bg-secondary)]/80 border-[var(--border-color)] hover:border-[#FF3B30] hover:bg-[#FF3B30]/20'
-                            }`}
-                            title={item.isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-                          >
-                            <Heart className={`h-3 w-3 ${item.isInWishlist ? 'text-white fill-white' : 'text-[var(--text-muted)]'}`} />
-                          </button>
+                          {item.isInWishlist ? (
+                            <button
+                              onClick={(e) => toggleWishlist(item.id, e)}
+                              className="absolute top-2 left-2 w-6 h-6 rounded-full bg-[#FF3B30]/90 backdrop-blur-sm border border-[#FF3B30] flex items-center justify-center shadow-md z-10"
+                              title="Remove from wishlist"
+                            >
+                              <Heart className="h-3 w-3 text-white fill-white" />
+                            </button>
+                          ) : (
+                            <button
+                              onClick={(e) => toggleWishlist(item.id, e)}
+                              className="absolute top-2 left-2 w-6 h-6 rounded-full bg-[#FF69B4]/90 backdrop-blur-sm border border-[#FF69B4] flex items-center justify-center shadow-md z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                              title="Add to wishlist"
+                            >
+                              <Heart className="h-3 w-3 text-white fill-white" />
+                            </button>
+                          )}
                           <button
                             onClick={() => toggleItemOwned(item.id, item.isOwned)}
                             className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-md ${
