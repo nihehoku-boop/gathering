@@ -923,18 +923,14 @@ export default function CollectionsList() {
             
             return (
               <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <Star className="h-5 w-5 text-[var(--gold-color)] fill-[var(--gold-color)]" />
-                  <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Trove Spotlight</h2>
-                </div>
                 <Card
-                  className={`bg-[var(--bg-secondary)] border-2 ${
-                    isComplete 
-                      ? 'border-[var(--gold-color)] hover:border-[var(--gold-color)]/80' 
-                      : 'border-[var(--accent-color)] hover:border-[var(--accent-color-hover)]'
-                  } hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up hover:shadow-xl hover:shadow-[var(--accent-color)]/20`}
+                  className="bg-[var(--bg-secondary)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up hover:shadow-xl hover:shadow-[var(--accent-color)]/20"
                   onClick={() => router.push(`/collections/${spotlightCollection.id}`)}
                 >
+                  <div className="flex items-center gap-2 mb-4 px-6 pt-6">
+                    <Star className="h-5 w-5 text-[var(--gold-color)] fill-[var(--gold-color)]" />
+                    <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Trove Spotlight</h2>
+                  </div>
                   <div className="grid md:grid-cols-2 gap-0">
                     {spotlightCollection.coverImage && (
                       <div className={`w-full h-64 md:h-auto overflow-hidden bg-[var(--bg-tertiary)] relative ${
