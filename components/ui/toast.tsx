@@ -26,10 +26,10 @@ const icons = {
 }
 
 const colors = {
-  success: 'bg-green-500/35 border-green-500/50 text-green-500',
-  error: 'bg-red-500/35 border-red-500/50 text-red-500',
-  info: 'bg-blue-500/35 border-blue-500/50 text-blue-500',
-  warning: 'bg-amber-500/35 border-amber-500/50 text-amber-500',
+  success: 'bg-green-500/90 border-green-500/70 text-green-50',
+  error: 'bg-red-500/90 border-red-500/70 text-red-50',
+  info: 'bg-blue-500/90 border-blue-500/70 text-blue-50',
+  warning: 'bg-amber-500/90 border-amber-500/70 text-amber-50',
 }
 
 export function ToastComponent({ toast, onClose }: ToastProps) {
