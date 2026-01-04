@@ -95,16 +95,38 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
-      {/* Animated Gradient Background - Discord Style */}
+      {/* Innovative Scrolling Gradient Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[#0f1114]"></div>
-        <div className="absolute inset-0 animate-gradient-move">
-          <div className="absolute top-0 left-0 w-full h-full opacity-30">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--accent-color)]/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl"></div>
-          </div>
-        </div>
+        <div 
+          className="absolute inset-0 opacity-40"
+          style={{
+            background: `linear-gradient(
+              90deg,
+              transparent 0%,
+              rgba(52, 199, 89, 0.15) 25%,
+              rgba(59, 130, 246, 0.15) 50%,
+              rgba(168, 85, 247, 0.15) 75%,
+              transparent 100%
+            )`,
+            backgroundSize: '200% 100%',
+            animation: 'gradient-scroll 15s linear infinite',
+          }}
+        ></div>
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: `linear-gradient(
+              135deg,
+              transparent 0%,
+              rgba(59, 130, 246, 0.12) 33%,
+              rgba(168, 85, 247, 0.12) 66%,
+              transparent 100%
+            )`,
+            backgroundSize: '200% 200%',
+            animation: 'gradient-scroll-diagonal 20s linear infinite',
+          }}
+        ></div>
       </div>
 
       {/* Hero Section - Discord Style */}
@@ -238,15 +260,13 @@ export default function LandingPage() {
                   }
                 >
                   <div className="max-w-xl mx-auto lg:mx-0">
-                    {/* Icon */}
-                    <div className="mb-6 inline-block">
-                      <div className="relative w-16 h-16 bg-[var(--accent-color)]/10 rounded-2xl flex items-center justify-center border border-[var(--accent-color)]/20">
-                        <img
-                          src={feature.icon}
-                          alt={feature.iconAlt}
-                          className="w-10 h-10 object-contain"
-                        />
-                      </div>
+                    {/* Icon - Standing Alone, Bigger */}
+                    <div className="mb-8 inline-block">
+                      <img
+                        src={feature.icon}
+                        alt={feature.iconAlt}
+                        className="w-20 h-20 lg:w-24 lg:h-24 object-contain"
+                      />
                     </div>
 
                     {/* Title */}
