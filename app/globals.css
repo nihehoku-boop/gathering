@@ -229,20 +229,22 @@
     animation: gradient 3s ease infinite;
   }
 
-  @keyframes gradient-move {
-    0%, 100% {
-      transform: translate(0, 0);
+  @keyframes gradient-scroll {
+    0% {
+      background-position: -200% 0;
     }
-    33% {
-      transform: translate(2%, -2%);
-    }
-    66% {
-      transform: translate(-2%, 2%);
+    100% {
+      background-position: 200% 0;
     }
   }
 
-  .animate-gradient-move {
-    animation: gradient-move 30s ease-in-out infinite;
+  @keyframes gradient-scroll-diagonal {
+    0% {
+      background-position: -200% -200%;
+    }
+    100% {
+      background-position: 200% 200%;
+    }
   }
 
   @keyframes pulse-glow {
