@@ -119,7 +119,7 @@ export async function GET(
     })
 
     // Fetch wishlist items for this user that match the collection's items
-    const itemIds = items.map(item => item.id)
+    const itemIds = items.map((item: { id: string }) => item.id)
     const wishlistItems = itemIds.length > 0 ? await prisma.wishlistItem.findMany({
       where: {
         wishlist: {
@@ -132,10 +132,10 @@ export async function GET(
       },
     }) : []
 
-    const wishlistItemIds = new Set(wishlistItems.map(wi => wi.itemId).filter(Boolean) as string[])
+    const wishlistItemIds = new Set(wishlistItems.map((wi: { itemId: string | null }) => wi.itemId).filter(Boolean) as string[])
 
     // Add isInWishlist field to each item
-    const itemsWithWishlist = items.map(item => ({
+    const itemsWithWishlist = items.map((item: { id: string }) => ({
       ...item,
       isInWishlist: wishlistItemIds.has(item.id),
     }))
