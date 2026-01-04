@@ -81,13 +81,6 @@ export async function GET(
       const recommendedUpdated = new Date(recommendedCollection.updatedAt)
       hasUpdate = recommendedUpdated > lastSynced
     }
-    
-    console.log('Update check:', {
-      collectionId: collection.id,
-      lastSyncedAt: collection.lastSyncedAt,
-      recommendedUpdatedAt: recommendedCollection.updatedAt,
-      hasUpdate,
-    })
 
     // Check for customizations
     const isCustomized = detectCustomizations(collection, recommendedCollection)
