@@ -47,7 +47,7 @@ export default function Navbar() {
       <EmailVerificationBanner />
       <nav className="border-b border-[var(--border-color)] glass sticky top-0 z-50 lg:ml-64 bg-[var(--bg-secondary)] animate-slide-in-right will-change-transform" style={{ top: 'var(--banner-height, 0px)' }}>
         <div className="container mx-auto px-4 sm:px-6 h-[73px] flex items-center">
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex justify-between items-center gap-4 w-full">
           {/* Mobile: Sidebar toggle button */}
           <button
             onClick={toggleSidebar}
