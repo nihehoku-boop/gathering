@@ -8,7 +8,7 @@ import Sidebar from '@/components/Sidebar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Heart, Share2, Trash2, Copy, Check, Edit, X } from 'lucide-react'
+import { Heart, Share2, Trash2, Copy, Check, Edit, X, CheckSquare2, Square } from 'lucide-react'
 import AlertDialog from '@/components/ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 
@@ -41,6 +41,8 @@ export default function WishlistPage() {
   const [editingName, setEditingName] = useState(false)
   const [wishlistName, setWishlistName] = useState('')
   const [copied, setCopied] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
@@ -168,6 +170,26 @@ export default function WishlistPage() {
     }
   }
 
+  const toggleSelection = (itemId: string) => {
+    const newSelection = new Set(selectedItems)
+    if (newSelection.has(itemId)) {
+      newSelection.delete(itemId)
+    } else {
+      newSelection.add(itemId)
+    }
+    setSelectedItems(newSelection)
+  }
+
+  const selectAll = () => {
+    if (wishlist) {
+      setSelectedItems(new Set(wishlist.items.map(item => item.id)))
+    }
+  }
+
+  const clearSelection = () => {
+    setSelectedItems(new Set())
+  }
+
   const deleteItem = async (itemId: string) => {
     const confirmed = await showConfirm({
       title: 'Remove Item',
@@ -204,6 +226,52 @@ export default function WishlistPage() {
       showAlert({
         title: 'Error',
         message: 'Failed to remove item. Please try again.',
+        type: 'error',
+      })
+    }
+  }
+
+  const handleBulkDelete = async () => {
+    if (selectedItems.size === 0) return
+
+    const confirmed = await showConfirm({
+      title: 'Remove Items',
+      message: `Are you sure you want to remove ${selectedItems.size} item${selectedItems.size > 1 ? 's' : ''} from your wishlist?`,
+      type: 'warning',
+      confirmText: 'Remove',
+      cancelText: 'Cancel',
+    })
+
+    if (!confirmed) return
+
+    try {
+      const itemIdsArray = Array.from(selectedItems)
+      const res = await fetch(`/api/wishlist/items?ids=${itemIdsArray.join(',')}`, {
+        method: 'DELETE',
+      })
+
+      if (res.ok) {
+        fetchWishlist()
+        clearSelection()
+        setIsSelectionMode(false)
+        showAlert({
+          title: 'Success',
+          message: `${selectedItems.size} item${selectedItems.size > 1 ? 's' : ''} removed from wishlist.`,
+          type: 'success',
+        })
+      } else {
+        const errorData = await res.json()
+        showAlert({
+          title: 'Error',
+          message: errorData.error || 'Failed to remove items',
+          type: 'error',
+        })
+      }
+    } catch (error) {
+      console.error('Error deleting wishlist items:', error)
+      showAlert({
+        title: 'Error',
+        message: 'Failed to remove items. Please try again.',
         type: 'error',
       })
     }
@@ -316,44 +384,95 @@ export default function WishlistPage() {
             {wishlist.description && (
               <p className="text-[var(--text-secondary)] text-lg mb-4">{wishlist.description}</p>
             )}
-            <div className="flex gap-2 flex-wrap">
-              <Button
-                variant="outline"
-                onClick={copyShareLink}
-                disabled={!wishlist.isPublic || !wishlist.shareToken}
-                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {copied ? (
-                  <>
-                    <Check className="mr-2 h-4 w-4" />
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copy Share Link
-                  </>
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={togglePublic}
-                className={`border-[var(--border-hover)] smooth-transition rounded-full ${
-                  wishlist.isPublic
-                    ? 'bg-[#34C759]/10 border-[#34C759] text-[#34C759]'
-                    : 'text-[var(--text-primary)] hover:bg-[#2a2d35]'
-                }`}
-              >
-                <Share2 className="mr-2 h-4 w-4" />
-                {wishlist.isPublic ? 'Public' : 'Private'}
-              </Button>
-              {wishlist.isPublic && wishlist.shareToken && (
-                <div className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
-                  <span>Share link:</span>
-                  <code className="bg-[var(--bg-tertiary)] px-2 py-1 rounded text-xs text-[var(--text-primary)]">
-                    {window.location.origin}/wishlist/share/{wishlist.shareToken.substring(0, 8)}...
-                  </code>
-                </div>
+            <div className="flex gap-2 flex-wrap items-center">
+              {isSelectionMode ? (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={selectAll}
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                  >
+                    <CheckSquare2 className="mr-2 h-4 w-4" />
+                    Select All
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={clearSelection}
+                    disabled={selectedItems.size === 0}
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Square className="mr-2 h-4 w-4" />
+                    Clear Selection
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleBulkDelete}
+                    disabled={selectedItems.size === 0}
+                    className="border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10 smooth-transition rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete ({selectedItems.size})
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsSelectionMode(false)
+                      clearSelection()
+                    }}
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                  >
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsSelectionMode(true)}
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full"
+                  >
+                    <CheckSquare2 className="mr-2 h-4 w-4" />
+                    Select
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={copyShareLink}
+                    disabled={!wishlist.isPublic || !wishlist.shareToken}
+                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[#2a2d35] smooth-transition rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="mr-2 h-4 w-4" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copy Share Link
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={togglePublic}
+                    className={`border-[var(--border-hover)] smooth-transition rounded-full ${
+                      wishlist.isPublic
+                        ? 'bg-[#34C759]/10 border-[#34C759] text-[#34C759]'
+                        : 'text-[var(--text-primary)] hover:bg-[#2a2d35]'
+                    }`}
+                  >
+                    <Share2 className="mr-2 h-4 w-4" />
+                    {wishlist.isPublic ? 'Public' : 'Private'}
+                  </Button>
+                  {wishlist.isPublic && wishlist.shareToken && (
+                    <div className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
+                      <span>Share link:</span>
+                      <code className="bg-[var(--bg-tertiary)] px-2 py-1 rounded text-xs text-[var(--text-primary)]">
+                        {window.location.origin}/wishlist/share/{wishlist.shareToken.substring(0, 8)}...
+                      </code>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -375,29 +494,74 @@ export default function WishlistPage() {
               {wishlist.items.map((item, index) => (
                 <Card
                   key={item.id}
-                  className="relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)]"
+                  className={`relative group rounded-lg border-2 overflow-hidden transition-all animate-fade-up cursor-pointer bg-[var(--bg-secondary)] ${
+                    isSelectionMode && selectedItems.has(item.id)
+                      ? 'ring-2 ring-[var(--accent-color)] border-[var(--accent-color)]'
+                      : 'border-[var(--border-color)] hover:border-[var(--border-hover)]'
+                  }`}
                   style={{ animationDelay: `${index * 30}ms` }}
+                  onClick={() => {
+                    if (isSelectionMode) {
+                      toggleSelection(item.id)
+                    }
+                  }}
                 >
                   {item.itemImage ? (
                     <div className="bg-[var(--bg-tertiary)] relative" style={{ aspectRatio: '2/3' }}>
+                      {isSelectionMode && (
+                        <div className="absolute top-2 left-2 z-20">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleSelection(item.id)
+                            }}
+                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                              selectedItems.has(item.id)
+                                ? 'bg-[var(--accent-color)] border-[var(--accent-color)]'
+                                : 'bg-[var(--bg-secondary)]/90 border-[var(--border-hover)] hover:border-[var(--accent-color)]'
+                            }`}
+                          >
+                            {selectedItems.has(item.id) && <Check className="h-4 w-4 text-white" />}
+                          </button>
+                        </div>
+                      )}
                       <img
                         src={item.itemImage}
                         alt={item.itemName}
                         className="w-full h-full object-cover"
                       />
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          deleteItem(item.id)
-                        }}
-                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#FF3B30] text-white flex items-center justify-center shadow-md hover:bg-[#C0392B] smooth-transition opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                        title="Remove from wishlist"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
+                      {!isSelectionMode && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            deleteItem(item.id)
+                          }}
+                          className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#FF3B30] text-white flex items-center justify-center shadow-md hover:bg-[#C0392B] smooth-transition opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                          title="Remove from wishlist"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="w-full bg-[#2a2d35] relative" style={{ aspectRatio: '2/3' }}>
+                      {isSelectionMode && (
+                        <div className="absolute top-2 left-2 z-20">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleSelection(item.id)
+                            }}
+                            className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                              selectedItems.has(item.id)
+                                ? 'bg-[var(--accent-color)] border-[var(--accent-color)]'
+                                : 'bg-[var(--bg-secondary)]/90 border-[var(--border-hover)] hover:border-[var(--accent-color)]'
+                            }`}
+                          >
+                            {selectedItems.has(item.id) && <Check className="h-4 w-4 text-white" />}
+                          </button>
+                        </div>
+                      )}
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#2a2d35] to-[#1a1d24]">
                         <div className="text-center p-2">
                           <div className="text-xs font-semibold text-[var(--text-secondary)]">
@@ -408,16 +572,18 @@ export default function WishlistPage() {
                           </div>
                         </div>
                       </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          deleteItem(item.id)
-                        }}
-                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#FF3B30] text-white flex items-center justify-center shadow-md hover:bg-[#C0392B] smooth-transition opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                        title="Remove from wishlist"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
+                      {!isSelectionMode && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            deleteItem(item.id)
+                          }}
+                          className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#FF3B30] text-white flex items-center justify-center shadow-md hover:bg-[#C0392B] smooth-transition opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                          title="Remove from wishlist"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
                   )}
                   <div className="p-2 bg-[var(--bg-secondary)]">
