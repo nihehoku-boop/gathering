@@ -138,6 +138,31 @@ async function updateItemHandler(
       data: updateData,
     })
 
+    // Auto-remove from wishlist if item is marked as owned and user has auto-remove enabled
+    if (updateData.isOwned === true) {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { autoRemoveFromWishlist: true },
+      })
+      
+      if (user?.autoRemoveFromWishlist !== false) {
+        // Get user's wishlist
+        const wishlist = await prisma.wishlist.findFirst({
+          where: { userId: session.user.id },
+        })
+        
+        if (wishlist) {
+          // Remove item from wishlist if it exists
+          await prisma.wishlistItem.deleteMany({
+            where: {
+              wishlistId: wishlist.id,
+              itemId: itemId,
+            },
+          })
+        }
+      }
+    }
+
     // Invalidate cache for this collection's items
     serverCache.deletePattern(`collection:${item.collectionId}:items:`)
     serverCache.delete(cacheKeys.collection(item.collectionId))

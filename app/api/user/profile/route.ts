@@ -38,6 +38,7 @@ export async function GET() {
           profileTheme: true,
           spotlightCollectionId: true,
           enableGoldenAccents: true,
+          autoRemoveFromWishlist: true,
           _count: {
             select: {
               collections: true,
@@ -90,7 +91,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, isPrivate, badge, accentColor, themeMode, bio, bannerImage, profileImage, profileTheme, spotlightCollectionId, enableGoldenAccents } = body
+    const { name, isPrivate, badge, accentColor, themeMode, bio, bannerImage, profileImage, profileTheme, spotlightCollectionId, enableGoldenAccents, autoRemoveFromWishlist } = body
 
     const updateData: any = {}
     if (name !== undefined) {
@@ -157,6 +158,7 @@ export async function PATCH(request: NextRequest) {
         profileTheme: true,
         spotlightCollectionId: true,
         enableGoldenAccents: true,
+        autoRemoveFromWishlist: true,
       },
     })
 

@@ -106,13 +106,26 @@ async function deleteWishlistItemsHandler(request: NextRequest) {
       )
     }
 
-    // Delete items
-    await prisma.wishlistItem.deleteMany({
-      where: {
-        id: { in: itemIds },
-        wishlistId: wishlist.id,
-      },
-    })
+    // Check if we're deleting by itemId or wishlistItem id
+    const byItemId = searchParams.get('byItemId') === 'true'
+    
+    if (byItemId) {
+      // Delete by itemId (used when removing from collection view)
+      await prisma.wishlistItem.deleteMany({
+        where: {
+          itemId: { in: itemIds },
+          wishlistId: wishlist.id,
+        },
+      })
+    } else {
+      // Delete by wishlistItem id (default behavior for wishlist page)
+      await prisma.wishlistItem.deleteMany({
+        where: {
+          id: { in: itemIds },
+          wishlistId: wishlist.id,
+        },
+      })
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {

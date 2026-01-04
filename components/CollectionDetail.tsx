@@ -90,6 +90,7 @@ const getItemCustomFields = (item: Item): Record<string, any> => {
 
 export default function CollectionDetail({ collectionId }: { collectionId: string }) {
   const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
+  const [autoRemoveFromWishlist, setAutoRemoveFromWishlist] = useState(true)
   const router = useRouter()
   const toast = useToast()
   const [collection, setCollection] = useState<Collection | null>(null)
@@ -132,6 +133,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         .then(res => res.json())
         .then(data => {
           setEnableGoldenAccents(data.enableGoldenAccents !== false)
+          setAutoRemoveFromWishlist(data.autoRemoveFromWishlist !== false)
         })
         .catch(err => console.error('Error fetching user settings:', err))
     }
@@ -144,7 +146,11 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     const handleSettingsUpdate = (event: CustomEvent) => {
       if (event.detail?.enableGoldenAccents !== undefined) {
         setEnableGoldenAccents(event.detail.enableGoldenAccents)
-      } else {
+      }
+      if (event.detail?.autoRemoveFromWishlist !== undefined) {
+        setAutoRemoveFromWishlist(event.detail.autoRemoveFromWishlist)
+      }
+      if (event.detail?.enableGoldenAccents === undefined && event.detail?.autoRemoveFromWishlist === undefined) {
         // If other settings changed, refetch to get latest
         fetchSettings()
       }
@@ -586,6 +592,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
   const toggleItemOwned = async (itemId: string, currentStatus: boolean) => {
     const newStatus = !currentStatus
+    const item = items.find(i => i.id === itemId)
     
       // Optimistically update the UI immediately
       setItems(prev => prev.map(item => 
@@ -605,20 +612,37 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
 
       if (res.ok) {
         const data = await res.json()
+        // If item was marked as owned and auto-remove is enabled, remove from wishlist
+        const shouldRemoveFromWishlist = newStatus && autoRemoveFromWishlist && item?.isInWishlist
+        
         // Update with server response to ensure sync
         setItems(prev => prev.map(item => 
-          item.id === itemId ? { ...item, isOwned: data.isOwned } : item
+          item.id === itemId ? { ...item, isOwned: data.isOwned, isInWishlist: shouldRemoveFromWishlist ? false : item.isInWishlist } : item
         ))
+        
+        // If auto-remove is enabled and item was marked as owned, remove from wishlist
+        if (shouldRemoveFromWishlist) {
+          try {
+            await fetch(`/api/wishlist/items?ids=${itemId}&byItemId=true`, {
+              method: 'DELETE',
+            })
+            // Dispatch event to update wishlist page if open
+            window.dispatchEvent(new CustomEvent('wishlist-updated'))
+          } catch (error) {
+            console.error('Error removing from wishlist:', error)
+          }
+        }
         
         // Show progress update
         const newOwned = data.isOwned ? totalOwnedCount + 1 : totalOwnedCount - 1
         const total = totalItemsCount
         const progress = total > 0 ? Math.round((newOwned / total) * 100) : 0
-        toast.success(
-          data.isOwned 
-            ? `Marked as owned! Progress: ${newOwned}/${total} (${progress}%)`
-            : `Removed from owned. Progress: ${newOwned}/${total} (${progress}%)`
-        )
+        const toastMessage = data.isOwned 
+          ? (shouldRemoveFromWishlist 
+              ? `Marked as owned and removed from wishlist! Progress: ${newOwned}/${total} (${progress}%)`
+              : `Marked as owned! Progress: ${newOwned}/${total} (${progress}%)`)
+          : `Removed from owned. Progress: ${newOwned}/${total} (${progress}%)`
+        toast.success(toastMessage)
         
         // Handle achievements if any were unlocked
         if (data.newlyUnlockedAchievements && data.newlyUnlockedAchievements.length > 0) {
@@ -644,6 +668,75 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         item.id === itemId ? { ...item, isOwned: currentStatus } : item
       ))
       console.error('Error updating item:', error)
+    }
+  }
+
+  const toggleWishlist = async (itemId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    const item = items.find(i => i.id === itemId)
+    if (!item || !collection) return
+    
+    const isCurrentlyInWishlist = item.isInWishlist || false
+    const newWishlistStatus = !isCurrentlyInWishlist
+    
+    // Optimistically update the UI
+    setItems(prev => prev.map(item => 
+      item.id === itemId ? { ...item, isInWishlist: newWishlistStatus } : item
+    ))
+    
+    try {
+      if (newWishlistStatus) {
+        // Add to wishlist
+        const res = await fetch('/api/wishlist/items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: [{
+              itemId: item.id,
+              collectionId: collectionId,
+              itemName: item.name,
+              itemNumber: item.number,
+              itemImage: item.image,
+              collectionName: collection?.name,
+              notes: item.notes,
+            }],
+          }),
+        })
+        
+        if (res.ok) {
+          toast.success('Added to wishlist')
+          window.dispatchEvent(new CustomEvent('wishlist-updated'))
+        } else {
+          // Revert on error
+          setItems(prev => prev.map(item => 
+            item.id === itemId ? { ...item, isInWishlist: isCurrentlyInWishlist } : item
+          ))
+          toast.error('Failed to add to wishlist')
+        }
+      } else {
+        // Remove from wishlist
+        const res = await fetch(`/api/wishlist/items?ids=${itemId}&byItemId=true`, {
+          method: 'DELETE',
+        })
+        
+        if (res.ok) {
+          toast.success('Removed from wishlist')
+          window.dispatchEvent(new CustomEvent('wishlist-updated'))
+        } else {
+          // Revert on error
+          setItems(prev => prev.map(item => 
+            item.id === itemId ? { ...item, isInWishlist: isCurrentlyInWishlist } : item
+          ))
+          toast.error('Failed to remove from wishlist')
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error)
+      // Revert on error
+      setItems(prev => prev.map(item => 
+        item.id === itemId ? { ...item, isInWishlist: isCurrentlyInWishlist } : item
+      ))
+      toast.error('Failed to update wishlist')
     }
   }
 
@@ -1823,11 +1916,17 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       )}
                       {!isSelectionMode && (
                         <>
-                          {item.isInWishlist && (
-                            <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-[#FF3B30]/90 backdrop-blur-sm border border-[#FF3B30] flex items-center justify-center shadow-md z-10" title="In wishlist">
-                              <Heart className="h-3 w-3 text-white fill-white" />
-                            </div>
-                          )}
+                          <button
+                            onClick={(e) => toggleWishlist(item.id, e)}
+                            className={`absolute top-2 left-2 w-6 h-6 rounded-full backdrop-blur-sm border flex items-center justify-center shadow-md z-10 transition-colors ${
+                              item.isInWishlist
+                                ? 'bg-[#FF3B30]/90 border-[#FF3B30] hover:bg-[#FF3B30]'
+                                : 'bg-[var(--bg-secondary)]/80 border-[var(--border-color)] hover:border-[#FF3B30] hover:bg-[#FF3B30]/20'
+                            }`}
+                            title={item.isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                          >
+                            <Heart className={`h-3 w-3 ${item.isInWishlist ? 'text-white fill-white' : 'text-[var(--text-muted)]'}`} />
+                          </button>
                           <button
                             onClick={() => toggleItemOwned(item.id, item.isOwned)}
                             className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-md ${
@@ -2042,11 +2141,19 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </button>
                     ) : (
                       <div className="flex items-center gap-1.5 flex-shrink-0">
-                        {item.isInWishlist && (
-                          <div title="In wishlist">
-                            <Heart className="h-4 w-4 text-[#FF3B30] fill-[#FF3B30]" />
-                          </div>
-                        )}
+                        <button
+                          onClick={(e) => toggleWishlist(item.id, e)}
+                          className="flex-shrink-0"
+                          title={item.isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                        >
+                          <Heart 
+                            className={`h-4 w-4 sm:h-5 sm:w-5 transition-colors ${
+                              item.isInWishlist 
+                                ? 'text-[#FF3B30] fill-[#FF3B30]' 
+                                : 'text-[var(--text-muted)] hover:text-[#FF3B30]'
+                            }`}
+                          />
+                        </button>
                         <button
                           onClick={() => toggleItemOwned(item.id, item.isOwned)}
                           className={`w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${

@@ -56,6 +56,7 @@ model User {
   achievements             String                    @default("[]") // JSON array of unlocked achievement IDs
   spotlightCollectionId    String? // ID of collection to feature prominently on home page (null = disabled, off by default)
   enableGoldenAccents      Boolean                   @default(true) // Enable gold accents for completed collections
+  autoRemoveFromWishlist   Boolean                   @default(true) // Automatically remove items from wishlist when marked as owned
   accounts                 Account[]
   sessions                 Session[]
   collections              Collection[]

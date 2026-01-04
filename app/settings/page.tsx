@@ -40,6 +40,7 @@ export default function SettingsPage() {
   const [accentColor, setAccentColor] = useState('#34C759')
   const [showProgressInSidebar, setShowProgressInSidebar] = useState(true)
   const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
+  const [autoRemoveFromWishlist, setAutoRemoveFromWishlist] = useState(true)
   const [spotlightCollectionId, setSpotlightCollectionId] = useState<string | null>(null) // null = disabled by default
   const [collections, setCollections] = useState<Array<{ id: string; name: string }>>([])
   const [saving, setSaving] = useState(false)
@@ -62,6 +63,7 @@ export default function SettingsPage() {
           const savedAccentColor = profileData.accentColor || '#34C759'
           setAccentColor(savedAccentColor)
           setEnableGoldenAccents(profileData.enableGoldenAccents !== false) // Default to true
+          setAutoRemoveFromWishlist(profileData.autoRemoveFromWishlist !== false) // Default to true
           setSpotlightCollectionId(profileData.spotlightCollectionId || null)
           
           // Apply accent color
@@ -88,6 +90,7 @@ export default function SettingsPage() {
         // Fallback to defaults
         setAccentColor('#34C759')
         setEnableGoldenAccents(true)
+        setAutoRemoveFromWishlist(true)
         document.documentElement.style.setProperty('--accent-color', '#34C759')
         document.documentElement.style.setProperty('--accent-color-hover', adjustBrightness('#34C759', -20))
         const defaultHsl = hexToHsl('#34C759')
@@ -211,6 +214,45 @@ export default function SettingsPage() {
       if (profileRes.ok) {
         const profileData = await profileRes.json()
         setEnableGoldenAccents(profileData.enableGoldenAccents !== false)
+      }
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleAutoRemoveFromWishlistChange = async (enabled: boolean) => {
+    setAutoRemoveFromWishlist(enabled)
+    setSaveError(null)
+    setSaving(true)
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ autoRemoveFromWishlist: enabled }),
+      })
+      if (res.ok) {
+        setSaveSuccess(true)
+        setTimeout(() => setSaveSuccess(false), 2000)
+        // Dispatch event to notify other components
+        window.dispatchEvent(new CustomEvent('settings-updated', { detail: { autoRemoveFromWishlist: enabled } }))
+      } else {
+        const error = await res.json()
+        setSaveError('Failed to save setting')
+        // Revert on error
+        const profileRes = await fetch('/api/user/profile')
+        if (profileRes.ok) {
+          const profileData = await profileRes.json()
+          setAutoRemoveFromWishlist(profileData.autoRemoveFromWishlist !== false)
+        }
+      }
+    } catch (error) {
+      setSaveError('Error saving setting')
+      console.error('Error saving auto-remove from wishlist setting:', error)
+      // Revert on error
+      const profileRes = await fetch('/api/user/profile')
+      if (profileRes.ok) {
+        const profileData = await profileRes.json()
+        setAutoRemoveFromWishlist(profileData.autoRemoveFromWishlist !== false)
       }
     } finally {
       setSaving(false)
@@ -443,6 +485,31 @@ export default function SettingsPage() {
                       type="checkbox"
                       checked={enableGoldenAccents}
                       onChange={(e) => handleGoldenAccentsChange(e.target.checked)}
+                      disabled={saving}
+                      className="sr-only peer"
+                    />
+                    <div className={`w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)] ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+                  </label>
+                </div>
+                {saving && <p className="text-xs text-[var(--text-secondary)]">Saving...</p>}
+                {saveSuccess && <p className="text-xs text-green-500">Saved!</p>}
+                {saveError && <p className="text-xs text-red-500">{saveError}</p>}
+              </div>
+
+              {/* Auto-Remove from Wishlist Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-[var(--text-primary)]">Auto-Remove from Wishlist</Label>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Automatically remove items from your wishlist when marked as owned
+                    </p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={autoRemoveFromWishlist}
+                      onChange={(e) => handleAutoRemoveFromWishlistChange(e.target.checked)}
                       disabled={saving}
                       className="sr-only peer"
                     />
