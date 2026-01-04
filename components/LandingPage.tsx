@@ -7,6 +7,7 @@ import { ArrowRight, Sparkles } from 'lucide-react'
 import LogoIcon from './LogoIcon'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useMemo } from 'react'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -19,6 +20,18 @@ export default function LandingPage() {
       router.push('/auth/signin')
     }
   }
+
+  // Generate particle positions once and memoize them
+  const particlePositions = useMemo(() => {
+    const positions: Array<{ top: number; left: number }> = []
+    for (let i = 0; i < 65; i++) {
+      positions.push({
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+      })
+    }
+    return positions
+  }, [])
 
   const features = [
     {
