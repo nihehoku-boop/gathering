@@ -33,8 +33,10 @@ export async function GET(
       )
     }
 
-    console.log('[API] Collection found:', collection.id, collection.name, 'Items:', collection.items.length)
-    return NextResponse.json(collection)
+    const response = NextResponse.json(collection)
+    // Cache recommended collection details for 10 minutes (they don't change frequently)
+    response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
+    return response
   } catch (error) {
     console.error('[API] Error fetching recommended collection:', error)
     return NextResponse.json(
