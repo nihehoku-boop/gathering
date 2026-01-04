@@ -927,13 +927,9 @@ export default function CollectionsList() {
                   className="bg-[var(--bg-secondary)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up hover:shadow-xl hover:shadow-[var(--accent-color)]/20"
                   onClick={() => router.push(`/collections/${spotlightCollection.id}`)}
                 >
-                  <div className="flex items-center gap-2 mb-4 px-6 pt-6">
-                    <Star className="h-5 w-5 text-[var(--gold-color)] fill-[var(--gold-color)]" />
-                    <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Trove Spotlight</h2>
-                  </div>
                   <div className="grid md:grid-cols-2 gap-0">
                     {spotlightCollection.coverImage && (
-                      <div className={`w-full h-64 md:h-auto overflow-hidden bg-[var(--bg-tertiary)] relative ${
+                      <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${
                         isComplete ? 'ring-2 ring-[var(--gold-color)]/30' : ''
                       }`}>
                         <Image
@@ -944,6 +940,10 @@ export default function CollectionsList() {
                           className={`${spotlightCollection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete ? 'group-hover:brightness-110' : ''}`}
                           loading="lazy"
                         />
+                        <div className="absolute top-3 left-3 flex items-center gap-2 bg-[var(--bg-secondary)]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[var(--border-color)]/50">
+                          <Star className="h-4 w-4 text-[var(--gold-color)] fill-[var(--gold-color)]" />
+                          <span className="text-sm font-semibold text-[var(--text-primary)]">Trove Spotlight</span>
+                        </div>
                       </div>
                     )}
                     <div className="p-6">
