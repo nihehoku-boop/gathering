@@ -140,7 +140,7 @@ export default function LandingPage() {
             ></div>
           )
         })}
-      </div>
+        </div>
 
       {/* Hero Section - Discord Style */}
       <div className="relative z-10">
@@ -189,30 +189,30 @@ export default function LandingPage() {
                 <span className="bg-gradient-to-r from-[var(--accent-color)] to-blue-500 bg-clip-text text-transparent">
                   Trove
                 </span>
-              </h1>
+            </h1>
               <p className="text-xl lg:text-2xl text-[#969696] mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
                 Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.
-              </p>
+            </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button
-                  onClick={handleGetStarted}
-                  size="lg"
-                  className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
-                >
+              <Button
+                onClick={handleGetStarted}
+                size="lg"
+                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
+              >
                   {session ? 'Go to My Trove' : 'Get Started'}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
-                </Button>
-                {!session && (
-                  <Link href="/auth/signin">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-lg px-8 py-6 rounded-full smooth-transition"
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
-                )}
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
+              </Button>
+              {!session && (
+                <Link href="/auth/signin">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-lg px-8 py-6 rounded-full smooth-transition"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )}
               </div>
             </div>
 
@@ -290,7 +290,7 @@ export default function LandingPage() {
                           width={800}
                           height={600}
                           className="w-full h-full object-cover"
-                          unoptimized
+                          priority={index < 2}
                         />
                       </div>
                     </div>
@@ -405,7 +405,7 @@ export default function LandingPage() {
       {/* CTA Section */}
       <div className="relative py-20 lg:py-32">
         <div className="container mx-auto px-6 lg:px-20">
-          <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
             <div className="relative p-12 lg:p-16 bg-gradient-to-br from-[#1a1d24] to-[#0f1114] border border-[#2a2d35] rounded-3xl overflow-hidden">
               {/* Background gradient */}
               <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-color)]/5 via-blue-500/5 to-[var(--accent-color)]/5"></div>
@@ -415,19 +415,19 @@ export default function LandingPage() {
                   <Sparkles className="h-12 w-12 text-[var(--accent-color)]" />
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#fafafa]">
-                  Ready to get started?
-                </h2>
-                <p className="text-xl text-[#969696] mb-8 max-w-2xl mx-auto">
+              Ready to get started?
+            </h2>
+            <p className="text-xl text-[#969696] mb-8 max-w-2xl mx-auto">
                   Join Colletro today and start organizing your collections
-                </p>
-                <Button
-                  onClick={handleGetStarted}
-                  size="lg"
-                  className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
-                >
+            </p>
+            <Button
+              onClick={handleGetStarted}
+              size="lg"
+              className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
+            >
                   {session ? 'Go to My Trove' : 'Get Started for Free'}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
-                </Button>
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
+            </Button>
               </div>
             </div>
           </div>
