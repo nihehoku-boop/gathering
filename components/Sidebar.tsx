@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical, Plus, Settings } from 'lucide-react'
+import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical, Plus, Bug, HelpCircle } from 'lucide-react'
 import LogoIcon from './LogoIcon'
 import { cn } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
@@ -949,11 +949,18 @@ export default function Sidebar() {
                   <FolderPlus className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => router.push('/settings')}
+                  onClick={() => window.open('https://github.com/nihehoku-boop/gathering/issues/new', '_blank')}
                   className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
-                  title="Settings"
+                  title="Report Bug / Propose Feature"
                 >
-                  <Settings className="h-5 w-5" />
+                  <Bug className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => router.push('/help')}
+                  className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
+                  title="Support"
+                >
+                  <HelpCircle className="h-5 w-5" />
                 </button>
               </div>
             </div>
