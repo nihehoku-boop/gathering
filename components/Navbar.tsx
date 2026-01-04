@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, PanelLeft, CheckCircle2 } from 'lucide-react'
-import TreasureChest from './icons/TreasureChest'
+import LogoIcon from './LogoIcon'
 import { useEffect, useState, useRef } from 'react'
 import { getBadgeEmoji } from '@/lib/badges'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
@@ -59,7 +59,7 @@ export default function Navbar() {
 
           {/* Mobile: Logo in center */}
           <Link href="/" className="lg:hidden flex-1 flex items-center justify-center gap-2 hover:opacity-80 smooth-transition">
-            <TreasureChest className="h-6 w-6 text-[var(--accent-color)]" />
+            <LogoIcon width={24} height={24} className="h-6 w-6" />
             <h1 className="text-xl font-bold text-[var(--text-primary)] tracking-tighter">
               Colletro
             </h1>
