@@ -96,14 +96,16 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen text-white overflow-hidden relative bg-gradient-animated">
       {/* Background Particle Effect */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }}>
         {[...Array(30)].map((_, i) => (
           <div
             key={`particle-${i}`}
-            className="absolute w-1.5 h-1.5 bg-[var(--accent-color)]/30 rounded-full animate-glitter"
+            className="absolute w-2 h-2 rounded-full animate-glitter"
             style={{
               left: `${(i * 3.3) % 100}%`,
               top: `${(i * 7) % 100}%`,
+              backgroundColor: 'var(--accent-color)',
+              opacity: 0.5,
               animationDelay: `${(i * 0.2) % 3}s`,
               animationDuration: `${2 + ((i % 4) * 0.5)}s`,
             }}
@@ -112,10 +114,12 @@ export default function LandingPage() {
         {[...Array(20)].map((_, i) => (
           <div
             key={`particle-blue-${i}`}
-            className="absolute w-1 h-1 bg-blue-500/25 rounded-full animate-glitter"
+            className="absolute w-1.5 h-1.5 rounded-full animate-glitter"
             style={{
               left: `${(i * 5) % 100}%`,
               top: `${(i * 11) % 100}%`,
+              backgroundColor: '#3b82f6',
+              opacity: 0.4,
               animationDelay: `${(i * 0.3 + 0.5) % 3}s`,
               animationDuration: `${2.5 + ((i % 3) * 0.5)}s`,
             }}
