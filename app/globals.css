@@ -252,8 +252,6 @@
       var(--bg-secondary) 66%,
       var(--bg-primary) 100%
     );
-    background-size: 400% 400%;
-    animation: gradient-parallax 20s ease infinite;
   }
 
   @keyframes glitter {
