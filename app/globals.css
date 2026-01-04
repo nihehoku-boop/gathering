@@ -248,9 +248,9 @@
     background: linear-gradient(
       135deg,
       #0a0e1a 0%,
-      #0f1628 33%,
-      #151d35 66%,
-      #0f1628 100%
+      var(--bg-primary) 33%,
+      var(--bg-secondary) 66%,
+      var(--bg-primary) 100%
     );
     background-size: 400% 400%;
     animation: gradient-parallax 20s ease infinite;
