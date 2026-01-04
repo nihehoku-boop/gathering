@@ -2043,7 +2043,9 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     ) : (
                       <div className="flex items-center gap-1.5 flex-shrink-0">
                         {item.isInWishlist && (
-                          <Heart className="h-4 w-4 text-[#FF3B30] fill-[#FF3B30]" title="In wishlist" />
+                          <div title="In wishlist">
+                            <Heart className="h-4 w-4 text-[#FF3B30] fill-[#FF3B30]" />
+                          </div>
                         )}
                         <button
                           onClick={() => toggleItemOwned(item.id, item.isOwned)}
