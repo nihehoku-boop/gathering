@@ -256,6 +256,21 @@
     animation: gradient-parallax 20s ease infinite;
   }
 
+  @keyframes glitter {
+    0%, 100% {
+      opacity: 0;
+      transform: translateY(0) scale(0.5);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-20px) scale(1);
+    }
+  }
+
+  .animate-glitter {
+    animation: glitter 2s ease-in-out infinite;
+  }
+
   @keyframes pulse-glow {
     0%, 100% {
       opacity: 1;
