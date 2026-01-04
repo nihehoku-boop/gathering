@@ -198,9 +198,11 @@ export default function LandingPage() {
                       : 'order-2 lg:order-2 lg:col-start-2'
                   }
                 >
-                  <div className="perspective-1000">
+                  <div style={{ perspective: '1000px' }}>
                     <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-2xl transform-gpu transition-transform duration-300 hover:scale-105" style={{
-                      transform: 'perspective(1000px) rotateY(-5deg) rotateX(2deg) translateZ(0)',
+                      transform: feature.imageSide === 'left' 
+                        ? 'perspective(1000px) rotateY(5deg) rotateX(2deg) translateZ(20px)'
+                        : 'perspective(1000px) rotateY(-5deg) rotateX(2deg) translateZ(20px)',
                     }}>
                       <div className="aspect-video">
                         <Image
