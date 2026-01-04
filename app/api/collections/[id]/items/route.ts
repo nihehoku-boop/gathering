@@ -118,6 +118,28 @@ export async function GET(
       },
     })
 
+    // Fetch wishlist items for this user that match the collection's items
+    const itemIds = items.map(item => item.id)
+    const wishlistItems = itemIds.length > 0 ? await prisma.wishlistItem.findMany({
+      where: {
+        wishlist: {
+          userId: session.user.id,
+        },
+        itemId: { in: itemIds },
+      },
+      select: {
+        itemId: true,
+      },
+    }) : []
+
+    const wishlistItemIds = new Set(wishlistItems.map(wi => wi.itemId).filter(Boolean) as string[])
+
+    // Add isInWishlist field to each item
+    const itemsWithWishlist = items.map(item => ({
+      ...item,
+      isInWishlist: wishlistItemIds.has(item.id),
+    }))
+
     const pagination = {
       page,
       limit,
@@ -128,13 +150,13 @@ export async function GET(
 
     // Cache the result (30 seconds TTL)
     serverCache.set(cacheKey, {
-      items,
+      items: itemsWithWishlist,
       pagination,
       userId: session.user.id,
     }, 30 * 1000)
 
     const response = NextResponse.json({
-      items,
+      items: itemsWithWishlist,
       pagination,
     })
 

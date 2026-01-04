@@ -34,6 +34,7 @@ interface Item {
   personalRating: number | null
   logDate: string | null
   customFields?: string | Record<string, any>
+  isInWishlist?: boolean
 }
 
 interface Collection {
@@ -1821,16 +1822,23 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         </div>
                       )}
                       {!isSelectionMode && (
-                        <button
-                          onClick={() => toggleItemOwned(item.id, item.isOwned)}
-                          className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-md ${
-                            item.isOwned
-                              ? 'bg-[#34C759] border-[#30D158] text-white'
-                              : 'bg-[var(--bg-secondary)] border-[var(--border-hover)] hover:border-[#34C759]'
-                          }`}
-                        >
-                          {item.isOwned && <Check className="h-3 w-3" />}
-                        </button>
+                        <>
+                          {item.isInWishlist && (
+                            <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-[#FF3B30]/90 backdrop-blur-sm border border-[#FF3B30] flex items-center justify-center shadow-md z-10" title="In wishlist">
+                              <Heart className="h-3 w-3 text-white fill-white" />
+                            </div>
+                          )}
+                          <button
+                            onClick={() => toggleItemOwned(item.id, item.isOwned)}
+                            className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors shadow-md ${
+                              item.isOwned
+                                ? 'bg-[#34C759] border-[#30D158] text-white'
+                                : 'bg-[var(--bg-secondary)] border-[var(--border-hover)] hover:border-[#34C759]'
+                            }`}
+                          >
+                            {item.isOwned && <Check className="h-3 w-3" />}
+                          </button>
+                        </>
                       )}
                     </div>
                     <div className="p-2 bg-[var(--bg-secondary)]">
@@ -2033,16 +2041,21 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         {selectedItems.has(item.id) && <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />}
                       </button>
                     ) : (
-                      <button
-                        onClick={() => toggleItemOwned(item.id, item.isOwned)}
-                        className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
-                          item.isOwned
-                            ? 'bg-[#34C759] border-[#34C759] text-white'
-                            : 'border-[#353842] hover:border-[#34C759]'
-                        }`}
-                      >
-                        {item.isOwned && <Check className="h-3 w-3 sm:h-4 sm:w-4" />}
-                      </button>
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                        {item.isInWishlist && (
+                          <Heart className="h-4 w-4 text-[#FF3B30] fill-[#FF3B30]" title="In wishlist" />
+                        )}
+                        <button
+                          onClick={() => toggleItemOwned(item.id, item.isOwned)}
+                          className={`w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                            item.isOwned
+                              ? 'bg-[#34C759] border-[#34C759] text-white'
+                              : 'border-[#353842] hover:border-[#34C759]'
+                          }`}
+                        >
+                          {item.isOwned && <Check className="h-3 w-3 sm:h-4 sm:w-4" />}
+                        </button>
+                      </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-sm sm:text-base text-[var(--text-primary)] truncate">
