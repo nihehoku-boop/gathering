@@ -956,11 +956,11 @@ export default function Sidebar() {
                   <Bug className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => router.push('/help')}
+                  onClick={() => window.open('https://buymeacoffee.com/yourusername', '_blank')}
                   className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
-                  title="Support"
+                  title="Support / Tip"
                 >
-                  <HelpCircle className="h-5 w-5" />
+                  <Coffee className="h-5 w-5" />
                 </button>
               </div>
             </div>
