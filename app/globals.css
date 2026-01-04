@@ -271,6 +271,25 @@
     animation: glitter 2s ease-in-out infinite;
   }
 
+  @keyframes sparkle {
+    0%, 100% {
+      filter: brightness(1) drop-shadow(0 0 0 rgba(52, 199, 89, 0));
+    }
+    25% {
+      filter: brightness(1.2) drop-shadow(0 0 20px rgba(52, 199, 89, 0.6)) drop-shadow(0 0 40px rgba(52, 199, 89, 0.3));
+    }
+    50% {
+      filter: brightness(1.1) drop-shadow(0 0 15px rgba(59, 130, 246, 0.5)) drop-shadow(0 0 30px rgba(59, 130, 246, 0.2));
+    }
+    75% {
+      filter: brightness(1.2) drop-shadow(0 0 20px rgba(52, 199, 89, 0.6)) drop-shadow(0 0 40px rgba(52, 199, 89, 0.3));
+    }
+  }
+
+  .animate-sparkle {
+    animation: sparkle 3s ease-in-out infinite;
+  }
+
   @keyframes pulse-glow {
     0%, 100% {
       opacity: 1;
