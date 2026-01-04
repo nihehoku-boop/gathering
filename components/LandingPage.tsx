@@ -94,15 +94,14 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden">
+    <div className="min-h-screen bg-[#0f1114] text-white overflow-hidden relative">
+      {/* Animated Gradient Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-color)]/5 via-blue-500/5 to-purple-500/5 animate-gradient-move"></div>
+      </div>
+
       {/* Hero Section - Discord Style */}
       <div className="relative">
-        {/* Background gradient effects */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-[var(--accent-color)]/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-60 -left-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-        </div>
-
         {/* Navigation */}
         <nav className="relative z-10 container mx-auto px-6 py-6 lg:px-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -175,25 +174,11 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Image Side - Hero Screenshot */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-2xl">
-                <div className="aspect-video bg-gradient-to-br from-[#1a1d24] to-[#0f1114] flex items-center justify-center">
-                  {/* Placeholder for hero screenshot */}
-                  <div className="text-center p-12">
-                    <p className="text-[#969696] text-sm mb-2">Hero Screenshot</p>
-                    <p className="text-[#666] text-xs">Add screenshot at /screenshots/hero.png</p>
-                  </div>
-                  {/* Uncomment when screenshot is added:
-                  <Image
-                    src="/screenshots/hero.png"
-                    alt="Colletro Dashboard"
-                    width={1200}
-                    height={800}
-                    className="w-full h-full object-cover"
-                    priority
-                  />
-                  */}
+            {/* Logo Side - Hero */}
+            <div className="relative flex items-center justify-center">
+              <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-2xl p-12 lg:p-16">
+                <div className="flex items-center justify-center">
+                  <LogoIcon width={200} height={200} className="w-48 h-48 lg:w-64 lg:h-64" />
                 </div>
               </div>
               {/* Decorative elements */}
@@ -210,8 +195,8 @@ export default function LandingPage() {
           <section
             key={index}
             className={`py-20 lg:py-32 ${
-              index % 2 === 0 ? 'bg-[#0f1114]' : 'bg-[#1a1d24]'
-            }`}
+              index % 2 === 0 ? 'bg-[#0f1114]/50' : 'bg-[#1a1d24]/50'
+            } backdrop-blur-sm`}
           >
             <div className="container mx-auto px-6 lg:px-20">
               <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
@@ -293,7 +278,7 @@ export default function LandingPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="relative bg-[#0f1114] py-20 lg:py-32">
+      <div className="relative bg-[#0f1114]/50 backdrop-blur-sm py-20 lg:py-32">
         <div className="container mx-auto px-6 lg:px-20">
           <div className="max-w-4xl mx-auto text-center">
             <div className="relative p-12 lg:p-16 bg-gradient-to-br from-[#1a1d24] to-[#0f1114] border border-[#2a2d35] rounded-3xl overflow-hidden">
@@ -325,7 +310,7 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="relative border-t border-[#2a2d35] bg-[#0f1114] py-12">
+      <footer className="relative border-t border-[#2a2d35] bg-[#0f1114]/50 backdrop-blur-sm py-12">
         <div className="container mx-auto px-6 lg:px-20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
