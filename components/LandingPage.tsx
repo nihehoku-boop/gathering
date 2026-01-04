@@ -392,7 +392,7 @@ export default function LandingPage() {
                     <span>{faq.question}</span>
                     <ChevronDown className="h-5 w-5 text-[#969696] group-open:rotate-180 smooth-transition flex-shrink-0 ml-4" />
                   </summary>
-                  <div className="px-6 pb-6 text-[#d1d1d1] leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                  <div className="px-6 pb-6 text-[#d1d1d1] leading-relaxed faq-answer">
                     {faq.answer}
                   </div>
                 </details>
