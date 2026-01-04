@@ -302,5 +302,14 @@
   .animate-pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
   }
+
+  /* FAQ details/summary animations */
+  details[open] summary ~ * {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
 }
 
