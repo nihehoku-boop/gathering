@@ -94,7 +94,7 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen text-white overflow-hidden relative bg-gradient-to-br from-[#0f1114] via-[#1a1d24] to-[#0f1114]">
+    <div className="min-h-screen text-white overflow-hidden relative bg-gradient-to-br from-[#1a0f14] via-[#2a1a1f] via-[#1a2a1f] to-[#0f141a]">
 
       {/* Hero Section - Discord Style */}
       <div className="relative">
