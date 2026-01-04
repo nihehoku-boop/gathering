@@ -170,9 +170,42 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Logo Side - Hero (Standing Alone, Bigger) */}
+            {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
             <div className="relative flex items-center justify-center">
-              <LogoIcon width={300} height={300} className="w-64 h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96" />
+              <div className="relative">
+                <div className="relative animate-sparkle">
+                  <LogoIcon width={500} height={500} className="w-96 h-96 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
+                </div>
+                
+                {/* Glitter/Particle Effect */}
+                <div className="absolute inset-0 z-0 overflow-visible">
+                  {[...Array(12)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-2 h-2 bg-[var(--accent-color)] rounded-full animate-glitter"
+                      style={{
+                        left: `${20 + (i * 7)}%`,
+                        top: `${15 + (i % 4) * 25}%`,
+                        animationDelay: `${i * 0.3}s`,
+                        animationDuration: `${2 + (i % 3)}s`,
+                      }}
+                    ></div>
+                  ))}
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={`secondary-${i}`}
+                      className="absolute w-1.5 h-1.5 bg-blue-500 rounded-full animate-glitter"
+                      style={{
+                        left: `${25 + (i * 8)}%`,
+                        top: `${20 + (i % 3) * 30}%`,
+                        animationDelay: `${i * 0.4 + 0.5}s`,
+                        animationDuration: `${2.5 + (i % 2)}s`,
+                      }}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+              
               {/* Decorative elements */}
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--accent-color)]/20 rounded-full blur-2xl -z-10"></div>
               <div className="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl -z-10"></div>
