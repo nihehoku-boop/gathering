@@ -89,13 +89,22 @@ export default function MissingImagesDialog({
         return
       }
 
+      const requestBody = {
+        itemIds: itemIdsArray,
+        autoFill: true,
+      }
+      
+      console.log('[MissingImagesDialog] Filling images:', {
+        endpoint,
+        collectionId,
+        itemIdsCount: itemIdsArray.length,
+        itemIds: itemIdsArray,
+      })
+
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          itemIds: itemIdsArray,
-          autoFill: true,
-        }),
+        body: JSON.stringify(requestBody),
       })
 
       if (res.ok) {
