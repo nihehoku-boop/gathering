@@ -83,11 +83,17 @@ export default function MissingImagesDialog({
       const endpoint = isCommunityCollection
         ? `/api/community-collections/${collectionId}/fill-images`
         : `/api/collections/${collectionId}/fill-images`
+      const itemIdsArray = Array.from(selectedItems)
+      if (itemIdsArray.length === 0) {
+        toast.error('Please select at least one item')
+        return
+      }
+
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          itemIds: Array.from(selectedItems),
+          itemIds: itemIdsArray,
           autoFill: true,
         }),
       })
@@ -111,8 +117,18 @@ export default function MissingImagesDialog({
           toast.error(`Failed to fill ${data.failed} image${data.failed > 1 ? 's' : ''}`)
         }
       } else {
-        const error = await res.json()
-        toast.error(error.error || 'Failed to fill images')
+        const errorData = await res.json().catch(() => ({ error: `HTTP ${res.status}: ${res.statusText}` }))
+        console.error('Fill images error:', res.status, errorData)
+        
+        if (res.status === 401) {
+          toast.error('Unauthorized - Please sign in again')
+        } else if (res.status === 403) {
+          toast.error('Forbidden - Admin access required')
+        } else if (res.status === 400) {
+          toast.error(errorData.error || 'Invalid request - Please try again')
+        } else {
+          toast.error(errorData.error || `Failed to fill images (${res.status})`)
+        }
       }
     } catch (error) {
       console.error('Error filling images:', error)
