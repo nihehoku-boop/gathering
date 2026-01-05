@@ -70,7 +70,7 @@ export async function POST(
         coverImage: collection.coverImage,
         coverImageFit: collection.coverImageFit,
         tags: collection.tags,
-        isPublic: false, // Default to hidden
+        isPublic: true, // Make public by default so it appears in recommended collections list
         items: {
           create: collection.items.map((item: { name: string; number: number | null; notes: string | null; image: string | null; customFields: string }) => ({
             name: item.name,
