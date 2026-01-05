@@ -2,6 +2,44 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { isUserAdmin } from '@/lib/user-cache'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> | { id: string } }
+) {
+  try {
+    const resolvedParams = await Promise.resolve(params)
+    const item = await prisma.communityItem.findUnique({
+      where: { id: resolvedParams.id },
+      include: {
+        communityCollection: {
+          select: {
+            id: true,
+            name: true,
+            template: true,
+            customFieldDefinitions: true,
+          },
+        },
+      },
+    })
+
+    if (!item) {
+      return NextResponse.json(
+        { error: 'Community item not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(item)
+  } catch (error) {
+    console.error('Error fetching community item:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -13,68 +51,59 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Resolve params
     const resolvedParams = await Promise.resolve(params)
+    const itemId = resolvedParams.id
+
+    // Get the item and its collection
     const item = await prisma.communityItem.findUnique({
-      where: { id: resolvedParams.id },
+      where: { id: itemId },
       include: {
-        communityCollection: {
-          select: { userId: true },
-        },
+        communityCollection: true,
       },
     })
 
     if (!item) {
       return NextResponse.json(
-        { error: 'Item not found' },
+        { error: 'Community item not found' },
         { status: 404 }
       )
     }
 
-    // Only the collection owner can edit items
-    if (item.communityCollection.userId !== session.user.id) {
+    // Check if user is admin OR the collection creator
+    const isAdmin = await isUserAdmin(session.user.id)
+    const isCreator = item.communityCollection.userId === session.user.id
+
+    if (!isAdmin && !isCreator) {
       return NextResponse.json(
-        { error: 'Forbidden - You can only edit items in your own collections' },
+        { error: 'Forbidden - Only admins or collection creators can edit items' },
         { status: 403 }
       )
     }
 
     const body = await request.json()
-    const { name, number, notes, image } = body
+    const { name, number, notes, image, customFields } = body
 
     const updateData: any = {}
-
+    
     if (name !== undefined) {
-      const trimmedName = String(name).trim()
-      if (!trimmedName) {
-        return NextResponse.json(
-          { error: 'Item name cannot be empty' },
-          { status: 400 }
-        )
-      }
-      updateData.name = trimmedName
+      updateData.name = name
     }
-
     if (number !== undefined) {
       updateData.number = number ? parseInt(String(number)) : null
     }
-
     if (notes !== undefined) {
-      updateData.notes = notes ? String(notes).trim() : null
+      updateData.notes = notes || null
     }
-
     if (image !== undefined) {
-      updateData.image = image ? String(image).trim() : null
+      updateData.image = image || null
     }
-
-    if (Object.keys(updateData).length === 0) {
-      return NextResponse.json(
-        { error: 'No fields to update' },
-        { status: 400 }
-      )
+    if (customFields !== undefined) {
+      updateData.customFields = customFields ? JSON.stringify(customFields) : '{}'
     }
 
     const updatedItem = await prisma.communityItem.update({
-      where: { id: resolvedParams.id },
+      where: { id: itemId },
       data: updateData,
     })
 
@@ -98,33 +127,38 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Resolve params
     const resolvedParams = await Promise.resolve(params)
+    const itemId = resolvedParams.id
+
+    // Get the item and its collection
     const item = await prisma.communityItem.findUnique({
-      where: { id: resolvedParams.id },
+      where: { id: itemId },
       include: {
-        communityCollection: {
-          select: { userId: true },
-        },
+        communityCollection: true,
       },
     })
 
     if (!item) {
       return NextResponse.json(
-        { error: 'Item not found' },
+        { error: 'Community item not found' },
         { status: 404 }
       )
     }
 
-    // Only the collection owner can delete items
-    if (item.communityCollection.userId !== session.user.id) {
+    // Check if user is admin OR the collection creator
+    const isAdmin = await isUserAdmin(session.user.id)
+    const isCreator = item.communityCollection.userId === session.user.id
+
+    if (!isAdmin && !isCreator) {
       return NextResponse.json(
-        { error: 'Forbidden - You can only delete items from your own collections' },
+        { error: 'Forbidden - Only admins or collection creators can delete items' },
         { status: 403 }
       )
     }
 
     await prisma.communityItem.delete({
-      where: { id: resolvedParams.id },
+      where: { id: itemId },
     })
 
     return NextResponse.json({ success: true })
@@ -136,6 +170,3 @@ export async function DELETE(
     )
   }
 }
-
-
-
