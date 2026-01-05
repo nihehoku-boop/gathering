@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ImageIcon, Search, CheckCircle, XCircle, Loader2 } from 'lucide-react'
 import { useToast } from '@/components/Toaster'
 
@@ -131,18 +131,24 @@ export default function MissingImagesDialog({
     setSelectedItems(new Set())
   }
 
+  if (!open) return null
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--bg-secondary)] border-[var(--border-color)]">
-        <DialogHeader>
-          <DialogTitle className="text-[var(--text-primary)] flex items-center gap-2">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => onOpenChange(false)}>
+      <Card 
+        className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--bg-secondary)] border-[var(--border-color)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <CardHeader>
+          <CardTitle className="text-[var(--text-primary)] flex items-center gap-2">
             <ImageIcon className="h-5 w-5" />
             Missing Images
-          </DialogTitle>
-          <DialogDescription className="text-[var(--text-secondary)]">
+          </CardTitle>
+          <CardDescription className="text-[var(--text-secondary)]">
             Items without images in this collection
-          </DialogDescription>
-        </DialogHeader>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
 
         {loading ? (
           <div className="flex items-center justify-center py-8">
@@ -284,8 +290,9 @@ export default function MissingImagesDialog({
             </div>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
