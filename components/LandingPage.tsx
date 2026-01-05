@@ -217,10 +217,10 @@ export default function LandingPage() {
             </div>
 
             {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
-            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-8 lg:mb-0">
+            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-6 sm:mb-8 lg:mb-0">
               <div className="relative">
                 <div className="relative animate-sparkle">
-                  <LogoIcon width={500} height={500} className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
+                  <LogoIcon width={500} height={500} className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
                 </div>
                 
                 {/* Glitter/Particle Effect */}
