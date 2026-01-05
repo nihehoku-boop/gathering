@@ -318,6 +318,8 @@ export default function CommunityCollectionsList() {
 
       if (res.ok) {
         fetchCollections()
+        // Dispatch event to notify other components to refresh
+        window.dispatchEvent(new CustomEvent('communityCollectionsUpdated'))
         showAlert({
           title: 'Success',
           message: 'Collection deleted successfully.',
