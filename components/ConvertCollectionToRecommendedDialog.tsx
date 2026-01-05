@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Loader2, Search, X } from 'lucide-react'
+import { useToast } from '@/components/Toaster'
 
 interface Collection {
   id: string
@@ -49,6 +50,7 @@ export default function ConvertCollectionToRecommendedDialog({
   const [searchQuery, setSearchQuery] = useState('')
   const [converting, setConverting] = useState<string | null>(null)
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null)
+  const toast = useToast()
 
   useEffect(() => {
     if (open) {
@@ -83,6 +85,9 @@ export default function ConvertCollectionToRecommendedDialog({
       })
 
       if (res.ok) {
+        const data = await res.json()
+        const collectionName = collections.find(c => c.id === collectionId)?.name || 'Collection'
+        toast.success(`Successfully converted "${collectionName}" to a recommended collection!`)
         onSuccess()
         // Dispatch event to notify other components to refresh
         window.dispatchEvent(new CustomEvent('recommendedCollectionsUpdated'))
@@ -91,11 +96,11 @@ export default function ConvertCollectionToRecommendedDialog({
         setSearchQuery('')
       } else {
         const error = await res.json()
-        alert(`Error: ${error.error || 'Failed to convert collection'}`)
+        toast.error(error.error || 'Failed to convert collection')
       }
     } catch (error) {
       console.error('Error converting collection:', error)
-      alert('Failed to convert collection')
+      toast.error('Failed to convert collection')
     } finally {
       setConverting(null)
     }
