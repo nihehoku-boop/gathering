@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     const url = new URL(request.url)
-    const sortBy = url.searchParams.get('sortBy') || 'newest' // newest, popular, score
+    const sortBy = url.searchParams.get('sortBy') || 'popular' // newest, popular, score
     const page = parseInt(url.searchParams.get('page') || '1')
     const limit = parseInt(url.searchParams.get('limit') || '20')
     const skip = (page - 1) * limit
