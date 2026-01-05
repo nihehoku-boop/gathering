@@ -79,6 +79,8 @@ export default function AdminDashboard() {
       })
       if (res.ok) {
         fetchCollections()
+        // Dispatch event to notify other components to refresh
+        window.dispatchEvent(new CustomEvent('recommendedCollectionsUpdated'))
       }
     } catch (error) {
       console.error('Error deleting collection:', error)
