@@ -283,7 +283,7 @@ export async function sendVerificationEmail(email: string, verificationLink: str
       return { success: false, error: 'Email service not configured' }
     }
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Gathering <onboarding@resend.dev>'
+    const fromEmail = normalizeFromEmail(process.env.RESEND_FROM_EMAIL)
     
     console.log('[Email] Sending verification email', {
       to: email,
