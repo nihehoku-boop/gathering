@@ -91,32 +91,16 @@ export async function POST(
 ) {
   try {
     const session = await getServerSession(authOptions)
-    console.log('[Fill Images] Session check:', {
-      hasSession: !!session,
-      hasUser: !!session?.user,
-      userId: session?.user?.id,
-      userEmail: session?.user?.email,
-    })
-    
     if (!session?.user?.id) {
-      console.error('[Fill Images] Unauthorized - No session or user ID')
-      return NextResponse.json({ error: 'Unauthorized - Please sign in again' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Check if user is admin
-    try {
-      const adminStatus = await isUserAdmin(session.user.id)
-      if (!adminStatus) {
-        return NextResponse.json(
-          { error: 'Forbidden - Admin access required' },
-          { status: 403 }
-        )
-      }
-    } catch (error) {
-      console.error('Error checking admin status:', error)
+    const adminStatus = await isUserAdmin(session.user.id)
+    if (!adminStatus) {
       return NextResponse.json(
-        { error: 'Error verifying admin status' },
-        { status: 500 }
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
       )
     }
 
@@ -124,60 +108,19 @@ export async function POST(
     const collectionId = resolvedParams.id
     
     if (!collectionId) {
-      console.error('[Fill Images] Missing collectionId in params:', resolvedParams)
       return NextResponse.json(
         { error: 'Collection ID is required' },
         { status: 400 }
       )
     }
     
-    let body
-    try {
-      // Check if request body has already been consumed
-      const contentType = request.headers.get('content-type')
-      console.log('[Fill Images] Content-Type:', contentType)
-      
-      if (!contentType || !contentType.includes('application/json')) {
-        console.error('[Fill Images] Invalid content-type:', contentType)
-        return NextResponse.json(
-          { error: 'Content-Type must be application/json' },
-          { status: 400 }
-        )
-      }
-      
-      body = await request.json()
-      console.log('[Fill Images] Request body parsed successfully:', { 
-        collectionId, 
-        bodyKeys: Object.keys(body || {}), 
-        itemIdsCount: body?.itemIds?.length,
-        itemIdsType: Array.isArray(body?.itemIds) ? 'array' : typeof body?.itemIds,
-      })
-    } catch (error) {
-      console.error('[Fill Images] Error parsing request body:', error)
-      const errorDetails = error instanceof Error ? error.message : String(error)
-      return NextResponse.json(
-        { 
-          error: 'Invalid request body - must be valid JSON',
-          details: process.env.NODE_ENV === 'development' ? errorDetails : undefined,
-        },
-        { status: 400 }
-      )
-    }
+    // Read request body - same pattern as working route
+    const body = await request.json()
+    const { itemIds, autoFill } = body
     
-    const { itemIds, autoFill } = body || {}
-    
-    if (!itemIds) {
-      console.error('[Fill Images] Missing itemIds in request body')
+    if (!itemIds || !Array.isArray(itemIds) || itemIds.length === 0) {
       return NextResponse.json(
-        { error: 'itemIds is required in request body' },
-        { status: 400 }
-      )
-    }
-    
-    if (!Array.isArray(itemIds)) {
-      console.error('[Fill Images] itemIds is not an array:', typeof itemIds, itemIds)
-      return NextResponse.json(
-        { error: 'itemIds must be an array' },
+        { error: 'itemIds must be a non-empty array' },
         { status: 400 }
       )
     }
