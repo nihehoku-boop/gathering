@@ -52,7 +52,9 @@ export default function MissingImagesDialog({
       const endpoint = isCommunityCollection
         ? `/api/community-collections/${collectionId}/missing-images`
         : `/api/collections/${collectionId}/missing-images`
-      const res = await fetch(endpoint)
+      const res = await fetch(endpoint, {
+        credentials: 'include', // Ensure cookies are sent
+      })
       if (res.ok) {
         const data = await res.json()
         setMissingImages(data.missingImages || [])
@@ -104,6 +106,7 @@ export default function MissingImagesDialog({
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Ensure cookies are sent
         body: JSON.stringify(requestBody),
       })
 
