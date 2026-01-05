@@ -16,6 +16,7 @@ import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
 import AddCollectionPreviewDialog from './AddCollectionPreviewDialog'
+import CommunityCollectionItemsManager from './CommunityCollectionItemsManager'
 
 interface CommunityItem {
   id: string
@@ -679,6 +680,18 @@ export default function CommunityCollectionsList() {
                         </Button>
                       )}
                       <div className="flex gap-2 ml-auto">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setManagingCollectionId(collection.id)
+                          }}
+                          className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                          title="View items"
+                        >
+                          <List className="h-4 w-4" />
+                        </Button>
                         {isOwner && (
                           <>
                             <Button
@@ -787,27 +800,20 @@ export default function CommunityCollectionsList() {
         }}
       />
       {managingCollectionId && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-4xl max-h-[90vh] bg-[var(--bg-secondary)] border-[var(--border-color)]">
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-[var(--text-primary)]">Manage Items</CardTitle>
-                <Button
-                  variant="ghost"
-                  onClick={() => setManagingCollectionId(null)}
-                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                >
-                  Close
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-[var(--text-secondary)]">
-                Item management for community collections will be available soon. 
-                For now, you can edit the collection details or delete and recreate it with items.
-              </p>
-            </CardContent>
-          </Card>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-auto">
+          <div className="w-full max-w-6xl bg-[var(--bg-primary)] rounded-lg p-6 max-h-[95vh] overflow-auto">
+            <CommunityCollectionItemsManager
+              collectionId={managingCollectionId}
+              onBack={() => setManagingCollectionId(null)}
+              onUpdate={() => {
+                // Refresh collections list
+                setCurrentPage(1)
+                setCollections([])
+                setHasMore(true)
+                fetchCollections(1, false)
+              }}
+            />
+          </div>
         </div>
       )}
       <AlertDialog
