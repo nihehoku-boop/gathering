@@ -17,6 +17,7 @@ interface MissingImagesDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   collectionId: string
+  isCommunityCollection?: boolean
   onImagesFilled?: () => void
 }
 
@@ -24,6 +25,7 @@ export default function MissingImagesDialog({
   open,
   onOpenChange,
   collectionId,
+  isCommunityCollection = false,
   onImagesFilled,
 }: MissingImagesDialogProps) {
   const [missingImages, setMissingImages] = useState<MissingImageItem[]>([])
@@ -47,13 +49,17 @@ export default function MissingImagesDialog({
   const fetchMissingImages = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/collections/${collectionId}/missing-images`)
+      const endpoint = isCommunityCollection
+        ? `/api/community-collections/${collectionId}/missing-images`
+        : `/api/collections/${collectionId}/missing-images`
+      const res = await fetch(endpoint)
       if (res.ok) {
         const data = await res.json()
         setMissingImages(data.missingImages || [])
         setSelectedItems(new Set(data.missingImages?.map((item: MissingImageItem) => item.id) || []))
       } else {
-        toast.error('Failed to fetch missing images')
+        const errorData = await res.json().catch(() => ({ error: 'Failed to fetch missing images' }))
+        toast.error(errorData.error || 'Failed to fetch missing images')
       }
     } catch (error) {
       console.error('Error fetching missing images:', error)
@@ -74,7 +80,10 @@ export default function MissingImagesDialog({
     setFillResults(null)
 
     try {
-      const res = await fetch(`/api/collections/${collectionId}/fill-images`, {
+      const endpoint = isCommunityCollection
+        ? `/api/community-collections/${collectionId}/fill-images`
+        : `/api/collections/${collectionId}/fill-images`
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

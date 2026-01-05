@@ -1,0 +1,224 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from "@/lib/auth-config"
+import { prisma } from '@/lib/prisma'
+import { isUserAdmin } from '@/lib/user-cache'
+
+// Build optimized search query based on collection type and item name
+function buildSearchQuery(itemName: string, collectionName: string, category?: string | null, template?: string | null): string {
+  // Remove common prefixes/suffixes that don't help search
+  let cleanItemName = itemName
+    .replace(/^#\s*/, '') // Remove leading #
+    .replace(/\s*-\s*.*$/, '') // Remove everything after first dash (often subtitle)
+    .trim()
+
+  // Build query based on collection type
+  if (template === 'comic-book' || category?.toLowerCase().includes('comic')) {
+    return `${collectionName} ${cleanItemName} cover`
+  } else if (template === 'trading-card' || category?.toLowerCase().includes('card')) {
+    return `${cleanItemName} ${category || 'trading card'}`
+  } else if (template === 'book') {
+    return `${cleanItemName} book cover`
+  } else if (template === 'video-game') {
+    return `${cleanItemName} game cover`
+  } else if (template === 'film') {
+    return `${cleanItemName} movie poster`
+  } else if (template === 'vinyl-record') {
+    return `${cleanItemName} vinyl cover`
+  } else {
+    return category ? `${cleanItemName} ${category}` : cleanItemName
+  }
+}
+
+// Search for images using Google Custom Search API
+async function searchImageGoogle(query: string): Promise<string | null> {
+  const apiKey = process.env.GOOGLE_CUSTOM_SEARCH_API_KEY
+  const searchEngineId = process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID
+
+  if (!apiKey || !searchEngineId) {
+    return null
+  }
+
+  try {
+    const encodedQuery = encodeURIComponent(query)
+    const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${searchEngineId}&q=${encodedQuery}&searchType=image&num=1&safe=active`
+    
+    const response = await fetch(url)
+    if (!response.ok) {
+      console.error('Google Custom Search API error:', response.status, response.statusText)
+      return null
+    }
+
+    const data = await response.json()
+    if (data.items && data.items.length > 0) {
+      return data.items[0].link
+    }
+  } catch (error) {
+    console.error('Google Custom Search error:', error)
+  }
+
+  return null
+}
+
+// Main image search function
+async function searchImage(
+  itemName: string,
+  collectionName: string,
+  category?: string | null,
+  template?: string | null
+): Promise<string | null> {
+  try {
+    const searchQuery = buildSearchQuery(itemName, collectionName, category, template)
+    console.log(`[Image Search] Searching for: "${searchQuery}"`)
+
+    const googleResult = await searchImageGoogle(searchQuery)
+    if (googleResult) {
+      console.log(`[Image Search] Found via Google: ${googleResult}`)
+      return googleResult
+    }
+
+    console.log(`[Image Search] No image found for: "${searchQuery}"`)
+    return null
+  } catch (error) {
+    console.error('Image search error:', error)
+    return null
+  }
+}
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> | { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if user is admin
+    const adminStatus = await isUserAdmin(session.user.id)
+    if (!adminStatus) {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    const resolvedParams = await Promise.resolve(params)
+    const collectionId = resolvedParams.id
+    const body = await request.json()
+    const { itemIds, autoFill } = body
+
+    // Verify collection exists
+    const collection = await prisma.communityCollection.findFirst({
+      where: {
+        id: collectionId,
+      },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        template: true,
+      },
+    })
+
+    if (!collection) {
+      return NextResponse.json(
+        { error: 'Collection not found' },
+        { status: 404 }
+      )
+    }
+
+    // Get items that need images
+    const items = await prisma.communityItem.findMany({
+      where: {
+        id: { in: itemIds || [] },
+        communityCollectionId: collectionId,
+        OR: [
+          { image: null },
+          { image: '' },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        number: true,
+      },
+    })
+
+    if (items.length === 0) {
+      return NextResponse.json({
+        success: true,
+        message: 'No items found that need images',
+        filled: 0,
+        failed: 0,
+      })
+    }
+
+    const results = {
+      filled: 0,
+      failed: 0,
+      details: [] as Array<{ itemId: string; itemName: string; success: boolean; imageUrl?: string; error?: string }>,
+    }
+
+    // Fill images for each item
+    for (const item of items) {
+      try {
+        const imageUrl = await searchImage(
+          item.name,
+          collection.name,
+          collection.category,
+          collection.template
+        )
+
+        if (imageUrl) {
+          await prisma.communityItem.update({
+            where: { id: item.id },
+            data: { image: imageUrl },
+          })
+          results.filled++
+          results.details.push({
+            itemId: item.id,
+            itemName: item.name,
+            success: true,
+            imageUrl,
+          })
+        } else {
+          results.failed++
+          results.details.push({
+            itemId: item.id,
+            itemName: item.name,
+            success: false,
+            error: 'No image found',
+          })
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 200))
+      } catch (error) {
+        console.error(`Error filling image for item ${item.id}:`, error)
+        results.failed++
+        results.details.push({
+          itemId: item.id,
+          itemName: item.name,
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        })
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      filled: results.filled,
+      failed: results.failed,
+      total: items.length,
+      details: results.details,
+    })
+  } catch (error) {
+    console.error('Error filling images:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
