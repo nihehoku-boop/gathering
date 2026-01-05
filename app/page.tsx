@@ -23,7 +23,7 @@ export default async function Home() {
         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-12">
           <div className="mb-6 sm:mb-10">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] mb-2 sm:mb-3 tracking-tight">
-              My Trove
+              My Collections
             </h1>
             <p className="text-[var(--text-secondary)] text-sm sm:text-base lg:text-lg flex flex-wrap items-center gap-1.5">
               <span>Welcome back,</span>
@@ -31,7 +31,7 @@ export default async function Home() {
                 {session.user?.badge && <span className="text-lg sm:text-xl flex-shrink-0">{getBadgeEmoji(session.user.badge) || session.user.badge}</span>}
                 <span className="break-words">{session.user?.name || session.user?.email}</span>
               </span>
-              <span>! Your trove awaits.</span>
+              <span>! Your collections await.</span>
             </p>
           </div>
           <CollectionsList />
