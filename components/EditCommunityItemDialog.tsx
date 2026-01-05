@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card'
 import { getTemplateFields, type TemplateField } from '@/lib/item-templates'
 import { useToast } from '@/components/Toaster'
+import ImageUpload from './ImageUpload'
 
 interface CommunityItem {
   id: string
@@ -155,15 +156,23 @@ export default function EditCommunityItemDialog({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image" className="text-[var(--text-primary)]">Image URL</Label>
-              <Input
-                id="image"
-                type="url"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
+              <ImageUpload
+                value={image || null}
+                onChange={(url) => setImage(url || '')}
+                label="Image"
+                maxSize={10}
               />
+              <div className="mt-2">
+                <Label htmlFor="image-url" className="text-sm text-[var(--text-secondary)]">Or enter URL manually</Label>
+                <Input
+                  id="image-url"
+                  type="url"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition mt-1"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
