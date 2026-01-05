@@ -68,9 +68,15 @@ export default function CommunityCollectionItemsManager({
     }
   }
 
-  const fetchCollection = async () => {
+  const fetchCollection = async (forceRefresh = false) => {
     try {
-      const res = await fetch(`/api/community-collections/${collectionId}`)
+      // Add cache-busting query parameter to force fresh data after image updates
+      const url = forceRefresh 
+        ? `/api/community-collections/${collectionId}?t=${Date.now()}`
+        : `/api/community-collections/${collectionId}`
+      const res = await fetch(url, {
+        cache: forceRefresh ? 'no-store' : 'default',
+      })
       if (res.ok) {
         const data = await res.json()
         setCollection(data)
@@ -341,7 +347,8 @@ export default function CommunityCollectionItemsManager({
           collectionId={collectionId}
           isCommunityCollection={true}
           onImagesFilled={() => {
-            fetchCollection()
+            // Force refresh to bypass cache after images are updated
+            fetchCollection(true)
             onUpdate?.()
           }}
         />
