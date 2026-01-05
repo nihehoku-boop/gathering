@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { X, Edit, Trash2, ArrowLeft, Grid3x3, List } from 'lucide-react'
+import { X, Edit, Trash2, ArrowLeft, Grid3x3, List, Image as ImageIcon } from 'lucide-react'
 import EditCommunityItemDialog from './EditCommunityItemDialog'
+import MissingImagesDialog from './MissingImagesDialog'
 import { useToast } from '@/components/Toaster'
 
 interface CommunityItem {
@@ -47,6 +48,7 @@ export default function CommunityCollectionItemsManager({
   const [editingItem, setEditingItem] = useState<CommunityItem | null>(null)
   const [viewMode, setViewMode] = useState<'cover' | 'list'>('cover')
   const [isAdmin, setIsAdmin] = useState(false)
+  const [showMissingImagesDialog, setShowMissingImagesDialog] = useState(false)
   const toast = useToast()
 
   useEffect(() => {
@@ -185,6 +187,17 @@ export default function CommunityCollectionItemsManager({
               </CardDescription>
             </div>
             <div className="flex gap-2">
+              {isAdmin && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowMissingImagesDialog(true)}
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                  title="Find Missing Images (Admin Only)"
+                >
+                  <ImageIcon className="h-4 w-4" />
+                </Button>
+              )}
               <Button
                 variant={viewMode === 'cover' ? 'default' : 'outline'}
                 size="sm"
@@ -321,6 +334,18 @@ export default function CommunityCollectionItemsManager({
         </CardContent>
       </Card>
 
+      {isAdmin && (
+        <MissingImagesDialog
+          open={showMissingImagesDialog}
+          onOpenChange={setShowMissingImagesDialog}
+          collectionId={collectionId}
+          isCommunityCollection={true}
+          onImagesFilled={() => {
+            fetchCollection()
+            onUpdate?.()
+          }}
+        />
+      )}
       <EditCommunityItemDialog
         open={editingItem !== null}
         onOpenChange={(open) => !open && setEditingItem(null)}
