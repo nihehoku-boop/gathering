@@ -743,7 +743,7 @@ export default function CollectionsList() {
                     className="fixed inset-0 z-10" 
                     onClick={() => setShowSortMenu(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                  <div className="absolute right-0 sm:right-0 left-auto sm:left-auto top-full mt-2 w-48 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
                     <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
                       Sort by
                     </div>
@@ -922,42 +922,51 @@ export default function CollectionsList() {
             const isComplete = progress === 100 && enableGoldenAccents
             
             return (
-              <div className="mb-8">
+              <div className="mb-4 sm:mb-6">
                 <Card
-                  className="bg-[var(--bg-secondary)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up hover:shadow-xl hover:shadow-[var(--accent-color)]/20"
+                  className={`bg-[var(--bg-secondary)] border-[var(--border-color)] hover:border-[var(--border-hover)] hover-lift cursor-pointer overflow-hidden smooth-transition group animate-fade-up ${
+                    isComplete && enableGoldenAccents ? 'border-[var(--gold-color)]/30 hover:border-[var(--gold-color)]/50' : ''
+                  } hover:shadow-lg hover:shadow-[var(--accent-color)]/10`}
                   onClick={() => router.push(`/collections/${spotlightCollection.id}`)}
                 >
-                  <div className="grid md:grid-cols-2 gap-0 items-stretch">
-                    {spotlightCollection.coverImage && (
-                      <div className={`w-full h-48 md:h-full md:min-h-full overflow-hidden bg-[var(--bg-tertiary)] relative ${
-                        isComplete ? 'ring-2 ring-[var(--gold-color)]/30' : ''
-                      }`}>
-                        <Image
-                          src={spotlightCollection.coverImage}
-                          alt={spotlightCollection.name}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                          className={`${spotlightCollection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete ? 'group-hover:brightness-110' : ''}`}
-                          loading="lazy"
-                        />
-                        <div className="absolute top-3 left-3 flex items-center gap-2 bg-[var(--bg-secondary)]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[var(--border-color)]/50">
-                          <Star className="h-4 w-4 text-[var(--gold-color)] fill-[var(--gold-color)]" />
-                          <span className="text-sm font-semibold text-[var(--text-primary)]">Trove Spotlight</span>
-                        </div>
+                  {spotlightCollection.coverImage && (
+                    <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${isComplete && enableGoldenAccents ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
+                      <Image
+                        src={spotlightCollection.coverImage}
+                        alt={spotlightCollection.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className={`${spotlightCollection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete && enableGoldenAccents ? 'group-hover:brightness-110' : ''}`}
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                        unoptimized={
+                          spotlightCollection.coverImage.startsWith('/ltbcover/') || 
+                          spotlightCollection.coverImage.includes('localhost') || 
+                          spotlightCollection.coverImage.includes('tcgdx') || 
+                          spotlightCollection.coverImage.includes('tcgdex') ||
+                          spotlightCollection.coverImage.toLowerCase().includes('ygoprodeck') ||
+                          spotlightCollection.coverImage.toLowerCase().includes('images.ygoprodeck.com')
+                        }
+                      />
+                      <div className="absolute top-3 left-3 flex items-center gap-2 bg-[var(--bg-secondary)]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[var(--border-color)]/50">
+                        <Star className="h-4 w-4 text-[var(--gold-color)] fill-[var(--gold-color)]" />
+                        <span className="text-sm font-semibold text-[var(--text-primary)]">Trove Spotlight</span>
                       </div>
-                    )}
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <CardTitle className="text-2xl text-[var(--text-primary)]">{spotlightCollection.name}</CardTitle>
-                            {spotlightCollection.category && (
-                              <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]" title={spotlightCollection.category}>
-                                <CategoryIcon category={spotlightCollection.category} className="h-3 w-3" />
-                                <span>{spotlightCollection.category}</span>
-                              </span>
-                            )}
+                    </div>
+                  )}
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <CardTitle className="text-xl text-[var(--text-primary)] mb-2">{spotlightCollection.name}</CardTitle>
+                        {spotlightCollection.category && (
+                          <div className="mb-2">
+                            <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]" title={spotlightCollection.category}>
+                              <CategoryIcon category={spotlightCollection.category} className="h-3 w-3" />
+                              <span>{spotlightCollection.category}</span>
+                            </span>
                           </div>
+                        )}
                           <div className="flex flex-wrap gap-2 mb-3">
                             {spotlightCollection.recommendedCollectionId && spotlightCollection.lastSyncedAt && (
                               <span className="text-xs text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full inline-block border border-blue-500/30 flex items-center gap-1" title={`Synced from recommended collection. Last synced: ${new Date(spotlightCollection.lastSyncedAt).toLocaleDateString()}`}>
@@ -1003,7 +1012,7 @@ export default function CollectionsList() {
                             })()}
                           </div>
                         </div>
-                        <div className="flex gap-1 ml-2">
+                        <div className="flex gap-1">
                           {(() => {
                             const updateStatus = updateStatuses.get(spotlightCollection.id)
                             if (updateStatus?.hasUpdate) {
@@ -1195,8 +1204,7 @@ export default function CollectionsList() {
                           {spotlightCollection.ownedCount !== undefined ? spotlightCollection.ownedCount : (spotlightCollection.items?.filter(i => i.isOwned).length || 0)} of {spotlightCollection._count.items} items
                         </p>
                       </div>
-                    </div>
-                  </div>
+                    </CardHeader>
                 </Card>
               </div>
             )
@@ -1252,15 +1260,15 @@ export default function CollectionsList() {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <CardTitle className="text-xl text-[var(--text-primary)]">{collection.name}</CardTitle>
-                        {collection.category && (
+                      <CardTitle className="text-xl text-[var(--text-primary)] mb-2">{collection.name}</CardTitle>
+                      {collection.category && (
+                        <div className="mb-2">
                           <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 rounded-full inline-flex items-center gap-1.5 border border-[var(--border-color)]" title={collection.category}>
                             <CategoryIcon category={collection.category} className="h-3 w-3" />
                             <span>{collection.category}</span>
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                       <div className="flex flex-wrap gap-2">
                         {collection.recommendedCollectionId && collection.lastSyncedAt && (
                           <span className="text-xs text-blue-500 bg-blue-500/10 px-2 py-1 rounded-full inline-block border border-blue-500/30 flex items-center gap-1" title={`Synced from recommended collection. Last synced: ${new Date(collection.lastSyncedAt).toLocaleDateString()}`}>
