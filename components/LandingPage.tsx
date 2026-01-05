@@ -181,35 +181,35 @@ export default function LandingPage() {
         </nav>
 
         {/* Hero Content - Split Layout */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-8 sm:py-12 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-4 sm:py-8 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-16 items-center max-w-7xl mx-auto">
             {/* Text Side */}
             <div className="text-center lg:text-left order-2 lg:order-1">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-3 lg:mb-6 leading-tight px-2 sm:px-0">
                 <span className="text-[#fafafa]">Your Collection</span>
                 <br />
                 <span className="bg-gradient-to-r from-[var(--accent-color)] to-blue-500 bg-clip-text text-transparent">
                   Trove
                 </span>
             </h1>
-              <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-[#969696] mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
+              <p className="text-sm sm:text-base lg:text-xl xl:text-2xl text-[#969696] mb-3 sm:mb-4 lg:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
                 Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.
             </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start px-2 sm:px-0">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center lg:justify-start px-2 sm:px-0">
               <Button
                 onClick={handleGetStarted}
                 size="lg"
-                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full smooth-transition group w-full sm:w-auto"
+                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-xs sm:text-sm lg:text-lg px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4 lg:py-6 rounded-full smooth-transition group w-full sm:w-auto"
               >
                   {session ? 'Go to My Trove' : 'Get Started'}
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 smooth-transition" />
+                <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 group-hover:translate-x-1 smooth-transition" />
               </Button>
               {!session && (
                 <Link href="/auth/signin" className="w-full sm:w-auto">
                   <Button
                     variant="outline"
                     size="lg"
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full smooth-transition w-full sm:w-auto"
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-xs sm:text-sm lg:text-lg px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4 lg:py-6 rounded-full smooth-transition w-full sm:w-auto"
                   >
                     Sign In
                   </Button>
@@ -219,10 +219,10 @@ export default function LandingPage() {
             </div>
 
             {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
-            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-6 sm:mb-8 lg:mb-0">
+            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-2 sm:mb-3 lg:mb-0">
               <div className="relative">
                 <div className="relative animate-sparkle">
-                  <LogoIcon width={500} height={500} className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
+                  <LogoIcon width={500} height={500} className="w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
                 </div>
                 
                 {/* Glitter/Particle Effect */}
