@@ -145,36 +145,38 @@ export default function LandingPage() {
       {/* Hero Section - Discord Style */}
       <div className="relative z-10">
         {/* Navigation */}
-        <nav className="relative z-10 container mx-auto px-4 sm:px-6 py-4 sm:py-6 lg:px-20 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
-            <LogoIcon width={24} height={24} className="h-6 w-6 sm:h-8 sm:w-8" />
-            <span className="text-lg sm:text-2xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-            {!session && (
-              <>
-                <Link 
-                  href="/auth/signin"
-                  className="text-[#969696] hover:text-[#fafafa] smooth-transition text-xs sm:text-sm font-medium hidden sm:block"
-                >
-                  Sign In
-                </Link>
+        <nav className="sticky top-0 z-50 w-full bg-[#0f1114]/95 backdrop-blur-sm border-b border-[#2a2d35]/50">
+          <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 lg:px-20 lg:py-6 flex items-center justify-between gap-3">
+            <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 hover:opacity-80 smooth-transition">
+              <LogoIcon width={24} height={24} className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8" />
+              <span className="text-base sm:text-lg lg:text-2xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
+            </Link>
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+              {!session && (
+                <>
+                  <Link 
+                    href="/auth/signin"
+                    className="text-[#969696] hover:text-[#fafafa] smooth-transition text-xs sm:text-sm font-medium hidden sm:block"
+                  >
+                    Sign In
+                  </Link>
+                  <Button
+                    onClick={handleGetStarted}
+                    className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-3 sm:px-5 lg:px-6 text-xs sm:text-sm py-1.5 sm:py-2 lg:py-2.5 whitespace-nowrap"
+                  >
+                    Get Started
+                  </Button>
+                </>
+              )}
+              {session && (
                 <Button
                   onClick={handleGetStarted}
-                  className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-3 sm:px-6 text-xs sm:text-sm py-2 sm:py-2.5 whitespace-nowrap"
+                  className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-3 sm:px-5 lg:px-6 text-xs sm:text-sm py-1.5 sm:py-2 lg:py-2.5 whitespace-nowrap"
                 >
-                  Get Started
+                  My Trove
                 </Button>
-              </>
-            )}
-            {session && (
-              <Button
-                onClick={handleGetStarted}
-                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-3 sm:px-6 text-xs sm:text-sm py-2 sm:py-2.5 whitespace-nowrap"
-              >
-                My Trove
-              </Button>
-            )}
+              )}
+            </div>
           </div>
         </nav>
 
