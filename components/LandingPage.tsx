@@ -181,7 +181,7 @@ export default function LandingPage() {
         </nav>
 
         {/* Hero Content - Split Layout */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-4 sm:py-8 lg:py-32">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-4 sm:py-8 lg:py-32 overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-16 items-center max-w-7xl mx-auto">
             {/* Text Side */}
             <div className="text-center lg:text-left order-2 lg:order-1">
@@ -219,14 +219,14 @@ export default function LandingPage() {
             </div>
 
             {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
-            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-2 sm:mb-3 lg:mb-0">
-              <div className="relative">
-                <div className="relative animate-sparkle">
-                  <LogoIcon width={500} height={500} className="w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
+            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-2 sm:mb-3 lg:mb-0 overflow-visible">
+              <div className="relative w-full max-w-[80px] sm:max-w-[128px] md:max-w-[176px] lg:max-w-none">
+                <div className="relative animate-sparkle w-full aspect-square flex items-center justify-center">
+                  <LogoIcon width={500} height={500} className="w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10 max-w-full max-h-full object-contain" />
                 </div>
                 
-                {/* Glitter/Particle Effect */}
-                <div className="absolute inset-0 z-0 overflow-visible">
+                {/* Glitter/Particle Effect - Hidden on mobile to prevent overflow */}
+                <div className="absolute inset-0 z-0 overflow-visible hidden sm:block">
                   {[...Array(12)].map((_, i) => (
                     <div
                       key={i}
@@ -254,9 +254,9 @@ export default function LandingPage() {
                 </div>
               </div>
               
-              {/* Decorative elements */}
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--accent-color)]/20 rounded-full blur-2xl -z-10"></div>
-              <div className="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl -z-10"></div>
+              {/* Decorative elements - Hidden on mobile to prevent overflow */}
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--accent-color)]/20 rounded-full blur-2xl -z-10 hidden sm:block"></div>
+              <div className="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl -z-10 hidden sm:block"></div>
             </div>
           </div>
         </div>
