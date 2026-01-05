@@ -145,23 +145,23 @@ export default function LandingPage() {
       {/* Hero Section - Discord Style */}
       <div className="relative z-10">
         {/* Navigation */}
-        <nav className="relative z-10 container mx-auto px-6 py-6 lg:px-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <LogoIcon width={32} height={32} className="h-8 w-8" />
-            <span className="text-2xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
+        <nav className="relative z-10 container mx-auto px-4 sm:px-6 py-4 sm:py-6 lg:px-20 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+            <LogoIcon width={24} height={24} className="h-6 w-6 sm:h-8 sm:w-8" />
+            <span className="text-lg sm:text-2xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
             {!session && (
               <>
                 <Link 
                   href="/auth/signin"
-                  className="text-[#969696] hover:text-[#fafafa] smooth-transition text-sm font-medium"
+                  className="text-[#969696] hover:text-[#fafafa] smooth-transition text-xs sm:text-sm font-medium hidden sm:block"
                 >
                   Sign In
                 </Link>
                 <Button
                   onClick={handleGetStarted}
-                  className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-6"
+                  className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-3 sm:px-6 text-xs sm:text-sm py-2 sm:py-2.5 whitespace-nowrap"
                 >
                   Get Started
                 </Button>
@@ -170,44 +170,44 @@ export default function LandingPage() {
             {session && (
               <Button
                 onClick={handleGetStarted}
-                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-6"
+                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white smooth-transition rounded-full px-3 sm:px-6 text-xs sm:text-sm py-2 sm:py-2.5 whitespace-nowrap"
               >
-                My Collections
+                My Trove
               </Button>
             )}
           </div>
         </nav>
 
         {/* Hero Content - Split Layout */}
-        <div className="relative z-10 container mx-auto px-6 lg:px-20 py-16 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-8 sm:py-12 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
             {/* Text Side */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight">
+            <div className="text-center lg:text-left order-2 lg:order-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2 sm:px-0">
                 <span className="text-[#fafafa]">Your Collection</span>
                 <br />
                 <span className="bg-gradient-to-r from-[var(--accent-color)] to-blue-500 bg-clip-text text-transparent">
                   Trove
                 </span>
             </h1>
-              <p className="text-xl lg:text-2xl text-[#969696] mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+              <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-[#969696] mb-6 sm:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
                 Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.
             </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start px-2 sm:px-0">
               <Button
                 onClick={handleGetStarted}
                 size="lg"
-                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
+                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full smooth-transition group w-full sm:w-auto"
               >
                   {session ? 'Go to My Trove' : 'Get Started'}
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 smooth-transition" />
               </Button>
               {!session && (
-                <Link href="/auth/signin">
+                <Link href="/auth/signin" className="w-full sm:w-auto">
                   <Button
                     variant="outline"
                     size="lg"
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-lg px-8 py-6 rounded-full smooth-transition"
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full smooth-transition w-full sm:w-auto"
                   >
                     Sign In
                   </Button>
@@ -217,10 +217,10 @@ export default function LandingPage() {
             </div>
 
             {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
-            <div className="relative flex items-center justify-center">
+            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-8 lg:mb-0">
               <div className="relative">
                 <div className="relative animate-sparkle">
-                  <LogoIcon width={500} height={500} className="w-96 h-96 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
+                  <LogoIcon width={500} height={500} className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10" />
                 </div>
                 
                 {/* Glitter/Particle Effect */}
@@ -265,10 +265,10 @@ export default function LandingPage() {
         {features.map((feature, index) => (
           <section
             key={index}
-            className="py-20 lg:py-32 relative"
+            className="py-12 sm:py-16 lg:py-32 relative"
           >
-            <div className="container mx-auto px-6 lg:px-20">
-              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+              <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
                 {/* Image Side */}
                 <div
                   className={
@@ -277,12 +277,27 @@ export default function LandingPage() {
                       : 'order-2 lg:order-2 lg:col-start-2'
                   }
                 >
-                  <div style={{ perspective: '1000px' }}>
+                  <div style={{ perspective: '1000px' }} className="hidden lg:block">
                     <div className="relative rounded-2xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-2xl transform-gpu transition-transform duration-300 hover:scale-105" style={{
                       transform: feature.imageSide === 'left' 
                         ? 'perspective(1000px) rotateY(5deg) rotateX(2deg) translateZ(20px)'
                         : 'perspective(1000px) rotateY(-5deg) rotateX(2deg) translateZ(20px)',
                     }}>
+                      <div className="aspect-video">
+                        <Image
+                          src={feature.screenshot}
+                          alt={feature.title}
+                          width={800}
+                          height={600}
+                          className="w-full h-full object-cover"
+                          priority={index < 2}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* Mobile: Simpler version without 3D effect */}
+                  <div className="lg:hidden">
+                    <div className="relative rounded-xl overflow-hidden border border-[#2a2d35] bg-[#1a1d24] shadow-xl">
                       <div className="aspect-video">
                         <Image
                           src={feature.screenshot}
@@ -305,30 +320,30 @@ export default function LandingPage() {
                       : 'order-1 lg:order-1 lg:col-start-1'
                   }
                 >
-                  <div className="max-w-xl mx-auto lg:mx-0">
+                  <div className="max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
                     {/* Title with Icon Next to It */}
-                    <div className="flex items-center gap-4 mb-4">
+                    <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
                       <img
                         src={feature.icon}
                         alt={feature.iconAlt}
-                        className="w-16 h-16 lg:w-20 lg:h-20 object-contain flex-shrink-0"
+                        className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 object-contain flex-shrink-0"
                       />
-                      <h2 className="text-4xl lg:text-5xl font-bold text-[#fafafa] leading-tight">
+                      <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#fafafa] leading-tight">
                         {feature.title}
                       </h2>
                     </div>
 
                     {/* Description */}
-                    <p className="text-xl text-[#969696] mb-8 leading-relaxed">
+                    <p className="text-base sm:text-lg lg:text-xl text-[#969696] mb-6 sm:mb-8 leading-relaxed">
                       {feature.description}
                     </p>
 
                     {/* Details List */}
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 sm:space-y-3">
                       {feature.details.map((detail, detailIndex) => (
-                        <li key={detailIndex} className="flex items-start gap-3">
+                        <li key={detailIndex} className="flex items-start gap-2 sm:gap-3">
                           <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] flex-shrink-0"></div>
-                          <span className="text-[#d1d1d1] text-lg">{detail}</span>
+                          <span className="text-[#d1d1d1] text-sm sm:text-base lg:text-lg">{detail}</span>
                         </li>
                       ))}
                     </ul>
@@ -341,14 +356,14 @@ export default function LandingPage() {
       </div>
 
       {/* FAQ Section */}
-      <div className="relative py-20 lg:py-32 z-10">
-        <div className="container mx-auto px-6 lg:px-20">
+      <div className="relative py-12 sm:py-16 lg:py-32 z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12 animate-fade-in">
-              <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#fafafa]">
+            <div className="text-center mb-8 sm:mb-12 animate-fade-in">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-[#fafafa]">
                 Questions?
               </h2>
-              <p className="text-xl text-[#969696]">
+              <p className="text-lg sm:text-xl text-[#969696]">
                 We've got answers
               </p>
             </div>
@@ -388,11 +403,11 @@ export default function LandingPage() {
                     animationFillMode: 'both',
                   }}
                 >
-                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none text-[#fafafa] font-medium text-lg smooth-transition hover:text-[var(--accent-color)]">
-                    <span>{faq.question}</span>
-                    <ChevronDown className="h-5 w-5 text-[#969696] group-open:rotate-180 smooth-transition flex-shrink-0 ml-4" />
+                  <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer list-none text-[#fafafa] font-medium text-base sm:text-lg smooth-transition hover:text-[var(--accent-color)]">
+                    <span className="pr-4">{faq.question}</span>
+                    <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-[#969696] group-open:rotate-180 smooth-transition flex-shrink-0" />
                   </summary>
-                  <div className="px-6 pb-6 text-[#d1d1d1] leading-relaxed faq-answer">
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 text-[#d1d1d1] leading-relaxed faq-answer text-sm sm:text-base">
                     {faq.answer}
                   </div>
                 </details>
@@ -403,30 +418,30 @@ export default function LandingPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="relative py-20 lg:py-32">
-        <div className="container mx-auto px-6 lg:px-20">
+      <div className="relative py-12 sm:py-16 lg:py-32">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-            <div className="relative p-12 lg:p-16 bg-gradient-to-br from-[#1a1d24] to-[#0f1114] border border-[#2a2d35] rounded-3xl overflow-hidden">
+            <div className="relative p-6 sm:p-8 lg:p-16 bg-gradient-to-br from-[#1a1d24] to-[#0f1114] border border-[#2a2d35] rounded-2xl sm:rounded-3xl overflow-hidden">
               {/* Background gradient */}
               <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-color)]/5 via-blue-500/5 to-[var(--accent-color)]/5"></div>
               
               <div className="relative z-10">
-                <div className="inline-block mb-6">
-                  <Sparkles className="h-12 w-12 text-[var(--accent-color)]" />
+                <div className="inline-block mb-4 sm:mb-6">
+                  <Sparkles className="h-8 w-8 sm:h-12 sm:w-12 text-[var(--accent-color)]" />
                 </div>
-                <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-[#fafafa]">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 text-[#fafafa]">
               Ready to get started?
             </h2>
-            <p className="text-xl text-[#969696] mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-[#969696] mb-6 sm:mb-8 max-w-2xl mx-auto px-2 sm:px-0">
                   Join Colletro today and start organizing your collections
             </p>
             <Button
               onClick={handleGetStarted}
               size="lg"
-              className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-lg px-8 py-6 rounded-full smooth-transition group"
+              className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-4 sm:py-6 rounded-full smooth-transition group w-full sm:w-auto"
             >
                   {session ? 'Go to My Trove' : 'Get Started for Free'}
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 smooth-transition" />
+              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 smooth-transition" />
             </Button>
               </div>
             </div>
@@ -435,14 +450,14 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="relative border-t border-[#2a2d35] bg-[#0f1114]/50 py-12">
-        <div className="container mx-auto px-6 lg:px-20">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+      <footer className="relative border-t border-[#2a2d35] bg-[#0f1114]/50 py-8 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-2">
-              <LogoIcon width={24} height={24} className="h-6 w-6" />
-              <span className="text-xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
+              <LogoIcon width={24} height={24} className="h-5 w-5 sm:h-6 sm:w-6" />
+              <span className="text-lg sm:text-xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
             </div>
-            <div className="flex items-center gap-6 text-[#969696] text-sm flex-wrap justify-center">
+            <div className="flex items-center gap-4 sm:gap-6 text-[#969696] text-xs sm:text-sm flex-wrap justify-center">
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">
                 About
               </Link>
