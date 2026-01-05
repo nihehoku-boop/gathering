@@ -133,12 +133,33 @@ export async function POST(
     
     let body
     try {
+      // Check if request body has already been consumed
+      const contentType = request.headers.get('content-type')
+      console.log('[Fill Images] Content-Type:', contentType)
+      
+      if (!contentType || !contentType.includes('application/json')) {
+        console.error('[Fill Images] Invalid content-type:', contentType)
+        return NextResponse.json(
+          { error: 'Content-Type must be application/json' },
+          { status: 400 }
+        )
+      }
+      
       body = await request.json()
-      console.log('[Fill Images] Request body:', { collectionId, bodyKeys: Object.keys(body || {}), itemIdsCount: body?.itemIds?.length })
+      console.log('[Fill Images] Request body parsed successfully:', { 
+        collectionId, 
+        bodyKeys: Object.keys(body || {}), 
+        itemIdsCount: body?.itemIds?.length,
+        itemIdsType: Array.isArray(body?.itemIds) ? 'array' : typeof body?.itemIds,
+      })
     } catch (error) {
       console.error('[Fill Images] Error parsing request body:', error)
+      const errorDetails = error instanceof Error ? error.message : String(error)
       return NextResponse.json(
-        { error: 'Invalid request body - must be valid JSON' },
+        { 
+          error: 'Invalid request body - must be valid JSON',
+          details: process.env.NODE_ENV === 'development' ? errorDetails : undefined,
+        },
         { status: 400 }
       )
     }
@@ -274,9 +295,17 @@ export async function POST(
       details: results.details,
     })
   } catch (error) {
-    console.error('Error filling images:', error)
+    console.error('[Fill Images] Unexpected error:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    console.error('[Fill Images] Error stack:', errorStack)
+    
+    // Return detailed error in development, generic in production
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        message: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+      },
       { status: 500 }
     )
   }
