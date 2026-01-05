@@ -49,7 +49,8 @@ export default function RecommendedCollectionsList() {
     // Listen for updates from admin dashboard
     const handleUpdate = () => {
       console.log('[RecommendedCollectionsList] Received update event, refreshing...')
-      fetchCollections()
+      // Force refresh to bypass cache after deletions/updates
+      fetchCollections(true)
     }
     
     window.addEventListener('recommendedCollectionsUpdated', handleUpdate)
@@ -59,20 +60,30 @@ export default function RecommendedCollectionsList() {
     }
   }, [])
 
-  const fetchCollections = async () => {
+  const fetchCollections = async (forceRefresh = false) => {
     try {
-      console.log('[RecommendedCollectionsList] Fetching collections...')
+      console.log('[RecommendedCollectionsList] Fetching collections...', { forceRefresh })
       const startTime = performance.now()
-      const res = await fetch('/api/recommended-collections', {
+      // Add cache-busting query parameter to force fresh data after deletions
+      const url = forceRefresh 
+        ? `/api/recommended-collections?t=${Date.now()}`
+        : '/api/recommended-collections'
+      const res = await fetch(url, {
         cache: 'no-store',
-        headers: { 'Cache-Control': 'no-cache' }
+        headers: { 
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        }
       })
       const endTime = performance.now()
       console.log(`[RecommendedCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
       if (res.ok) {
         const data = await res.json()
+        console.log('[RecommendedCollectionsList] Received collections:', data.length)
         setCollections(data)
         setFilteredCollections(data)
+      } else {
+        console.error('[RecommendedCollectionsList] Fetch failed:', res.status, res.statusText)
       }
     } catch (error) {
       console.error('Error fetching recommended collections:', error)
