@@ -15,8 +15,10 @@ import {
 } from '@/components/ui/card'
 import { stringifyTags } from '@/lib/tags'
 import TagSelector from '@/components/TagSelector'
-import { ITEM_TEMPLATES } from '@/lib/item-templates'
+import { ITEM_TEMPLATES, type ItemTemplate } from '@/lib/item-templates'
 import ImageUpload from './ImageUpload'
+import { useToast } from '@/components/Toaster'
+import { ChevronDown, ChevronUp, Info } from 'lucide-react'
 
 interface CreateCollectionDialogProps {
   open: boolean
@@ -39,10 +41,37 @@ export default function CreateCollectionDialog({
   const [coverImageFit, setCoverImageFit] = useState<string>('cover')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
+  const [showTemplatePreview, setShowTemplatePreview] = useState(false)
+  const [categorySuggestions, setCategorySuggestions] = useState<string[]>([])
+  const [showCategorySuggestions, setShowCategorySuggestions] = useState(false)
+  const [showCoverImageUrl, setShowCoverImageUrl] = useState(false)
+  const toast = useToast()
 
   useEffect(() => {
     fetchFolders()
+    fetchCategories()
   }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('/api/collections')
+      if (res.ok) {
+        const collections = await res.json()
+        const categories = Array.from(new Set(
+          collections
+            .map((c: { category: string | null }) => c.category)
+            .filter((cat: string | null): cat is string => cat !== null && cat.trim() !== '')
+        )).sort() as string[]
+        setCategorySuggestions(categories)
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+    }
+  }
+
+  const getSelectedTemplate = (): ItemTemplate | undefined => {
+    return ITEM_TEMPLATES.find(t => t.id === template)
+  }
 
   const fetchFolders = async () => {
     try {
@@ -81,6 +110,7 @@ export default function CreateCollectionDialog({
       })
 
       if (res.ok) {
+        toast.success('Collection created successfully!')
         setName('')
         setDescription('')
         setCategory('')
@@ -89,9 +119,13 @@ export default function CreateCollectionDialog({
         setSelectedTags([])
         onOpenChange(false)
         onSuccess()
+      } else {
+        const errorData = await res.json()
+        toast.error(errorData.error || 'Failed to create collection')
       }
     } catch (error) {
       console.error('Error creating collection:', error)
+      toast.error('An error occurred while creating the collection')
     } finally {
       setLoading(false)
     }
@@ -122,15 +156,43 @@ export default function CreateCollectionDialog({
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="space-y-2 relative">
                 <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
-                <Input
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  placeholder="e.g., Comics, Books, Cards"
-                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
-                />
+                <div className="relative">
+                  <Input
+                    id="category"
+                    value={category}
+                    onChange={(e) => {
+                      setCategory(e.target.value)
+                      setShowCategorySuggestions(true)
+                    }}
+                    onFocus={() => setShowCategorySuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowCategorySuggestions(false), 200)}
+                    placeholder="e.g., Comics, Books, Cards"
+                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
+                    list="category-suggestions"
+                  />
+                  {showCategorySuggestions && categorySuggestions.length > 0 && category && (
+                    <div className="absolute z-10 w-full mt-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-md shadow-lg max-h-40 overflow-y-auto">
+                      {categorySuggestions
+                        .filter(cat => cat.toLowerCase().includes(category.toLowerCase()))
+                        .slice(0, 5)
+                        .map((cat) => (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => {
+                              setCategory(cat)
+                              setShowCategorySuggestions(false)
+                            }}
+                            className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] text-sm smooth-transition"
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="folder" className="text-[var(--text-primary)]">Folder</Label>
@@ -163,9 +225,35 @@ export default function CreateCollectionDialog({
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-[var(--text-muted)]">
-                Choose a template to customize the fields available when editing items in this collection.
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-[var(--text-muted)]">
+                  Choose a template to customize the fields available when editing items.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowTemplatePreview(!showTemplatePreview)}
+                  className="flex items-center gap-1 text-xs text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] smooth-transition"
+                >
+                  <Info className="h-3 w-3" />
+                  {showTemplatePreview ? 'Hide' : 'Preview'} Fields
+                  {showTemplatePreview ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                </button>
+              </div>
+              {showTemplatePreview && getSelectedTemplate() && (
+                <div className="mt-2 p-3 bg-[var(--bg-tertiary)] rounded-md border border-[var(--border-color)]">
+                  <p className="text-sm font-medium text-[var(--text-primary)] mb-2">
+                    {getSelectedTemplate()?.icon} {getSelectedTemplate()?.name} includes:
+                  </p>
+                  <ul className="space-y-1">
+                    {getSelectedTemplate()?.fields.map((field) => (
+                      <li key={field.id} className="text-xs text-[var(--text-secondary)] flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span>
+                        {field.label} {field.required && <span className="text-red-400">*</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="description" className="text-[var(--text-primary)]">Description</Label>
@@ -179,24 +267,34 @@ export default function CreateCollectionDialog({
               />
             </div>
             <div className="space-y-2">
-              <ImageUpload
-                value={coverImage || null}
-                onChange={(url) => setCoverImage(url || '')}
-                label="Cover Image"
-                aspectRatio="2/3"
-                maxSize={10}
-              />
-              <div className="mt-2">
-                <Label htmlFor="coverImage-url" className="text-sm text-[var(--text-secondary)]">Or enter URL manually</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="coverImage" className="text-[var(--text-primary)]">Cover Image</Label>
+                <button
+                  type="button"
+                  onClick={() => setShowCoverImageUrl(!showCoverImageUrl)}
+                  className="text-xs text-[var(--accent-color)] hover:text-[var(--accent-color-hover)] smooth-transition"
+                >
+                  {showCoverImageUrl ? 'Use Upload' : 'Or enter URL'}
+                </button>
+              </div>
+              {!showCoverImageUrl ? (
+                <ImageUpload
+                  value={coverImage || null}
+                  onChange={(url) => setCoverImage(url || '')}
+                  label=""
+                  aspectRatio="2/3"
+                  maxSize={10}
+                />
+              ) : (
                 <Input
                   id="coverImage-url"
                   type="url"
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
                   placeholder="https://example.com/image.jpg"
-                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition mt-1"
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
                 />
-              </div>
+              )}
               <div className="mt-2">
                 <Label htmlFor="coverImageFit" className="text-sm text-[var(--text-primary)]">Image Fit</Label>
                 <select

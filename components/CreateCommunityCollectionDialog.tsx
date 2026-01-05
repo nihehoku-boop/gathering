@@ -17,6 +17,7 @@ import { stringifyTags } from '@/lib/tags'
 import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
+import { useToast } from '@/components/Toaster'
 
 interface CreateCommunityCollectionDialogProps {
   open: boolean
@@ -37,6 +38,7 @@ export default function CreateCommunityCollectionDialog({
   const [coverImageFit, setCoverImageFit] = useState<string>('cover')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
+  const toast = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,11 +72,11 @@ export default function CreateCommunityCollectionDialog({
         onSuccess()
       } else {
         const error = await res.json()
-        alert(`Error: ${error.error || 'Failed to create collection'}`)
+        toast.error(error.error || 'Failed to create collection')
       }
     } catch (error) {
       console.error('Error creating collection:', error)
-      alert('Failed to create collection')
+      toast.error('An error occurred while creating the collection')
     } finally {
       setLoading(false)
     }

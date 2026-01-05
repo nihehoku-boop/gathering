@@ -10,6 +10,7 @@ import { parseTags, getTagColor, AVAILABLE_TAGS } from '@/lib/tags'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
+import AddCollectionPreviewDialog from './AddCollectionPreviewDialog'
 
 interface RecommendedItem {
   id: string
@@ -143,22 +144,36 @@ export default function RecommendedCollectionsList() {
     return Array.from(new Set(categories)).sort()
   }
 
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false)
+  const [previewCollectionId, setPreviewCollectionId] = useState<string | null>(null)
+
   const handleAddToAccount = async (collectionId: string) => {
-    setAddingCollection(collectionId)
+    setPreviewCollectionId(collectionId)
+    setShowPreviewDialog(true)
+  }
+
+  const confirmAddToAccount = async () => {
+    if (!previewCollectionId) return
+    setAddingCollection(previewCollectionId)
     try {
-      const res = await fetch(`/api/recommended-collections/${collectionId}/add-to-account`, {
+      const res = await fetch(`/api/recommended-collections/${previewCollectionId}/add-to-account`, {
         method: 'POST',
       })
 
       if (res.ok) {
+        const data = await res.json()
         showAlert({
           title: 'Success',
-          message: 'Collection added to your account!',
+          message: `Collection "${data.name}" added to your account!`,
           type: 'success',
           onConfirm: () => {
-            router.push('/')
+            // Don't auto-redirect, let user stay or navigate manually
           },
+          confirmText: 'OK',
+          showCancel: false,
         })
+        // Refresh collections list
+        fetchCollections()
       } else {
         const error = await res.json()
         showAlert({
@@ -476,6 +491,13 @@ export default function RecommendedCollectionsList() {
           ))}
         </div>
       )}
+      <AddCollectionPreviewDialog
+        open={showPreviewDialog}
+        onOpenChange={setShowPreviewDialog}
+        collectionId={previewCollectionId || ''}
+        collectionType="recommended"
+        onConfirm={confirmAddToAccount}
+      />
       <AlertDialog
         open={alertDialog.open}
         onOpenChange={(open) => !open && closeAlert()}

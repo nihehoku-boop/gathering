@@ -2147,19 +2147,23 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </button>
                     ) : (
                       <div className="flex items-center gap-1.5 flex-shrink-0">
-                        <button
-                          onClick={(e) => toggleWishlist(item.id, e)}
-                          className="flex-shrink-0"
-                          title={item.isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-                        >
-                          <Heart 
-                            className={`h-4 w-4 sm:h-5 sm:w-5 transition-colors ${
-                              item.isInWishlist 
-                                ? 'text-[#FF3B30] fill-[#FF3B30]' 
-                                : 'text-[var(--text-muted)] hover:text-[#FF3B30]'
-                            }`}
-                          />
-                        </button>
+                        {item.isInWishlist ? (
+                          <button
+                            onClick={(e) => toggleWishlist(item.id, e)}
+                            className="flex-shrink-0"
+                            title="Remove from wishlist"
+                          >
+                            <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-[#FF3B30] fill-[#FF3B30]" />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => toggleWishlist(item.id, e)}
+                            className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                            title="Add to wishlist"
+                          >
+                            <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-[#FF69B4] fill-[#FF69B4]" />
+                          </button>
+                        )}
                         <button
                           onClick={() => toggleItemOwned(item.id, item.isOwned)}
                           className={`w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
