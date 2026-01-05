@@ -88,13 +88,19 @@ export default function AdminDashboard() {
   }
 
   const handleToggleVisibility = async (id: string, currentVisibility: boolean) => {
+    const newVisibility = !currentVisibility
     try {
       const res = await fetch(`/api/recommended-collections/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPublic: !currentVisibility }),
+        body: JSON.stringify({ isPublic: newVisibility }),
       })
       if (res.ok) {
+        const updated = await res.json()
+        // Update local state immediately for better UX
+        setCollections(prev => prev.map(c => 
+          c.id === id ? { ...c, isPublic: updated.isPublic } : c
+        ))
         fetchCollections()
         // Dispatch event to notify other components to refresh
         window.dispatchEvent(new CustomEvent('recommendedCollectionsUpdated'))
