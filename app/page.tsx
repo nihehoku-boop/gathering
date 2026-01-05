@@ -31,7 +31,7 @@ export default async function Home() {
                 {session.user?.badge && <span className="text-lg sm:text-xl flex-shrink-0">{getBadgeEmoji(session.user.badge) || session.user.badge}</span>}
                 <span className="break-words">{session.user?.name || session.user?.email}</span>
               </span>
-              <span>! Your collections await.</span>
+              <span>! Your trove awaits.</span>
             </p>
           </div>
           <CollectionsList />
