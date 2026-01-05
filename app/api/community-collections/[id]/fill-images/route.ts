@@ -36,6 +36,10 @@ async function searchImageGoogle(query: string): Promise<string | null> {
   const searchEngineId = process.env.GOOGLE_CUSTOM_SEARCH_ENGINE_ID
 
   if (!apiKey || !searchEngineId) {
+    console.error('[Image Search] Missing API credentials:', {
+      hasApiKey: !!apiKey,
+      hasSearchEngineId: !!searchEngineId,
+    })
     return null
   }
 
@@ -45,7 +49,21 @@ async function searchImageGoogle(query: string): Promise<string | null> {
     
     const response = await fetch(url)
     if (!response.ok) {
-      console.error('Google Custom Search API error:', response.status, response.statusText)
+      const errorText = await response.text().catch(() => '')
+      console.error('[Image Search] Google API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText.substring(0, 200), // First 200 chars of error
+      })
+      
+      // Provide helpful error message for common issues
+      if (response.status === 403) {
+        console.error('[Image Search] 403 Forbidden - Check:')
+        console.error('  1. API key is correct and added to Vercel environment variables')
+        console.error('  2. Custom Search API is enabled in Google Cloud Console')
+        console.error('  3. API key has proper permissions')
+        console.error('  4. Search Engine ID is correct')
+      }
       return null
     }
 
@@ -54,7 +72,7 @@ async function searchImageGoogle(query: string): Promise<string | null> {
       return data.items[0].link
     }
   } catch (error) {
-    console.error('Google Custom Search error:', error)
+    console.error('[Image Search] Request error:', error)
   }
 
   return null
