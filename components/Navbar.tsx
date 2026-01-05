@@ -19,6 +19,7 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -32,6 +33,28 @@ export default function Navbar() {
       setIsAdmin(false)
     }
   }, [session])
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (isMobileMenuOpen && menuRef.current && menuButtonRef.current) {
+        const target = event.target as Node
+        if (!menuRef.current.contains(target) && !menuButtonRef.current.contains(target)) {
+          setIsMobileMenuOpen(false)
+        }
+      }
+    }
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('touchstart', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
+    }
+  }, [isMobileMenuOpen])
 
   const menuItems = session ? [
     ...(isAdmin ? [{ label: 'Admin', icon: Star, path: '/admin' }] : []),
@@ -166,6 +189,7 @@ export default function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
                   <div 
+                    ref={menuRef}
                     className="fixed w-56 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-[70] overflow-hidden"
                     style={{
                       top: menuButtonRef.current ? `${menuButtonRef.current.getBoundingClientRect().bottom + 8}px` : '4rem',

@@ -1427,7 +1427,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                         className="fixed inset-0 z-10" 
                         onClick={() => setShowSortMenu(false)}
                       />
-                      <div className="absolute right-0 sm:right-0 left-auto sm:left-auto top-full mt-2 w-48 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
                         <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
                           Sort by
                         </div>
@@ -1602,22 +1602,43 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     >
                       <CheckSquare2 className="h-4 w-4" />
                     </Button>
-                    <div className="relative">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setShowSortMenu(!showSortMenu)}
-                        className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
-                      >
-                        <ArrowUpDown className="h-4 w-4" />
-                      </Button>
-                      {showSortMenu && (
-                    <>
-                      <div 
-                        className="fixed inset-0 z-10" 
-                        onClick={() => setShowSortMenu(false)}
-                      />
-                      <div className="absolute right-0 sm:right-0 left-auto sm:left-auto top-full mt-2 w-48 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowSortMenu(!showSortMenu)}
+                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                    >
+                      <ArrowUpDown className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === 'cover' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('cover')}
+                      className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
+                      title="Cover view"
+                    >
+                      <Grid3x3 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                      className={viewMode === 'list' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
+                      title="List view"
+                    >
+                      <List className="h-4 w-4" />
+                    </Button>
+                  </>
+                )}
+            </div>
+            {/* Mobile: Sort menu appears below buttons */}
+            {showSortMenu && !isSelectionMode && (
+              <>
+                <div 
+                  className="fixed inset-0 z-10" 
+                  onClick={() => setShowSortMenu(false)}
+                />
+                <div className="mt-2 w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
                         <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
                           Sort by
                         </div>
@@ -1684,28 +1705,6 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                       </div>
                     </>
                   )}
-                    </div>
-                    <Button
-                      variant={viewMode === 'cover' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setViewMode('cover')}
-                      className={viewMode === 'cover' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
-                      title="Cover view"
-                    >
-                      <Grid3x3 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === 'list' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setViewMode('list')}
-                      className={viewMode === 'list' ? 'accent-button text-white' : 'border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'}
-                      title="List view"
-                    >
-                      <List className="h-4 w-4" />
-                    </Button>
-                  </>
-                )}
-            </div>
           </div>
           <CardContent>
             <div className="flex flex-col gap-2 mb-4">
