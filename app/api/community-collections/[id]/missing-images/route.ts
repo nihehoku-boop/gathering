@@ -10,8 +10,15 @@ export async function GET(
 ) {
   try {
     const session = await getServerSession(authOptions)
+    console.log('[Missing Images] Session check:', {
+      hasSession: !!session,
+      hasUser: !!session?.user,
+      userId: session?.user?.id,
+    })
+    
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      console.error('[Missing Images] Unauthorized - No session or user ID')
+      return NextResponse.json({ error: 'Unauthorized - Please sign in again' }, { status: 401 })
     }
 
     // Check if user is admin

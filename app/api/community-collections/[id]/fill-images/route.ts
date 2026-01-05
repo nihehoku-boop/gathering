@@ -91,8 +91,16 @@ export async function POST(
 ) {
   try {
     const session = await getServerSession(authOptions)
+    console.log('[Fill Images] Session check:', {
+      hasSession: !!session,
+      hasUser: !!session?.user,
+      userId: session?.user?.id,
+      userEmail: session?.user?.email,
+    })
+    
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      console.error('[Fill Images] Unauthorized - No session or user ID')
+      return NextResponse.json({ error: 'Unauthorized - Please sign in again' }, { status: 401 })
     }
 
     // Check if user is admin
