@@ -162,15 +162,16 @@ export default function Navbar() {
               {isMobileMenuOpen && (
                 <>
                   <div 
-                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    className="fixed inset-0 bg-black/50 z-[60] lg:hidden"
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
                   <div 
-                    className="fixed w-56 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-50 overflow-hidden"
+                    className="fixed w-56 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-[70] overflow-hidden"
                     style={{
                       top: menuButtonRef.current ? `${menuButtonRef.current.getBoundingClientRect().bottom + 8}px` : '4rem',
                       right: '1rem',
                     }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {menuItems.map((item) => {
                       const Icon = item.icon
