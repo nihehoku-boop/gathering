@@ -18,6 +18,7 @@ import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X } from 'lucide-react'
 import ImageUpload from './ImageUpload'
+import { useToast } from '@/components/Toaster'
 
 interface CreateRecommendedCollectionDialogProps {
   open: boolean
@@ -39,6 +40,7 @@ export default function CreateRecommendedCollectionDialog({
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
+  const toast = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,11 +73,11 @@ export default function CreateRecommendedCollectionDialog({
         onSuccess()
       } else {
         const error = await res.json()
-        alert(`Error: ${error.error || 'Failed to create collection'}`)
+        toast.error(error.error || 'Failed to create collection')
       }
     } catch (error) {
       console.error('Error creating collection:', error)
-      alert('Failed to create collection')
+      toast.error('An error occurred while creating the collection')
     } finally {
       setLoading(false)
     }

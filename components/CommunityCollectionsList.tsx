@@ -15,6 +15,7 @@ import { getBadgeEmoji } from '@/lib/badges'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
+import AddCollectionPreviewDialog from './AddCollectionPreviewDialog'
 
 interface CommunityItem {
   id: string
@@ -232,10 +233,19 @@ export default function CommunityCollectionsList() {
     }
   }
 
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false)
+  const [previewCollectionId, setPreviewCollectionId] = useState<string | null>(null)
+
   const handleAddToAccount = async (collectionId: string) => {
-    setAddingCollection(collectionId)
+    setPreviewCollectionId(collectionId)
+    setShowPreviewDialog(true)
+  }
+
+  const confirmAddToAccount = async () => {
+    if (!previewCollectionId) return
+    setAddingCollection(previewCollectionId)
     try {
-      const res = await fetch(`/api/community-collections/${collectionId}/add-to-account`, {
+      const res = await fetch(`/api/community-collections/${previewCollectionId}/add-to-account`, {
         method: 'POST',
       })
 
@@ -243,25 +253,32 @@ export default function CommunityCollectionsList() {
         const data = await res.json()
         const newlyUnlocked = data.newlyUnlockedAchievements || []
         
+        const collectionName = data.name || 'Collection'
         if (newlyUnlocked.length > 0) {
           showAlert({
             title: 'Collection Added! 🎉',
-            message: `You unlocked ${newlyUnlocked.length} achievement${newlyUnlocked.length > 1 ? 's' : ''}!`,
+            message: `${collectionName} added! You unlocked ${newlyUnlocked.length} achievement${newlyUnlocked.length > 1 ? 's' : ''}!`,
             type: 'success',
             onConfirm: () => {
-              router.push('/')
+              // Don't auto-redirect, let user stay or navigate manually
             },
+            confirmText: 'OK',
+            showCancel: false,
           })
         } else {
           showAlert({
             title: 'Success',
-            message: 'Collection added to your account!',
+            message: `"${collectionName}" added to your account!`,
             type: 'success',
             onConfirm: () => {
-              router.push('/')
+              // Don't auto-redirect, let user stay or navigate manually
             },
+            confirmText: 'OK',
+            showCancel: false,
           })
         }
+        // Refresh collections list
+        fetchCollections(1, false)
       } else {
         const error = await res.json()
         showAlert({
