@@ -15,11 +15,19 @@ export async function GET(
     }
 
     // Check if user is admin
-    const adminStatus = await isUserAdmin(session.user.id)
-    if (!adminStatus) {
+    try {
+      const adminStatus = await isUserAdmin(session.user.id)
+      if (!adminStatus) {
+        return NextResponse.json(
+          { error: 'Forbidden - Admin access required' },
+          { status: 403 }
+        )
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error)
       return NextResponse.json(
-        { error: 'Forbidden - Admin access required' },
-        { status: 403 }
+        { error: 'Error verifying admin status' },
+        { status: 500 }
       )
     }
 
