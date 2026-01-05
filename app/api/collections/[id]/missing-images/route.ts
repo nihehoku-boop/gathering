@@ -65,7 +65,7 @@ export async function GET(
         category: collection.category,
         template: collection.template,
       },
-      missingImages: itemsWithoutImages.map(item => ({
+      missingImages: itemsWithoutImages.map((item: { id: string; name: string; number: number | null }) => ({
         id: item.id,
         name: item.name,
         number: item.number,
