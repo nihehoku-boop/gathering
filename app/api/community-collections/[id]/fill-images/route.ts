@@ -115,21 +115,48 @@ export async function POST(
     const resolvedParams = await Promise.resolve(params)
     const collectionId = resolvedParams.id
     
+    if (!collectionId) {
+      console.error('[Fill Images] Missing collectionId in params:', resolvedParams)
+      return NextResponse.json(
+        { error: 'Collection ID is required' },
+        { status: 400 }
+      )
+    }
+    
     let body
     try {
       body = await request.json()
+      console.log('[Fill Images] Request body:', { collectionId, bodyKeys: Object.keys(body || {}), itemIdsCount: body?.itemIds?.length })
     } catch (error) {
+      console.error('[Fill Images] Error parsing request body:', error)
       return NextResponse.json(
-        { error: 'Invalid request body' },
+        { error: 'Invalid request body - must be valid JSON' },
         { status: 400 }
       )
     }
     
     const { itemIds, autoFill } = body || {}
     
-    if (!itemIds || !Array.isArray(itemIds) || itemIds.length === 0) {
+    if (!itemIds) {
+      console.error('[Fill Images] Missing itemIds in request body')
       return NextResponse.json(
-        { error: 'itemIds array is required and must not be empty' },
+        { error: 'itemIds is required in request body' },
+        { status: 400 }
+      )
+    }
+    
+    if (!Array.isArray(itemIds)) {
+      console.error('[Fill Images] itemIds is not an array:', typeof itemIds, itemIds)
+      return NextResponse.json(
+        { error: 'itemIds must be an array' },
+        { status: 400 }
+      )
+    }
+    
+    if (itemIds.length === 0) {
+      console.error('[Fill Images] itemIds array is empty')
+      return NextResponse.json(
+        { error: 'itemIds array must not be empty' },
         { status: 400 }
       )
     }
