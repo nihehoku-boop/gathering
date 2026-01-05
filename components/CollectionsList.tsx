@@ -864,10 +864,10 @@ export default function CollectionsList() {
           <CardContent className="py-16 text-center">
             <LogoIcon width={64} height={64} className="mx-auto h-16 w-16 mb-6" />
             <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
-              Your trove is empty
+              Your collections are empty
             </h3>
             <p className="text-[var(--text-secondary)] mb-6 max-w-md mx-auto">
-              Start building your trove by creating your first collection! You can create a custom collection or browse recommended collections to get started.
+              Start building your collection by creating your first collection! You can create a custom collection or browse recommended collections to get started.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button 
@@ -951,7 +951,7 @@ export default function CollectionsList() {
                       />
                       <div className="absolute top-3 left-3 flex items-center gap-2 bg-[var(--bg-secondary)]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[var(--border-color)]/50">
                         <Star className="h-4 w-4 text-[var(--gold-color)] fill-[var(--gold-color)]" />
-                        <span className="text-sm font-semibold text-[var(--text-primary)]">Trove Spotlight</span>
+                        <span className="text-sm font-semibold text-[var(--text-primary)]">Collection Spotlight</span>
                       </div>
                     </div>
                   )}
@@ -1186,7 +1186,7 @@ export default function CollectionsList() {
                             {isComplete && (
                               <span className="text-xs text-[var(--gold-color)] font-semibold flex items-center gap-1">
                                 <Star className="h-3 w-3 fill-[var(--gold-color)]" />
-                                Complete Trove
+                                Complete Collection
                               </span>
                             )}
                             <span className={`font-semibold ${isComplete ? 'text-[var(--gold-color)]' : 'text-[var(--text-primary)]'}`}>
