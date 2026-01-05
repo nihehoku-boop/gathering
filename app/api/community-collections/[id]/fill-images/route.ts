@@ -236,9 +236,15 @@ export async function POST(
         )
 
         if (imageUrl) {
-          await prisma.communityItem.update({
+          const updated = await prisma.communityItem.update({
             where: { id: item.id },
             data: { image: imageUrl },
+          })
+          console.log('[Fill Images] Updated item:', {
+            itemId: item.id,
+            itemName: item.name,
+            imageUrl,
+            updatedImage: updated.image,
           })
           results.filled++
           results.details.push({
