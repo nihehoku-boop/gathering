@@ -96,18 +96,43 @@ export async function POST(
     }
 
     // Check if user is admin
-    const adminStatus = await isUserAdmin(session.user.id)
-    if (!adminStatus) {
+    try {
+      const adminStatus = await isUserAdmin(session.user.id)
+      if (!adminStatus) {
+        return NextResponse.json(
+          { error: 'Forbidden - Admin access required' },
+          { status: 403 }
+        )
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error)
       return NextResponse.json(
-        { error: 'Forbidden - Admin access required' },
-        { status: 403 }
+        { error: 'Error verifying admin status' },
+        { status: 500 }
       )
     }
 
     const resolvedParams = await Promise.resolve(params)
     const collectionId = resolvedParams.id
-    const body = await request.json()
-    const { itemIds, autoFill } = body
+    
+    let body
+    try {
+      body = await request.json()
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      )
+    }
+    
+    const { itemIds, autoFill } = body || {}
+    
+    if (!itemIds || !Array.isArray(itemIds) || itemIds.length === 0) {
+      return NextResponse.json(
+        { error: 'itemIds array is required and must not be empty' },
+        { status: 400 }
+      )
+    }
 
     // Verify collection exists
     const collection = await prisma.communityCollection.findFirst({
