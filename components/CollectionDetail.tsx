@@ -17,6 +17,7 @@ import BulkImportDialog from './BulkImportDialog'
 import EditItemDialog from './EditItemDialog'
 import EditCollectionDialog from './EditCollectionDialog'
 import AlternativeCoversView from './AlternativeCoversView'
+import MissingImagesDialog from './MissingImagesDialog'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 import ItemCardSkeleton from './ItemCardSkeleton'
@@ -123,6 +124,7 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const [shareToken, setShareToken] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
+  const [showMissingImagesDialog, setShowMissingImagesDialog] = useState(false)
   const [openItemMenu, setOpenItemMenu] = useState<string | null>(null)
   const [menuPosition, setMenuPosition] = useState<{ x: number; y: number } | null>(null)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
@@ -1214,6 +1216,15 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     </>
                   )}
                 </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowMissingImagesDialog(true)}
+                  className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition rounded-full"
+                  title="Find Missing Images"
+                >
+                  <ImageIcon className="h-4 w-4" />
+                </Button>
                 <Button
                   variant="outline"
                   size="icon"
@@ -2585,6 +2596,15 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
           }}
         />
       )}
+      <MissingImagesDialog
+        open={showMissingImagesDialog}
+        onOpenChange={setShowMissingImagesDialog}
+        collectionId={collectionId}
+        onImagesFilled={() => {
+          // Refresh items to show newly filled images
+          fetchItems()
+        }}
+      />
       <AlertDialog
         open={alertDialog.open}
         onOpenChange={(open) => !open && closeAlert()}
