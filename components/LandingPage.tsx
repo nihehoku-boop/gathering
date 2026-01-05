@@ -220,9 +220,9 @@ export default function LandingPage() {
 
             {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
             <div className="relative flex items-center justify-center order-1 lg:order-2 mb-2 sm:mb-3 lg:mb-0 overflow-visible">
-              <div className="relative w-full max-w-[80px] sm:max-w-[128px] md:max-w-[176px] lg:max-w-none">
+              <div className="relative w-full max-w-[104px] sm:max-w-[166px] md:max-w-[229px] lg:max-w-none">
                 <div className="relative animate-sparkle w-full aspect-square flex items-center justify-center">
-                  <LogoIcon width={500} height={500} className="w-20 h-20 sm:w-32 sm:h-32 md:w-44 md:h-44 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10 max-w-full max-h-full object-contain" />
+                  <LogoIcon width={500} height={500} className="w-[104px] h-[104px] sm:w-[166px] sm:h-[166px] md:w-[229px] md:h-[229px] lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10 max-w-full max-h-full object-contain" />
                 </div>
                 
                 {/* Glitter/Particle Effect - Hidden on mobile to prevent overflow */}
