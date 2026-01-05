@@ -63,7 +63,7 @@ export default function CommunityCollectionsList() {
   const [searchQuery, setSearchQuery] = useState('') // Debounced search query
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'mostItems' | 'leastItems' | 'alphabetical' | 'popular'>('newest')
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'mostItems' | 'leastItems' | 'alphabetical' | 'popular'>('popular')
   const [votingCollectionId, setVotingCollectionId] = useState<string | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
