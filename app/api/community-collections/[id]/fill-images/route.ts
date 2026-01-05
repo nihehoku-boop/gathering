@@ -89,8 +89,11 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
+  console.log('[Fill Images] Route handler called')
   try {
+    console.log('[Fill Images] Getting session...')
     const session = await getServerSession(authOptions)
+    console.log('[Fill Images] Session:', { hasSession: !!session, userId: session?.user?.id })
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -115,12 +118,31 @@ export async function POST(
     }
     
     // Read request body - same pattern as working route
-    const body = await request.json()
-    const { itemIds, autoFill } = body
-    
-    if (!itemIds || !Array.isArray(itemIds) || itemIds.length === 0) {
+    let body
+    try {
+      body = await request.json()
+    } catch (error) {
+      console.error('[Fill Images] Failed to parse request body:', error)
       return NextResponse.json(
-        { error: 'itemIds must be a non-empty array' },
+        { error: 'Invalid JSON in request body', details: error instanceof Error ? error.message : String(error) },
+        { status: 400 }
+      )
+    }
+    
+    const { itemIds, autoFill } = body || {}
+    
+    if (!itemIds) {
+      console.error('[Fill Images] Missing itemIds in body:', { bodyKeys: Object.keys(body || {}) })
+      return NextResponse.json(
+        { error: 'itemIds is required in request body' },
+        { status: 400 }
+      )
+    }
+    
+    if (!Array.isArray(itemIds)) {
+      console.error('[Fill Images] itemIds is not an array:', { type: typeof itemIds, value: itemIds })
+      return NextResponse.json(
+        { error: 'itemIds must be an array' },
         { status: 400 }
       )
     }
