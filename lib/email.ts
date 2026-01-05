@@ -26,7 +26,7 @@ function getResendClient(): Resend | null {
  */
 function normalizeFromEmail(fromEmail: string | undefined): string {
   if (!fromEmail) {
-    return 'Gathering <onboarding@resend.dev>'
+    return 'Colletro <onboarding@resend.dev>'
   }
 
   // Remove any extra whitespace
@@ -62,7 +62,7 @@ function normalizeFromEmail(fromEmail: string | undefined): string {
 
   // If we can't parse it, use default
   console.warn('[Email] Invalid from email format, using default:', trimmed)
-  return 'Gathering <onboarding@resend.dev>'
+  return 'Colletro <onboarding@resend.dev>'
 }
 
 // Email templates
@@ -82,7 +82,7 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
     const { data, error } = await client.emails.send({
       from: fromEmail,
       to: email,
-      subject: 'Reset Your Gathering Password',
+      subject: 'Reset Your Colletro Password',
       html: `
         <!DOCTYPE html>
         <html>
@@ -92,7 +92,7 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
           </head>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
             <div style="background-color: #0f1114; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
-              <h1 style="color: #FFD60A; margin: 0 0 10px 0; font-size: 24px;">Gathering</h1>
+              <h1 style="color: #FFD60A; margin: 0 0 10px 0; font-size: 24px;">Colletro</h1>
               <p style="color: #fafafa; margin: 0; font-size: 14px;">Your Collection Manager</p>
             </div>
             
@@ -102,7 +102,7 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
               <p style="color: #666;">${userName ? `Hi ${userName},` : 'Hi,'}</p>
               
               <p style="color: #666;">
-                We received a request to reset your password for your Gathering account. Click the button below to reset your password:
+                We received a request to reset your password for your Colletro account. Click the button below to reset your password:
               </p>
               
               <div style="text-align: center; margin: 30px 0;">
@@ -131,7 +131,7 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
             </div>
             
             <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
-              <p>© ${new Date().getFullYear()} Gathering. All rights reserved.</p>
+              <p>© ${new Date().getFullYear()} Colletro. All rights reserved.</p>
               <p style="margin: 5px 0;">
                 <a href="${process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'}/privacy" style="color: #999; text-decoration: none;">Privacy Policy</a> | 
                 <a href="${process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'}/terms" style="color: #999; text-decoration: none;">Terms of Service</a>
@@ -141,18 +141,18 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
         </html>
       `,
       text: `
-Reset Your Gathering Password
+Reset Your Colletro Password
 
 ${userName ? `Hi ${userName},` : 'Hi,'}
 
-We received a request to reset your password for your Gathering account.
+We received a request to reset your password for your Colletro account.
 
 Click this link to reset your password:
 ${resetLink}
 
 This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.
 
-© ${new Date().getFullYear()} Gathering. All rights reserved.
+© ${new Date().getFullYear()} Colletro. All rights reserved.
       `.trim(),
     })
 
@@ -187,7 +187,7 @@ export async function sendWelcomeEmail(email: string, userName?: string) {
     const { data, error } = await client.emails.send({
       from: fromEmail,
       to: email,
-      subject: 'Welcome to Gathering!',
+      subject: 'Welcome to Colletro!',
       html: `
         <!DOCTYPE html>
         <html>
@@ -197,17 +197,17 @@ export async function sendWelcomeEmail(email: string, userName?: string) {
           </head>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
             <div style="background-color: #0f1114; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
-              <h1 style="color: #FFD60A; margin: 0 0 10px 0; font-size: 24px;">Gathering</h1>
+              <h1 style="color: #FFD60A; margin: 0 0 10px 0; font-size: 24px;">Colletro</h1>
               <p style="color: #fafafa; margin: 0; font-size: 14px;">Your Collection Manager</p>
             </div>
             
             <div style="background-color: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h2 style="color: #0f1114; margin-top: 0;">Welcome to Gathering! 🎉</h2>
+              <h2 style="color: #0f1114; margin-top: 0;">Welcome to Colletro! 🎉</h2>
               
               <p style="color: #666;">${userName ? `Hi ${userName},` : 'Hi,'}</p>
               
               <p style="color: #666;">
-                Thank you for joining Gathering! We're excited to help you organize and track your collections.
+                Thank you for joining Colletro! We're excited to help you organize and track your collections.
               </p>
               
               <div style="background-color: #f5f5f5; border-radius: 6px; padding: 20px; margin: 20px 0;">
@@ -233,17 +233,17 @@ export async function sendWelcomeEmail(email: string, userName?: string) {
             </div>
             
             <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
-              <p>© ${new Date().getFullYear()} Gathering. All rights reserved.</p>
+              <p>© ${new Date().getFullYear()} Colletro. All rights reserved.</p>
             </div>
           </body>
         </html>
       `,
       text: `
-Welcome to Gathering! 🎉
+Welcome to Colletro! 🎉
 
 ${userName ? `Hi ${userName},` : 'Hi,'}
 
-Thank you for joining Gathering! We're excited to help you organize and track your collections.
+Thank you for joining Colletro! We're excited to help you organize and track your collections.
 
 Get Started:
 - Create your first collection
@@ -255,7 +255,7 @@ Visit ${appUrl} to get started.
 
 If you have any questions, check out our Help & FAQ page: ${appUrl}/help
 
-© ${new Date().getFullYear()} Gathering. All rights reserved.
+© ${new Date().getFullYear()} Colletro. All rights reserved.
       `.trim(),
     })
 
@@ -304,7 +304,7 @@ export async function sendVerificationEmail(email: string, verificationLink: str
           </head>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
             <div style="background-color: #0f1114; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
-              <h1 style="color: #FFD60A; margin: 0 0 10px 0; font-size: 24px;">Gathering</h1>
+              <h1 style="color: #FFD60A; margin: 0 0 10px 0; font-size: 24px;">Colletro</h1>
               <p style="color: #fafafa; margin: 0; font-size: 14px;">Your Collection Manager</p>
             </div>
             
@@ -343,7 +343,7 @@ export async function sendVerificationEmail(email: string, verificationLink: str
             </div>
             
             <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
-              <p>© ${new Date().getFullYear()} Gathering. All rights reserved.</p>
+              <p>© ${new Date().getFullYear()} Colletro. All rights reserved.</p>
               <p style="margin: 5px 0;">
                 <a href="${process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'}/privacy" style="color: #999; text-decoration: none;">Privacy Policy</a> | 
                 <a href="${process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'}/terms" style="color: #999; text-decoration: none;">Terms of Service</a>
@@ -364,7 +364,7 @@ ${verificationLink}
 
 This link will expire in 24 hours. If you didn't create an account, you can safely ignore this email.
 
-© ${new Date().getFullYear()} Gathering. All rights reserved.
+© ${new Date().getFullYear()} Colletro. All rights reserved.
       `.trim(),
     })
 
