@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react'
+import { ArrowRight, Sparkles, ChevronDown, ChevronDown as ArrowDown } from 'lucide-react'
 import LogoIcon from './LogoIcon'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -181,35 +181,35 @@ export default function LandingPage() {
         </nav>
 
         {/* Hero Content - Split Layout */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 py-4 sm:py-8 lg:py-32 overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-16 items-center max-w-7xl mx-auto">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-20 pt-24 sm:pt-32 lg:pt-0 pb-4 sm:py-8 lg:py-32 overflow-hidden min-h-[calc(100vh-80px)] sm:min-h-auto flex flex-col justify-center">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center max-w-7xl mx-auto">
             {/* Text Side */}
             <div className="text-center lg:text-left order-2 lg:order-1">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-2 sm:mb-3 lg:mb-6 leading-tight px-2 sm:px-0">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-5 lg:mb-6 leading-tight px-2 sm:px-0">
                 <span className="text-[#fafafa]">Your Collection</span>
                 <br />
                 <span className="bg-gradient-to-r from-[var(--accent-color)] to-blue-500 bg-clip-text text-transparent">
                   Trove
                 </span>
             </h1>
-              <p className="text-sm sm:text-base lg:text-xl xl:text-2xl text-[#969696] mb-3 sm:mb-4 lg:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
+              <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-[#969696] mb-6 sm:mb-7 lg:mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0 px-2 sm:px-0">
                 Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.
             </p>
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center lg:justify-start px-2 sm:px-0">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-4 justify-center lg:justify-start px-2 sm:px-0">
               <Button
                 onClick={handleGetStarted}
                 size="lg"
-                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-xs sm:text-sm lg:text-lg px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4 lg:py-6 rounded-full smooth-transition group w-full sm:w-auto"
+                className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-hover)] text-white text-sm sm:text-base lg:text-lg px-5 sm:px-7 lg:px-8 py-3 sm:py-5 lg:py-6 rounded-full smooth-transition group w-full sm:w-auto"
               >
                   {session ? 'Go to My Trove' : 'Get Started'}
-                <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 group-hover:translate-x-1 smooth-transition" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 lg:h-5 lg:w-5 group-hover:translate-x-1 smooth-transition" />
               </Button>
               {!session && (
                 <Link href="/auth/signin" className="w-full sm:w-auto">
                   <Button
                     variant="outline"
                     size="lg"
-                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-xs sm:text-sm lg:text-lg px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4 lg:py-6 rounded-full smooth-transition w-full sm:w-auto"
+                    className="border-[#353842] text-[#fafafa] hover:bg-[#2a2d35] text-sm sm:text-base lg:text-lg px-5 sm:px-7 lg:px-8 py-3 sm:py-5 lg:py-6 rounded-full smooth-transition w-full sm:w-auto"
                   >
                     Sign In
                   </Button>
@@ -219,10 +219,10 @@ export default function LandingPage() {
             </div>
 
             {/* Logo Side - Hero (Standing Alone, Bigger with Glitter) */}
-            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-2 sm:mb-3 lg:mb-0 overflow-visible">
-              <div className="relative w-full max-w-[104px] sm:max-w-[166px] md:max-w-[229px] lg:max-w-none">
+            <div className="relative flex items-center justify-center order-1 lg:order-2 mb-4 sm:mb-5 lg:mb-0 overflow-visible">
+              <div className="relative w-full max-w-[130px] sm:max-w-[200px] md:max-w-[280px] lg:max-w-none">
                 <div className="relative animate-sparkle w-full aspect-square flex items-center justify-center">
-                  <LogoIcon width={500} height={500} className="w-[104px] h-[104px] sm:w-[166px] sm:h-[166px] md:w-[229px] md:h-[229px] lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10 max-w-full max-h-full object-contain" />
+                  <LogoIcon width={500} height={500} className="w-[130px] h-[130px] sm:w-[200px] sm:h-[200px] md:w-[280px] md:h-[280px] lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10 max-w-full max-h-full object-contain" />
                 </div>
                 
                 {/* Glitter/Particle Effect - Hidden on mobile to prevent overflow */}
@@ -257,6 +257,14 @@ export default function LandingPage() {
               {/* Decorative elements - Hidden on mobile to prevent overflow */}
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--accent-color)]/20 rounded-full blur-2xl -z-10 hidden sm:block"></div>
               <div className="absolute -top-4 -right-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl -z-10 hidden sm:block"></div>
+            </div>
+          </div>
+          
+          {/* Scroll Indicator - Only visible on mobile */}
+          <div className="flex justify-center mt-8 sm:mt-0 lg:hidden">
+            <div className="flex flex-col items-center gap-2 animate-bounce">
+              <span className="text-xs text-[#969696] mb-1">Scroll to explore</span>
+              <ChevronDown className="h-6 w-6 text-[var(--accent-color)] animate-pulse" />
             </div>
           </div>
         </div>
