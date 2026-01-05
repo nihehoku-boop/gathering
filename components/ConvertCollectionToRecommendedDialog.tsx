@@ -84,6 +84,8 @@ export default function ConvertCollectionToRecommendedDialog({
 
       if (res.ok) {
         onSuccess()
+        // Dispatch event to notify other components to refresh
+        window.dispatchEvent(new CustomEvent('recommendedCollectionsUpdated'))
         onOpenChange(false)
         setSelectedCollectionId(null)
         setSearchQuery('')
