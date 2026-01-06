@@ -9,9 +9,33 @@
  * Run with: tsx scripts/migrate-categories.ts
  */
 
+import * as dotenv from 'dotenv'
+import * as path from 'path'
 import { PrismaClient } from '@prisma/client'
 import { normalizeCategory, AVAILABLE_CATEGORIES } from '../lib/categories'
 import { parseTags, stringifyTags, AVAILABLE_TAGS } from '../lib/tags'
+
+// Load environment variables in order of precedence:
+// 1. .env.production (if exists, for production runs)
+// 2. .env.local (local overrides)
+// 3. .env (default)
+const envProduction = path.join(process.cwd(), '.env.production')
+const envLocal = path.join(process.cwd(), '.env.local')
+const envDefault = path.join(process.cwd(), '.env')
+
+try {
+  if (require('fs').existsSync(envProduction)) {
+    dotenv.config({ path: envProduction })
+  }
+  if (require('fs').existsSync(envLocal)) {
+    dotenv.config({ path: envLocal, override: false })
+  }
+  dotenv.config({ path: envDefault, override: false })
+} catch (error) {
+  console.warn('Warning: Could not load all environment files:', error)
+  // Fallback to default .env
+  dotenv.config()
+}
 
 const prisma = new PrismaClient()
 

@@ -254,6 +254,15 @@ export default function AdminDashboard() {
             Convert Collection
           </Button>
           <Button 
+            onClick={handleMigrateCategories}
+            disabled={migratingCategories}
+            variant="outline"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+          >
+            <Database className="mr-2 h-4 w-4" />
+            {migratingCategories ? 'Migrating...' : 'Migrate Categories'}
+          </Button>
+          <Button 
             onClick={handleGenerateCovers}
             disabled={generatingCovers}
             variant="outline"
