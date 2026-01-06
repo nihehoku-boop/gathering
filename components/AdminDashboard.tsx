@@ -443,6 +443,18 @@ export default function AdminDashboard() {
         onOpenChange={setShowConvertDialog}
         onSuccess={fetchCollections}
       />
+      <AlertDialog
+        open={alertDialog.open}
+        onOpenChange={(open) => !open && closeAlert()}
+        title={alertDialog.title}
+        message={alertDialog.message}
+        type={alertDialog.type}
+        confirmText={alertDialog.confirmText}
+        cancelText={alertDialog.cancelText}
+        showCancel={alertDialog.showCancel}
+        onConfirm={alertDialog.onConfirm}
+        onCancel={alertDialog.onCancel}
+      />
     </Tabs>
   )
 }
