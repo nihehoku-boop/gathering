@@ -465,6 +465,9 @@ export default function CollectionsList() {
             setCollections(prev => prev.filter(c => c.id !== id))
             setFilteredCollections(prev => prev.filter(c => c.id !== id))
             
+            // Dispatch event to notify Sidebar to refresh
+            window.dispatchEvent(new CustomEvent('collectionsUpdated'))
+            
             // Refresh from server in background (non-blocking) to ensure consistency
             // Since cache is invalidated, this will fetch fresh data
             // We do this asynchronously to not block the UI update
