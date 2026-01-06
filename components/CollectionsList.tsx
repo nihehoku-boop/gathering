@@ -465,8 +465,12 @@ export default function CollectionsList() {
             setCollections(prev => prev.filter(c => c.id !== id))
             setFilteredCollections(prev => prev.filter(c => c.id !== id))
             
-            // Then refresh from server to ensure consistency
-            fetchCollections()
+            // Refresh from server in background (non-blocking) to ensure consistency
+            // Since cache is invalidated, this will fetch fresh data
+            // We do this asynchronously to not block the UI update
+            setTimeout(() => {
+              fetchCollections()
+            }, 100)
             
             setAlertDialog({
               open: true,
