@@ -98,8 +98,6 @@ export async function POST(request: NextRequest) {
       }
       throw error
     }
-
-    return NextResponse.json({ success: true, id: report.id }, { status: 201 })
   } catch (error) {
     console.error('Error creating bug report:', error)
     return NextResponse.json(
