@@ -417,12 +417,12 @@ export default function CommunityCollectionsList() {
           </Button>
           {session && (
             <Button
-              onClick={() => setShowCreateDialog(true)}
+              onClick={() => setShowShareDialog(true)}
               className="accent-button text-white smooth-transition"
               size="sm"
             >
-              <Plus className="mr-2 h-4 w-4" />
-              Create Collection
+              <Users className="mr-2 h-4 w-4" />
+              Add Collection
             </Button>
           )}
         </div>
