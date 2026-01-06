@@ -20,16 +20,48 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create bug report in database
-    // We'll store it in a new table or use the existing reports table
-    // For now, let's create a ContentReport with type 'bug' or 'feature'
+    // Create bug report - store in a special system collection
+    // First, find or create a system collection for bug reports
+    let bugReportCollection = await prisma.communityCollection.findFirst({
+      where: {
+        name: 'System: Bug Reports',
+        userId: 'system', // We'll need a system user or handle this differently
+      },
+    })
+
+    // If no system collection exists, create a placeholder one
+    // For now, we'll create a minimal community collection just for bug reports
+    if (!bugReportCollection) {
+      // Get the first admin user to use as the "owner" of the system collection
+      const adminUser = await prisma.user.findFirst({
+        where: { isAdmin: true },
+        select: { id: true },
+      })
+
+      if (!adminUser) {
+        return NextResponse.json(
+          { error: 'System error: No admin user found' },
+          { status: 500 }
+        )
+      }
+
+      bugReportCollection = await prisma.communityCollection.create({
+        data: {
+          name: 'System: Bug Reports',
+          description: 'Internal collection for storing bug reports and feature requests',
+          userId: adminUser.id,
+          isHidden: true, // Hide from public view
+        },
+      })
+    }
+
+    // Create bug report as a ContentReport linked to the system collection
     const report = await prisma.contentReport.create({
       data: {
-        type: 'bug', // or 'feature' based on user selection, but for now just 'bug'
         reason: 'Bug Report / Feature Request',
         description: description.trim(),
         reporterId: session.user.id,
-        // No collectionId or itemId for bug reports
+        communityCollectionId: bugReportCollection.id,
         status: 'pending',
       },
     })
