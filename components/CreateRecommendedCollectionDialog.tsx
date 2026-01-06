@@ -71,6 +71,8 @@ export default function CreateRecommendedCollectionDialog({
         setSelectedTags([])
         onOpenChange(false)
         onSuccess()
+        // Dispatch event to notify RecommendedCollectionsList to refresh
+        window.dispatchEvent(new CustomEvent('recommendedCollectionsUpdated'))
       } else {
         const error = await res.json()
         toast.error(error.error || 'Failed to create collection')
