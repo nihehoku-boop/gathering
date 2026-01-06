@@ -219,10 +219,12 @@ export default function ContentReportsViewer() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <CardTitle className="text-lg text-[var(--text-primary)]">
-                        {report.communityCollection.name}
+                        {report.communityCollection.name === 'System: Bug Reports' 
+                          ? 'Bug Report / Feature Request'
+                          : report.communityCollection.name}
                       </CardTitle>
                       {getStatusBadge(report.status)}
-                      {report.communityCollection.isHidden && (
+                      {report.communityCollection.isHidden && report.communityCollection.name !== 'System: Bug Reports' && (
                         <Badge className="bg-red-500 text-white">
                           <EyeOff className="mr-1 h-3 w-3" />
                           Hidden
@@ -233,10 +235,14 @@ export default function ContentReportsViewer() {
                       <span>
                         Reported by: <strong>{report.reporter.name || report.reporter.email}</strong>
                       </span>
-                      <span>•</span>
-                      <span>
-                        Created by: <strong>{report.communityCollection.user.name || report.communityCollection.user.email}</strong>
-                      </span>
+                      {report.communityCollection.name !== 'System: Bug Reports' && (
+                        <>
+                          <span>•</span>
+                          <span>
+                            Created by: <strong>{report.communityCollection.user.name || report.communityCollection.user.email}</strong>
+                          </span>
+                        </>
+                      )}
                       <span>•</span>
                       <span>
                         {new Date(report.createdAt).toLocaleDateString()}
@@ -301,27 +307,7 @@ export default function ContentReportsViewer() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Collection</h4>
-                  <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
-                    <p className="font-medium text-[var(--text-primary)]">
-                      {selectedReport.communityCollection.name}
-                    </p>
-                    {selectedReport.communityCollection.description && (
-                      <p className="text-sm text-[var(--text-secondary)] mt-1">
-                        {selectedReport.communityCollection.description}
-                      </p>
-                    )}
-                    {selectedReport.communityCollection.coverImage && (
-                      <img
-                        src={selectedReport.communityCollection.coverImage}
-                        alt={selectedReport.communityCollection.name}
-                        className="mt-2 w-full h-32 object-cover rounded"
-                      />
-                    )}
-                  </div>
-                </div>
+              {selectedReport.communityCollection.name === 'System: Bug Reports' ? (
                 <div>
                   <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Reporter</h4>
                   <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
@@ -330,63 +316,96 @@ export default function ContentReportsViewer() {
                     </p>
                   </div>
                 </div>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Collection Items</h4>
-                <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
-                  {selectedReport.communityCollection.items && selectedReport.communityCollection.items.length > 0 ? (
-                    <div className="space-y-2">
-                      <p className="text-xs text-[var(--text-secondary)] mb-2">
-                        {selectedReport.communityCollection.items.length} item{selectedReport.communityCollection.items.length !== 1 ? 's' : ''} in this collection:
-                      </p>
-                      <div className="max-h-64 overflow-y-auto space-y-2">
-                        {selectedReport.communityCollection.items.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex items-start gap-3 p-2 bg-[var(--bg-secondary)] rounded border border-[var(--border-color)]"
-                          >
-                            {item.image && (
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-16 h-16 object-cover rounded flex-shrink-0"
-                              />
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                {item.number !== null && (
-                                  <span className="text-xs font-medium text-[var(--text-secondary)]">
-                                    #{item.number}
-                                  </span>
-                                )}
-                                <p className="text-sm font-medium text-[var(--text-primary)] truncate">
-                                  {item.name}
-                                </p>
-                              </div>
-                              {item.notes && (
-                                <p className="text-xs text-[var(--text-secondary)] mt-1 line-clamp-2">
-                                  {item.notes}
-                                </p>
-                              )}
-                              {item.customFields && item.customFields !== '{}' && (
-                                <p className="text-xs text-[var(--text-secondary)] mt-1 opacity-75">
-                                  Has custom fields
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        ))}
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Collection</h4>
+                      <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
+                        <p className="font-medium text-[var(--text-primary)]">
+                          {selectedReport.communityCollection.name}
+                        </p>
+                        {selectedReport.communityCollection.description && (
+                          <p className="text-sm text-[var(--text-secondary)] mt-1">
+                            {selectedReport.communityCollection.description}
+                          </p>
+                        )}
+                        {selectedReport.communityCollection.coverImage && (
+                          <img
+                            src={selectedReport.communityCollection.coverImage}
+                            alt={selectedReport.communityCollection.name}
+                            className="mt-2 w-full h-32 object-cover rounded"
+                          />
+                        )}
                       </div>
                     </div>
-                  ) : (
-                    <p className="text-sm text-[var(--text-secondary)] text-center py-4">
-                      <Package className="h-5 w-5 mx-auto mb-2 opacity-50" />
-                      No items in this collection
-                    </p>
-                  )}
-                </div>
-              </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Reporter</h4>
+                      <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
+                        <p className="text-sm text-[var(--text-primary)]">
+                          {selectedReport.reporter.name || selectedReport.reporter.email}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Collection Items</h4>
+                    <div className="bg-[var(--bg-tertiary)] p-3 rounded-lg">
+                      {selectedReport.communityCollection.items && selectedReport.communityCollection.items.length > 0 ? (
+                        <div className="space-y-2">
+                          <p className="text-xs text-[var(--text-secondary)] mb-2">
+                            {selectedReport.communityCollection.items.length} item{selectedReport.communityCollection.items.length !== 1 ? 's' : ''} in this collection:
+                          </p>
+                          <div className="max-h-64 overflow-y-auto space-y-2">
+                            {selectedReport.communityCollection.items.map((item) => (
+                              <div
+                                key={item.id}
+                                className="flex items-start gap-3 p-2 bg-[var(--bg-secondary)] rounded border border-[var(--border-color)]"
+                              >
+                                {item.image && (
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-16 h-16 object-cover rounded flex-shrink-0"
+                                  />
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    {item.number !== null && (
+                                      <span className="text-xs font-medium text-[var(--text-secondary)]">
+                                        #{item.number}
+                                      </span>
+                                    )}
+                                    <p className="text-sm font-medium text-[var(--text-primary)] truncate">
+                                      {item.name}
+                                    </p>
+                                  </div>
+                                  {item.notes && (
+                                    <p className="text-xs text-[var(--text-secondary)] mt-1 line-clamp-2">
+                                      {item.notes}
+                                    </p>
+                                  )}
+                                  {item.customFields && item.customFields !== '{}' && (
+                                    <p className="text-xs text-[var(--text-secondary)] mt-1 opacity-75">
+                                      Has custom fields
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-[var(--text-secondary)] text-center py-4">
+                          <Package className="h-5 w-5 mx-auto mb-2 opacity-50" />
+                          No items in this collection
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div>
                 <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Report Details</h4>
@@ -438,15 +457,17 @@ export default function ContentReportsViewer() {
                   <XCircle className="mr-2 h-4 w-4" />
                   Dismiss
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleReportAction(selectedReport.id, 'hide')}
-                  disabled={actionLoading === selectedReport.id}
-                  className="flex-1 border-red-500 text-red-500 hover:bg-red-500/10"
-                >
-                  <EyeOff className="mr-2 h-4 w-4" />
-                  Hide Collection
-                </Button>
+                {selectedReport.communityCollection.name !== 'System: Bug Reports' && (
+                  <Button
+                    variant="outline"
+                    onClick={() => handleReportAction(selectedReport.id, 'hide')}
+                    disabled={actionLoading === selectedReport.id}
+                    className="flex-1 border-red-500 text-red-500 hover:bg-red-500/10"
+                  >
+                    <EyeOff className="mr-2 h-4 w-4" />
+                    Hide Collection
+                  </Button>
+                )}
                 <Button
                   onClick={() => handleReportAction(selectedReport.id, 'resolve')}
                   disabled={actionLoading === selectedReport.id}
