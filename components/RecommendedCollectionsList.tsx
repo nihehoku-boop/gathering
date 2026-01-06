@@ -62,12 +62,12 @@ export default function RecommendedCollectionsList() {
 
   const fetchCollections = async (forceRefresh = false) => {
     try {
+      setLoading(true) // Set loading state when fetching
       console.log('[RecommendedCollectionsList] Fetching collections...', { forceRefresh })
       const startTime = performance.now()
-      // Add cache-busting query parameter to force fresh data after deletions
-      const url = forceRefresh 
-        ? `/api/recommended-collections?t=${Date.now()}`
-        : '/api/recommended-collections'
+      // Always add cache-busting query parameter to ensure fresh data
+      // The API will bypass cache when this parameter is present
+      const url = `/api/recommended-collections?t=${Date.now()}`
       const res = await fetch(url, {
         cache: 'no-store',
         headers: { 
