@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
 import { checkAllAchievements } from '@/lib/achievement-checker'
+import { serverCache, cacheKeys } from '@/lib/server-cache'
 
 export async function POST(
   request: NextRequest,
@@ -59,6 +60,9 @@ export async function POST(
         items: true,
       },
     })
+
+    // Invalidate user collections cache
+    serverCache.delete(cacheKeys.userCollections(session.user.id))
 
     // Check and unlock achievements
     console.log(`[API] Checking achievements for user ${session.user.id} after adding community collection`)
