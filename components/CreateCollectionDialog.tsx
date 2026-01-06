@@ -19,6 +19,7 @@ import { ITEM_TEMPLATES, type ItemTemplate } from '@/lib/item-templates'
 import ImageUpload from './ImageUpload'
 import { useToast } from '@/components/Toaster'
 import { ChevronDown, ChevronUp, Info } from 'lucide-react'
+import { AVAILABLE_CATEGORIES, normalizeCategory } from '@/lib/categories'
 
 interface CreateCollectionDialogProps {
   open: boolean
@@ -42,32 +43,12 @@ export default function CreateCollectionDialog({
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [showTemplatePreview, setShowTemplatePreview] = useState(false)
-  const [categorySuggestions, setCategorySuggestions] = useState<string[]>([])
-  const [showCategorySuggestions, setShowCategorySuggestions] = useState(false)
   const [showCoverImageUrl, setShowCoverImageUrl] = useState(false)
   const toast = useToast()
 
   useEffect(() => {
     fetchFolders()
-    fetchCategories()
   }, [])
-
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch('/api/collections')
-      if (res.ok) {
-        const collections = await res.json()
-        const categories = Array.from(new Set(
-          collections
-            .map((c: { category: string | null }) => c.category)
-            .filter((cat: string | null): cat is string => cat !== null && cat.trim() !== '')
-        )).sort() as string[]
-        setCategorySuggestions(categories)
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error)
-    }
-  }
 
   const getSelectedTemplate = (): ItemTemplate | undefined => {
     return ITEM_TEMPLATES.find(t => t.id === template)
@@ -156,43 +137,24 @@ export default function CreateCollectionDialog({
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2 relative">
+              <div className="space-y-2">
                 <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
-                <div className="relative">
-                  <Input
-                    id="category"
-                    value={category}
-                    onChange={(e) => {
-                      setCategory(e.target.value)
-                      setShowCategorySuggestions(true)
-                    }}
-                    onFocus={() => setShowCategorySuggestions(true)}
-                    onBlur={() => setTimeout(() => setShowCategorySuggestions(false), 200)}
-                    placeholder="e.g., Comics, Books, Cards"
-                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
-                    list="category-suggestions"
-                  />
-                  {showCategorySuggestions && categorySuggestions.length > 0 && category && (
-                    <div className="absolute z-10 w-full mt-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-md shadow-lg max-h-40 overflow-y-auto">
-                      {categorySuggestions
-                        .filter(cat => cat.toLowerCase().includes(category.toLowerCase()))
-                        .slice(0, 5)
-                        .map((cat) => (
-                          <button
-                            key={cat}
-                            type="button"
-                            onClick={() => {
-                              setCategory(cat)
-                              setShowCategorySuggestions(false)
-                            }}
-                            className="w-full text-left px-3 py-2 hover:bg-[var(--bg-tertiary)] text-[var(--text-primary)] text-sm smooth-transition"
-                          >
-                            {cat}
-                          </button>
-                        ))}
-                    </div>
-                  )}
-                </div>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] smooth-transition"
+                >
+                  <option value="">Select a category</option>
+                  {AVAILABLE_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-[var(--text-muted)]">
+                  Choose the main category for this collection
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="folder" className="text-[var(--text-primary)]">Folder</Label>

@@ -52,6 +52,7 @@ export default function AdminDashboard() {
   const [showImportDialog, setShowImportDialog] = useState(false)
   const [showConvertDialog, setShowConvertDialog] = useState(false)
   const [generatingCovers, setGeneratingCovers] = useState(false)
+  const [migratingCategories, setMigratingCategories] = useState(false)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
@@ -105,6 +106,50 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Error deleting collection:', error)
+    }
+  }
+
+  const handleMigrateCategories = async () => {
+    const confirmed = await showConfirm({
+      title: 'Migrate Categories',
+      message: 'This will normalize all categories to the predefined list and remove collection-type tags. This may take a few moments. Continue?',
+      type: 'warning',
+      confirmText: 'Migrate',
+      cancelText: 'Cancel',
+    })
+
+    if (!confirmed) return
+
+    setMigratingCategories(true)
+    try {
+      const res = await fetch('/api/admin/migrate-categories', {
+        method: 'POST',
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        showAlert({
+          title: 'Success!',
+          message: `Migration complete!\n- Collections updated: ${data.collectionsUpdated}\n- Recommended collections updated: ${data.recommendedUpdated}\n- Community collections updated: ${data.communityUpdated}\n- Collection-type tags removed: ${data.tagsCleaned}${data.errors && data.errors.length > 0 ? `\n\nErrors: ${data.errors.length}` : ''}`,
+          type: 'success',
+        })
+      } else {
+        const error = await res.json()
+        showAlert({
+          title: 'Error',
+          message: error.error || 'Failed to migrate categories',
+          type: 'error',
+        })
+      }
+    } catch (error) {
+      console.error('Error migrating categories:', error)
+      showAlert({
+        title: 'Error',
+        message: 'Failed to migrate categories',
+        type: 'error',
+      })
+    } finally {
+      setMigratingCategories(false)
     }
   }
 
@@ -252,6 +297,15 @@ export default function AdminDashboard() {
           >
             <Plus className="mr-2 h-4 w-4" />
             Convert Collection
+          </Button>
+          <Button 
+            onClick={handleMigrateCategories}
+            disabled={migratingCategories}
+            variant="outline"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+          >
+            <Database className="mr-2 h-4 w-4" />
+            {migratingCategories ? 'Migrating...' : 'Migrate Categories'}
           </Button>
           <Button 
             onClick={handleGenerateCovers}

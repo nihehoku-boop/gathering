@@ -55,7 +55,9 @@ export default function EditCommunityCollectionDialog({
     if (collection) {
       setName(collection.name)
       setDescription(collection.description || '')
-      setCategory(collection.category || '')
+      // Normalize category to match predefined categories
+      const normalized = normalizeCategory(collection.category)
+      setCategory(normalized || collection.category || '')
       setTemplate(collection.template || 'custom')
       setCoverImage(collection.coverImage || '')
       setCoverImageFit((collection as any).coverImageFit || 'cover')
@@ -132,12 +134,19 @@ export default function EditCommunityCollectionDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
-              <Input
+              <select
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
-              />
+                className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] smooth-transition"
+              >
+                <option value="">Select a category</option>
+                {AVAILABLE_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="template" className="text-[var(--text-primary)]">Item Template</Label>
