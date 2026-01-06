@@ -179,6 +179,19 @@ export default function CollectionsList() {
     }
   }, [])
 
+  // Listen for collection updates (e.g., when adding from community collections)
+  useEffect(() => {
+    const handleCollectionsUpdated = () => {
+      console.log('[CollectionsList] Received collectionsUpdated event, refreshing...')
+      fetchCollections()
+    }
+
+    window.addEventListener('collectionsUpdated', handleCollectionsUpdated)
+    return () => {
+      window.removeEventListener('collectionsUpdated', handleCollectionsUpdated)
+    }
+  }, [])
+
   // Listen for storage changes to sync with sidebar drag-and-drop
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
@@ -224,7 +237,8 @@ export default function CollectionsList() {
   const fetchCollections = async () => {
     try {
       const res = await fetch('/api/collections', {
-        next: { revalidate: 60 }, // Revalidate every 60 seconds
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' },
       })
       if (res.ok) {
         const data = await res.json()
