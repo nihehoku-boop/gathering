@@ -327,6 +327,10 @@ async function deleteCollectionHandler(
       where: { id: collectionId },
     })
 
+    // Invalidate caches
+    serverCache.delete(cacheKeys.collection(collectionId))
+    serverCache.delete(cacheKeys.userCollections(session.user.id))
+
     return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Error deleting collection:', error)
