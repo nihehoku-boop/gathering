@@ -51,6 +51,7 @@ const REPORT_REASONS: Record<string, { label: string; color: string }> = {
   spam: { label: 'Spam or Scam', color: 'bg-red-500' },
   inappropriate: { label: 'Inappropriate Content', color: 'bg-orange-500' },
   copyright: { label: 'Copyright Violation', color: 'bg-purple-500' },
+  'Bug Report / Feature Request': { label: 'Bug Report / Feature Request', color: 'bg-blue-500' },
   other: { label: 'Other', color: 'bg-gray-500' },
 }
 
