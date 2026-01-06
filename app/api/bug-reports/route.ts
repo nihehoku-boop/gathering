@@ -58,8 +58,7 @@ export async function POST(request: NextRequest) {
     // Note: The unique constraint on (communityCollectionId, reporterId) prevents
     // multiple reports from the same user for the same collection.
     // For bug reports, we want to allow multiple reports, so we'll delete any existing
-    // pending bug report from this user first, or we can create multiple system collections.
-    // Actually, let's just try to create it and handle the unique constraint error.
+    // pending bug report from this user first if there's a conflict.
     try {
       const report = await prisma.contentReport.create({
         data: {
@@ -85,7 +84,7 @@ export async function POST(request: NextRequest) {
         })
         
         // Create the new report
-        const report = await prisma.contentReport.create({
+        const newReport = await prisma.contentReport.create({
           data: {
             reason: 'Bug Report / Feature Request',
             description: description.trim(),
@@ -95,7 +94,7 @@ export async function POST(request: NextRequest) {
           },
         })
 
-        return NextResponse.json({ success: true, id: report.id }, { status: 201 })
+        return NextResponse.json({ success: true, id: newReport.id }, { status: 201 })
       }
       throw error
     }
