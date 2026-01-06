@@ -120,6 +120,9 @@ export default function SettingsPage() {
     // Also update localStorage immediately
     localStorage.setItem('accentColor', color)
     
+    // Force a re-render by dispatching a custom event that components can listen to
+    window.dispatchEvent(new CustomEvent('accent-color-changed', { detail: { color } }))
+    
     try {
       // Save to user profile
       const res = await fetch('/api/user/profile', {
@@ -399,7 +402,13 @@ export default function SettingsPage() {
                       onChange={toggleTheme}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)]"></div>
+                    <div 
+                      className="w-11 h-6 peer-focus:outline-none peer-focus:ring-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
+                      style={{
+                        backgroundColor: theme === 'light' ? accentColor : '#2a2d35',
+                        '--tw-ring-color': accentColor,
+                      } as React.CSSProperties}
+                    ></div>
                   </label>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[#969696]">
@@ -451,9 +460,48 @@ export default function SettingsPage() {
                     </button>
                   ))}
                 </div>
+                {/* Visual Preview */}
+                <div className="mt-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-hover)]">
+                  <p className="text-xs font-medium text-[var(--text-secondary)] mb-3">Preview:</p>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <button 
+                      className="px-4 py-2 rounded-lg text-white font-medium smooth-transition"
+                      style={{ backgroundColor: accentColor }}
+                    >
+                      Button Preview
+                    </button>
+                    <div 
+                      className="px-4 py-2 rounded-lg border-2 font-medium smooth-transition"
+                      style={{ 
+                        borderColor: accentColor,
+                        color: accentColor,
+                        backgroundColor: 'transparent'
+                      }}
+                    >
+                      Outline Button
+                    </div>
+                    <div className="flex-1 min-w-[120px]">
+                      <div className="h-2 bg-[var(--bg-secondary)] rounded-full overflow-hidden">
+                        <div 
+                          className="h-full rounded-full smooth-transition"
+                          style={{ 
+                            width: '60%',
+                            backgroundColor: accentColor
+                          }}
+                        ></div>
+                      </div>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1">Progress Bar</p>
+                    </div>
+                  </div>
+                </div>
                 <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                   <span>Selected:</span>
-                  <span className="font-medium text-[var(--text-primary)]">{accentColor}</span>
+                  <span 
+                    className="font-medium text-[var(--text-primary)] font-mono"
+                    style={{ color: accentColor }}
+                  >
+                    {accentColor}
+                  </span>
                 </div>
                 {saving && <p className="text-xs text-[var(--text-secondary)]">Saving...</p>}
                 {saveSuccess && <p className="text-xs text-green-500">Saved!</p>}
@@ -488,7 +536,13 @@ export default function SettingsPage() {
                       disabled={saving}
                       className="sr-only peer"
                     />
-                    <div className={`w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)] ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+                    <div 
+                      className={`w-11 h-6 peer-focus:outline-none peer-focus:ring-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      style={{
+                        backgroundColor: enableGoldenAccents ? accentColor : '#2a2d35',
+                        '--tw-ring-color': accentColor,
+                      } as React.CSSProperties}
+                    ></div>
                   </label>
                 </div>
                 {saving && <p className="text-xs text-[var(--text-secondary)]">Saving...</p>}
@@ -513,7 +567,13 @@ export default function SettingsPage() {
                       disabled={saving}
                       className="sr-only peer"
                     />
-                    <div className={`w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)] ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+                    <div 
+                      className={`w-11 h-6 peer-focus:outline-none peer-focus:ring-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      style={{
+                        backgroundColor: autoRemoveFromWishlist ? accentColor : '#2a2d35',
+                        '--tw-ring-color': accentColor,
+                      } as React.CSSProperties}
+                    ></div>
                   </label>
                 </div>
                 {saving && <p className="text-xs text-[var(--text-secondary)]">Saving...</p>}
@@ -606,7 +666,13 @@ export default function SettingsPage() {
                       onChange={(e) => handleShowProgressChange(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)]"></div>
+                    <div 
+                      className="w-11 h-6 peer-focus:outline-none peer-focus:ring-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
+                      style={{
+                        backgroundColor: showProgressInSidebar ? accentColor : '#2a2d35',
+                        '--tw-ring-color': accentColor,
+                      } as React.CSSProperties}
+                    ></div>
                   </label>
                 </div>
               </div>
