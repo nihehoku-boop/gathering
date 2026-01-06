@@ -80,6 +80,7 @@ export default function Sidebar() {
   })
   const [isMounted, setIsMounted] = useState(false)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [showBugReportDialog, setShowBugReportDialog] = useState(false)
   const [enableGoldenAccents, setEnableGoldenAccents] = useState(true)
   const { alertDialog, showAlert, closeAlert } = useAlert()
 
@@ -973,14 +974,14 @@ export default function Sidebar() {
                   <FolderPlus className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => window.open('https://github.com/nihehoku-boop/gathering/issues/new', '_blank')}
+                  onClick={() => setShowBugReportDialog(true)}
                   className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
                   title="Report Bug / Propose Feature"
                 >
                   <Bug className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => window.open('https://buymeacoffee.com/yourusername', '_blank')}
+                  onClick={() => window.open('https://buymeacoffee.com/henske', '_blank')}
                   className="p-2 text-[var(--text-muted)] hover:text-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] rounded-full smooth-transition"
                   title="Support / Tip"
                 >
@@ -1034,6 +1035,10 @@ export default function Sidebar() {
           fetchCollections()
           setShowCreateDialog(false)
         }}
+      />
+      <BugReportDialog
+        open={showBugReportDialog}
+        onOpenChange={setShowBugReportDialog}
       />
     </>
   )

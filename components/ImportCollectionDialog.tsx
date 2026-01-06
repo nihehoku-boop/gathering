@@ -356,8 +356,8 @@ export default function ImportCollectionDialog({
             <div className="bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-lg p-4 space-y-2">
               <p className="text-sm font-medium text-[var(--text-primary)]">Supported Formats:</p>
               <ul className="text-xs text-[var(--text-secondary)] space-y-1 list-disc list-inside">
-                <li>JSON files exported from Gathering</li>
-                <li>CSV files exported from Gathering</li>
+                <li>JSON files exported from Colletro</li>
+                <li>CSV files exported from Colletro</li>
                 <li>Files must match the export format structure</li>
               </ul>
             </div>
