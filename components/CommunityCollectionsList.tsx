@@ -191,6 +191,9 @@ export default function CommunityCollectionsList() {
         limit: '20',
       })
       
+      // Add cache-busting parameter to ensure fresh data
+      params.append('t', Date.now().toString())
+      
       if (searchQuery.trim()) {
         params.append('search', searchQuery.trim())
       }
@@ -205,7 +208,10 @@ export default function CommunityCollectionsList() {
       
       const res = await fetch(`/api/community-collections?${params.toString()}`, {
         cache: 'no-store',
-        headers: { 'Cache-Control': 'no-cache' }
+        headers: { 
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        }
       })
       const endTime = performance.now()
       console.log(`[CommunityCollectionsList] Fetch completed in ${(endTime - startTime).toFixed(2)}ms`)
@@ -338,19 +344,20 @@ export default function CommunityCollectionsList() {
         setFilteredCollections(prev => prev.filter(c => c.id !== collectionId))
         setTotalCount(prev => Math.max(0, prev - 1))
         
-        // Refresh from server to ensure consistency
-        setCurrentPage(1)
-        setCollections([])
-        setHasMore(true)
-        fetchCollections(1, false)
-        
         // Dispatch event to notify other components to refresh
         window.dispatchEvent(new CustomEvent('communityCollectionsUpdated'))
+        
         showAlert({
           title: 'Success',
           message: 'Collection deleted successfully.',
           type: 'success',
         })
+        
+        // Refresh from server in background to ensure consistency (non-blocking)
+        setTimeout(() => {
+          setCurrentPage(1)
+          fetchCollections(1, false)
+        }, 100)
       } else {
         const error = await res.json()
         showAlert({
