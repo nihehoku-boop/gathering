@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Plus, BookOpen, Search, Edit, Trash2, User, List, Filter as FilterIcon, X, ChevronDown, ChevronUp, Heart, CheckCircle2, Flag } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { parseTags, getTagColor, AVAILABLE_TAGS } from '@/lib/tags'
-import CreateCommunityCollectionDialog from './CreateCommunityCollectionDialog'
+import ShareToCommunityDialog from './ShareToCommunityDialog'
 import EditCommunityCollectionDialog from './EditCommunityCollectionDialog'
 import ReportCollectionDialog from './ReportCollectionDialog'
 import { getBadgeEmoji } from '@/lib/badges'
@@ -67,7 +67,7 @@ export default function CommunityCollectionsList() {
   const [votingCollectionId, setVotingCollectionId] = useState<string | null>(null)
   const [showFilters, setShowFilters] = useState(false)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
-  const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [showShareDialog, setShowShareDialog] = useState(false)
   const [editingCollection, setEditingCollection] = useState<CommunityCollection | null>(null)
   const [managingCollectionId, setManagingCollectionId] = useState<string | null>(null)
   const [reportingCollection, setReportingCollection] = useState<{ id: string; name: string } | null>(null)
@@ -804,9 +804,9 @@ export default function CommunityCollectionsList() {
         </div>
       )}
 
-      <CreateCommunityCollectionDialog
-        open={showCreateDialog}
-        onOpenChange={setShowCreateDialog}
+      <ShareToCommunityDialog
+        open={showShareDialog}
+        onOpenChange={setShowShareDialog}
         onSuccess={() => {
           setCurrentPage(1)
           setCollections([])
