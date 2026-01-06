@@ -120,7 +120,6 @@ export default function AdminDashboard() {
 
     if (!confirmed) return
 
-    // Set loading state
     setMigratingCategories(true)
     try {
       const res = await fetch('/api/admin/migrate-categories', {
