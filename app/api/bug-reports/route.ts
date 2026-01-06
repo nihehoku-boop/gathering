@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from "@/lib/auth-config"
 import { prisma } from '@/lib/prisma'
+import { sanitizeText } from '@/lib/sanitize'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,6 +17,17 @@ export async function POST(request: NextRequest) {
     if (!description || typeof description !== 'string' || !description.trim()) {
       return NextResponse.json(
         { error: 'Description is required' },
+        { status: 400 }
+      )
+    }
+
+    // Sanitize description to prevent XSS and injection attacks
+    // Limit to 5000 characters for bug reports
+    const sanitizedDescription = sanitizeText(description, 5000)
+    
+    if (!sanitizedDescription) {
+      return NextResponse.json(
+        { error: 'Description cannot be empty after sanitization' },
         { status: 400 }
       )
     }
@@ -73,7 +85,7 @@ export async function POST(request: NextRequest) {
     const report = await prisma.contentReport.create({
       data: {
         reason: 'Bug Report / Feature Request',
-        description: description.trim(),
+        description: sanitizedDescription,
         reporterId: session.user.id,
         communityCollectionId: bugReportCollection.id,
         status: 'pending',
