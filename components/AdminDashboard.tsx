@@ -108,6 +108,50 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleMigrateCategories = async () => {
+    const confirmed = await showConfirm({
+      title: 'Migrate Categories',
+      message: 'This will normalize all categories to the predefined list and remove collection-type tags. This may take a few moments. Continue?',
+      type: 'warning',
+      confirmText: 'Migrate',
+      cancelText: 'Cancel',
+    })
+
+    if (!confirmed) return
+
+    setMigratingCategories(true)
+    try {
+      const res = await fetch('/api/admin/migrate-categories', {
+        method: 'POST',
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        showAlert({
+          title: 'Success!',
+          message: `Migration complete!\n- Collections updated: ${data.collectionsUpdated}\n- Recommended collections updated: ${data.recommendedUpdated}\n- Community collections updated: ${data.communityUpdated}\n- Collection-type tags removed: ${data.tagsCleaned}${data.errors && data.errors.length > 0 ? `\n\nErrors: ${data.errors.length}` : ''}`,
+          type: 'success',
+        })
+      } else {
+        const error = await res.json()
+        showAlert({
+          title: 'Error',
+          message: error.error || 'Failed to migrate categories',
+          type: 'error',
+        })
+      }
+    } catch (error) {
+      console.error('Error migrating categories:', error)
+      showAlert({
+        title: 'Error',
+        message: 'Failed to migrate categories',
+        type: 'error',
+      })
+    } finally {
+      setMigratingCategories(false)
+    }
+  }
+
   const handleGenerateCovers = async () => {
     const confirmed = await showConfirm({
       title: 'Generate Collection Covers',
