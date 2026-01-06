@@ -5,9 +5,13 @@
 // Collection cover image dimensions
 // Display: h-48 (192px) with w-full (responsive width)
 // Optimal format: 2:1 aspect ratio for collection cards
-// Generated at 2x for retina displays: 768px x 384px
-const COVER_WIDTH = 768
+// Generated at 2x for retina displays: 800px x 384px (slightly wider)
+const COVER_WIDTH = 800
 const COVER_HEIGHT = 384
+
+// Padding from edges
+const HORIZONTAL_PADDING = 60
+const VERTICAL_PADDING = 40
 
 // Color scheme
 const COLORS = {
@@ -58,35 +62,59 @@ function escapeXml(text: string): string {
 }
 
 export function generateSVGCover(collectionName: string, category: string | null = null): string {
-  const maxLength = 30
-  const displayName = collectionName.length > maxLength 
-    ? collectionName.substring(0, maxLength - 3) + '...'
-    : collectionName
-
-  const words = displayName.split(' ')
+  // Calculate available width (accounting for padding)
+  const availableWidth = COVER_WIDTH - (HORIZONTAL_PADDING * 2)
+  
+  // Start with base font size and adjust based on text length
+  let baseFontSize = 48
+  const minFontSize = 32
+  const maxFontSize = 52
+  
+  // Estimate text width (rough approximation: average char width is ~0.6 * fontSize)
+  const estimatedTextWidth = collectionName.length * (baseFontSize * 0.6)
+  
+  // If text is too wide, reduce font size
+  if (estimatedTextWidth > availableWidth * 0.9) {
+    // Calculate optimal font size to fit in available width
+    const optimalSize = Math.floor((availableWidth * 0.9) / (collectionName.length * 0.6))
+    baseFontSize = Math.max(minFontSize, Math.min(maxFontSize, optimalSize))
+  }
+  
+  // Word wrap with padding consideration
+  const words = collectionName.split(' ')
   const lines: string[] = []
   let currentLine = ''
   
-  // Wider format allows more characters per line (roughly 30-35 chars)
+  // Calculate max characters per line based on font size and available width
+  const avgCharWidth = baseFontSize * 0.6
+  const maxCharsPerLine = Math.floor(availableWidth / avgCharWidth)
+  
   for (const word of words) {
-    if ((currentLine + word).length <= 35) {
-      currentLine += (currentLine ? ' ' : '') + word
+    const testLine = currentLine ? `${currentLine} ${word}` : word
+    if (testLine.length <= maxCharsPerLine) {
+      currentLine = testLine
     } else {
       if (currentLine) lines.push(currentLine)
       currentLine = word
+      // If a single word is too long, truncate it
+      if (currentLine.length > maxCharsPerLine) {
+        currentLine = currentLine.substring(0, maxCharsPerLine - 3) + '...'
+      }
     }
   }
   if (currentLine) lines.push(currentLine)
 
-  // Limit to 2 lines for better readability in wider format
+  // Limit to 2 lines for better readability
   if (lines.length > 2) {
     lines.splice(2)
-    lines[1] = lines[1].substring(0, 32) + '...'
+    // Truncate second line if needed
+    if (lines[1].length > maxCharsPerLine) {
+      lines[1] = lines[1].substring(0, maxCharsPerLine - 3) + '...'
+    }
   }
 
-  // Adjust font size and spacing for wider format
-  const fontSize = 56
-  const lineHeight = 70
+  // Calculate line height based on font size
+  const lineHeight = baseFontSize * 1.4
   const startY = COVER_HEIGHT / 2 - ((lines.length - 1) * lineHeight) / 2
   const categoryColors = getCategoryColor(category)
 
@@ -109,8 +137,8 @@ export function generateSVGCover(collectionName: string, category: string | null
   ${lines.map((line, index) => `
   <text x="${COVER_WIDTH / 2}" y="${startY + index * lineHeight}" 
     font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="${fontSize}" font-weight="700" fill="${COLORS.text.primary}" 
-    text-anchor="middle" letter-spacing="-1px" dominant-baseline="central">
+    font-size="${baseFontSize}" font-weight="700" fill="${COLORS.text.primary}" 
+    text-anchor="middle" letter-spacing="-0.5px" dominant-baseline="central">
     ${escapeXml(line)}
   </text>`).join('')}
   ${category ? `
