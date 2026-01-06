@@ -499,7 +499,13 @@ export default function ProfilePage() {
                           onChange={(e) => setIsPrivate(e.target.checked)}
                           className="sr-only peer"
                         />
-                        <div className="w-11 h-6 bg-[#2a2d35] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--accent-color)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent-color)]"></div>
+                        <div 
+                          className="w-11 h-6 peer-focus:outline-none peer-focus:ring-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
+                          style={{
+                            backgroundColor: isPrivate ? accentColor : '#2a2d35',
+                            '--tw-ring-color': accentColor,
+                          } as React.CSSProperties}
+                        ></div>
                       </label>
                     </div>
                   </div>
