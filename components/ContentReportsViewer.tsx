@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { AlertTriangle, CheckCircle2, XCircle, Eye, EyeOff, Clock, Package } from 'lucide-react'
 import { useAlert } from '@/hooks/useAlert'
 import AlertDialog from './ui/alert-dialog'
+import { escapeHtml } from '@/lib/sanitize'
 
 interface ContentReport {
   id: string
@@ -271,7 +272,7 @@ export default function ContentReportsViewer() {
                   {report.description && (
                     <div>
                       <span className="text-xs font-medium text-[var(--text-secondary)]">Description:</span>
-                      <p className="text-sm text-[var(--text-primary)] mt-1">{report.description}</p>
+                      <p className="text-sm text-[var(--text-primary)] mt-1 whitespace-pre-wrap">{escapeHtml(report.description)}</p>
                     </div>
                   )}
                   {report.adminNotes && (
@@ -419,8 +420,8 @@ export default function ContentReportsViewer() {
                   {selectedReport.description && (
                     <div>
                       <span className="text-xs text-[var(--text-secondary)]">Description:</span>
-                      <p className="text-sm text-[var(--text-primary)] mt-1">
-                        {selectedReport.description}
+                      <p className="text-sm text-[var(--text-primary)] mt-1 whitespace-pre-wrap">
+                        {escapeHtml(selectedReport.description)}
                       </p>
                     </div>
                   )}
