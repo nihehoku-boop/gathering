@@ -50,7 +50,10 @@ export default function RecommendedCollectionsList() {
     const handleUpdate = () => {
       console.log('[RecommendedCollectionsList] Received update event, refreshing...')
       // Force refresh to bypass cache after deletions/updates
-      fetchCollections(true)
+      // Small delay to ensure server-side changes are committed
+      setTimeout(() => {
+        fetchCollections(true)
+      }, 100)
     }
     
     window.addEventListener('recommendedCollectionsUpdated', handleUpdate)
