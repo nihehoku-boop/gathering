@@ -16,6 +16,7 @@ import {
 import { stringifyTags, parseTags } from '@/lib/tags'
 import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES, TemplateField } from '@/lib/item-templates'
+import { AVAILABLE_CATEGORIES, normalizeCategory } from '@/lib/categories'
 import { X, Plus, Trash2, GripVertical } from 'lucide-react'
 import ImageUpload from './ImageUpload'
 import {
@@ -100,7 +101,9 @@ export default function EditRecommendedCollectionDialog({
     if (collection) {
       setName(collection.name)
       setDescription(collection.description || '')
-      setCategory(collection.category || '')
+      // Normalize category to match predefined categories
+      const normalized = normalizeCategory(collection.category)
+      setCategory(normalized || collection.category || '')
       setTemplate(collection.template || 'custom')
       
       // Load custom field definitions
@@ -371,13 +374,19 @@ export default function EditRecommendedCollectionDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
-              <Input
+              <select
                 id="category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                placeholder="e.g., Comics, Books"
-                className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
-              />
+                className="w-full px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-hover)] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] smooth-transition"
+              >
+                <option value="">Select a category</option>
+                {AVAILABLE_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="template" className="text-[var(--text-primary)]">Item Template</Label>
