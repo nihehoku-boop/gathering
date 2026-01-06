@@ -52,6 +52,7 @@ export default function AdminDashboard() {
   const [showImportDialog, setShowImportDialog] = useState(false)
   const [showConvertDialog, setShowConvertDialog] = useState(false)
   const [generatingCovers, setGeneratingCovers] = useState(false)
+  const [migratingCategories, setMigratingCategories] = useState(false)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
