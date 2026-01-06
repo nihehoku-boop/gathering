@@ -65,10 +65,23 @@ export default function ConvertCollectionToRecommendedDialog({
       if (searchQuery.trim()) {
         params.append('search', searchQuery.trim())
       }
-      const res = await fetch(`/api/admin/collections?${params.toString()}`)
+      params.append('limit', '100') // Get more results for admin
+      const res = await fetch(`/api/community-collections?${params.toString()}`)
       if (res.ok) {
         const data = await res.json()
-        setCollections(data.collections || [])
+        // Transform community collections to match the expected format
+        setCollections((data.collections || []).map((cc: any) => ({
+          id: cc.id,
+          name: cc.name,
+          description: cc.description,
+          category: cc.category,
+          template: cc.template,
+          coverImage: cc.coverImage,
+          coverImageFit: cc.coverImageFit,
+          tags: cc.tags,
+          user: cc.user,
+          _count: { items: cc.items?.length || 0 },
+        })))
       }
     } catch (error) {
       console.error('Error fetching collections:', error)
@@ -80,8 +93,12 @@ export default function ConvertCollectionToRecommendedDialog({
   const handleConvert = async (collectionId: string) => {
     setConverting(collectionId)
     try {
-      const res = await fetch(`/api/admin/collections/${collectionId}/convert-to-recommended`, {
+      const res = await fetch(`/api/admin/community-collections/${collectionId}/convert-to-recommended`, {
         method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
       })
 
       if (res.ok) {
@@ -116,7 +133,7 @@ export default function ConvertCollectionToRecommendedDialog({
             <div>
               <CardTitle className="text-[var(--text-primary)]">Convert Collection to Recommended</CardTitle>
               <CardDescription className="text-[var(--text-secondary)]">
-                Select a user collection to convert into a recommended collection
+                Select a community collection to convert into a recommended collection
               </CardDescription>
             </div>
             <Button
