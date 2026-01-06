@@ -8,6 +8,7 @@ import { rateLimitConfigs } from '@/lib/rate-limit'
 import { validateRequestBody, createCollectionSchema } from '@/lib/validation-schemas'
 import { logger } from '@/lib/logger'
 import { serverCache, cacheKeys } from '@/lib/server-cache'
+import { generateCoverDataURL } from '@/lib/generate-cover'
 
 async function getCollectionsHandler() {
   try {
@@ -156,7 +157,7 @@ async function createCollectionHandler(request: NextRequest) {
         customFieldDefinitions: template === 'custom' && customFieldDefinitions
           ? (typeof customFieldDefinitions === 'string' ? customFieldDefinitions : JSON.stringify(customFieldDefinitions))
           : '[]',
-        coverImage: coverImage || null,
+        coverImage: coverImage || generateCoverDataURL(name, category || null),
         coverImageAspectRatio: coverImageAspectRatio || null,
         coverImageFit: coverImageFit || 'contain',
         tags: tagsString,
