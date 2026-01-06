@@ -1,51 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="400" height="600" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+<svg width="800" height="384" viewBox="0 0 800 384" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Background gradient with category color -->
-    <linearGradient id="bg-gradient" x1="0" y1="0" x2="400" y2="600">
+    <linearGradient id="bg-gradient" x1="0" y1="0" x2="800" y2="384">
       <stop offset="0%" style="stop-color:#1a1d24;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#8B4513;stop-opacity:0.15" />
       <stop offset="100%" style="stop-color:#2a2d35;stop-opacity:1" />
     </linearGradient>
-    <!-- Simple grid pattern -->
     <pattern id="grid-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
       <rect width="20" height="20" fill="none"/>
       <line x1="0" y1="0" x2="0" y2="20" stroke="#fafafa" stroke-width="0.5" opacity="0.05"/>
       <line x1="0" y1="0" x2="20" y2="0" stroke="#fafafa" stroke-width="0.5" opacity="0.05"/>
     </pattern>
   </defs>
+  <rect width="800" height="384" fill="url(#bg-gradient)"/>
+  <rect width="800" height="384" fill="url(#grid-pattern)"/>
   
-  <!-- Background -->
-  <rect width="400" height="600" fill="url(#bg-gradient)"/>
-  <rect width="400" height="600" fill="url(#grid-pattern)"/>
-  
-  <!-- Collection name text -->
-  
-  <text 
-    x="200" 
-    y="300" 
+  <text x="400" y="192" 
     font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="48" 
-    font-weight="700" 
-    fill="#fafafa" 
-    text-anchor="middle"
-    letter-spacing="-1px"
-    dominant-baseline="central">
+    font-size="48" font-weight="700" fill="#fafafa" 
+    text-anchor="middle" letter-spacing="-0.5px" dominant-baseline="central">
     My Test Collection
   </text>
   
-  
-  <!-- Category badge -->
-  <rect x="140" y="450" width="120" height="32" rx="16" fill="#CD853F" opacity="0.25"/>
-  <text 
-    x="200" 
-    y="466" 
+  <rect x="320" y="307.20000000000005" width="160" height="36" rx="18" fill="#CD853F" opacity="0.25"/>
+  <text x="400" y="325.20000000000005" 
     font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="14" 
-    font-weight="600" 
-    fill="#CD853F" 
-    text-anchor="middle"
-    dominant-baseline="central">
+    font-size="16" font-weight="600" fill="#CD853F" 
+    text-anchor="middle" dominant-baseline="central">
     Books
   </text>
 </svg>
