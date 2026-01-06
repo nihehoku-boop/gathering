@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { parseTags, stringifyTags } from '@/lib/tags'
+import { AVAILABLE_CATEGORIES, normalizeCategory } from '@/lib/categories'
 import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES } from '@/lib/item-templates'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
