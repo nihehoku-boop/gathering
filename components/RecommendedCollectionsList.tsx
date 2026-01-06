@@ -183,6 +183,15 @@ export default function RecommendedCollectionsList() {
           confirmText: 'OK',
           showCancel: false,
         })
+        // Close preview dialog
+        setShowPreviewDialog(false)
+        setPreviewCollectionId(null)
+        
+        // Dispatch event to notify CollectionsList to refresh
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('collectionsUpdated'))
+        }, 100)
+        
         // Refresh collections list
         fetchCollections()
       } else {

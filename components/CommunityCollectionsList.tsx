@@ -282,8 +282,10 @@ export default function CommunityCollectionsList() {
         setShowPreviewDialog(false)
         setPreviewCollectionId(null)
         
-        // Dispatch event to notify CollectionsList to refresh
-        window.dispatchEvent(new CustomEvent('collectionsUpdated'))
+        // Dispatch event to notify CollectionsList to refresh (use setTimeout to ensure event is dispatched after dialog closes)
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('collectionsUpdated'))
+        }, 100)
         
         // Refresh collections list
         fetchCollections(1, false)
@@ -835,6 +837,13 @@ export default function CommunityCollectionsList() {
           </div>
         </div>
       )}
+      <AddCollectionPreviewDialog
+        open={showPreviewDialog}
+        onOpenChange={setShowPreviewDialog}
+        collectionId={previewCollectionId || ''}
+        collectionType="community"
+        onConfirm={confirmAddToAccount}
+      />
       <AlertDialog
         open={alertDialog.open}
         onOpenChange={(open) => !open && closeAlert()}
