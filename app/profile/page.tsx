@@ -24,6 +24,7 @@ export default function ProfilePage() {
   const [bio, setBio] = useState('')
   const [bannerImage, setBannerImage] = useState('')
   const [profileImage, setProfileImage] = useState('')
+  const [accentColor, setAccentColor] = useState('#34C759')
   const [profileTheme, setProfileTheme] = useState<{
     backgroundColor?: string
     backgroundGradient?: string
@@ -47,6 +48,34 @@ export default function ProfilePage() {
     ]
     return basicBadges
   })
+
+  useEffect(() => {
+    // Load accent color from profile
+    const loadAccentColor = async () => {
+      try {
+        const res = await fetch('/api/user/profile')
+        if (res.ok) {
+          const data = await res.json()
+          setAccentColor(data.accentColor || '#34C759')
+        }
+      } catch (error) {
+        console.error('Error loading accent color:', error)
+      }
+    }
+    loadAccentColor()
+
+    // Listen for accent color changes from settings
+    const handleAccentColorChange = (e: CustomEvent) => {
+      if (e.detail?.color) {
+        setAccentColor(e.detail.color)
+      }
+    }
+    window.addEventListener('accent-color-changed', handleAccentColorChange as EventListener)
+    
+    return () => {
+      window.removeEventListener('accent-color-changed', handleAccentColorChange as EventListener)
+    }
+  }, [])
 
   useEffect(() => {
     if (session?.user) {
@@ -700,10 +729,14 @@ export default function ProfilePage() {
                               className={`
                                 p-4 rounded-lg border-2 smooth-transition text-left
                                 ${profileTheme.cardStyle === style
-                                  ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
+                                  ? 'bg-opacity-20'
                                   : 'border-[var(--border-hover)] hover:border-[#666] bg-[#2a2d35]'
                                 }
                               `}
+                              style={{
+                                borderColor: profileTheme.cardStyle === style ? accentColor : undefined,
+                                backgroundColor: profileTheme.cardStyle === style ? `${accentColor}20` : undefined,
+                              } as React.CSSProperties}
                             >
                               <div className="text-sm font-medium text-[var(--text-primary)] mb-2 capitalize">
                                 {style}
@@ -739,10 +772,14 @@ export default function ProfilePage() {
                             className={`
                               p-4 rounded-lg border-2 smooth-transition text-center
                               ${profileTheme.fontSize === size
-                                ? 'border-[var(--accent-color)] bg-[var(--accent-color)]/20'
+                                ? 'bg-opacity-20'
                                 : 'border-[var(--border-hover)] hover:border-[#666] bg-[#2a2d35]'
                               }
                             `}
+                            style={{
+                              borderColor: profileTheme.fontSize === size ? accentColor : undefined,
+                              backgroundColor: profileTheme.fontSize === size ? `${accentColor}20` : undefined,
+                            } as React.CSSProperties}
                           >
                             <div className="text-sm font-medium text-[var(--text-primary)] capitalize">
                               {size}
