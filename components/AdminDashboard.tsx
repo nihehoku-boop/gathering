@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users, Database, BarChart3, Flag, TrendingUp } from 'lucide-react'
+import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users, Database, BarChart3, Flag, TrendingUp, Image } from 'lucide-react'
+import { useAlert } from '@/hooks/useAlert'
 import CreateRecommendedCollectionDialog from './CreateRecommendedCollectionDialog'
 import EditRecommendedCollectionDialog from './EditRecommendedCollectionDialog'
 import RecommendedCollectionItemsManager from './RecommendedCollectionItemsManager'
@@ -15,6 +16,7 @@ import ConvertCollectionToRecommendedDialog from './ConvertCollectionToRecommend
 import PrismaLogsViewer from './PrismaLogsViewer'
 import ContentReportsViewer from './ContentReportsViewer'
 import AnalyticsViewer from './AnalyticsViewer'
+import AlertDialog from './ui/alert-dialog'
 import { parseTags, getTagColor } from '@/lib/tags'
 
 interface RecommendedItem {
@@ -49,6 +51,8 @@ export default function AdminDashboard() {
   const [showBulkImport, setShowBulkImport] = useState(false)
   const [showImportDialog, setShowImportDialog] = useState(false)
   const [showConvertDialog, setShowConvertDialog] = useState(false)
+  const [generatingCovers, setGeneratingCovers] = useState(false)
+  const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
 
   useEffect(() => {
     fetchCollections()
@@ -84,6 +88,50 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Error deleting collection:', error)
+    }
+  }
+
+  const handleGenerateCovers = async () => {
+    const confirmed = await showConfirm({
+      title: 'Generate Collection Covers',
+      message: 'This will generate cover images for all collections without covers. This may take a few moments. Continue?',
+      type: 'warning',
+      confirmText: 'Generate',
+      cancelText: 'Cancel',
+    })
+
+    if (!confirmed) return
+
+    setGeneratingCovers(true)
+    try {
+      const res = await fetch('/api/admin/generate-covers', {
+        method: 'POST',
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        showAlert({
+          title: 'Success!',
+          message: `Generated ${data.generated} cover images and updated ${data.updated} collections.${data.errors && data.errors.length > 0 ? `\n\nErrors: ${data.errors.length}` : ''}`,
+          type: 'success',
+        })
+      } else {
+        const error = await res.json()
+        showAlert({
+          title: 'Error',
+          message: error.error || 'Failed to generate covers',
+          type: 'error',
+        })
+      }
+    } catch (error) {
+      console.error('Error generating covers:', error)
+      showAlert({
+        title: 'Error',
+        message: 'Failed to generate covers',
+        type: 'error',
+      })
+    } finally {
+      setGeneratingCovers(false)
     }
   }
 
@@ -172,7 +220,7 @@ export default function AdminDashboard() {
         <div>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-[var(--text-primary)]">Recommended Collections</h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button 
             onClick={() => setShowImportDialog(true)}
             className="accent-button text-white smooth-transition rounded-full"
@@ -187,6 +235,15 @@ export default function AdminDashboard() {
           >
             <Plus className="mr-2 h-4 w-4" />
             Convert Collection
+          </Button>
+          <Button 
+            onClick={handleGenerateCovers}
+            disabled={generatingCovers}
+            variant="outline"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+          >
+            <Image className="mr-2 h-4 w-4" />
+            {generatingCovers ? 'Generating...' : 'Generate Covers'}
           </Button>
           <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
