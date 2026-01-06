@@ -21,9 +21,21 @@
 import * as dotenv from 'dotenv'
 import * as path from 'path'
 
-// Load .env.local first (takes precedence), then .env
-dotenv.config({ path: path.join(process.cwd(), '.env.local') })
-dotenv.config() // This will not override .env.local values
+// Load environment variables in order of precedence:
+// 1. .env.production (if exists, for production runs)
+// 2. .env.local (local overrides)
+// 3. .env (default)
+const envProduction = path.join(process.cwd(), '.env.production')
+const envLocal = path.join(process.cwd(), '.env.local')
+const envDefault = path.join(process.cwd(), '.env')
+
+if (require('fs').existsSync(envProduction)) {
+  dotenv.config({ path: envProduction })
+}
+if (require('fs').existsSync(envLocal)) {
+  dotenv.config({ path: envLocal }) // This will override .env.production values
+}
+dotenv.config() // This will not override existing values
 
 import { prisma } from '../lib/prisma'
 import * as fs from 'fs'
