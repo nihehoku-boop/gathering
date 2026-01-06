@@ -56,12 +56,29 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchCollections()
+    
+    // Listen for recommended collections updates
+    const handleRecommendedCollectionsUpdated = () => {
+      console.log('[AdminDashboard] Received recommendedCollectionsUpdated event, refreshing...')
+      fetchCollections()
+    }
+    
+    window.addEventListener('recommendedCollectionsUpdated', handleRecommendedCollectionsUpdated)
+    return () => {
+      window.removeEventListener('recommendedCollectionsUpdated', handleRecommendedCollectionsUpdated)
+    }
   }, [])
 
   const fetchCollections = async () => {
     try {
       // Add ?admin=true to show all collections (including hidden ones) in admin dashboard
-      const res = await fetch('/api/recommended-collections?admin=true')
+      // Add cache-busting to ensure fresh data
+      const res = await fetch(`/api/recommended-collections?admin=true&_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      })
       if (res.ok) {
         const data = await res.json()
         console.log('Fetched collections:', data)
