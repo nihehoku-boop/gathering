@@ -309,23 +309,21 @@ async function deleteCollectionHandler(
     const resolvedParams = await Promise.resolve(params)
     const collectionId = resolvedParams.id
 
-    const collection = await prisma.collection.findFirst({
+    // Verify ownership and delete in one operation (more efficient)
+    // Using deleteMany with where clause ensures we only delete if user owns it
+    const deleteResult = await prisma.collection.deleteMany({
       where: {
         id: collectionId,
         userId: session.user.id,
       },
     })
 
-    if (!collection) {
+    if (deleteResult.count === 0) {
       return NextResponse.json(
-        { error: 'Collection not found' },
+        { error: 'Collection not found or you do not have permission to delete it' },
         { status: 404 }
       )
     }
-
-    await prisma.collection.delete({
-      where: { id: collectionId },
-    })
 
     // Invalidate caches
     serverCache.delete(cacheKeys.collection(collectionId))
