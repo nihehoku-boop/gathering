@@ -46,9 +46,22 @@ export async function GET(request: NextRequest) {
     })
 
     const response = NextResponse.json(recommendedCollections)
-    // Cache recommended collections for 10 minutes (they don't change frequently)
-    // This significantly reduces database queries
-    response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
+    
+    // Check if there's a cache-busting parameter (t=timestamp)
+    // If so, don't cache the response to ensure fresh data
+    const hasCacheBust = url.searchParams.has('t')
+    
+    if (hasCacheBust) {
+      // No caching when cache-busting parameter is present
+      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+    } else {
+      // Cache recommended collections for 10 minutes (they don't change frequently)
+      // This significantly reduces database queries
+      response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
+    }
+    
     return response
   } catch (error) {
     logger.error('Error fetching recommended collections:', error)
