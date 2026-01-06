@@ -89,7 +89,14 @@ export default function Sidebar() {
 
   const fetchCollections = useCallback(async () => {
     try {
-      const res = await fetch('/api/collections')
+      // Add cache-busting to ensure fresh data
+      const res = await fetch(`/api/collections?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+      })
       if (res.ok) {
         const data = await res.json()
         setCollections(data)
