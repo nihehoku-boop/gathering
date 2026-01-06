@@ -709,6 +709,19 @@ export default function ProfilePage() {
                       <p className="text-xs text-[var(--text-muted)]">
                         Choose either a solid color or a gradient. Gradient will override color if both are set.
                       </p>
+                      {/* Background Preview */}
+                      <div className="mt-3 p-4 rounded-lg border border-[var(--border-hover)] overflow-hidden">
+                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">Preview:</p>
+                        <div 
+                          className="h-24 rounded-lg flex items-center justify-center"
+                          style={{
+                            backgroundColor: profileTheme.backgroundGradient ? undefined : (profileTheme.backgroundColor || '#0f1114'),
+                            background: profileTheme.backgroundGradient || undefined,
+                          } as React.CSSProperties}
+                        >
+                          <span className="text-xs text-white/80 font-medium">Profile Background</span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Card Style */}
@@ -748,7 +761,18 @@ export default function ProfilePage() {
                                 {style}
                               </div>
                               {/* Preview Card */}
-                              <div className={`${cardClassName} rounded-lg p-3 mb-2 shadow-sm`}>
+                              <div 
+                                className={`rounded-lg p-3 mb-2 shadow-sm ${
+                                  style === 'minimal' 
+                                    ? 'bg-transparent border-none' 
+                                    : style === 'bordered'
+                                    ? 'bg-[#1a1d24] border-2'
+                                    : 'bg-[var(--bg-secondary)] border-[var(--border-color)]'
+                                }`}
+                                style={{
+                                  borderColor: style === 'bordered' ? accentColor : undefined,
+                                } as React.CSSProperties}
+                              >
                                 <div className="text-xs font-semibold text-[var(--text-primary)] mb-1">Collection Name</div>
                                 <div className="text-xs text-[var(--text-secondary)]">5 items collected</div>
                               </div>
@@ -787,11 +811,11 @@ export default function ProfilePage() {
                               backgroundColor: profileTheme.fontSize === size ? `${accentColor}20` : undefined,
                             } as React.CSSProperties}
                           >
-                            <div className="text-sm font-medium text-[var(--text-primary)] capitalize">
+                            <div className={`font-medium text-[var(--text-primary)] capitalize mb-2 ${size === 'small' ? 'text-xs' : size === 'medium' ? 'text-sm' : 'text-base'}`}>
                               {size}
                             </div>
-                            <div className={`text-[var(--text-secondary)] mt-1 ${size === 'small' ? 'text-xs' : size === 'medium' ? 'text-sm' : 'text-base'}`}>
-                              Sample Text
+                            <div className={`text-[var(--text-secondary)] ${size === 'small' ? 'text-xs' : size === 'medium' ? 'text-sm' : 'text-base'}`}>
+                              Sample text preview
                             </div>
                           </button>
                         ))}
