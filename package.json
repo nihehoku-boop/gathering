@@ -44,6 +44,7 @@
     "seed:books-remaining-classics": "tsx scripts/seed-books-remaining-classics.ts",
     "seed:books-1001-complete": "tsx scripts/seed-books-1001-complete.ts",
     "cleanup:incomplete-books": "tsx scripts/cleanup-incomplete-book-collections.ts",
+    "complete:incomplete-books": "tsx scripts/complete-incomplete-book-collections.ts",
     "seed:films-best-picture": "tsx scripts/seed-films-best-picture.ts",
     "seed:films-studio-ghibli": "tsx scripts/seed-films-studio-ghibli.ts",
     "seed:films-mcu": "tsx scripts/seed-films-mcu.ts",
