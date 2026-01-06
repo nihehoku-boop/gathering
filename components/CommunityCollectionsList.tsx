@@ -278,6 +278,13 @@ export default function CommunityCollectionsList() {
             showCancel: false,
           })
         }
+        // Close preview dialog
+        setShowPreviewDialog(false)
+        setPreviewCollectionId(null)
+        
+        // Dispatch event to notify CollectionsList to refresh
+        window.dispatchEvent(new CustomEvent('collectionsUpdated'))
+        
         // Refresh collections list
         fetchCollections(1, false)
       } else {
@@ -317,7 +324,17 @@ export default function CommunityCollectionsList() {
       })
 
       if (res.ok) {
-        fetchCollections()
+        // Immediately remove from local state for instant feedback
+        setCollections(prev => prev.filter(c => c.id !== collectionId))
+        setFilteredCollections(prev => prev.filter(c => c.id !== collectionId))
+        setTotalCount(prev => Math.max(0, prev - 1))
+        
+        // Refresh from server to ensure consistency
+        setCurrentPage(1)
+        setCollections([])
+        setHasMore(true)
+        fetchCollections(1, false)
+        
         // Dispatch event to notify other components to refresh
         window.dispatchEvent(new CustomEvent('communityCollectionsUpdated'))
         showAlert({
