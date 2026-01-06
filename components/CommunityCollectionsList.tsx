@@ -248,11 +248,18 @@ export default function CommunityCollectionsList() {
     try {
       const res = await fetch(`/api/community-collections/${previewCollectionId}/add-to-account`, {
         method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
       })
 
       if (res.ok) {
         const data = await res.json()
         const newlyUnlocked = data.newlyUnlockedAchievements || []
+        
+        // Dispatch event to update My Collections view
+        window.dispatchEvent(new CustomEvent('collectionsUpdated'))
         
         const collectionName = data.name || 'Collection'
         if (newlyUnlocked.length > 0) {
