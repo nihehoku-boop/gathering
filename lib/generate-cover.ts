@@ -3,8 +3,11 @@
  */
 
 // Collection cover image dimensions
-const COVER_WIDTH = 400
-const COVER_HEIGHT = 600
+// Display: h-48 (192px) with w-full (responsive width)
+// Optimal format: 2:1 aspect ratio for collection cards
+// Generated at 2x for retina displays: 768px x 384px
+const COVER_WIDTH = 768
+const COVER_HEIGHT = 384
 
 // Color scheme
 const COLORS = {
@@ -64,8 +67,9 @@ export function generateSVGCover(collectionName: string, category: string | null
   const lines: string[] = []
   let currentLine = ''
   
+  // Wider format allows more characters per line (roughly 30-35 chars)
   for (const word of words) {
-    if ((currentLine + word).length <= 20) {
+    if ((currentLine + word).length <= 35) {
       currentLine += (currentLine ? ' ' : '') + word
     } else {
       if (currentLine) lines.push(currentLine)
@@ -74,12 +78,15 @@ export function generateSVGCover(collectionName: string, category: string | null
   }
   if (currentLine) lines.push(currentLine)
 
-  if (lines.length > 3) {
-    lines.splice(3)
-    lines[2] = lines[2].substring(0, 17) + '...'
+  // Limit to 2 lines for better readability in wider format
+  if (lines.length > 2) {
+    lines.splice(2)
+    lines[1] = lines[1].substring(0, 32) + '...'
   }
 
-  const lineHeight = 60
+  // Adjust font size and spacing for wider format
+  const fontSize = 56
+  const lineHeight = 70
   const startY = COVER_HEIGHT / 2 - ((lines.length - 1) * lineHeight) / 2
   const categoryColors = getCategoryColor(category)
 
@@ -102,15 +109,15 @@ export function generateSVGCover(collectionName: string, category: string | null
   ${lines.map((line, index) => `
   <text x="${COVER_WIDTH / 2}" y="${startY + index * lineHeight}" 
     font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="48" font-weight="700" fill="${COLORS.text.primary}" 
+    font-size="${fontSize}" font-weight="700" fill="${COLORS.text.primary}" 
     text-anchor="middle" letter-spacing="-1px" dominant-baseline="central">
     ${escapeXml(line)}
   </text>`).join('')}
   ${category ? `
-  <rect x="${COVER_WIDTH / 2 - 60}" y="${COVER_HEIGHT * 0.75}" width="120" height="32" rx="16" fill="${categoryColors.badge}" opacity="0.25"/>
-  <text x="${COVER_WIDTH / 2}" y="${COVER_HEIGHT * 0.75 + 16}" 
+  <rect x="${COVER_WIDTH / 2 - 80}" y="${COVER_HEIGHT * 0.8}" width="160" height="36" rx="18" fill="${categoryColors.badge}" opacity="0.25"/>
+  <text x="${COVER_WIDTH / 2}" y="${COVER_HEIGHT * 0.8 + 18}" 
     font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="14" font-weight="600" fill="${categoryColors.badge}" 
+    font-size="16" font-weight="600" fill="${categoryColors.badge}" 
     text-anchor="middle" dominant-baseline="central">
     ${escapeXml(category)}
   </text>` : ''}
