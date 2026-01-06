@@ -460,48 +460,9 @@ export default function SettingsPage() {
                     </button>
                   ))}
                 </div>
-                {/* Visual Preview */}
-                <div className="mt-4 p-4 bg-[var(--bg-tertiary)] rounded-lg border border-[var(--border-hover)]">
-                  <p className="text-xs font-medium text-[var(--text-secondary)] mb-3">Preview:</p>
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <button 
-                      className="px-4 py-2 rounded-lg text-white font-medium smooth-transition"
-                      style={{ backgroundColor: accentColor }}
-                    >
-                      Button Preview
-                    </button>
-                    <div 
-                      className="px-4 py-2 rounded-lg border-2 font-medium smooth-transition"
-                      style={{ 
-                        borderColor: accentColor,
-                        color: accentColor,
-                        backgroundColor: 'transparent'
-                      }}
-                    >
-                      Outline Button
-                    </div>
-                    <div className="flex-1 min-w-[120px]">
-                      <div className="h-2 bg-[var(--bg-secondary)] rounded-full overflow-hidden">
-                        <div 
-                          className="h-full rounded-full smooth-transition"
-                          style={{ 
-                            width: '60%',
-                            backgroundColor: accentColor
-                          }}
-                        ></div>
-                      </div>
-                      <p className="text-xs text-[var(--text-secondary)] mt-1">Progress Bar</p>
-                    </div>
-                  </div>
-                </div>
                 <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                   <span>Selected:</span>
-                  <span 
-                    className="font-medium text-[var(--text-primary)] font-mono"
-                    style={{ color: accentColor }}
-                  >
-                    {accentColor}
-                  </span>
+                  <span className="font-medium text-[var(--text-primary)]">{accentColor}</span>
                 </div>
                 {saving && <p className="text-xs text-[var(--text-secondary)]">Saving...</p>}
                 {saveSuccess && <p className="text-xs text-green-500">Saved!</p>}
