@@ -11,6 +11,7 @@ import { Progress } from '@/components/ui/progress'
 import { useAlert } from '@/hooks/useAlert'
 import AlertDialog from './ui/alert-dialog'
 import CreateCollectionDialog from './CreateCollectionDialog'
+import BugReportDialog from './BugReportDialog'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import {
   DndContext,
