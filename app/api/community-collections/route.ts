@@ -197,9 +197,22 @@ export async function GET(request: NextRequest) {
         hasMore,
       },
     })
-    // Cache community collections for 2 minutes (moderate change frequency)
-    // Stale-while-revalidate allows serving stale content while revalidating in background
-    response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
+    
+    // Check if there's a cache-busting parameter (t=timestamp)
+    // If so, don't cache the response to ensure fresh data
+    const hasCacheBust = url.searchParams.has('t')
+    
+    if (hasCacheBust) {
+      // No caching when cache-busting parameter is present
+      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+    } else {
+      // Cache community collections for 2 minutes (moderate change frequency)
+      // Stale-while-revalidate allows serving stale content while revalidating in background
+      response.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240')
+    }
+    
     return response
   } catch (error) {
     console.error('Error fetching community collections:', error)
