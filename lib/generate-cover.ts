@@ -26,35 +26,11 @@ const COLORS = {
   },
 }
 
+import { getCategoryColor as getCategoryColorFromLib } from './categories'
+
 export function getCategoryColor(category: string | null): { start: string; badge: string } {
-  if (!category) {
-    return { start: '#34C759', badge: '#34C759' }
-  }
-
-  const categoryLower = category.toLowerCase()
-  const colorMap: Record<string, { start: string; badge: string }> = {
-    'books': { start: '#8B4513', badge: '#CD853F' },
-    'book': { start: '#8B4513', badge: '#CD853F' },
-    'comics': { start: '#FF6B6B', badge: '#FF8787' },
-    'comic': { start: '#FF6B6B', badge: '#FF8787' },
-    'movies': { start: '#4ECDC4', badge: '#6EDCD4' },
-    'movie': { start: '#4ECDC4', badge: '#6EDCD4' },
-    'films': { start: '#4ECDC4', badge: '#6EDCD4' },
-    'music': { start: '#9B59B6', badge: '#BB8FCE' },
-    'vinyl': { start: '#9B59B6', badge: '#BB8FCE' },
-    'games': { start: '#F39C12', badge: '#F5B041' },
-    'game': { start: '#F39C12', badge: '#F5B041' },
-    'trading cards': { start: '#3498DB', badge: '#5DADE2' },
-    'cards': { start: '#3498DB', badge: '#5DADE2' },
-    'toys': { start: '#E74C3C', badge: '#EC7063' },
-    'art': { start: '#E91E63', badge: '#F06292' },
-  }
-
-  if (colorMap[categoryLower]) return colorMap[categoryLower]
-  for (const [key, color] of Object.entries(colorMap)) {
-    if (categoryLower.includes(key) || key.includes(categoryLower)) return color
-  }
-  return { start: '#34C759', badge: '#34C759' }
+  // Use the centralized category color function
+  return getCategoryColorFromLib(category)
 }
 
 function escapeXml(text: string): string {
