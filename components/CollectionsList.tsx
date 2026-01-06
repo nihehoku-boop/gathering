@@ -455,9 +455,19 @@ export default function CollectionsList() {
         try {
           const res = await fetch(`/api/collections/${id}`, {
             method: 'DELETE',
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-cache',
+            },
           })
           if (res.ok) {
+            // Immediately remove from local state for instant feedback
+            setCollections(prev => prev.filter(c => c.id !== id))
+            setFilteredCollections(prev => prev.filter(c => c.id !== id))
+            
+            // Then refresh from server to ensure consistency
             fetchCollections()
+            
             setAlertDialog({
               open: true,
               title: 'Success',
