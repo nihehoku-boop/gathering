@@ -118,6 +118,23 @@ export default function Sidebar() {
     }
   }, [session, fetchCollections, fetchFolders])
   
+  // Listen for collection updates (when collections are added from recommended/community)
+  useEffect(() => {
+    const handleCollectionsUpdated = () => {
+      console.log('[Sidebar] Received collectionsUpdated event, refreshing...')
+      // Small delay to ensure server-side changes are committed
+      setTimeout(() => {
+        fetchCollections()
+      }, 100)
+    }
+    
+    window.addEventListener('collectionsUpdated', handleCollectionsUpdated)
+    
+    return () => {
+      window.removeEventListener('collectionsUpdated', handleCollectionsUpdated)
+    }
+  }, [fetchCollections])
+  
   // Fetch user settings for golden accents
   useEffect(() => {
     const fetchSettings = () => {
