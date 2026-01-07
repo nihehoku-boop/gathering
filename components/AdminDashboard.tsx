@@ -324,6 +324,51 @@ export default function AdminDashboard() {
             <Image className="mr-2 h-4 w-4" />
             {generatingCovers ? 'Generating...' : 'Generate Covers'}
           </Button>
+          <Button 
+            onClick={async () => {
+              const confirmed = await showConfirm({
+                title: 'Seed Euro Coins',
+                message: 'This will create community collections for all 1€ and 2€ coins from all 19 Eurozone countries. Continue?',
+                type: 'info',
+                confirmText: 'Create',
+                cancelText: 'Cancel',
+              })
+              if (!confirmed) return
+
+              try {
+                const res = await fetch('/api/admin/seed-euro-coins', {
+                  method: 'POST',
+                })
+                if (res.ok) {
+                  const data = await res.json()
+                  showAlert({
+                    title: 'Success!',
+                    message: data.message || 'Euro coin collections created successfully!',
+                    type: 'success',
+                  })
+                } else {
+                  const error = await res.json()
+                  showAlert({
+                    title: 'Error',
+                    message: error.error || 'Failed to create Euro coin collections',
+                    type: 'error',
+                  })
+                }
+              } catch (error) {
+                console.error('Error seeding Euro coins:', error)
+                showAlert({
+                  title: 'Error',
+                  message: 'Failed to create Euro coin collections',
+                  type: 'error',
+                })
+              }
+            }}
+            variant="outline"
+            className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+          >
+            <Database className="mr-2 h-4 w-4" />
+            Seed Euro Coins
+          </Button>
           <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
             New Recommended Collection
