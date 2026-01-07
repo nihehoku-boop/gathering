@@ -16,7 +16,20 @@ async function createItemHandler(request: NextRequest) {
     }
 
     // Validate request body
-    const validation = await validateRequestBody(request, createItemSchema)
+    let validation: any
+    try {
+      validation = await validateRequestBody(request, createItemSchema)
+    } catch (validationError: any) {
+      logger.error('Item creation validation threw error:', {
+        error: validationError?.message,
+        stack: validationError?.stack,
+      })
+      return NextResponse.json(
+        { error: 'Validation error: ' + (validationError?.message || 'Unknown error'), details: process.env.NODE_ENV === 'development' ? validationError?.stack : undefined },
+        { status: 400 }
+      )
+    }
+    
     if (!validation.success) {
       logger.error('Item creation validation failed:', {
         error: validation.error,
@@ -55,41 +68,93 @@ async function createItemHandler(request: NextRequest) {
       )
     }
 
-    const item = await prisma.item.create({
-      data: {
-        collectionId,
-        name,
-        number: number ?? null,
-        image: image || null,
-        notes: notes || null,
-        alternativeImages: Array.isArray(alternativeImages) && alternativeImages.length > 0 
-          ? JSON.stringify(alternativeImages) 
-          : null,
-        wear: wear || null,
-        personalRating: personalRating ?? null,
-        logDate: logDate || null,
-        customFields: customFields ? JSON.stringify(customFields) : null,
-      },
-    })
+    // Prepare item data
+    const itemData: any = {
+      collectionId,
+      name,
+      number: number ?? null,
+      image: image || null,
+      notes: notes || null,
+      wear: wear || null,
+      personalRating: personalRating ?? null,
+      logDate: logDate || null,
+    }
 
-    // Check and unlock achievements
-    const newlyUnlocked = await checkAllAchievements(session.user.id)
+    // Handle alternativeImages - Prisma expects a string with default "[]"
+    if (Array.isArray(alternativeImages) && alternativeImages.length > 0) {
+      itemData.alternativeImages = JSON.stringify(alternativeImages)
+    } else {
+      // Use default empty array as string if no images provided
+      itemData.alternativeImages = '[]'
+    }
+
+    // Handle customFields - Prisma expects a string with default "{}"
+    if (customFields && typeof customFields === 'object' && Object.keys(customFields).length > 0) {
+      try {
+        itemData.customFields = JSON.stringify(customFields)
+      } catch (jsonError) {
+        logger.error('Failed to stringify customFields:', jsonError)
+        itemData.customFields = '{}'
+      }
+    } else {
+      // Use default empty object as string if no custom fields provided
+      itemData.customFields = '{}'
+    }
+
+    let item
+    try {
+      item = await prisma.item.create({
+        data: itemData,
+      })
+    } catch (prismaError: any) {
+      logger.error('Prisma error creating item:', {
+        error: prismaError?.message,
+        code: prismaError?.code,
+        meta: prismaError?.meta,
+        itemData: {
+          ...itemData,
+          alternativeImages: itemData.alternativeImages?.substring(0, 100),
+          customFields: itemData.customFields?.substring(0, 100),
+        },
+      })
+      return NextResponse.json(
+        { 
+          error: 'Database error creating item',
+          details: process.env.NODE_ENV === 'development' ? prismaError?.message : undefined,
+          code: prismaError?.code,
+        },
+        { status: 500 }
+      )
+    }
+
+    // Check and unlock achievements (don't fail if this errors)
+    let newlyUnlocked: string[] = []
+    try {
+      newlyUnlocked = await checkAllAchievements(session.user.id)
+    } catch (achievementError) {
+      logger.error('Error checking achievements (non-fatal):', achievementError)
+    }
 
     return NextResponse.json({
       ...item,
       newlyUnlockedAchievements: newlyUnlocked,
     }, { status: 201 })
   } catch (error) {
-    logger.error('Error creating item:', error)
+    logger.error('Unexpected error creating item:', error)
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     const errorStack = error instanceof Error ? error.stack : undefined
-    console.error('[Item Creation] Full error details:', {
+    console.error('[Item Creation] Unexpected error:', {
       error: errorMessage,
       stack: errorStack,
       errorType: error?.constructor?.name,
+      errorCode: (error as any)?.code,
     })
     return NextResponse.json(
-      { error: 'Internal server error', details: process.env.NODE_ENV === 'development' ? errorMessage : undefined },
+      { 
+        error: 'Internal server error',
+        message: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? errorStack : undefined,
+      },
       { status: 500 }
     )
   }
