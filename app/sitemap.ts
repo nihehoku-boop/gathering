@@ -1,7 +1,27 @@
 import { MetadataRoute } from 'next'
+import { prisma } from '@/lib/prisma'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  
+  // Fetch published blog posts
+  const blogPosts = await prisma.blogPost.findMany({
+    where: {
+      published: true,
+      publishedAt: { not: null },
+    },
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  })
+
+  const blogUrls = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
   
   return [
     {
@@ -70,6 +90,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    ...blogUrls,
   ]
 }
 

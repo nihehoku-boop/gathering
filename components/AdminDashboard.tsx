@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users, Database, BarChart3, Flag, TrendingUp, Image } from 'lucide-react'
+import { Trash2, Plus, Edit, List, Download, Eye, EyeOff, Users, Database, BarChart3, Flag, TrendingUp, Image, FileText } from 'lucide-react'
 import { useAlert } from '@/hooks/useAlert'
 import CreateRecommendedCollectionDialog from './CreateRecommendedCollectionDialog'
 import EditRecommendedCollectionDialog from './EditRecommendedCollectionDialog'
@@ -16,6 +16,7 @@ import ConvertCollectionToRecommendedDialog from './ConvertCollectionToRecommend
 import PrismaLogsViewer from './PrismaLogsViewer'
 import ContentReportsViewer from './ContentReportsViewer'
 import AnalyticsViewer from './AnalyticsViewer'
+import BlogManagement from './BlogManagement'
 import AlertDialog from './ui/alert-dialog'
 import { parseTags, getTagColor } from '@/lib/tags'
 
@@ -276,6 +277,13 @@ export default function AdminDashboard() {
           <TrendingUp className="mr-2 h-4 w-4" />
           Analytics
         </TabsTrigger>
+        <TabsTrigger 
+          value="blog" 
+          className="data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-black text-[var(--text-secondary)] data-[state=active]:text-black"
+        >
+          <FileText className="mr-2 h-4 w-4" />
+          Blog
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="collections">
@@ -507,6 +515,10 @@ export default function AdminDashboard() {
 
       <TabsContent value="analytics">
         <AnalyticsViewer />
+      </TabsContent>
+
+      <TabsContent value="blog">
+        <BlogManagement />
       </TabsContent>
 
       <ConvertCollectionToRecommendedDialog
