@@ -60,28 +60,36 @@ export const createItemSchema = z.object({
   image: z.union([
     z.string().url(),
     z.string().startsWith('/'), // Allow local paths like /ltbcover/image.jpg
+    z.string().length(0), // Allow empty string
     z.null(),
     z.undefined(),
-  ]).optional().transform((val) => val ? sanitizeUrlTransform(val) : null),
+  ]).optional().transform((val) => val && val.trim() ? sanitizeUrlTransform(val) : null),
   notes: z.string().max(5000).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(5000)(val) : val),
-  alternativeImages: z.array(
-    z.union([
-      z.string().url(),
-      z.string().startsWith('/'), // Allow local paths
-    ])
-  ).optional().transform((arr) => {
-    if (!arr || !Array.isArray(arr)) return undefined
-    // Filter and sanitize, removing invalid URLs
+  alternativeImages: z.array(z.string()).optional().transform((arr) => {
+    if (!arr || !Array.isArray(arr) || arr.length === 0) return undefined
+    // Filter valid URLs and local paths, then sanitize
     const filtered = arr
+      .filter(url => url && url.trim() && (url.startsWith('/') || url.startsWith('http')))
       .map(sanitizeUrlArrayTransform)
       .filter((url): url is string => url !== null && url !== '')
-    // Return undefined if array is empty after filtering
     return filtered.length > 0 ? filtered : undefined
   }),
   wear: z.string().max(50).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(50)(val) : val),
-  personalRating: z.number().int().min(1).max(10).nullable().optional(),
-  logDate: z.string().nullable().optional(),
-  customFields: z.record(z.string(), z.any()).nullable().optional(),
+  personalRating: z.union([
+    z.number().int().min(1).max(10),
+    z.null(),
+    z.undefined(),
+  ]).optional().transform((val) => val ?? null),
+  logDate: z.union([
+    z.string(),
+    z.null(),
+    z.undefined(),
+  ]).optional().transform((val) => val || null),
+  customFields: z.union([
+    z.record(z.string(), z.any()),
+    z.null(),
+    z.undefined(),
+  ]).optional().transform((val) => val || null),
 })
 
 export const updateItemSchema = z.object({
