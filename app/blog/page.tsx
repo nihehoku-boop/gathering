@@ -35,7 +35,7 @@ export default async function BlogPage() {
     },
   })
 
-  const categories = Array.from(new Set(posts.map(p => p.category).filter(Boolean)))
+  const categories = Array.from(new Set(posts.map((p: { category: string | null }) => p.category).filter(Boolean)))
 
   return (
     <>
