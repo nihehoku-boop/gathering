@@ -189,8 +189,12 @@ export default function CreateCollectionDialog({
               <select
                 id="template"
                 value={template}
-                onChange={(e) => setTemplate(e.target.value)}
-                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]"
+                onChange={(e) => {
+                  console.log('Template changed from', template, 'to', e.target.value)
+                  setTemplate(e.target.value)
+                }}
+                disabled={loading}
+                className="w-full px-3 py-2 bg-[#2a2d35] border border-[#353842] rounded-md text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {ITEM_TEMPLATES.map((t) => (
                   <option key={t.id} value={t.id}>
