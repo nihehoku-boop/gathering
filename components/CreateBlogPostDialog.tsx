@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/hooks/use-toast'
+import { useToast } from '@/components/Toaster'
 
 interface CreateBlogPostDialogProps {
   open: boolean
@@ -30,7 +30,7 @@ export default function CreateBlogPostDialog({
   const [category, setCategory] = useState('')
   const [published, setPublished] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const { toast } = useToast()
+  const toast = useToast()
 
   const generateSlug = (text: string) => {
     return text
@@ -51,11 +51,7 @@ export default function CreateBlogPostDialog({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title || !slug || !content) {
-      toast({
-        title: 'Error',
-        description: 'Title, slug, and content are required',
-        variant: 'destructive',
-      })
+      toast.error('Title, slug, and content are required')
       return
     }
 
@@ -79,10 +75,7 @@ export default function CreateBlogPostDialog({
       })
 
       if (res.ok) {
-        toast({
-          title: 'Success',
-          description: 'Blog post created successfully',
-        })
+        toast.success('Blog post created successfully')
         // Reset form
         setTitle('')
         setSlug('')
@@ -97,19 +90,11 @@ export default function CreateBlogPostDialog({
         onSuccess()
       } else {
         const error = await res.json()
-        toast({
-          title: 'Error',
-          description: error.error || 'Failed to create blog post',
-          variant: 'destructive',
-        })
+        toast.error(error.error || 'Failed to create blog post')
       }
     } catch (error) {
       console.error('Error creating blog post:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to create blog post. Please try again.',
-        variant: 'destructive',
-      })
+      toast.error('Failed to create blog post. Please try again.')
     } finally {
       setSubmitting(false)
     }
