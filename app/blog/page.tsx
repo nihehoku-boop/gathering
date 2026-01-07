@@ -62,7 +62,7 @@ export default async function BlogPage() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map((post) => (
+              {posts.map((post: { id: string; slug: string; title: string; excerpt: string | null; featuredImage: string | null; category: string | null; publishedAt: Date | null; tags: string[]; author: { name: string | null } }) => (
                 <Link
                   key={post.id}
                   href={`/blog/${post.slug}`}
