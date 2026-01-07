@@ -61,7 +61,8 @@
     "update:cover-fit": "tsx scripts/update-cover-image-fit.ts",
     "generate:collection-covers": "tsx scripts/generate-collection-covers.ts",
     "test:cover": "tsx scripts/test-cover-generation.ts",
-    "blog:create-initial": "tsx scripts/create-initial-blog-posts.ts"
+    "blog:create-initial": "tsx scripts/create-initial-blog-posts.ts",
+    "seed:euro-coins": "tsx scripts/seed-euro-coins.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
