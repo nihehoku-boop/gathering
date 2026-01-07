@@ -468,6 +468,9 @@ export default function LandingPage() {
               <span className="text-lg sm:text-xl font-bold text-[#fafafa] tracking-tighter">Colletro</span>
             </div>
             <div className="flex items-center gap-4 sm:gap-6 text-[#969696] text-xs sm:text-sm flex-wrap justify-center">
+              <Link href="/blog" className="hover:text-[#fafafa] smooth-transition">
+                Blog
+              </Link>
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">
                 About
               </Link>
