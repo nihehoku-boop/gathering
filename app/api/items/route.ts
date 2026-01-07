@@ -27,7 +27,18 @@ async function createItemHandler(request: NextRequest) {
         { status: validation.status }
       )
     }
-    const { collectionId, name, number, image } = validation.data
+    const { 
+      collectionId, 
+      name, 
+      number, 
+      image, 
+      notes, 
+      alternativeImages, 
+      wear, 
+      personalRating, 
+      logDate, 
+      customFields 
+    } = validation.data
 
     // Verify collection belongs to user
     const collection = await prisma.collection.findFirst({
@@ -50,6 +61,14 @@ async function createItemHandler(request: NextRequest) {
         name,
         number: number ?? null,
         image: image || null,
+        notes: notes || null,
+        alternativeImages: alternativeImages && alternativeImages.length > 0 
+          ? JSON.stringify(alternativeImages) 
+          : null,
+        wear: wear || null,
+        personalRating: personalRating ?? null,
+        logDate: logDate || null,
+        customFields: customFields ? JSON.stringify(customFields) : null,
       },
     })
 
