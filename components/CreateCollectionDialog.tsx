@@ -50,6 +50,22 @@ export default function CreateCollectionDialog({
     fetchFolders()
   }, [])
 
+  // Reset form when dialog opens
+  useEffect(() => {
+    if (open) {
+      setName('')
+      setDescription('')
+      setCategory('')
+      setFolderId('')
+      setTemplate('custom')
+      setCoverImage('')
+      setCoverImageFit('cover')
+      setSelectedTags([])
+      setShowTemplatePreview(false)
+      setShowCoverImageUrl(false)
+    }
+  }, [open])
+
   const getSelectedTemplate = (): ItemTemplate | undefined => {
     return ITEM_TEMPLATES.find(t => t.id === template)
   }
@@ -92,12 +108,7 @@ export default function CreateCollectionDialog({
 
       if (res.ok) {
         toast.success('Collection created successfully!')
-        setName('')
-        setDescription('')
-        setCategory('')
-        setFolderId('')
-        setCoverImage('')
-        setSelectedTags([])
+        // Form reset is handled by useEffect when dialog closes
         onOpenChange(false)
         onSuccess()
       } else {
