@@ -557,14 +557,14 @@ export default function BulkImageImportDialog({
                                       }
                                       className="w-full px-2 py-1 text-sm bg-[var(--bg-secondary)] border border-[var(--border-hover)] rounded text-[var(--text-primary)]"
                                       required={field.required}
-                                    >
-                                      <option value="">Select...</option>
-                                      {field.options.map((opt) => (
-                                        <option key={opt} value={opt}>
-                                          {opt}
-                                        </option>
-                                      ))}
-                                    </select>
+                                      >
+                                        <option value="">Select...</option>
+                                        {field.options.map((opt: string) => (
+                                          <option key={opt} value={opt}>
+                                            {opt}
+                                          </option>
+                                        ))}
+                                      </select>
                                   )}
                                 </div>
                               ))}
