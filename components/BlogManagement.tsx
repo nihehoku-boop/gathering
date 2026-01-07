@@ -140,13 +140,53 @@ export default function BlogManagement() {
             Create and manage blog posts for SEO and content marketing
           </p>
         </div>
-        <Button
-          onClick={() => setShowCreateDialog(true)}
-          className="accent-button text-white"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Create Post
-        </Button>
+        <div className="flex gap-2">
+          {posts.length === 0 && (
+            <Button
+              onClick={async () => {
+                try {
+                  const res = await fetch('/api/admin/blog/seed', {
+                    method: 'POST',
+                  })
+                  if (res.ok) {
+                    const data = await res.json()
+                    showAlert({
+                      title: 'Success',
+                      message: data.message || 'Initial blog posts created successfully!',
+                      type: 'success',
+                    })
+                    fetchPosts()
+                  } else {
+                    const error = await res.json()
+                    showAlert({
+                      title: 'Error',
+                      message: error.error || 'Failed to seed blog posts',
+                      type: 'error',
+                    })
+                  }
+                } catch (error) {
+                  console.error('Error seeding blog posts:', error)
+                  showAlert({
+                    title: 'Error',
+                    message: 'Failed to seed blog posts. Please try again.',
+                    type: 'error',
+                  })
+                }
+              }}
+              variant="outline"
+              className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+            >
+              Seed Initial Posts
+            </Button>
+          )}
+          <Button
+            onClick={() => setShowCreateDialog(true)}
+            className="accent-button text-white"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Create Post
+          </Button>
+        </div>
       </div>
 
       {posts.length === 0 ? (
