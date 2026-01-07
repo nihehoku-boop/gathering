@@ -5,7 +5,7 @@ import { sanitizeText, sanitizeEmail, sanitizeUrl, sanitizeHtml } from './saniti
 const sanitizeTextTransform = (val: string) => sanitizeText(val)
 const sanitizeTextMax = (maxLength: number) => (val: string) => sanitizeText(val, maxLength)
 const sanitizeUrlTransform = (val: string | null | undefined) => sanitizeUrl(val)
-const sanitizeUrlArrayTransform = (val: string) => sanitizeUrl(val) || ''
+const sanitizeUrlArrayTransform = (val: string) => sanitizeUrl(val)
 
 // Helper to validate CUID or UUID (Prisma uses CUIDs by default)
 const cuidOrUuid = z.string().refine(
@@ -68,8 +68,16 @@ export const createItemSchema = z.object({
     z.union([
       z.string().url(),
       z.string().startsWith('/'), // Allow local paths
-    ]).transform(sanitizeUrlArrayTransform)
-  ).optional(),
+    ])
+  ).optional().transform((arr) => {
+    if (!arr || !Array.isArray(arr)) return undefined
+    // Filter and sanitize, removing invalid URLs
+    const filtered = arr
+      .map(sanitizeUrlArrayTransform)
+      .filter((url): url is string => url !== null && url !== '')
+    // Return undefined if array is empty after filtering
+    return filtered.length > 0 ? filtered : undefined
+  }),
   wear: z.string().max(50).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(50)(val) : val),
   personalRating: z.number().int().min(1).max(10).nullable().optional(),
   logDate: z.string().nullable().optional(),
@@ -80,8 +88,25 @@ export const updateItemSchema = z.object({
   isOwned: z.boolean().optional(),
   name: z.string().min(1).max(500).trim().optional().transform((val) => val ? sanitizeTextTransform(val) : val),
   notes: z.string().max(5000).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(5000)(val) : val),
-  image: z.string().url().nullable().optional().transform(sanitizeUrlTransform),
-  alternativeImages: z.array(z.string().url().transform(sanitizeUrlArrayTransform)).optional(),
+  image: z.union([
+    z.string().url(),
+    z.string().startsWith('/'), // Allow local paths
+    z.null(),
+  ]).nullable().optional().transform((val) => val ? sanitizeUrlTransform(val) : null),
+  alternativeImages: z.array(
+    z.union([
+      z.string().url(),
+      z.string().startsWith('/'), // Allow local paths
+    ])
+  ).optional().transform((arr) => {
+    if (!arr || !Array.isArray(arr)) return undefined
+    // Filter and sanitize, removing invalid URLs
+    const filtered = arr
+      .map(sanitizeUrlArrayTransform)
+      .filter((url): url is string => url !== null && url !== '')
+    // Return undefined if array is empty after filtering
+    return filtered.length > 0 ? filtered : undefined
+  }),
   wear: z.string().max(50).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(50)(val) : val),
   personalRating: z.number().int().min(1).max(10).nullable().optional(),
   logDate: z.string().nullable().optional(),
