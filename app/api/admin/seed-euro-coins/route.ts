@@ -1,8 +1,9 @@
-import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth-config'
+import { prisma } from '@/lib/prisma'
 
-const prisma = new PrismaClient()
-
-// Eurozone countries with their coin designs and real image URLs from Wikipedia/ECB
+// Eurozone countries with their coin designs and real image URLs from Wikipedia
 const eurozoneCountries = [
   {
     country: 'Austria',
@@ -310,119 +311,141 @@ const eurozoneCountries = [
   },
 ]
 
-async function main() {
-  console.log('Creating Euro coin collections...')
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  // Find or create a dedicated user for coin collections (not admin)
-  let coinUser = await prisma.user.findFirst({
-    where: {
-      email: 'coin-collector@colletro.app',
-    },
-  })
+    // Check if user is admin
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isAdmin: true },
+    })
 
-  if (!coinUser) {
-    coinUser = await prisma.user.create({
-      data: {
+    if (!user?.isAdmin) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    // Find or create a dedicated user for coin collections (not admin)
+    let coinUser = await prisma.user.findFirst({
+      where: {
         email: 'coin-collector@colletro.app',
-        name: 'Euro Coin Collector',
-        isAdmin: false,
       },
     })
-    console.log('Created dedicated user for coin collections')
-  } else {
-    console.log('Using existing coin collector user')
-  }
 
-  // Create 1 Euro collection
-  const existingOneEuro = await prisma.communityCollection.findFirst({
-    where: { name: 'Euro 1 Euro Coins' },
-  })
-
-  if (!existingOneEuro) {
-    const oneEuroCollection = await prisma.communityCollection.create({
-      data: {
-        name: 'Euro 1 Euro Coins',
-        description: 'Complete collection of 1 Euro coins from all Eurozone countries. Each country has its own unique design on the reverse side.',
-        category: 'Coins',
-        template: 'custom',
-        customFieldDefinitions: JSON.stringify([
-          { name: 'Country', type: 'text', required: true },
-          { name: 'Country Code', type: 'text', required: false },
-          { name: 'Design', type: 'text', required: false },
-          { name: 'Year', type: 'number', required: false },
-          { name: 'Condition', type: 'text', required: false },
-        ]),
-        tags: JSON.stringify(['coins', 'euro', 'numismatics', 'currency', 'europe']),
-        userId: coinUser.id,
-        items: {
-          create: eurozoneCountries.map((country, index) => ({
-            name: country.oneEuro.name,
-            number: index + 1,
-            notes: country.oneEuro.description,
-            image: country.oneEuro.image,
-            customFields: JSON.stringify({
-              'Country': country.country,
-              'Country Code': country.code,
-              'Design': country.oneEuro.design,
-            }),
-          })),
+    if (!coinUser) {
+      coinUser = await prisma.user.create({
+        data: {
+          email: 'coin-collector@colletro.app',
+          name: 'Euro Coin Collector',
+          isAdmin: false,
         },
-      },
+      })
+    }
+
+    const results = {
+      oneEuro: null as any,
+      twoEuro: null as any,
+      created: [] as string[],
+      skipped: [] as string[],
+    }
+
+    // Create 1 Euro collection
+    const existingOneEuro = await prisma.communityCollection.findFirst({
+      where: { name: 'Euro 1 Euro Coins' },
     })
-    console.log(`Created 1 Euro collection with ${eurozoneCountries.length} coins`)
-  } else {
-    console.log('1 Euro collection already exists, skipping...')
-  }
 
-  // Create 2 Euro collection
-  const existingTwoEuro = await prisma.communityCollection.findFirst({
-    where: { name: 'Euro 2 Euro Coins' },
-  })
-
-  if (!existingTwoEuro) {
-    const twoEuroCollection = await prisma.communityCollection.create({
-      data: {
-        name: 'Euro 2 Euro Coins',
-        description: 'Complete collection of 2 Euro coins from all Eurozone countries. Each country has its own unique design on the reverse side.',
-        category: 'Coins',
-        template: 'custom',
-        customFieldDefinitions: JSON.stringify([
-          { name: 'Country', type: 'text', required: true },
-          { name: 'Country Code', type: 'text', required: false },
-          { name: 'Design', type: 'text', required: false },
-          { name: 'Year', type: 'number', required: false },
-          { name: 'Condition', type: 'text', required: false },
-        ]),
-        tags: JSON.stringify(['coins', 'euro', 'numismatics', 'currency', 'europe']),
-        userId: coinUser.id,
-        items: {
-          create: eurozoneCountries.map((country, index) => ({
-            name: country.twoEuro.name,
-            number: index + 1,
-            notes: country.twoEuro.description,
-            image: country.twoEuro.image,
-            customFields: JSON.stringify({
-              'Country': country.country,
-              'Country Code': country.code,
-              'Design': country.twoEuro.design,
-            }),
-          })),
+    if (!existingOneEuro) {
+      results.oneEuro = await prisma.communityCollection.create({
+        data: {
+          name: 'Euro 1 Euro Coins',
+          description: 'Complete collection of 1 Euro coins from all Eurozone countries. Each country has its own unique design on the reverse side.',
+          category: 'Coins',
+          template: 'custom',
+          customFieldDefinitions: JSON.stringify([
+            { name: 'Country', type: 'text', required: true },
+            { name: 'Country Code', type: 'text', required: false },
+            { name: 'Design', type: 'text', required: false },
+            { name: 'Year', type: 'number', required: false },
+            { name: 'Condition', type: 'text', required: false },
+          ]),
+          tags: JSON.stringify(['coins', 'euro', 'numismatics', 'currency', 'europe']),
+          userId: coinUser.id,
+          items: {
+            create: eurozoneCountries.map((country, index) => ({
+              name: country.oneEuro.name,
+              number: index + 1,
+              notes: country.oneEuro.description,
+              image: country.oneEuro.image,
+              customFields: JSON.stringify({
+                'Country': country.country,
+                'Country Code': country.code,
+                'Design': country.oneEuro.design,
+              }),
+            })),
+          },
         },
-      },
-    })
-    console.log(`Created 2 Euro collection with ${eurozoneCountries.length} coins`)
-  } else {
-    console.log('2 Euro collection already exists, skipping...')
-  }
+      })
+      results.created.push('Euro 1 Euro Coins')
+    } else {
+      results.skipped.push('Euro 1 Euro Coins')
+    }
 
-  console.log('Euro coin collections created successfully!')
+    // Create 2 Euro collection
+    const existingTwoEuro = await prisma.communityCollection.findFirst({
+      where: { name: 'Euro 2 Euro Coins' },
+    })
+
+    if (!existingTwoEuro) {
+      results.twoEuro = await prisma.communityCollection.create({
+        data: {
+          name: 'Euro 2 Euro Coins',
+          description: 'Complete collection of 2 Euro coins from all Eurozone countries. Each country has its own unique design on the reverse side.',
+          category: 'Coins',
+          template: 'custom',
+          customFieldDefinitions: JSON.stringify([
+            { name: 'Country', type: 'text', required: true },
+            { name: 'Country Code', type: 'text', required: false },
+            { name: 'Design', type: 'text', required: false },
+            { name: 'Year', type: 'number', required: false },
+            { name: 'Condition', type: 'text', required: false },
+          ]),
+          tags: JSON.stringify(['coins', 'euro', 'numismatics', 'currency', 'europe']),
+          userId: coinUser.id,
+          items: {
+            create: eurozoneCountries.map((country, index) => ({
+              name: country.twoEuro.name,
+              number: index + 1,
+              notes: country.twoEuro.description,
+              image: country.twoEuro.image,
+              customFields: JSON.stringify({
+                'Country': country.country,
+                'Country Code': country.code,
+                'Design': country.twoEuro.design,
+              }),
+            })),
+          },
+        },
+      })
+      results.created.push('Euro 2 Euro Coins')
+    } else {
+      results.skipped.push('Euro 2 Euro Coins')
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Created ${results.created.length} collections, skipped ${results.skipped.length}`,
+      created: results.created,
+      skipped: results.skipped,
+    })
+  } catch (error) {
+    console.error('Error seeding Euro coins:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
