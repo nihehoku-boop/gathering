@@ -190,10 +190,25 @@ export default function AddItemDialog({
         onSuccess(newItem)
         onOpenChange(false)
       } else {
-        const errorData = await res.json().catch(() => ({ error: 'Failed to add item' }))
+        let errorData
+        try {
+          const text = await res.text()
+          errorData = JSON.parse(text)
+        } catch {
+          errorData = { error: `Failed to add item (Status: ${res.status})` }
+        }
+        
+        // Log full error details for debugging
+        console.error('[AddItemDialog] Error response:', {
+          status: res.status,
+          statusText: res.statusText,
+          error: errorData,
+          requestBody: requestBody,
+        })
+        
         showAlert({
           title: 'Error',
-          message: errorData.error || 'Failed to add item',
+          message: errorData.error || errorData.message || `Failed to add item (${res.status})`,
           type: 'error',
         })
       }
