@@ -112,7 +112,6 @@ export default function BlogManagement() {
       } else {
         const error = await res.json()
         showAlert({
-          open: true,
           title: 'Error',
           message: error.error || 'Failed to update blog post',
           type: 'error',
@@ -121,7 +120,6 @@ export default function BlogManagement() {
     } catch (error) {
       console.error('Error toggling publish status:', error)
       showAlert({
-        open: true,
         title: 'Error',
         message: 'Failed to update blog post. Please try again.',
         type: 'error',
