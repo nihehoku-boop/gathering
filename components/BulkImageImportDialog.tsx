@@ -150,22 +150,43 @@ export default function BulkImageImportDialog({
           continue
         }
 
-        // Convert to base64 data URL for preview
-        const reader = new FileReader()
-        const dataUrl = await new Promise<string>((resolve, reject) => {
-          reader.onload = (e) => resolve(e.target?.result as string)
-          reader.onerror = reject
-          reader.readAsDataURL(file)
-        })
+        // Upload to server
+        try {
+          const formData = new FormData()
+          formData.append('file', file)
 
-        newImages.push(dataUrl)
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          })
+
+          if (!res.ok) {
+            const error = await res.json().catch(() => ({ error: 'Upload failed' }))
+            console.error('Upload failed for', file.name, error)
+            toast.error(`Failed to upload ${file.name}`)
+            continue
+          }
+
+          const data = await res.json()
+          if (data.url) {
+            newImages.push(data.url)
+          } else {
+            console.error('No URL in upload response', data)
+            toast.error(`Failed to get URL for ${file.name}`)
+          }
+        } catch (uploadError) {
+          console.error('Error uploading file:', uploadError)
+          toast.error(`Failed to upload ${file.name}`)
+        }
       }
 
-      setUploadedImages((prev) => [...prev, ...newImages])
-      toast.success(`Uploaded ${newImages.length} image${newImages.length > 1 ? 's' : ''}`)
+      if (newImages.length > 0) {
+        setUploadedImages((prev) => [...prev, ...newImages])
+        toast.success(`Uploaded ${newImages.length} image${newImages.length > 1 ? 's' : ''}`)
+      }
     } catch (error) {
-      console.error('Error uploading images:', error)
-      toast.error('Failed to upload some images')
+      console.error('Error processing images:', error)
+      toast.error('Failed to process some images')
     } finally {
       setUploading(false)
     }
