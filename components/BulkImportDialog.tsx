@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getTemplateFields } from '@/lib/item-templates'
+import BulkImageImportDialog from './BulkImageImportDialog'
 
 interface BulkImportDialogProps {
   open: boolean
@@ -38,7 +39,7 @@ export default function BulkImportDialog({
   isRecommendedCollection = false,
 }: BulkImportDialogProps) {
   const [loading, setLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState('numbered')
+  const [activeTab, setActiveTab] = useState('images')
 
   // Numbered series options
   const [seriesName, setSeriesName] = useState('')
@@ -392,6 +393,22 @@ export default function BulkImportDialog({
     return 0
   }
 
+  // Show image import dialog if that tab is active
+  if (open && activeTab === 'images') {
+    return (
+      <BulkImageImportDialog
+        open={open}
+        onOpenChange={onOpenChange}
+        collectionId={collectionId}
+        collectionTemplate={collectionTemplate}
+        customFieldDefinitions={customFieldDefinitions}
+        onSuccess={onSuccess}
+      />
+    )
+  }
+
+  if (!open) return null
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl max-h-[90vh] flex flex-col">
@@ -403,11 +420,24 @@ export default function BulkImportDialog({
         </CardHeader>
         <CardContent className="flex-1 overflow-y-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="images">🖼️ Upload Images</TabsTrigger>
               <TabsTrigger value="numbered">Numbered Series</TabsTrigger>
               <TabsTrigger value="csv">CSV Import</TabsTrigger>
               <TabsTrigger value="manual">Manual List</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="images" className="space-y-4 mt-4 text-center py-8">
+              <p className="text-[var(--text-secondary)] mb-4">
+                Upload images first, then fill out details for each item.
+              </p>
+              <Button
+                onClick={() => setActiveTab('images')}
+                className="accent-button text-white"
+              >
+                Go to Upload Images
+              </Button>
+            </TabsContent>
 
             <TabsContent value="numbered" className="space-y-4 mt-4">
               <div className="space-y-2">
