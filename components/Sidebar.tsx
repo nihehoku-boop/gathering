@@ -596,9 +596,6 @@ export default function Sidebar() {
               <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tighter">
                 Colletro
               </h2>
-              <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">
-                Beta
-              </span>
             </Link>
             <button
               onClick={() => setIsSidebarOpen(false)}
