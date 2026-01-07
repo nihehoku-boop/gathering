@@ -59,7 +59,6 @@ export default function BlogManagement() {
 
   const handleDelete = async (id: string) => {
     showAlert({
-      open: true,
       title: 'Delete Blog Post',
       message: 'Are you sure you want to delete this blog post? This action cannot be undone.',
       type: 'warning',
@@ -74,7 +73,6 @@ export default function BlogManagement() {
           if (res.ok) {
             setPosts(posts.filter(p => p.id !== id))
             showAlert({
-              open: true,
               title: 'Success',
               message: 'Blog post deleted successfully.',
               type: 'success',
@@ -82,7 +80,6 @@ export default function BlogManagement() {
           } else {
             const error = await res.json()
             showAlert({
-              open: true,
               title: 'Error',
               message: error.error || 'Failed to delete blog post',
               type: 'error',
@@ -91,7 +88,6 @@ export default function BlogManagement() {
         } catch (error) {
           console.error('Error deleting blog post:', error)
           showAlert({
-            open: true,
             title: 'Error',
             message: 'Failed to delete blog post. Please try again.',
             type: 'error',
