@@ -1,11 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { X } from 'lucide-react'
 import { useToast } from '@/components/Toaster'
 
 interface CreateBlogPostDialogProps {
@@ -87,6 +95,7 @@ export default function CreateBlogPostDialog({
         setTags('')
         setCategory('')
         setPublished(false)
+        onOpenChange(false)
         onSuccess()
       } else {
         const error = await res.json()
@@ -100,147 +109,160 @@ export default function CreateBlogPostDialog({
     }
   }
 
+  if (!open) return null
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--bg-secondary)] border-[var(--border-color)]">
-        <DialogHeader>
-          <DialogTitle className="text-[var(--text-primary)]">Create Blog Post</DialogTitle>
-          <DialogDescription className="text-[var(--text-secondary)]">
-            Create a new blog post for SEO and content marketing
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[var(--bg-secondary)] border-[var(--border-color)]">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+          <div>
+            <CardTitle className="text-[var(--text-primary)]">Create Blog Post</CardTitle>
+            <CardDescription className="text-[var(--text-secondary)]">
+              Create a new blog post for SEO and content marketing
+            </CardDescription>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onOpenChange(false)}
+            className="h-8 w-8 p-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-[var(--text-primary)]">Title *</Label>
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="slug" className="text-[var(--text-primary)]">Slug *</Label>
+                <Input
+                  id="slug"
+                  value={slug}
+                  onChange={(e) => setSlug(generateSlug(e.target.value))}
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                  required
+                />
+              </div>
+            </div>
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-[var(--text-primary)]">Title *</Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => handleTitleChange(e.target.value)}
+              <Label htmlFor="excerpt" className="text-[var(--text-primary)]">Excerpt</Label>
+              <Textarea
+                id="excerpt"
+                value={excerpt}
+                onChange={(e) => setExcerpt(e.target.value)}
                 className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                rows={2}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="content" className="text-[var(--text-primary)]">Content * (HTML)</Label>
+              <Textarea
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)] font-mono text-sm"
+                rows={15}
                 required
               />
+              <p className="text-xs text-[var(--text-secondary)]">
+                Enter HTML content. Use &lt;p&gt; for paragraphs, &lt;h2&gt; for headings, etc.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="featuredImage" className="text-[var(--text-primary)]">Featured Image URL</Label>
+                <Input
+                  id="featuredImage"
+                  value={featuredImage}
+                  onChange={(e) => setFeaturedImage(e.target.value)}
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
+                <Input
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                  placeholder="e.g., Guides, Updates, Tips"
+                />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="slug" className="text-[var(--text-primary)]">Slug *</Label>
+              <Label htmlFor="tags" className="text-[var(--text-primary)]">Tags (comma-separated)</Label>
               <Input
-                id="slug"
-                value={slug}
-                onChange={(e) => setSlug(generateSlug(e.target.value))}
+                id="tags"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
                 className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-                required
+                placeholder="collection, organization, tips"
               />
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="excerpt" className="text-[var(--text-primary)]">Excerpt</Label>
-            <Textarea
-              id="excerpt"
-              value={excerpt}
-              onChange={(e) => setExcerpt(e.target.value)}
-              className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-              rows={2}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="content" className="text-[var(--text-primary)]">Content * (HTML)</Label>
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)] font-mono text-sm"
-              rows={15}
-              required
-            />
-            <p className="text-xs text-[var(--text-secondary)]">
-              Enter HTML content. Use &lt;p&gt; for paragraphs, &lt;h2&gt; for headings, etc.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="featuredImage" className="text-[var(--text-primary)]">Featured Image URL</Label>
-              <Input
-                id="featuredImage"
-                value={featuredImage}
-                onChange={(e) => setFeaturedImage(e.target.value)}
-                className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="metaTitle" className="text-[var(--text-primary)]">SEO Title</Label>
+                <Input
+                  id="metaTitle"
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                  placeholder="Leave empty to use title"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="metaDescription" className="text-[var(--text-primary)]">SEO Description</Label>
+                <Input
+                  id="metaDescription"
+                  value={metaDescription}
+                  onChange={(e) => setMetaDescription(e.target.value)}
+                  className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
+                  placeholder="Leave empty to use excerpt"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="category" className="text-[var(--text-primary)]">Category</Label>
-              <Input
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-                placeholder="e.g., Guides, Updates, Tips"
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="published"
+                checked={published}
+                onChange={(e) => setPublished(e.target.checked)}
+                className="w-4 h-4"
               />
+              <Label htmlFor="published" className="text-[var(--text-primary)]">
+                Publish immediately
+              </Label>
             </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="tags" className="text-[var(--text-primary)]">Tags (comma-separated)</Label>
-            <Input
-              id="tags"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-              placeholder="collection, organization, tips"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="metaTitle" className="text-[var(--text-primary)]">SEO Title</Label>
-              <Input
-                id="metaTitle"
-                value={metaTitle}
-                onChange={(e) => setMetaTitle(e.target.value)}
-                className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-                placeholder="Leave empty to use title"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="metaDescription" className="text-[var(--text-primary)]">SEO Description</Label>
-              <Input
-                id="metaDescription"
-                value={metaDescription}
-                onChange={(e) => setMetaDescription(e.target.value)}
-                className="bg-[var(--bg-tertiary)] border-[var(--border-color)] text-[var(--text-primary)]"
-                placeholder="Leave empty to use excerpt"
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="published"
-              checked={published}
-              onChange={(e) => setPublished(e.target.checked)}
-              className="w-4 h-4"
-            />
-            <Label htmlFor="published" className="text-[var(--text-primary)]">
-              Publish immediately
-            </Label>
-          </div>
-          <div className="flex justify-end gap-2 pt-4">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => onOpenChange(false)}
-              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="accent-button text-white"
-            >
-              {submitting ? 'Creating...' : 'Create Post'}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+            <CardFooter className="flex justify-end gap-2 pt-4 px-0">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => onOpenChange(false)}
+                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="accent-button text-white"
+              >
+                {submitting ? 'Creating...' : 'Create Post'}
+              </Button>
+            </CardFooter>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
-
