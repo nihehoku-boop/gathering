@@ -14,6 +14,7 @@ import { ArrowLeft, Plus, Check, X, Upload, Grid3x3, List, Edit, ChevronDown, Ch
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 import BulkImportDialog from './BulkImportDialog'
+import AddItemDialog from './AddItemDialog'
 import EditItemDialog from './EditItemDialog'
 import EditCollectionDialog from './EditCollectionDialog'
 import AlternativeCoversView from './AlternativeCoversView'
@@ -105,16 +106,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
   const hasMoreItemsRef = useRef(hasMoreItems)
   const itemsPageRef = useRef(itemsPage)
   const itemsLoadingRef = useRef(false)
-  const [newItemName, setNewItemName] = useState('')
-  const [newItemNumber, setNewItemNumber] = useState('')
-  const [addingItem, setAddingItem] = useState(false)
+  const [showAddItemDialog, setShowAddItemDialog] = useState(false)
   const [showBulkImport, setShowBulkImport] = useState(false)
   const [viewMode, setViewMode] = useState<'cover' | 'list'>('cover')
   const [sortBy, setSortBy] = useState<'number-asc' | 'number-desc' | 'name-asc' | 'name-desc' | 'owned' | 'not-owned' | 'rating-high' | 'rating-low' | 'date-new' | 'date-old'>('number-asc')
   const sortByRef = useRef(sortBy)
   const [showSortMenu, setShowSortMenu] = useState(false)
   const [editingItem, setEditingItem] = useState<Item | null>(null)
-  const [showAddForm, setShowAddForm] = useState(false)
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   const [showEditCollection, setShowEditCollection] = useState(false)
   const [viewingAlternatives, setViewingAlternatives] = useState<Item | null>(null)
@@ -742,98 +740,26 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
     }
   }
 
-  const addItem = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newItemName.trim()) return
-
-    setAddingItem(true)
-    try {
-      // Parse number properly - handle empty strings and invalid numbers
-      let parsedNumber: number | null = null
-      if (newItemNumber && newItemNumber.trim()) {
-        const num = parseInt(newItemNumber.trim(), 10)
-        if (!isNaN(num) && num > 0) {
-          parsedNumber = num
-        }
-      }
-
-      // Validate collectionId before sending
-      if (!collectionId || typeof collectionId !== 'string') {
-        console.error('[Add Item] Invalid collectionId:', collectionId)
-        showAlert({
-          title: 'Error',
-          message: 'Invalid collection ID. Please refresh the page and try again.',
-          type: 'error',
-        })
-        setAddingItem(false)
-        return
-      }
-
-      const trimmedCollectionId = collectionId.trim()
-      
-      // Log in development to debug UUID issues
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[Add Item] Sending request with:', {
-          collectionId: trimmedCollectionId,
-          collectionIdLength: trimmedCollectionId.length,
-          name: newItemName.trim(),
-          number: parsedNumber,
-        })
-      }
-
-      const res = await fetch('/api/items', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          collectionId: trimmedCollectionId,
-          name: newItemName.trim(),
-          number: parsedNumber,
-        }),
-      })
-
-      if (res.ok) {
-        const newItem = await res.json()
-        setNewItemName('')
-        setNewItemNumber('')
-        setShowAddForm(false)
-        // Invalidate cache - items have changed
-        CollectionCache.invalidateCollection(collectionId)
-        // Add the new item to the list
-        setItems(prev => [newItem, ...prev])
-        setTotalItemsCount(prev => prev + 1)
-        fetchCollection()
-        
-        // Show success toast with progress
-        const newTotal = totalItemsCount + 1
-        const newOwned = totalOwnedCount
-        const progress = newTotal > 0 ? Math.round((newOwned / newTotal) * 100) : 0
-        toast.success(`Item added! Progress: ${newOwned}/${newTotal} (${progress}%)`)
-        
-        // Show achievement notification if any were unlocked
-        if (newItem.newlyUnlockedAchievements && newItem.newlyUnlockedAchievements.length > 0) {
-          setTimeout(() => {
-            toast.success(`🎉 Achievement unlocked: ${newItem.newlyUnlockedAchievements.join(', ')}`, 7000)
-          }, 500)
-        }
-      } else {
-        // Handle error response
-        const errorData = await res.json().catch(() => ({ error: 'Failed to add item' }))
-        toast.error(errorData.error || 'Failed to add item')
-        showAlert({
-          title: 'Error',
-          message: errorData.error || 'Failed to add item',
-          type: 'error',
-        })
-      }
-    } catch (error) {
-      console.error('Error adding item:', error)
-      showAlert({
-        title: 'Error',
-        message: 'An error occurred while adding the item. Please try again.',
-        type: 'error',
-      })
-    } finally {
-      setAddingItem(false)
+  // Handle successful item addition from dialog
+  const handleItemAdded = (newItem: any) => {
+    // Invalidate cache - items have changed
+    CollectionCache.invalidateCollection(collectionId)
+    // Add the new item to the list
+    setItems(prev => [newItem, ...prev])
+    setTotalItemsCount(prev => prev + 1)
+    fetchCollection()
+    
+    // Show success toast with progress
+    const newTotal = totalItemsCount + 1
+    const newOwned = totalOwnedCount
+    const progress = newTotal > 0 ? Math.round((newOwned / newTotal) * 100) : 0
+    toast.success(`Item added! Progress: ${newOwned}/${newTotal} (${progress}%)`)
+    
+    // Show achievement notification if any were unlocked
+    if (newItem.newlyUnlockedAchievements && newItem.newlyUnlockedAchievements.length > 0) {
+      setTimeout(() => {
+        toast.success(`🎉 Achievement unlocked: ${newItem.newlyUnlockedAchievements.join(', ')}`, 7000)
+      }, 500)
     }
   }
 
@@ -1718,70 +1644,27 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                   )}
           </div>
           <CardContent>
-            <div className="flex flex-col gap-2 mb-4">
-              {!showAddForm ? (
-                <div className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowBulkImport(true)}
-                    className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
-                    size="sm"
-                    title="Bulk Import Items"
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Bulk Add Items
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() => setShowAddForm(true)}
-                    className="accent-button text-white smooth-transition"
-                    size="sm"
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add Item
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={addItem} className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Item name (e.g., Book #1)"
-                      value={newItemName}
-                      onChange={(e) => setNewItemName(e.target.value)}
-                      className="flex-1 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
-                      autoFocus
-                    />
-                    <Input
-                      type="number"
-                      placeholder="Number"
-                      value={newItemNumber}
-                      onChange={(e) => setNewItemNumber(e.target.value)}
-                      className="w-24 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[#007AFF] smooth-transition"
-                    />
-                    <Button 
-                      type="submit" 
-                      disabled={addingItem || !newItemName.trim()}
-                      className="accent-button text-white smooth-transition"
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setShowAddForm(false)
-                        setNewItemName('')
-                        setNewItemNumber('')
-                      }}
-                      className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </form>
-              )}
+            <div className="flex justify-end gap-2 mb-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowBulkImport(true)}
+                className="border-[var(--border-hover)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] smooth-transition"
+                size="sm"
+                title="Bulk Import Items"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                Bulk Add Items
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setShowAddItemDialog(true)}
+                className="accent-button text-white smooth-transition"
+                size="sm"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Item
+              </Button>
             </div>
 
             {items.length === 0 && !loading && !itemsLoading && (
@@ -1795,15 +1678,13 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
                     Start building your trove by adding your first item! You can add items one at a time or use bulk import to add many items at once.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    {!showAddForm && (
-                      <Button
-                        onClick={() => setShowAddForm(true)}
-                        className="accent-button text-white smooth-transition"
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add First Item
-                      </Button>
-                    )}
+                    <Button
+                      onClick={() => setShowAddItemDialog(true)}
+                      className="accent-button text-white smooth-transition"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add First Item
+                    </Button>
                     <Button
                       variant="outline"
                       onClick={() => setShowBulkImport(true)}
@@ -2485,6 +2366,14 @@ export default function CollectionDetail({ collectionId }: { collectionId: strin
         </Card>
       </div>
     </div>
+      <AddItemDialog
+        open={showAddItemDialog}
+        onOpenChange={setShowAddItemDialog}
+        collectionId={collectionId}
+        collectionTemplate={collection?.template}
+        customFieldDefinitions={collection?.customFieldDefinitions}
+        onSuccess={handleItemAdded}
+      />
       <BulkImportDialog
         open={showBulkImport}
         onOpenChange={setShowBulkImport}
