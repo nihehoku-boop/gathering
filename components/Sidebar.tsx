@@ -593,8 +593,11 @@ export default function Sidebar() {
           <div className="flex items-center justify-between px-6 border-b border-[var(--border-color)] h-[73px]">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 smooth-transition">
               <LogoIcon width={24} height={24} className="h-6 w-6" />
-              <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tighter">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tighter relative">
                 Colletro
+                <span className="absolute -top-1 -right-6 px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-[var(--accent-color)] text-black rounded">
+                  Beta
+                </span>
               </h2>
             </Link>
             <button

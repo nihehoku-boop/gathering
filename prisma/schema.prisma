@@ -65,6 +65,7 @@ model User {
   communityCollectionVotes CommunityCollectionVote[]
   contentReports           ContentReport[]
   wishlists                Wishlist[]
+  blogPosts                BlogPost[]
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt
 
@@ -289,4 +290,29 @@ model ContentReport {
   @@index([reporterId])
   @@index([status])
   @@index([createdAt])
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String? // Short description for previews
+  content     String   @db.Text // Full blog post content (markdown or HTML)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  featuredImage String? // URL to featured image
+  published   Boolean  @default(false) // Draft vs published
+  publishedAt DateTime? // When it was published
+  metaTitle   String? // Custom SEO title
+  metaDescription String? // Custom SEO description
+  tags        String[] // Array of tags for categorization
+  category    String? // Main category (e.g., "Guides", "Updates", "Tips")
+  viewCount   Int      @default(0) // Track views for analytics
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([published, publishedAt])
+  @@index([category])
+  @@index([authorId])
 }
