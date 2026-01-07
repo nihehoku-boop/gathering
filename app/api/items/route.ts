@@ -62,7 +62,7 @@ async function createItemHandler(request: NextRequest) {
         number: number ?? null,
         image: image || null,
         notes: notes || null,
-        alternativeImages: alternativeImages && alternativeImages.length > 0 
+        alternativeImages: Array.isArray(alternativeImages) && alternativeImages.length > 0 
           ? JSON.stringify(alternativeImages) 
           : null,
         wear: wear || null,
@@ -81,8 +81,15 @@ async function createItemHandler(request: NextRequest) {
     }, { status: 201 })
   } catch (error) {
     logger.error('Error creating item:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    console.error('[Item Creation] Full error details:', {
+      error: errorMessage,
+      stack: errorStack,
+      errorType: error?.constructor?.name,
+    })
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: process.env.NODE_ENV === 'development' ? errorMessage : undefined },
       { status: 500 }
     )
   }
