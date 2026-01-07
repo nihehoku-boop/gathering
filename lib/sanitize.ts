@@ -52,6 +52,15 @@ export function sanitizeUrl(url: string | null | undefined): string | null {
     return null
   }
 
+  // Allow local paths starting with /
+  if (trimmed.startsWith('/')) {
+    // Prevent path traversal
+    if (trimmed.includes('..')) {
+      return null
+    }
+    return trimmed
+  }
+
   // Only allow http:// and https://
   if (!trimmed.match(/^https?:\/\//i)) {
     return null

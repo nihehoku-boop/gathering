@@ -64,7 +64,12 @@ export const createItemSchema = z.object({
     z.undefined(),
   ]).optional().transform((val) => val ? sanitizeUrlTransform(val) : null),
   notes: z.string().max(5000).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(5000)(val) : val),
-  alternativeImages: z.array(z.string().url().transform(sanitizeUrlArrayTransform)).optional(),
+  alternativeImages: z.array(
+    z.union([
+      z.string().url(),
+      z.string().startsWith('/'), // Allow local paths
+    ]).transform(sanitizeUrlArrayTransform)
+  ).optional(),
   wear: z.string().max(50).trim().nullable().optional().transform((val) => val ? sanitizeTextMax(50)(val) : val),
   personalRating: z.number().int().min(1).max(10).nullable().optional(),
   logDate: z.string().nullable().optional(),
