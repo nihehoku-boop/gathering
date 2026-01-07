@@ -144,21 +144,45 @@ export default function AddItemDialog({
         }
       }
       
+      // Build request body, only including non-empty values
+      const requestBody: Record<string, any> = {
+        collectionId: collectionId.trim(),
+        name: trimmedName,
+      }
+      
+      if (parsedNumber !== null) {
+        requestBody.number = parsedNumber
+      }
+      if (notes.trim()) {
+        requestBody.notes = notes.trim()
+      }
+      if (image.trim()) {
+        requestBody.image = image.trim()
+      }
+      const filteredAltImages = alternativeImages.filter(img => img && img.trim())
+      if (filteredAltImages.length > 0) {
+        requestBody.alternativeImages = filteredAltImages
+      }
+      if (wear.trim()) {
+        requestBody.wear = wear.trim()
+      }
+      if (personalRating) {
+        const rating = parseInt(personalRating)
+        if (!isNaN(rating) && rating >= 1 && rating <= 10) {
+          requestBody.personalRating = rating
+        }
+      }
+      if (logDate) {
+        requestBody.logDate = logDate
+      }
+      if (Object.keys(cleanedCustomFields).length > 0) {
+        requestBody.customFields = cleanedCustomFields
+      }
+
       const res = await fetch('/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          collectionId: collectionId.trim(),
-          name: trimmedName,
-          number: parsedNumber,
-          notes: notes.trim() || null,
-          image: image.trim() || null,
-          alternativeImages: alternativeImages.filter(img => img && img.trim()),
-          wear: wear.trim() || null,
-          personalRating: personalRating ? parseInt(personalRating) : null,
-          logDate: logDate || null,
-          customFields: Object.keys(cleanedCustomFields).length > 0 ? cleanedCustomFields : null,
-        }),
+        body: JSON.stringify(requestBody),
       })
 
       if (res.ok) {
