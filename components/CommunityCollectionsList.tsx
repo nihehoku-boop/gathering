@@ -643,10 +643,13 @@ export default function CommunityCollectionsList() {
                     </div>
                   )}
                   {(() => {
-                    const tags = parseTags(collection.tags || '[]')
-                    return tags.length > 0 && (
+                    const allTags = parseTags(collection.tags || '[]')
+                    const visibleTags = allTags.slice(0, 3)
+                    const remainingCount = allTags.length - 3
+                    
+                    return allTags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {tags.map((tag) => {
+                        {visibleTags.map((tag) => {
                           const colors = getTagColor(tag)
                           return (
                             <span
@@ -662,6 +665,14 @@ export default function CommunityCollectionsList() {
                             </span>
                           )
                         })}
+                        {remainingCount > 0 && (
+                          <span 
+                            className="text-xs text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-0.5 rounded-full border border-[var(--border-color)]" 
+                            title={`${allTags.slice(3).join(', ')}`}
+                          >
+                            +{remainingCount} more
+                          </span>
+                        )}
                       </div>
                     )
                   })()}
