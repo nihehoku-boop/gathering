@@ -30,7 +30,10 @@ const getMetadataBase = (): URL => {
 }
 
 export const metadata: Metadata = {
-  title: 'Colletro - Your Collection Trove',
+  title: {
+    default: 'Colletro - Your Collection Trove',
+    template: '%s | Colletro',
+  },
   description: 'Build your trove. Catalog books, comics, movies, and cards — with tags, editions, and wishlists.',
   metadataBase: getMetadataBase(),
   keywords: ['collection', 'collector', 'collections', 'tracking', 'organize', 'comics', 'cards', 'books', 'collectibles', 'trove'],

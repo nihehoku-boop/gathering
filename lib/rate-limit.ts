@@ -111,10 +111,10 @@ export const rateLimitConfigs = {
     windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 3, // 3 requests per hour
   },
-  // Strict for registration
+  // Strict for registration (reduces bot / bulk signups)
   registration: {
     windowMs: 60 * 60 * 1000, // 1 hour
-    maxRequests: 5, // 5 registrations per hour per IP
+    maxRequests: 3, // 3 registrations per hour per IP
   },
 }
 

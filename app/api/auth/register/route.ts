@@ -6,6 +6,7 @@ import { withRateLimit } from '@/lib/rate-limit-middleware'
 import { rateLimitConfigs } from '@/lib/rate-limit'
 import { sendWelcomeEmail, sendVerificationEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
+import { isBlockedEmailDomain } from '@/lib/blocked-email-domains'
 
 async function registerHandler(request: NextRequest) {
   try {
@@ -24,6 +25,14 @@ async function registerHandler(request: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
+        { status: 400 }
+      )
+    }
+
+    // Block disposable / temporary email domains
+    if (isBlockedEmailDomain(email)) {
+      return NextResponse.json(
+        { error: 'Please use a permanent email address. Temporary email addresses are not allowed.' },
         { status: 400 }
       )
     }

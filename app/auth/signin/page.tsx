@@ -41,6 +41,9 @@ function SignInContent() {
       if (result?.ok) {
         router.push('/')
         router.refresh()
+      } else if (result?.error === 'EmailNotVerified') {
+        setShowVerificationMessage(true)
+        setError('')
       } else {
         setError('Invalid email or password')
       }

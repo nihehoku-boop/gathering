@@ -18,6 +18,15 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
+            password: true,
+            emailVerified: true,
+            isAdmin: true,
+          },
         })
 
         if (!user || !user.password) {
@@ -28,6 +37,12 @@ export const authOptions: NextAuthOptions = {
 
         if (!isValid) {
           return null
+        }
+
+        // Require email verification to sign in (reduces bot / throwaway accounts)
+        // Admins can sign in without verification (e.g. existing admin accounts)
+        if (!user.emailVerified && !user.isAdmin) {
+          throw new Error('EmailNotVerified')
         }
 
         return {
