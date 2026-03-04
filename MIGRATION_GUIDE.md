@@ -48,7 +48,7 @@ If your database is suspended, you have a few options:
 2. Add these variables:
 
 ```env
-# Old database (your current Vercel Postgres)
+# Old database (your current connection string from Vercel env or Prisma dashboard)
 OLD_DATABASE_URL="postgres://user:password@host:5432/postgres?sslmode=require"
 
 # New database (your Neon connection string)
