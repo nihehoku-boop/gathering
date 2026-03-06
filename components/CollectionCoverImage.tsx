@@ -32,7 +32,7 @@ export default function CollectionCoverImage({
           alt=""
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover scale-150 blur-lg opacity-50 select-none pointer-events-none"
+          className="object-cover scale-150 blur-md opacity-50 select-none pointer-events-none"
           aria-hidden
           unoptimized={unoptimized}
         />

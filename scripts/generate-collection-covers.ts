@@ -200,7 +200,7 @@ function generateSVGCover(collectionName: string, category: string | null = null
       <stop offset="100%" style="stop-color:${COLORS.background.gradient.end};stop-opacity:1" />
     </linearGradient>
     <filter id="blur-bg" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="blur"/>
       <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0" result="blur-opacity"/>
     </filter>
   </defs>

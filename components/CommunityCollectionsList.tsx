@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, useRef } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -49,8 +49,18 @@ interface CommunityCollection {
   userVote?: 'upvote' | null
 }
 
+type SortOption = 'newest' | 'oldest' | 'mostItems' | 'leastItems' | 'alphabetical' | 'popular'
+const SORT_OPTIONS: SortOption[] = ['newest', 'oldest', 'mostItems', 'leastItems', 'alphabetical', 'popular']
+
+interface CategoryWithCount {
+  name: string
+  count: number
+}
+
 export default function CommunityCollectionsList() {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const { data: session } = useSession()
   const [collections, setCollections] = useState<CommunityCollection[]>([])
   const [filteredCollections, setFilteredCollections] = useState<CommunityCollection[]>([])
@@ -64,14 +74,53 @@ export default function CommunityCollectionsList() {
   const [searchQuery, setSearchQuery] = useState('') // Debounced search query
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'mostItems' | 'leastItems' | 'alphabetical' | 'popular'>('popular')
+  const [sortBy, setSortBy] = useState<SortOption>('popular')
   const [votingCollectionId, setVotingCollectionId] = useState<string | null>(null)
   const [showFilters, setShowFilters] = useState(false)
+  const [categoryChips, setCategoryChips] = useState<CategoryWithCount[]>([])
+  const hasSyncedFromUrl = useRef(false)
   const { alertDialog, showAlert, showConfirm, closeAlert } = useAlert()
   const [showShareDialog, setShowShareDialog] = useState(false)
   const [editingCollection, setEditingCollection] = useState<CommunityCollection | null>(null)
   const [managingCollectionId, setManagingCollectionId] = useState<string | null>(null)
   const [reportingCollection, setReportingCollection] = useState<{ id: string; name: string } | null>(null)
+
+  // Sync URL -> state (on load and when user uses back/forward)
+  useEffect(() => {
+    const q = searchParams.get('q') ?? ''
+    const cat = searchParams.get('category') ?? ''
+    const sort = searchParams.get('sort')
+    setSearchInput(q)
+    setSearchQuery(q)
+    setSelectedCategory(cat)
+    if (sort && SORT_OPTIONS.includes(sort as SortOption)) {
+      setSortBy(sort as SortOption)
+    }
+    hasSyncedFromUrl.current = true
+  }, [searchParams])
+
+  // Sync state -> URL (shareable / bookmarkable filters)
+  useEffect(() => {
+    if (!hasSyncedFromUrl.current) return
+    const params = new URLSearchParams()
+    if (searchQuery.trim()) params.set('q', searchQuery.trim())
+    if (selectedCategory) params.set('category', selectedCategory)
+    if (sortBy && sortBy !== 'popular') params.set('sort', sortBy)
+    const qs = params.toString()
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
+  }, [searchQuery, selectedCategory, sortBy, pathname, router])
+
+  // Fetch category counts for chips
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/community-collections/categories', { cache: 'no-store' })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data: { categories?: CategoryWithCount[] } | null) => {
+        if (!cancelled && data?.categories) setCategoryChips(data.categories)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   // Debounce search input
   useEffect(() => {
@@ -380,6 +429,40 @@ export default function CommunityCollectionsList() {
   return (
     <div>
       <div className="mb-6 space-y-4">
+        {/* Quick category chips */}
+        {categoryChips.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('')}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium smooth-transition ${
+                !selectedCategory
+                  ? 'bg-[var(--accent-color)] text-white'
+                  : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-hover)] hover:border-[var(--accent-color)]'
+              }`}
+            >
+              All
+            </button>
+            {categoryChips.map(({ name, count }) => {
+              const isSelected = selectedCategory.toLowerCase() === name.toLowerCase()
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => setSelectedCategory(isSelected ? '' : name)}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium smooth-transition ${
+                    isSelected
+                      ? 'bg-[var(--accent-color)] text-white'
+                      : 'bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-hover)] hover:border-[var(--accent-color)]'
+                  }`}
+                >
+                  {name}
+                  <span className={isSelected ? ' opacity-90' : ' text-[var(--text-secondary)]'}> ({count})</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
         <div className="flex gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)] z-10" />
