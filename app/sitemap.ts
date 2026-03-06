@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
+import { getAllCollectSlugs } from '@/lib/collect-pages'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
@@ -64,6 +65,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
+  const collectUrls: MetadataRoute.Sitemap = getAllCollectSlugs().map((slug) => ({
+    url: `${baseUrl}/collect/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
   let blogUrls: MetadataRoute.Sitemap = []
   try {
     const blogPosts = await prisma.blogPost.findMany({
@@ -86,6 +94,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // If DB unavailable at build/crawl time, still return static URLs
   }
 
-  return [...staticUrls, ...blogUrls]
+  return [...staticUrls, ...collectUrls, ...blogUrls]
 }
 

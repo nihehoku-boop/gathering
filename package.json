@@ -24,6 +24,7 @@
     "migrate-to-production": "tsx scripts/migrate-to-production.ts",
     "migrate-recommended-community": "tsx scripts/migrate-recommended-community.ts",
     "set-recommended-public": "tsx scripts/set-recommended-collections-public.ts",
+    "list:recommended": "tsx scripts/list-recommended-collections.ts",
     "seed:top-100-vinyls": "tsx scripts/seed-top-100-vinyls.ts",
     "seed:pokemon-tcg": "tsx scripts/seed-pokemon-tcg-collections.ts",
     "seed:magic-tcg": "tsx scripts/seed-magic-tcg-collections.ts",

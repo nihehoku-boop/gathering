@@ -7,6 +7,7 @@ import { ArrowRight, Sparkles, ChevronDown, ChevronDown as ArrowDown } from 'luc
 import LogoIcon from './LogoIcon'
 import Link from 'next/link'
 import Image from 'next/image'
+import { COLLECT_PAGES } from '@/lib/collect-pages'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -380,6 +381,26 @@ export default function LandingPage() {
             </Button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* What do you collect? */}
+      <div className="relative py-10 sm:py-14 border-t border-[#2a2d35]/80">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+          <p className="text-center text-[#969696] text-sm sm:text-base mb-4 sm:mb-6">
+            What do you collect?
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+            {COLLECT_PAGES.map((page) => (
+              <Link
+                key={page.slug}
+                href={`/collect/${page.slug}`}
+                className="px-4 py-2 rounded-full text-sm font-medium bg-[#1a1d24] border border-[#2a2d35] text-[#fafafa] hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] smooth-transition"
+              >
+                {page.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
