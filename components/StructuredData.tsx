@@ -4,7 +4,7 @@
  */
 
 export default function StructuredData() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
   
   const websiteSchema = {
     '@context': 'https://schema.org',

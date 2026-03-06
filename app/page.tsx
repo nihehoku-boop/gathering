@@ -4,6 +4,7 @@ import CollectionsList from '@/components/CollectionsList'
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
 import LandingPage from '@/components/LandingPage'
+import LandingFAQSchema from '@/components/LandingFAQSchema'
 import OnboardingTour from '@/components/OnboardingTour'
 import { getBadgeEmoji } from '@/lib/badges'
 
@@ -12,7 +13,12 @@ export default async function Home() {
 
   // Show landing page if not logged in, otherwise show collections
   if (!session) {
-    return <LandingPage />
+    return (
+      <>
+        <LandingFAQSchema />
+        <LandingPage />
+      </>
+    )
   }
 
   return (

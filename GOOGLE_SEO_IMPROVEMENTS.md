@@ -11,7 +11,7 @@ Based on your current setup (see `SEO_IMPLEMENTATION_SUMMARY.md` and `SEO_OPTIMI
 - Root **meta tags** (title, description, keywords), **OpenGraph**, **Twitter Card**, **robots**
 - **metadataBase** for canonical URLs
 - **Structured data** (WebSite, Organization, WebApplication) in layout
-- **sitemap.xml** (home, auth, community, recommended, legal, help, about, leaderboard, blog)
+- **sitemap.xml** (home, auth, about, help, terms, privacy, cookies, blog — login-only URLs removed)
 - **robots.txt** with sitemap and clear allow/disallow
 - **Blog** and **legal pages** have their own metadata
 - **Landing page** is server-rendered when not logged in, so homepage is crawlable
@@ -124,3 +124,21 @@ Give important pages their own title and description so SERPs are clearer and mo
 | BreadcrumbList              | Layouts or shared component    | Medium |
 
 Doing **1–4** will fix the main technical gaps and give you a solid base; **5–7** will make individual pages and share links perform better in Google.
+
+---
+
+## Google Search Console – only one page crawled?
+
+If GSC shows only one (or very few) pages indexed:
+
+1. **Sitemap**  
+   Submit your sitemap in GSC: **Sitemaps** → add `https://yourdomain.com/sitemap.xml`. The sitemap now lists only **crawlable** URLs (home, about, help, terms, privacy, cookies, blog); community/recommended/leaderboard were removed because they redirect to sign-in, so Google was not indexing their content.
+
+2. **NEXTAUTH_URL**  
+   In Vercel (and in the sitemap), `NEXTAUTH_URL` must be your **live domain** (e.g. `https://colletro.com`). If it was a staging URL, the sitemap and canonicals pointed to the wrong domain and Google may have under-crawled.
+
+3. **Request indexing**  
+   In GSC use **URL Inspection** for your key URLs (`/`, `/about`, `/help`, `/blog`) and click **Request indexing** so Google recrawls them.
+
+4. **Landing page links**  
+   The footer now links to Blog, About, **Help**, Terms, Privacy, Cookies so Google can discover these pages from the homepage.

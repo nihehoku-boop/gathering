@@ -27,7 +27,7 @@ export async function generateMetadata(
     }
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
   const title = post.metaTitle || post.title
   const description = post.metaDescription || post.excerpt || 'Read more on Colletro Blog'
 
@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound()
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
 
   // Structured data for SEO
   const structuredData = {

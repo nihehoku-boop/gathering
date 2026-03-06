@@ -67,7 +67,7 @@ function normalizeFromEmail(fromEmail: string | undefined): string {
 
 // Helper to get logo URL
 function getLogoUrl(): string {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
   // Remove trailing slash if present
   const cleanUrl = baseUrl.replace(/\/$/, '')
   return `${cleanUrl}/logo-icon.png`
@@ -85,7 +85,7 @@ export async function sendPasswordResetEmail(email: string, resetLink: string, u
 
     const fromEmail = normalizeFromEmail(process.env.RESEND_FROM_EMAIL)
     const logoUrl = getLogoUrl()
-    const appUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+    const appUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
     
     console.log('[Email] Using from email:', fromEmail)
     
@@ -203,7 +203,7 @@ export async function sendWelcomeEmail(email: string, userName?: string) {
     }
 
     const fromEmail = normalizeFromEmail(process.env.RESEND_FROM_EMAIL)
-    const appUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+    const appUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
     const logoUrl = getLogoUrl()
     
     console.log('[Email] Using from email:', fromEmail)
@@ -327,7 +327,7 @@ export async function sendVerificationEmail(email: string, verificationLink: str
 
     const fromEmail = normalizeFromEmail(process.env.RESEND_FROM_EMAIL)
     const logoUrl = getLogoUrl()
-    const appUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+    const appUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
     
     console.log('[Email] Sending verification email', {
       to: email,

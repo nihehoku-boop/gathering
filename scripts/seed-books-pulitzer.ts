@@ -176,7 +176,7 @@ async function openLibraryFetch(url: string): Promise<any> {
   
   const response = await fetch(url, {
     headers: {
-      'User-Agent': 'Gathering/1.0 (https://gathering-jade.vercel.app)',
+      'User-Agent': 'Gathering/1.0 (https://colletro.com)',
     },
   })
 

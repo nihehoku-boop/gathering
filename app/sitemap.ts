@@ -2,28 +2,12 @@ import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
-  
-  // Fetch published blog posts
-  const blogPosts = await prisma.blogPost.findMany({
-    where: {
-      published: true,
-      publishedAt: { not: null },
-    },
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  })
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://colletro.com'
 
-  const blogUrls = blogPosts.map((post: { slug: string; updatedAt: Date }) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: post.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }))
-  
-  return [
+  // Only include URLs that are crawlable without login (no redirect to signin).
+  // community, recommended, leaderboard require auth and redirect — listing them
+  // caused Google to waste crawl budget and see only one real page.
+  const staticUrls: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -43,16 +27,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/community`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: 'hourly',
-      priority: 0.9,
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
-      url: `${baseUrl}/recommended`,
+      url: `${baseUrl}/help`,
       lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
+      changeFrequency: 'weekly',
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/terms`,
@@ -73,30 +57,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/help`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/leaderboard`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.8,
-    },
-    {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    ...blogUrls,
   ]
+
+  let blogUrls: MetadataRoute.Sitemap = []
+  try {
+    const blogPosts = await prisma.blogPost.findMany({
+      where: {
+        published: true,
+        publishedAt: { not: null },
+      },
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+    })
+    blogUrls = blogPosts.map((post: { slug: string; updatedAt: Date }) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }))
+  } catch {
+    // If DB unavailable at build/crawl time, still return static URLs
+  }
+
+  return [...staticUrls, ...blogUrls]
 }
 

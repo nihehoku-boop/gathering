@@ -19,13 +19,13 @@ const bricolageGrotesque = Bricolage_Grotesque({
 
 // Helper to safely create URL
 const getMetadataBase = (): URL => {
-  const url = process.env.NEXTAUTH_URL || 'https://gathering-jade.vercel.app'
+  const url = process.env.NEXTAUTH_URL || 'https://colletro.com'
   try {
     // If URL doesn't have protocol, add https
     const urlWithProtocol = url.startsWith('http') ? url : `https://${url}`
     return new URL(urlWithProtocol)
   } catch {
-    return new URL('https://gathering-jade.vercel.app')
+    return new URL('https://colletro.com')
   }
 }
 
