@@ -423,6 +423,9 @@ export default function LandingPage() {
               <Link href="/help" className="hover:text-[#fafafa] smooth-transition">
                 Help
               </Link>
+              <Link href="/impressum" className="hover:text-[#fafafa] smooth-transition">
+                Impressum
+              </Link>
               <Link href="/terms" className="hover:text-[#fafafa] smooth-transition">
                 Terms
               </Link>
@@ -431,6 +434,9 @@ export default function LandingPage() {
               </Link>
               <Link href="/cookies" className="hover:text-[#fafafa] smooth-transition">
                 Cookies
+              </Link>
+              <Link href="/cookies#settings" className="hover:text-[#fafafa] smooth-transition">
+                Cookie settings
               </Link>
               {session && (
                 <>

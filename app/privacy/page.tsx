@@ -41,7 +41,7 @@ export default function PrivacyPage() {
                 Colletro ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our collection management platform.
               </p>
               <p className="text-[#969696] leading-relaxed mt-3">
-                <strong>Data Controller:</strong> The data controller for the purposes of GDPR is Colletro. For questions about data protection, please contact us through the contact information provided in your account settings.
+                <strong>Data Controller:</strong> The data controller for the purposes of GDPR is Colletro (Nico Hennecke). For questions about data protection, please contact <a href="mailto:nico@hennecke.email" className="text-[var(--accent-color)] hover:underline">nico@hennecke.email</a> or see our <Link href="/impressum" className="text-[var(--accent-color)] hover:underline">Impressum</Link>.
               </p>
             </section>
 
@@ -108,6 +108,7 @@ export default function PrivacyPage() {
                 <li>Cloud hosting providers (Vercel, Prisma)</li>
                 <li>Image hosting services (Cloudinary)</li>
                 <li>Analytics services (Vercel Analytics)</li>
+                <li>Error monitoring (Sentry) for stability and debugging; may process IP, device info, and error context</li>
               </ul>
               <p className="text-[#969696] leading-relaxed mt-3">
                 These providers are contractually obligated to protect your data and use it only for the purposes we specify.
@@ -183,7 +184,15 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">12. Contact Us</h2>
               <p className="text-[#969696] leading-relaxed">
-                If you have any questions about this Privacy Policy or wish to exercise your rights, please contact us through the contact information provided in your account settings or on our website.
+                For questions about this Privacy Policy or to exercise your data subject rights (access, rectification, erasure, portability, etc.), please contact:
+              </p>
+              <p className="text-[#969696] leading-relaxed mt-2">
+                <strong className="text-[#fafafa]">Nico Hennecke</strong>
+                <br />
+                Email: <a href="mailto:nico@hennecke.email" className="text-[var(--accent-color)] hover:underline">nico@hennecke.email</a>
+              </p>
+              <p className="text-[#969696] leading-relaxed mt-2">
+                Further contact and legal information can be found in our <Link href="/impressum" className="text-[var(--accent-color)] hover:underline">Impressum</Link>. A full postal address can be provided on request (e.g. for formal requests).
               </p>
               <p className="text-[#969696] leading-relaxed mt-3">
                 <strong>Supervisory Authority:</strong> If you are located in Germany, you have the right to lodge a complaint with the Bundesbeauftragte für den Datenschutz und die Informationsfreiheit (BfDI) or your local data protection authority.

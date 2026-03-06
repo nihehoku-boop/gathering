@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
+import CookieSettingsBlock from '@/components/CookieSettingsBlock'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy - Colletro',
@@ -29,6 +30,10 @@ export default function CookiesPage() {
             </Link>
             <h1 className="text-4xl font-semibold text-[#fafafa] mb-2">Cookie Policy</h1>
             <p className="text-[#969696]">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          </div>
+
+          <div id="settings" className="mb-8">
+            <CookieSettingsBlock />
           </div>
 
           <div className="prose prose-invert max-w-none space-y-6 text-[#fafafa]">
@@ -67,6 +72,11 @@ export default function CookiesPage() {
               <p className="text-[#969696] leading-relaxed">
                 We use Vercel Speed Insights to monitor performance and identify areas for optimization. These cookies help us ensure the Service loads quickly and efficiently.
               </p>
+
+              <h3 className="text-xl font-semibold text-[#fafafa] mb-3 mt-4">2.4. Error Monitoring</h3>
+              <p className="text-[#969696] leading-relaxed">
+                We use Sentry to capture errors and improve stability. Sentry may process technical data (e.g. IP, browser, device) and error context. It may use cookies or similar technologies. We use this data only for debugging and service improvement.
+              </p>
             </section>
 
             <section>
@@ -76,6 +86,7 @@ export default function CookiesPage() {
               </p>
               <ul className="list-disc list-inside ml-4 space-y-2 text-[#969696]">
                 <li><strong>Vercel Analytics:</strong> For website analytics and performance monitoring</li>
+                <li><strong>Sentry:</strong> For error monitoring and stability</li>
                 <li><strong>Cloudinary:</strong> For image hosting and optimization (may set cookies for image delivery)</li>
               </ul>
               <p className="text-[#969696] leading-relaxed mt-3">
@@ -84,7 +95,14 @@ export default function CookiesPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">4. Managing Cookies</h2>
+              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">4. Your Choice and Consent</h2>
+              <p className="text-[#969696] leading-relaxed mb-3">
+                When you first visit Colletro, we ask for your consent. We load analytics and performance tools (Vercel Analytics, Vercel Speed Insights) only if you choose &quot;Accept all.&quot; If you choose &quot;Essential only,&quot; we use only cookies that are strictly necessary for the service to function.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">5. Managing Cookies</h2>
               <p className="text-[#969696] leading-relaxed mb-3">
                 You can control and manage cookies in several ways:
               </p>
@@ -99,23 +117,23 @@ export default function CookiesPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">5. Local Storage</h2>
+              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">6. Local Storage</h2>
               <p className="text-[#969696] leading-relaxed">
                 In addition to cookies, we use browser local storage to store your preferences (such as accent color) on your device. This data is stored locally and is not transmitted to our servers except as part of your user profile when you save your settings.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">6. Changes to This Cookie Policy</h2>
+              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">7. Changes to This Cookie Policy</h2>
               <p className="text-[#969696] leading-relaxed">
                 We may update this Cookie Policy from time to time. We will notify you of any material changes by posting the new Cookie Policy on this page and updating the "Last updated" date.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">7. Contact Us</h2>
+              <h2 className="text-2xl font-semibold text-[#fafafa] mb-4">8. Contact Us</h2>
               <p className="text-[#969696] leading-relaxed">
-                If you have any questions about our use of cookies, please contact us through the contact information provided in your account settings or on our website.
+                If you have any questions about our use of cookies, please contact <a href="mailto:nico@hennecke.email" className="text-[var(--accent-color)] hover:underline">nico@hennecke.email</a> or see our <Link href="/impressum" className="text-[var(--accent-color)] hover:underline">Impressum</Link>.
               </p>
             </section>
           </div>

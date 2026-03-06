@@ -4,8 +4,8 @@ import './globals.css'
 import { Providers } from './providers'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import SentryInit from '@/components/SentryInit'
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
+import CookieConsentBanner from '@/components/CookieConsentBanner'
+import GatedAnalytics from '@/components/GatedAnalytics'
 import StructuredData from '@/components/StructuredData'
 
 const bricolageGrotesque = Bricolage_Grotesque({ 
@@ -141,8 +141,8 @@ export default async function RootLayout({
         <SentryInit />
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />
-        <SpeedInsights />
-        <Analytics />
+        <CookieConsentBanner />
+        <GatedAnalytics />
       </body>
     </html>
   )

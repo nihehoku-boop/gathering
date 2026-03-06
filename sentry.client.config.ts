@@ -1,9 +1,11 @@
 import * as Sentry from '@sentry/nextjs'
 
-// Only initialize if DSN is provided
+// Client-side Sentry is initialized only after cookie consent ("Accept all") in GatedSentry.
+// This avoids sending data before the user has consented (EU ePrivacy/GDPR).
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    enabled: false, // Only enabled after consent in GatedSentry
     tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
     debug: false,
     replaysOnErrorSampleRate: 1.0,
@@ -15,8 +17,7 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
       }),
     ],
     environment: process.env.NODE_ENV,
-    beforeSend(event, hint) {
-      // Don't send errors in development
+    beforeSend(event) {
       if (process.env.NODE_ENV === 'development') {
         console.log('[Sentry] Would send error:', event)
         return null
