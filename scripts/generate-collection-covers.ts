@@ -185,56 +185,35 @@ function generateSVGCover(collectionName: string, category: string | null = null
   // Get category colors
   const categoryColors = getCategoryColor(category)
 
+  const blurredText = lines.map((line, index) => `
+  <text x="${COVER_WIDTH / 2}" y="${startY + index * lineHeight}" font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" font-size="48" font-weight="700" fill="${COLORS.text.primary}" text-anchor="middle" letter-spacing="-1px" dominant-baseline="central">${escapeXml(line)}</text>`).join('')
+  const blurredCategory = category ? `
+  <rect x="${COVER_WIDTH / 2 - 60}" y="${COVER_HEIGHT * 0.75}" width="120" height="32" rx="16" fill="${categoryColors.badge}" opacity="0.25"/>
+  <text x="${COVER_WIDTH / 2}" y="${COVER_HEIGHT * 0.75 + 16}" font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" font-size="14" font-weight="600" fill="${categoryColors.badge}" text-anchor="middle" dominant-baseline="central">${escapeXml(category)}</text>` : ''
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${COVER_WIDTH}" height="${COVER_HEIGHT}" viewBox="0 0 ${COVER_WIDTH} ${COVER_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Background gradient with category color -->
     <linearGradient id="bg-gradient" x1="0" y1="0" x2="${COVER_WIDTH}" y2="${COVER_HEIGHT}">
       <stop offset="0%" style="stop-color:${COLORS.background.gradient.start};stop-opacity:1" />
       <stop offset="50%" style="stop-color:${categoryColors.start};stop-opacity:0.15" />
       <stop offset="100%" style="stop-color:${COLORS.background.gradient.end};stop-opacity:1" />
     </linearGradient>
-    <!-- Simple grid pattern -->
-    <pattern id="grid-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-      <rect width="20" height="20" fill="none"/>
-      <line x1="0" y1="0" x2="0" y2="20" stroke="${COLORS.text.primary}" stroke-width="0.5" opacity="0.05"/>
-      <line x1="0" y1="0" x2="20" y2="0" stroke="${COLORS.text.primary}" stroke-width="0.5" opacity="0.05"/>
-    </pattern>
+    <filter id="blur-bg" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="24" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0" result="blur-opacity"/>
+    </filter>
   </defs>
-  
-  <!-- Background -->
   <rect width="${COVER_WIDTH}" height="${COVER_HEIGHT}" fill="url(#bg-gradient)"/>
-  <rect width="${COVER_WIDTH}" height="${COVER_HEIGHT}" fill="url(#grid-pattern)"/>
-  
-  <!-- Collection name text -->
+  <g filter="url(#blur-bg)" transform="translate(${COVER_WIDTH / 2}, ${COVER_HEIGHT / 2}) scale(1.8) translate(${-COVER_WIDTH / 2}, ${-COVER_HEIGHT / 2})" opacity="0.6">
+    ${blurredText}
+    ${blurredCategory}
+  </g>
   ${lines.map((line, index) => `
-  <text 
-    x="${COVER_WIDTH / 2}" 
-    y="${startY + index * lineHeight}" 
-    font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="48" 
-    font-weight="700" 
-    fill="${COLORS.text.primary}" 
-    text-anchor="middle"
-    letter-spacing="-1px"
-    dominant-baseline="central">
-    ${escapeXml(line)}
-  </text>`).join('')}
-  
+  <text x="${COVER_WIDTH / 2}" y="${startY + index * lineHeight}" font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" font-size="48" font-weight="700" fill="${COLORS.text.primary}" text-anchor="middle" letter-spacing="-1px" dominant-baseline="central">${escapeXml(line)}</text>`).join('')}
   ${category ? `
-  <!-- Category badge -->
   <rect x="${COVER_WIDTH / 2 - 60}" y="${COVER_HEIGHT * 0.75}" width="120" height="32" rx="16" fill="${categoryColors.badge}" opacity="0.25"/>
-  <text 
-    x="${COVER_WIDTH / 2}" 
-    y="${COVER_HEIGHT * 0.75 + 16}" 
-    font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" 
-    font-size="14" 
-    font-weight="600" 
-    fill="${categoryColors.badge}" 
-    text-anchor="middle"
-    dominant-baseline="central">
-    ${escapeXml(category)}
-  </text>` : ''}
+  <text x="${COVER_WIDTH / 2}" y="${COVER_HEIGHT * 0.75 + 16}" font-family="system-ui, -apple-system, 'Bricolage Grotesque', sans-serif" font-size="14" font-weight="600" fill="${categoryColors.badge}" text-anchor="middle" dominant-baseline="central">${escapeXml(category)}</text>` : ''}
 </svg>`
 }
 

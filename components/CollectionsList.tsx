@@ -13,6 +13,7 @@ import { Plus, BookOpen, Trash2, Search, X, Edit, RefreshCw, AlertTriangle, Shar
 import LogoIcon from './LogoIcon'
 import CategoryIcon from './icons/CategoryIcon'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
+import CollectionCoverImage from './CollectionCoverImage'
 import CreateCollectionDialog from './CreateCollectionDialog'
 import EditCollectionDialog from './EditCollectionDialog'
 import ImportCollectionDialog from './ImportCollectionDialog'
@@ -961,26 +962,22 @@ export default function CollectionsList() {
                   onClick={() => router.push(`/collections/${spotlightCollection.id}`)}
                 >
                   {spotlightCollection.coverImage && (
-                    <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${isComplete && enableGoldenAccents ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
-                      <Image
+                    <div className={`relative ${isComplete && enableGoldenAccents ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
+                      <CollectionCoverImage
                         src={spotlightCollection.coverImage}
                         alt={spotlightCollection.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className={`${spotlightCollection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete && enableGoldenAccents ? 'group-hover:brightness-110' : ''}`}
-                        loading="lazy"
-                        placeholder="blur"
-                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                        coverImageFit={spotlightCollection.coverImageFit}
+                        imageClassName={`group-hover:scale-105 smooth-transition ${isComplete && enableGoldenAccents ? 'group-hover:brightness-110' : ''}`}
                         unoptimized={
-                          spotlightCollection.coverImage.startsWith('/ltbcover/') || 
-                          spotlightCollection.coverImage.includes('localhost') || 
-                          spotlightCollection.coverImage.includes('tcgdx') || 
+                          spotlightCollection.coverImage.startsWith('/ltbcover/') ||
+                          spotlightCollection.coverImage.includes('localhost') ||
+                          spotlightCollection.coverImage.includes('tcgdx') ||
                           spotlightCollection.coverImage.includes('tcgdex') ||
                           spotlightCollection.coverImage.toLowerCase().includes('ygoprodeck') ||
                           spotlightCollection.coverImage.toLowerCase().includes('images.ygoprodeck.com')
                         }
                       />
-                      <div className="absolute top-3 left-3 flex items-center gap-2 bg-[var(--bg-secondary)]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[var(--border-color)]/50">
+                      <div className="absolute top-3 left-3 z-20 flex items-center gap-2 bg-[var(--bg-secondary)]/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[var(--border-color)]/50">
                         <Star className="h-4 w-4 text-[var(--gold-color)] fill-[var(--gold-color)]" />
                         <span className="text-sm font-semibold text-[var(--text-primary)]">Trove Spotlight</span>
                       </div>
@@ -1267,20 +1264,16 @@ export default function CollectionsList() {
                 onClick={() => router.push(`/collections/${collection.id}`)}
               >
                 {collection.coverImage && (
-                  <div className={`w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] relative ${isComplete && enableGoldenAccents ? 'ring-2 ring-[var(--gold-color)]/30' : ''}`}>
-                    <Image
+                  <div className={isComplete && enableGoldenAccents ? 'ring-2 ring-[var(--gold-color)]/30' : ''}>
+                    <CollectionCoverImage
                       src={collection.coverImage}
                       alt={collection.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className={`${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition ${isComplete && enableGoldenAccents ? 'group-hover:brightness-110' : ''}`}
-                      loading="lazy"
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                      coverImageFit={collection.coverImageFit}
+                      imageClassName={`group-hover:scale-105 smooth-transition ${isComplete && enableGoldenAccents ? 'group-hover:brightness-110' : ''}`}
                       unoptimized={
-                        collection.coverImage.startsWith('/ltbcover/') || 
-                        collection.coverImage.includes('localhost') || 
-                        collection.coverImage.includes('tcgdx') || 
+                        collection.coverImage.startsWith('/ltbcover/') ||
+                        collection.coverImage.includes('localhost') ||
+                        collection.coverImage.includes('tcgdx') ||
                         collection.coverImage.includes('tcgdex') ||
                         collection.coverImage.toLowerCase().includes('ygoprodeck') ||
                         collection.coverImage.toLowerCase().includes('images.ygoprodeck.com')

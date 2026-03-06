@@ -7,7 +7,6 @@ import { ArrowRight, Sparkles, ChevronDown, ChevronDown as ArrowDown } from 'luc
 import LogoIcon from './LogoIcon'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useMemo } from 'react'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -20,18 +19,6 @@ export default function LandingPage() {
       router.push('/auth/signin')
     }
   }
-
-  // Generate particle positions once and memoize them
-  const particlePositions = useMemo(() => {
-    const positions: Array<{ top: number; left: number }> = []
-    for (let i = 0; i < 65; i++) {
-      positions.push({
-        top: Math.random() * 100,
-        left: Math.random() * 100,
-      })
-    }
-    return positions
-  }, [])
 
   const features = [
     {
@@ -108,40 +95,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen text-white overflow-hidden relative bg-gradient-animated">
-      {/* Background Particle Effect - Same as chest particles */}
-      <div className="fixed inset-0 z-0 overflow-visible pointer-events-none">
-        {[...Array(40)].map((_, i) => {
-          const pos = particlePositions[i]
-          return (
-            <div
-              key={`bg-glitter-accent-${i}`}
-              className="absolute w-2 h-2 bg-[var(--accent-color)] rounded-full animate-glitter"
-              style={{
-                top: `${pos.top}%`,
-                left: `${pos.left}%`,
-                animationDelay: `${i * 0.15}s`,
-                animationDuration: `${2 + (i % 4) * 0.25}s`,
-              }}
-            ></div>
-          )
-        })}
-        {[...Array(25)].map((_, i) => {
-          const pos = particlePositions[40 + i]
-          return (
-            <div
-              key={`bg-glitter-blue-${i}`}
-              className="absolute w-1.5 h-1.5 bg-blue-500 rounded-full animate-glitter"
-              style={{
-                top: `${pos.top}%`,
-                left: `${pos.left}%`,
-                animationDelay: `${i * 0.2 + 0.05}s`,
-                animationDuration: `${2.5 + (i % 3) * 0.33}s`,
-              }}
-            ></div>
-          )
-        })}
-        </div>
-
       {/* Hero Section - Discord Style */}
       <div className="relative z-10">
         {/* Navigation */}
@@ -223,34 +176,6 @@ export default function LandingPage() {
               <div className="relative w-full max-w-[130px] sm:max-w-[200px] md:max-w-[280px] lg:max-w-none">
                 <div className="relative animate-sparkle w-full aspect-square flex items-center justify-center">
                   <LogoIcon width={500} height={500} className="w-[130px] h-[130px] sm:w-[200px] sm:h-[200px] md:w-[280px] md:h-[280px] lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] relative z-10 max-w-full max-h-full object-contain" />
-                </div>
-                
-                {/* Glitter/Particle Effect - Hidden on mobile to prevent overflow */}
-                <div className="absolute inset-0 z-0 overflow-visible hidden sm:block">
-                  {[...Array(12)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="absolute w-2 h-2 bg-[var(--accent-color)] rounded-full animate-glitter"
-                      style={{
-                        left: `${20 + (i * 7)}%`,
-                        top: `${15 + (i % 4) * 25}%`,
-                        animationDelay: `${i * 0.3}s`,
-                        animationDuration: `${2 + (i % 3)}s`,
-                      }}
-                    ></div>
-                  ))}
-                  {[...Array(8)].map((_, i) => (
-                    <div
-                      key={`secondary-${i}`}
-                      className="absolute w-1.5 h-1.5 bg-blue-500 rounded-full animate-glitter"
-                      style={{
-                        left: `${25 + (i * 8)}%`,
-                        top: `${20 + (i % 3) * 30}%`,
-                        animationDelay: `${i * 0.4 + 0.5}s`,
-                        animationDuration: `${2.5 + (i % 2)}s`,
-                      }}
-                    ></div>
-                  ))}
                 </div>
               </div>
               
@@ -473,6 +398,9 @@ export default function LandingPage() {
               </Link>
               <Link href="/about" className="hover:text-[#fafafa] smooth-transition">
                 About
+              </Link>
+              <Link href="/help" className="hover:text-[#fafafa] smooth-transition">
+                Help
               </Link>
               <Link href="/terms" className="hover:text-[#fafafa] smooth-transition">
                 Terms

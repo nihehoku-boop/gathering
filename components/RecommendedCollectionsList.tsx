@@ -10,6 +10,7 @@ import { parseTags, getTagColor, AVAILABLE_TAGS } from '@/lib/tags'
 import AlertDialog from './ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
 import CollectionCardSkeleton from './CollectionCardSkeleton'
+import CollectionCoverImage from './CollectionCoverImage'
 import AddCollectionPreviewDialog from './AddCollectionPreviewDialog'
 
 interface RecommendedItem {
@@ -437,11 +438,20 @@ export default function RecommendedCollectionsList() {
               }}
             >
               {collection.coverImage && (
-                <div className="w-full h-48 overflow-hidden bg-[var(--bg-tertiary)] flex-shrink-0">
-                  <img
+                <div className="flex-shrink-0">
+                  <CollectionCoverImage
                     src={collection.coverImage}
                     alt={collection.name}
-                    className={`w-full h-full ${collection.coverImageFit === 'contain' ? 'object-contain' : 'object-cover'} group-hover:scale-105 smooth-transition`}
+                    coverImageFit={collection.coverImageFit}
+                    imageClassName="group-hover:scale-105 smooth-transition"
+                    unoptimized={
+                      collection.coverImage.startsWith('/ltbcover/') ||
+                      collection.coverImage.includes('localhost') ||
+                      collection.coverImage.includes('tcgdx') ||
+                      collection.coverImage.includes('tcgdex') ||
+                      collection.coverImage.toLowerCase().includes('ygoprodeck') ||
+                      collection.coverImage.toLowerCase().includes('images.ygoprodeck.com')
+                    }
                   />
                 </div>
               )}
