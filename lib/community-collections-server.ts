@@ -63,7 +63,7 @@ export async function getFirstPageCommunityCollections() {
 
   if (usePopularFallback) {
     collectionsWithVotes = collectionsWithVotes
-      .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
+      .sort((a: { upvotes?: number }, b: { upvotes?: number }) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
       .slice(0, DEFAULT_LIMIT)
   }
 
