@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import Image from 'next/image'
 import { ArrowLeft, TrendingUp, Package, CheckCircle, Star, Tag, BarChart3 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -103,7 +104,7 @@ export default function StatisticsPage() {
               </Button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--text-primary)]" />
+              <Image src="/icons/statistic.png" alt="" width={32} height={32} className="h-6 w-6 sm:h-8 sm:w-8" />
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Statistics Dashboard</h1>
             </div>
             <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] mb-6 sm:mb-10">

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import Image from 'next/image'
 import { ArrowLeft, Info, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react'
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
@@ -85,7 +86,7 @@ export default function AboutPage() {
               </Button>
             </div>
             <div className="flex items-center gap-3 mb-3">
-              <Info className="h-8 w-8 text-[var(--text-primary)]" />
+              <Image src="/icons/info123.png" alt="" width={32} height={32} className="h-8 w-8" />
               <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">About Colletro</h1>
             </div>
             <p className="text-[var(--text-secondary)] text-lg mb-10">

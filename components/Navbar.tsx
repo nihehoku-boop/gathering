@@ -61,8 +61,8 @@ export default function Navbar() {
     ...(isAdmin ? [{ label: 'Admin', icon: Star, path: '/admin' }] : []),
     { label: 'Achievements', iconSrc: '/icons/achievments.svg', path: '/achievements' },
     { label: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
-    { label: 'Statistics', icon: BarChart3, path: '/statistics' },
-    { label: 'About', icon: Info, path: '/about' },
+    { label: 'Statistics', iconSrc: '/icons/statistic.png', path: '/statistics' },
+    { label: 'About', iconSrc: '/icons/info123.png', path: '/about' },
     { label: 'Settings', iconSrc: '/icons/settings.svg', path: '/settings' },
   ] : []
 

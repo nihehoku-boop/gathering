@@ -671,7 +671,7 @@ export default function Sidebar() {
                   : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
               )}
             >
-              <Users className="h-5 w-5" />
+              <Image src="/icons/community.png" alt="" width={20} height={20} className="h-5 w-5" />
               <span className="font-medium">Community</span>
             </button>
 
