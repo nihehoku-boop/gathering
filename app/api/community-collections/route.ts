@@ -54,15 +54,11 @@ export async function GET(request: NextRequest) {
     // Note: category is already in where clause, so totalCount includes category filter
     const totalCount = await prisma.communityCollection.count({ where })
 
-    // Build orderBy based on sortBy
-    let orderBy: any = { createdAt: 'desc' } // Default to newest
+    // Build orderBy: use DB for popular (upvotesCount), newest, oldest, alphabetical; in-memory only for mostItems/leastItems and tags filter
+    let orderBy: any = { createdAt: 'desc' }
     if (sortBy === 'popular' || sortBy === 'score') {
-      // For popular/score, we'll need to sort after calculating votes
-      // So we'll fetch all and sort in memory, but limit the fetch
-      orderBy = { createdAt: 'desc' }
+      orderBy = { upvotesCount: 'desc' }
     } else if (sortBy === 'mostItems' || sortBy === 'leastItems') {
-      // For item count sorting, we need to fetch all and sort in memory
-      // since we need to count items for each collection
       orderBy = { createdAt: 'desc' }
     } else if (sortBy === 'newest') {
       orderBy = { createdAt: 'desc' }
@@ -72,37 +68,19 @@ export async function GET(request: NextRequest) {
       orderBy = { name: 'asc' }
     }
 
-    // Get paginated community collections with their items and creator info
-    // Note: For popular/score/mostItems/leastItems sorting, we need to fetch ALL and sort in memory
-    // Also need to fetch ALL when filtering by tags, since tags are stored as JSON and filtered in memory
-    // Also need to fetch ALL when filtering by category to ensure proper sorting across all matching collections
-    const needsInMemorySort = sortBy === 'popular' || sortBy === 'score' || sortBy === 'mostItems' || sortBy === 'leastItems'
-    const needsInMemoryFilter = tagArray.length > 0 // Need to fetch all when filtering by tags
-    const needsFetchAll = needsInMemorySort || needsInMemoryFilter || (category && category.trim() !== '') // Fetch all when category filter is active
-    
-    // Determine pagination based on sort type and filtering
+    const needsInMemorySort = sortBy === 'mostItems' || sortBy === 'leastItems'
+    const needsInMemoryFilter = tagArray.length > 0
+    const needsFetchAll = needsInMemorySort || needsInMemoryFilter
     const fetchSkip = needsFetchAll ? 0 : skip
-    const fetchTake = needsFetchAll
-      ? (totalCount > 0 ? totalCount + 1000 : 50000) // Fetch all when sorting/filtering in memory
-      : limit // Normal pagination for other sorts
+    const fetchTake = needsFetchAll ? Math.min(totalCount + 100, 2000) : limit
 
+    // List view: omit full items array (use _count.items) for smaller payload and faster LCP
     const collections = await prisma.communityCollection.findMany({
       where,
       orderBy,
       skip: fetchSkip,
       take: fetchTake,
       include: {
-        items: {
-          orderBy: [
-            { number: 'asc' },
-            { name: 'asc' },
-          ],
-          select: {
-            id: true,
-            name: true,
-            number: true,
-          },
-        },
         user: {
           select: {
             id: true,
@@ -113,12 +91,9 @@ export async function GET(request: NextRequest) {
             isVerified: true,
           },
         },
-        votes: {
-          select: {
-            voteType: true,
-            userId: true,
-          },
-        },
+        ...(session?.user?.id && {
+          votes: { where: { userId: session.user.id }, select: { voteType: true } },
+        }),
         _count: {
           select: {
             items: true,
@@ -128,63 +103,43 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    // Calculate vote counts and scores for each collection (upvotes only)
-    let collectionsWithVotes = collections.map((collection: { id: string; name: string; description: string | null; category: string | null; template: string | null; coverImage: string | null; tags: string; votes: { voteType: string; userId: string }[]; user: { id: string; name: string | null; email: string; image: string | null; badge: string | null; isVerified: boolean }; items: { id: string; name: string; number: number | null }[]; _count: { items: number; votes: number }; createdAt: Date; updatedAt: Date }) => {
-      const upvotes = collection.votes.filter(v => v.voteType === 'upvote').length
-      const score = upvotes
-      const userVote = session?.user?.id 
-        ? collection.votes.find(v => v.userId === session.user.id)?.voteType || null
-        : null
-
+    type Row = typeof collections[0] & { votes?: { voteType: string }[] }
+    let collectionsWithVotes = collections.map((collection: Row) => {
+      const upvotes = Number((collection as { upvotesCount?: number }).upvotesCount) || 0
+      const userVote = collection.votes?.[0]?.voteType ?? null
       return {
         ...collection,
+        items: [], // List view: items loaded only when opening a collection
         upvotes,
-        score,
+        score: upvotes,
         userVote,
-        votes: undefined, // Remove votes array from response
+        votes: undefined,
       }
     })
 
-    // Filter by tags if specified (since tags are stored as JSON string)
     if (tagArray.length > 0) {
-      collectionsWithVotes = collectionsWithVotes.filter((collection: { tags: string }) => {
+      collectionsWithVotes = collectionsWithVotes.filter((c: { tags: string }) => {
         try {
-          const collectionTags = typeof collection.tags === 'string' 
-            ? JSON.parse(collection.tags) 
-            : collection.tags || []
-          return Array.isArray(collectionTags) && 
-                 tagArray.some(tag => collectionTags.includes(tag))
+          const t = typeof c.tags === 'string' ? JSON.parse(c.tags) : c.tags || []
+          return Array.isArray(t) && tagArray.some((tag: string) => t.includes(tag))
         } catch {
           return false
         }
       })
     }
 
-    // Sort collections (especially for popular/score/mostItems/leastItems)
     let sortedCollections = collectionsWithVotes
-    if (sortBy === 'popular' || sortBy === 'score') {
-      sortedCollections = collectionsWithVotes.sort((a: { score: number }, b: { score: number }) => b.score - a.score)
-    } else if (sortBy === 'mostItems') {
-      sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (b._count?.items || 0) - (a._count?.items || 0))
+    if (sortBy === 'mostItems') {
+      sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (b._count?.items ?? 0) - (a._count?.items ?? 0))
     } else if (sortBy === 'leastItems') {
-      sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (a._count?.items || 0) - (b._count?.items || 0))
-    } else if (sortBy === 'newest') {
-      // Already sorted by createdAt desc
-    } else if (sortBy === 'oldest') {
-      // Already sorted by createdAt asc
-    } else if (sortBy === 'alphabetical') {
-      // Already sorted by name asc
+      sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (a._count?.items ?? 0) - (b._count?.items ?? 0))
     }
 
-    // Apply pagination after sorting/filtering (if we fetched all collections)
     if (needsFetchAll) {
       sortedCollections = sortedCollections.slice(skip, skip + limit)
     }
 
-    // Calculate accurate total count after tag filtering
-    const finalTotal = tagArray.length > 0 
-      ? collectionsWithVotes.length // Total after tag filtering
-      : totalCount
+    const finalTotal = tagArray.length > 0 ? collectionsWithVotes.length : totalCount
     const hasMore = skip + sortedCollections.length < finalTotal
 
     const response = NextResponse.json({

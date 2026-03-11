@@ -64,6 +64,7 @@
     "test:cover": "tsx scripts/test-cover-generation.ts",
     "blog:create-initial": "tsx scripts/create-initial-blog-posts.ts",
     "seed:euro-coins": "tsx scripts/seed-euro-coins.ts",
+    "backfill:community-upvotes": "tsx scripts/backfill-community-upvotes-count.ts",
     "cap:sync": "npx cap sync",
     "cap:open:ios": "npx cap open ios",
     "cap:open:android": "npx cap open android",

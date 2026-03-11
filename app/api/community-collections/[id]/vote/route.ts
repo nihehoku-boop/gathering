@@ -60,6 +60,10 @@ export async function POST(
       await prisma.communityCollectionVote.delete({
         where: { id: existingVote.id },
       })
+      await prisma.communityCollection.update({
+        where: { id: collectionId },
+        data: { upvotesCount: { decrement: 1 } },
+      })
     } else {
       // Create new upvote
       await prisma.communityCollectionVote.create({
@@ -68,6 +72,10 @@ export async function POST(
           userId: session.user.id,
           voteType: 'upvote',
         },
+      })
+      await prisma.communityCollection.update({
+        where: { id: collectionId },
+        data: { upvotesCount: { increment: 1 } },
       })
     }
 

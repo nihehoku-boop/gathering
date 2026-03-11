@@ -201,11 +201,13 @@ model CommunityCollection {
   sharedCollections      Collection[]              @relation("SharedCollections") // Collections that were shared to this community collection
   isHidden               Boolean                   @default(false) // Hidden by admin moderation
   moderationNotes        String? // Admin notes about moderation action
+  upvotesCount           Int                       @default(0) // Cached for fast "popular" sort (no fetch-all)
   createdAt              DateTime                  @default(now())
   updatedAt              DateTime                  @updatedAt
 
   @@index([userId])
   @@index([isHidden])
+  @@index([upvotesCount])
 }
 
 model CommunityCollectionVote {

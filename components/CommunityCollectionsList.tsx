@@ -34,6 +34,7 @@ interface CommunityCollection {
   coverImageFit?: string | null
   tags: string
   items: CommunityItem[]
+  _count?: { items: number; votes?: number }
   userId: string
   user: {
     id: string
@@ -57,18 +58,28 @@ interface CategoryWithCount {
   count: number
 }
 
-export default function CommunityCollectionsList() {
+export type CommunityListInitialData = {
+  collections: CommunityCollection[]
+  pagination: { page: number; limit: number; total: number; totalPages: number; hasMore: boolean }
+}
+
+export default function CommunityCollectionsList({
+  initialData = null,
+}: {
+  initialData?: CommunityListInitialData | null
+} = {}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { data: session } = useSession()
-  const [collections, setCollections] = useState<CommunityCollection[]>([])
-  const [filteredCollections, setFilteredCollections] = useState<CommunityCollection[]>([])
-  const [loading, setLoading] = useState(true)
+  const usedInitialDataRef = useRef(!!initialData)
+  const [collections, setCollections] = useState<CommunityCollection[]>(() => initialData?.collections ?? [])
+  const [filteredCollections, setFilteredCollections] = useState<CommunityCollection[]>(() => initialData?.collections ?? [])
+  const [loading, setLoading] = useState(!initialData)
   const [loadingMore, setLoadingMore] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
-  const [totalCount, setTotalCount] = useState<number>(0)
+  const [hasMore, setHasMore] = useState(initialData?.pagination?.hasMore ?? true)
+  const [totalCount, setTotalCount] = useState<number>(initialData?.pagination?.total ?? 0)
   const [addingCollection, setAddingCollection] = useState<string | null>(null)
   const [searchInput, setSearchInput] = useState('') // Immediate input value
   const [searchQuery, setSearchQuery] = useState('') // Debounced search query
@@ -132,26 +143,25 @@ export default function CommunityCollectionsList() {
   }, [searchInput])
 
   useEffect(() => {
-    // Reset and fetch first page when filters/search/sort change
-    setCurrentPage(1)
-    setCollections([])
-    setHasMore(true)
-    fetchCollections(1, false)
-    
-    // Listen for updates when collections are created/updated
-    const handleUpdate = () => {
-      console.log('[CommunityCollectionsList] Received update event, refreshing...')
+    // Skip first fetch when we have server-provided initial data and filters are still default
+    const useInitial = usedInitialDataRef.current && sortBy === 'popular' && !searchQuery && !selectedCategory && selectedTags.length === 0
+    if (useInitial) {
+      usedInitialDataRef.current = false
+    } else {
       setCurrentPage(1)
       setCollections([])
       setHasMore(true)
       fetchCollections(1, false)
     }
-    
-    window.addEventListener('communityCollectionsUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('communityCollectionsUpdated', handleUpdate)
+
+    const handleUpdate = () => {
+      setCurrentPage(1)
+      setCollections([])
+      setHasMore(true)
+      fetchCollections(1, false)
     }
+    window.addEventListener('communityCollectionsUpdated', handleUpdate)
+    return () => window.removeEventListener('communityCollectionsUpdated', handleUpdate)
   }, [sortBy, searchQuery, selectedCategory, selectedTags])
 
   const handleVote = async (collectionId: string) => {
@@ -779,7 +789,7 @@ export default function CommunityCollectionsList() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <p className="text-sm text-[var(--text-secondary)]">
-                        {collection.items.length} items included
+                        {(collection._count?.items ?? collection.items?.length ?? 0)} items included
                       </p>
                       {/* Voting UI - Upvote only */}
                       <div className="flex items-center gap-2">
