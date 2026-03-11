@@ -8,6 +8,7 @@ import Sidebar from '@/components/Sidebar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import Image from 'next/image'
 import { Heart, Share2, Trash2, Copy, Check, Edit, X, CheckSquare2, Square } from 'lucide-react'
 import AlertDialog from '@/components/ui/alert-dialog'
 import { useAlert } from '@/hooks/useAlert'
@@ -367,7 +368,7 @@ export default function WishlistPage() {
               ) : (
                 <>
                   <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight flex items-center gap-2 sm:gap-3">
-                    <Heart className="h-8 w-8 text-[#FF3B30]" />
+                    <Image src="/icons/wishlist.svg" alt="" width={32} height={32} className="h-8 w-8" />
                     {wishlist.name || 'My Wishlist'}
                     <Button
                       variant="ghost"

@@ -60,7 +60,7 @@ export default function Navbar() {
   const menuItems = session ? [
     ...(isAdmin ? [{ label: 'Admin', icon: Star, path: '/admin' }] : []),
     { label: 'Achievements', iconSrc: '/icons/achievments.svg', path: '/achievements' },
-    { label: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
+    { label: 'Leaderboard', iconSrc: '/icons/leaderboard.svg', path: '/leaderboard' },
     { label: 'Statistics', iconSrc: '/icons/statistic.png', path: '/statistics' },
     { label: 'About', iconSrc: '/icons/info123.png', path: '/about' },
     { label: 'Settings', iconSrc: '/icons/settings.svg', path: '/settings' },

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { Trophy, Medal, Award, ArrowLeft, Crown, CheckCircle2 } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
@@ -93,7 +94,7 @@ export default function LeaderboardPage() {
               </Button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--accent-color)]" />
+              <Image src="/icons/leaderboard.svg" alt="" width={32} height={32} className="h-6 w-6 sm:h-8 sm:w-8" />
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Leaderboard</h1>
             </div>
             <p className="text-sm sm:text-base lg:text-lg text-[var(--text-secondary)] mb-6 sm:mb-10">
@@ -110,7 +111,7 @@ export default function LeaderboardPage() {
           ) : leaderboard.length === 0 ? (
             <Card className="bg-[var(--bg-secondary)] border-[var(--border-color)]">
               <CardContent className="py-16 text-center">
-                <Trophy className="mx-auto h-16 w-16 text-[var(--text-muted)] mb-6" />
+                <Image src="/icons/leaderboard.svg" alt="" width={64} height={64} className="mx-auto h-16 w-16 mb-6 opacity-50" />
                 <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
                   No rankings yet
                 </h3>
