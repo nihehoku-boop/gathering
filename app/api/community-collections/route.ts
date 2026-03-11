@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     // Build orderBy: use DB for popular (upvotesCount), newest, oldest, alphabetical; in-memory only for mostItems/leastItems and tags filter
     let orderBy: any = { createdAt: 'desc' }
     if (sortBy === 'popular' || sortBy === 'score') {
-      orderBy = { upvotesCount: 'desc' }
+      orderBy = [{ upvotesCount: 'desc' }, { createdAt: 'desc' }] // secondary sort when counts tied (e.g. before backfill)
     } else if (sortBy === 'mostItems' || sortBy === 'leastItems') {
       orderBy = { createdAt: 'desc' }
     } else if (sortBy === 'newest') {
@@ -68,7 +68,23 @@ export async function GET(request: NextRequest) {
       orderBy = { name: 'asc' }
     }
 
-    const needsInMemorySort = sortBy === 'mostItems' || sortBy === 'leastItems'
+    // When popular/score but upvotesCount not backfilled, sort by vote count in memory (one-time until backfill runs)
+    const popularNeedsFallback =
+      (sortBy === 'popular' || sortBy === 'score') &&
+      searchQuery === '' &&
+      category === '' &&
+      tagArray.length === 0
+    let usePopularFallback = false
+    if (popularNeedsFallback) {
+      const anyWithCount = await prisma.communityCollection.findFirst({
+        where: { ...where, upvotesCount: { gt: 0 } },
+        select: { id: true },
+      })
+      usePopularFallback = !anyWithCount
+    }
+
+    const needsInMemorySort =
+      sortBy === 'mostItems' || sortBy === 'leastItems' || usePopularFallback
     const needsInMemoryFilter = tagArray.length > 0
     const needsFetchAll = needsInMemorySort || needsInMemoryFilter
     const fetchSkip = needsFetchAll ? 0 : skip
@@ -105,7 +121,11 @@ export async function GET(request: NextRequest) {
 
     type Row = typeof collections[0] & { votes?: { voteType: string }[] }
     let collectionsWithVotes = collections.map((collection: Row) => {
-      const upvotes = Number((collection as { upvotesCount?: number }).upvotesCount) || 0
+      // Use cached upvotesCount; fallback to _count.votes when backfill not run yet
+      const upvotes =
+        Number((collection as { upvotesCount?: number }).upvotesCount) ||
+        (collection as { _count?: { votes?: number } })._count?.votes ||
+        0
       const userVote = collection.votes?.[0]?.voteType ?? null
       return {
         ...collection,
@@ -133,6 +153,8 @@ export async function GET(request: NextRequest) {
       sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (b._count?.items ?? 0) - (a._count?.items ?? 0))
     } else if (sortBy === 'leastItems') {
       sortedCollections = collectionsWithVotes.sort((a: { _count?: { items: number } }, b: { _count?: { items: number } }) => (a._count?.items ?? 0) - (b._count?.items ?? 0))
+    } else if (usePopularFallback && (sortBy === 'popular' || sortBy === 'score')) {
+      sortedCollections = collectionsWithVotes.sort((a: { upvotes?: number }, b: { upvotes?: number }) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
     }
 
     if (needsFetchAll) {

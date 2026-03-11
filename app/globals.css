@@ -254,6 +254,17 @@
     );
   }
 
+  /* Halftone dot pattern – comic / trading card feel */
+  .halftone-dots {
+    background-image: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 1px
+    );
+    background-size: 14px 14px;
+    background-position: 0 0;
+  }
+
   @keyframes glitter {
     0%, 100% {
       opacity: 0.1;

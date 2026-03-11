@@ -96,6 +96,8 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen text-white overflow-hidden relative bg-gradient-animated">
+      {/* Halftone dot overlay – comic / trading card vibe */}
+      <div className="halftone-dots absolute inset-0 z-[1] pointer-events-none" aria-hidden />
       {/* Hero Section - Discord Style */}
       <div className="relative z-10">
         {/* Navigation */}

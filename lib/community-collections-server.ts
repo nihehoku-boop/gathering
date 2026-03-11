@@ -13,10 +13,17 @@ export async function getFirstPageCommunityCollections() {
   const where = { isHidden: false }
   const totalCount = await prisma.communityCollection.count({ where })
 
+  const anyWithCount = await prisma.communityCollection.findFirst({
+    where: { ...where, upvotesCount: { gt: 0 } },
+    select: { id: true },
+  })
+  const usePopularFallback = !anyWithCount
+
+  const take = usePopularFallback ? Math.min(totalCount, 500) : DEFAULT_LIMIT
   const collections = await prisma.communityCollection.findMany({
     where,
-    orderBy: { upvotesCount: 'desc' },
-    take: DEFAULT_LIMIT,
+    orderBy: usePopularFallback ? { createdAt: 'desc' } : [{ upvotesCount: 'desc' }, { createdAt: 'desc' }],
+    take,
     include: {
       user: {
         select: {
@@ -38,8 +45,11 @@ export async function getFirstPageCommunityCollections() {
   })
 
   type Row = (typeof collections)[0] & { votes?: { voteType: string }[] }
-  const collectionsWithVotes = collections.map((collection: Row) => {
-    const upvotes = Number((collection as { upvotesCount?: number }).upvotesCount) || 0
+  let collectionsWithVotes = collections.map((collection: Row) => {
+    const upvotes =
+      Number((collection as { upvotesCount?: number }).upvotesCount) ||
+      (collection as { _count?: { votes?: number } })._count?.votes ||
+      0
     const userVote = collection.votes?.[0]?.voteType ?? null
     return {
       ...collection,
@@ -50,6 +60,12 @@ export async function getFirstPageCommunityCollections() {
       votes: undefined,
     }
   })
+
+  if (usePopularFallback) {
+    collectionsWithVotes = collectionsWithVotes
+      .sort((a, b) => (b.upvotes ?? 0) - (a.upvotes ?? 0))
+      .slice(0, DEFAULT_LIMIT)
+  }
 
   const hasMore = DEFAULT_LIMIT < totalCount
   return {
