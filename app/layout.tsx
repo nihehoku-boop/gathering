@@ -138,6 +138,35 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${bricolageGrotesque.variable} ${bricolageGrotesque.className} antialiased`}>
+        {/* Hide native splash when running inside Capacitor app */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function hideSplash() {
+                  try {
+                    var C = window.Capacitor;
+                    if (C && C.Plugins && C.Plugins.SplashScreen && typeof C.Plugins.SplashScreen.hide === 'function') {
+                      C.Plugins.SplashScreen.hide();
+                      return true;
+                    }
+                  } catch (e) {}
+                  return false;
+                }
+                function tryHide() {
+                  if (hideSplash()) return;
+                  var attempts = 0;
+                  var t = setInterval(function() {
+                    if (hideSplash() || ++attempts > 20) clearInterval(t);
+                  }, 100);
+                }
+                if (document.readyState === 'complete') tryHide();
+                else window.addEventListener('load', tryHide);
+                document.addEventListener('DOMContentLoaded', tryHide);
+              })();
+            `,
+          }}
+        />
         <SentryInit />
         <Providers>{children}</Providers>
         <ServiceWorkerRegistration />

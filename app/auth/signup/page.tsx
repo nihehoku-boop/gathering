@@ -33,6 +33,12 @@ export default function SignUpPage() {
       return
     }
 
+    const trimmedName = name.trim()
+    if (!trimmedName) {
+      setError('Name is required')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -42,7 +48,7 @@ export default function SignUpPage() {
         body: JSON.stringify({
           email,
           password,
-          name: name || undefined,
+          name: trimmedName,
         }),
       })
 
@@ -99,7 +105,7 @@ export default function SignUpPage() {
               )}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[var(--text-primary)]">Name (optional)</Label>
+                  <Label htmlFor="name" className="text-[var(--text-primary)]">Name *</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
                     <Input
@@ -108,6 +114,7 @@ export default function SignUpPage() {
                       placeholder="Your name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      required
                       className="pl-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                     />
                   </div>

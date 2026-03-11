@@ -152,10 +152,10 @@
 ### Implementation Priority
 
 #### Phase 1: Foundation (Critical)
-1. ✅ Database schema (subscription fields)
-2. ⬜ Stripe integration
-3. ⬜ Subscription management UI
-4. ⬜ Feature gating middleware
+1. ⬜ Database schema (subscription fields on User: subscriptionTier, subscriptionStatus, stripeCustomerId, subscriptionId, subscriptionEndsAt, storageUsed, storageLimit)
+2. ⬜ Stripe integration (Checkout, webhooks, customer portal)
+3. ⬜ Subscription management UI (upgrade, cancel, billing)
+4. ⬜ Feature gating middleware (check tier in API + frontend)
 
 #### Phase 2: Premium Features (High Value)
 1. ⬜ PDF export generation
@@ -374,7 +374,7 @@ Start with Phase 1 & 2 features (fully doable), then evaluate Phase 3 based on u
 ### Next Steps
 
 1. ✅ Design tier structure (this document)
-2. ⬜ Update database schema
+2. ⬜ Update database schema (User: subscriptionTier, subscriptionStatus, stripeCustomerId, subscriptionId, subscriptionEndsAt, storageUsed, storageLimit)
 3. ⬜ Implement Stripe integration
 4. ⬜ Create subscription management UI
 5. ⬜ Add feature gating middleware

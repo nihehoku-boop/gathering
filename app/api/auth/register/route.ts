@@ -20,6 +20,14 @@ async function registerHandler(request: NextRequest) {
       )
     }
 
+    const trimmedName = typeof name === 'string' ? name.trim() : ''
+    if (!trimmedName) {
+      return NextResponse.json(
+        { error: 'Name is required' },
+        { status: 400 }
+      )
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
@@ -65,7 +73,7 @@ async function registerHandler(request: NextRequest) {
       data: {
         email,
         password: hashedPassword,
-        name: name || email.split('@')[0],
+        name: trimmedName,
       },
       select: {
         id: true,
