@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 import { Star, Users, BookOpen, ChevronRight, ChevronDown, X, Heart, Folder, FolderPlus, Trash2, Edit, GripVertical, Plus, Bug, Coffee } from 'lucide-react'
 import LogoIcon from './LogoIcon'
 import { cn } from '@/lib/utils'
@@ -638,7 +639,7 @@ export default function Sidebar() {
                   : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
               )}
             >
-              <Star className="h-5 w-5" />
+              <Image src="/icons/star.svg" alt="" width={20} height={20} className="h-5 w-5" />
               <span className="font-medium">Recommended</span>
             </button>
 
@@ -702,7 +703,7 @@ export default function Sidebar() {
                   : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
               )}
             >
-              <Heart className="h-5 w-5" />
+              <Image src="/icons/wishlist.svg" alt="" width={20} height={20} className="h-5 w-5" />
               <span className="font-medium">Wishlist</span>
             </button>
 

@@ -19,7 +19,7 @@ export default function LogoIcon({ className = '', width, height }: LogoIconProp
   return (
     <div className={`inline-block ${className}`} style={{ width: iconWidth, height: iconHeight }}>
       <Image
-        src="/logo-icon.png" // Path to the treasure chest image - update to .svg if you have SVG version
+        src="/icons/chest.svg"
         alt="Colletro Logo"
         width={iconWidth}
         height={iconHeight}

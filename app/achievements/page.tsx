@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { Trophy, Lock, ArrowLeft } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
@@ -127,7 +128,7 @@ export default function AchievementsPage() {
               </Button>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-[var(--accent-color)]" />
+              <Image src="/icons/achievments.svg" alt="" width={32} height={32} className="h-6 w-6 sm:h-8 sm:w-8" />
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Achievements</h1>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6 sm:mb-10">

@@ -4,6 +4,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { LogOut, User, Star, Settings, Info, Trophy, Award, BarChart3, Menu, X, PanelLeft, CheckCircle2 } from 'lucide-react'
 import LogoIcon from './LogoIcon'
 import { useEffect, useState, useRef } from 'react'
@@ -58,11 +59,11 @@ export default function Navbar() {
 
   const menuItems = session ? [
     ...(isAdmin ? [{ label: 'Admin', icon: Star, path: '/admin' }] : []),
-    { label: 'Achievements', icon: Award, path: '/achievements' },
+    { label: 'Achievements', iconSrc: '/icons/achievments.svg', path: '/achievements' },
     { label: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { label: 'Statistics', icon: BarChart3, path: '/statistics' },
     { label: 'About', icon: Info, path: '/about' },
-    { label: 'Settings', icon: Settings, path: '/settings' },
+    { label: 'Settings', iconSrc: '/icons/settings.svg', path: '/settings' },
   ] : []
 
   return (
@@ -93,23 +94,24 @@ export default function Navbar() {
 
           {/* Desktop: Menu items */}
           <div className="hidden lg:flex items-center gap-6 flex-1">
-            {menuItems.map((item) => {
-              const Icon = item.icon
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => router.push(item.path)}
-                  className={`text-sm smooth-transition flex items-center gap-1.5 ${
-                    pathname === item.path 
-                      ? 'text-[var(--accent-color)] font-medium' 
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </button>
-              )
-            })}
+            {menuItems.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => router.push(item.path)}
+                className={`text-sm smooth-transition flex items-center gap-1.5 ${
+                  pathname === item.path 
+                    ? 'text-[var(--accent-color)] font-medium' 
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                {'iconSrc' in item && item.iconSrc ? (
+                  <Image src={item.iconSrc} alt="" width={16} height={16} className="h-4 w-4" />
+                ) : (
+                  'icon' in item && item.icon && <item.icon className="h-4 w-4" />
+                )}
+                {item.label}
+              </button>
+            ))}
           </div>
 
           {/* Desktop: Menu items */}
@@ -197,26 +199,27 @@ export default function Navbar() {
                     }}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {menuItems.map((item) => {
-                      const Icon = item.icon
-                      return (
-                        <button
-                          key={item.path}
-                          onClick={() => {
-                            router.push(item.path)
-                            setIsMobileMenuOpen(false)
-                          }}
-                          className={`w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 ${
-                            pathname === item.path
-                              ? 'bg-[var(--accent-color)]/20 text-[var(--accent-color)]'
-                              : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
-                          }`}
-                        >
-                          <Icon className="h-4 w-4" />
-                          {item.label}
-                        </button>
-                      )
-                    })}
+                    {menuItems.map((item) => (
+                      <button
+                        key={item.path}
+                        onClick={() => {
+                          router.push(item.path)
+                          setIsMobileMenuOpen(false)
+                        }}
+                        className={`w-full px-4 py-3 text-left text-sm smooth-transition flex items-center gap-2 ${
+                          pathname === item.path
+                            ? 'bg-[var(--accent-color)]/20 text-[var(--accent-color)]'
+                            : 'text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]'
+                        }`}
+                      >
+                        {'iconSrc' in item && item.iconSrc ? (
+                          <Image src={item.iconSrc} alt="" width={16} height={16} className="h-4 w-4" />
+                        ) : (
+                          'icon' in item && item.icon && <item.icon className="h-4 w-4" />
+                        )}
+                        {item.label}
+                      </button>
+                    ))}
                     {/* Sign Out button in mobile menu */}
                     <div className="border-t border-[var(--border-color)]">
                       <button

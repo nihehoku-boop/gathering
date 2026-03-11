@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 import { Settings, ArrowLeft, Moon, Sun, Trash2, AlertTriangle, BookOpen } from 'lucide-react'
 import Sidebar from '@/components/Sidebar'
 import Navbar from '@/components/Navbar'
@@ -367,7 +368,7 @@ export default function SettingsPage() {
               </Button>
             </div>
             <div className="flex items-center gap-3 mb-3">
-              <Settings className="h-8 w-8 text-[var(--text-primary)]" />
+              <Image src="/icons/settings.svg" alt="" width={32} height={32} className="h-8 w-8" />
               <h1 className="text-5xl font-semibold text-[var(--text-primary)] tracking-tight">Settings</h1>
             </div>
             <p className="text-[var(--text-secondary)] text-lg mb-10">
