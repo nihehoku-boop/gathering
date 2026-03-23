@@ -161,19 +161,6 @@ export default function SignUpPage() {
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="humanCheckAnswer" className="text-[var(--text-primary)]">What is 2 + 2? *</Label>
-                  <Input
-                    id="humanCheckAnswer"
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="Your answer"
-                    value={humanCheckAnswer}
-                    onChange={(e) => setHumanCheckAnswer(e.target.value)}
-                    required
-                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
-                  />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="confirmPassword" className="text-[var(--text-primary)]">Confirm Password *</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
@@ -187,6 +174,19 @@ export default function SignUpPage() {
                       className="pl-10 bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
                     />
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="humanCheckAnswer" className="text-[var(--text-primary)]">What is 2 + 2? *</Label>
+                  <Input
+                    id="humanCheckAnswer"
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Your answer"
+                    value={humanCheckAnswer}
+                    onChange={(e) => setHumanCheckAnswer(e.target.value)}
+                    required
+                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
+                  />
                 </div>
                 <Button 
                   type="submit" 
