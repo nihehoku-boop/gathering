@@ -15,6 +15,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [humanCheckAnswer, setHumanCheckAnswer] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -39,6 +40,11 @@ export default function SignUpPage() {
       return
     }
 
+    if (humanCheckAnswer.trim() !== '4') {
+      setError('Please answer the bot protection question correctly')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -49,6 +55,7 @@ export default function SignUpPage() {
           email,
           password,
           name: trimmedName,
+          humanCheckAnswer: humanCheckAnswer.trim(),
         }),
       })
 
@@ -152,6 +159,19 @@ export default function SignUpPage() {
                   <p className="text-xs text-[var(--text-secondary)]">
                     Password must be at least 6 characters long
                   </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="humanCheckAnswer" className="text-[var(--text-primary)]">What is 2 + 2? *</Label>
+                  <Input
+                    id="humanCheckAnswer"
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Your answer"
+                    value={humanCheckAnswer}
+                    onChange={(e) => setHumanCheckAnswer(e.target.value)}
+                    required
+                    className="bg-[var(--bg-tertiary)] border-[var(--border-hover)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent-color)] smooth-transition"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword" className="text-[var(--text-primary)]">Confirm Password *</Label>

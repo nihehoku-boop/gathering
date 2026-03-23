@@ -11,7 +11,7 @@ import { isBlockedEmailDomain } from '@/lib/blocked-email-domains'
 async function registerHandler(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, password, name } = body
+    const { email, password, name, humanCheckAnswer } = body
 
     if (!email || !password) {
       return NextResponse.json(
@@ -24,6 +24,13 @@ async function registerHandler(request: NextRequest) {
     if (!trimmedName) {
       return NextResponse.json(
         { error: 'Name is required' },
+        { status: 400 }
+      )
+    }
+
+    if (String(humanCheckAnswer ?? '').trim() !== '4') {
+      return NextResponse.json(
+        { error: 'Incorrect answer to bot protection question' },
         { status: 400 }
       )
     }
