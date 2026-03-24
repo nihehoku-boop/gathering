@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { stringifyTags } from '@/lib/tags'
+import { stringifyTags, LANGUAGE_REGION_TAGS, getTagColor } from '@/lib/tags'
 import TagSelector from '@/components/TagSelector'
 import { ITEM_TEMPLATES, type ItemTemplate } from '@/lib/item-templates'
 import ImageUpload from './ImageUpload'
@@ -121,6 +121,12 @@ export default function CreateCollectionDialog({
     } finally {
       setLoading(false)
     }
+  }
+
+  const toggleLanguageRegionTag = (tag: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    )
   }
 
   if (!open) return null
@@ -287,6 +293,37 @@ export default function CreateCollectionDialog({
                   Choose how the cover image should be displayed in collection cards.
                 </p>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[var(--text-primary)]">Language/Region</Label>
+              <div className="flex flex-wrap gap-2">
+                {LANGUAGE_REGION_TAGS.map((tag) => {
+                  const isSelected = selectedTags.includes(tag)
+                  const colors = getTagColor(tag)
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleLanguageRegionTag(tag)}
+                      className={`px-3 py-1.5 rounded-full text-sm border smooth-transition ${
+                        isSelected
+                          ? 'opacity-100'
+                          : 'opacity-70 hover:opacity-100'
+                      }`}
+                      style={{
+                        backgroundColor: colors.bg,
+                        color: colors.text,
+                        borderColor: colors.border,
+                      }}
+                    >
+                      {tag}
+                    </button>
+                  )
+                })}
+              </div>
+              <p className="text-xs text-[var(--text-muted)]">
+                Quick-select language/region tags for this collection.
+              </p>
             </div>
             <TagSelector
               selectedTags={selectedTags}

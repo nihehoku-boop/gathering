@@ -72,6 +72,23 @@ export const AVAILABLE_TAGS = [
 
 export type Tag = typeof AVAILABLE_TAGS[number]
 
+/**
+ * Preset language/region tags for collections.
+ * Stored in the same tags array as other collection tags.
+ */
+export const LANGUAGE_REGION_TAGS = [
+  'English',
+  'Spanish',
+  'French',
+  'German',
+  'Portuguese',
+  'Italian',
+  'Japanese',
+  'Chinese',
+  'Korean',
+  'Russian',
+] as const
+
 // Color mapping for each tag
 export const TAG_COLORS: Record<Tag, { bg: string; text: string; border: string }> = {
   // Condition & Rarity

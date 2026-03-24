@@ -19,6 +19,7 @@ import AnalyticsViewer from './AnalyticsViewer'
 import BlogManagement from './BlogManagement'
 import AlertDialog from './ui/alert-dialog'
 import { parseTags, getTagColor } from '@/lib/tags'
+import CollectionCoverImage from './CollectionCoverImage'
 
 interface RecommendedItem {
   id: string
@@ -36,6 +37,7 @@ interface RecommendedCollection {
   template?: string | null
   customFieldDefinitions?: string | null
   coverImage: string | null
+  coverImageFit?: string | null
   tags: string
   isPublic?: boolean
   items: RecommendedItem[]
@@ -396,11 +398,20 @@ export default function AdminDashboard() {
           {collections.map((collection) => (
             <Card key={collection.id} className="overflow-hidden">
               {collection.coverImage && (
-                <div className="w-full h-48 overflow-hidden bg-gray-200">
-                  <img
+                <div>
+                  <CollectionCoverImage
                     src={collection.coverImage}
                     alt={collection.name}
-                    className="w-full h-full object-cover"
+                    coverImageFit={collection.coverImageFit}
+                    imageClassName="group-hover:scale-105 smooth-transition"
+                    unoptimized={
+                      collection.coverImage.startsWith('/ltbcover/') ||
+                      collection.coverImage.includes('localhost') ||
+                      collection.coverImage.includes('tcgdx') ||
+                      collection.coverImage.includes('tcgdex') ||
+                      collection.coverImage.toLowerCase().includes('ygoprodeck') ||
+                      collection.coverImage.toLowerCase().includes('images.ygoprodeck.com')
+                    }
                   />
                 </div>
               )}
