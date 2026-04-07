@@ -772,10 +772,14 @@ export default function CollectionsList() {
               {showSortMenu && (
                 <>
                   <div 
-                    className="fixed inset-0 z-10" 
+                    className="fixed inset-0 z-40" 
                     onClick={() => setShowSortMenu(false)}
                   />
-                  <div className="absolute right-0 sm:right-0 left-auto sm:left-auto top-full mt-2 w-48 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-20 overflow-hidden">
+                  <div
+                    className="absolute right-0 sm:right-0 left-auto sm:left-auto top-full mt-2 w-48 max-w-[calc(100vw-2rem)] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg shadow-lg z-50 overflow-hidden"
+                    onClick={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                  >
                     <div className="px-3 py-2 text-xs font-semibold text-[var(--text-secondary)] uppercase border-b border-[var(--border-color)]">
                       Sort by
                     </div>
